@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Cockpit Móvel — Assistente Clínico & Pessoal</title>
+
+  <!-- Telegram WebApp SDK Oficial -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js via CDN para gráficos da aba Corpo -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d'
+            },
+            surface: {
+              800: '#1e293b',
+              850: '#172033',
+              900: '#0f172a',
+              950: '#020617'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Safe-area insets para iPhones e dispositivos com notch */
+    body {
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: calc(72px + env(safe-area-inset-bottom, 12px));
+    }
+    .safe-bottom-nav {
+      padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
+    }
+    /* Scrollbar sutil */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-accent {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(15, 23, 42, 0.85) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+    }
+    /* Estilos táteis */
+    button, .tap-card {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-surface-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-white flex flex-col">
+
+  <!-- TOP HEADER COMPACTO PARA MOBILE -->
+  <header class="border-b border-slate-800/80 bg-surface-900/95 backdrop-blur sticky top-0 z-40 px-4 py-2.5">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 via-emerald-500 to-teal-400 flex items-center justify-center shadow-md shadow-brand-500/20 text-white font-black text-sm">
+          R
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-sm text-white tracking-tight">Cockpit Móvel</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-brand-500/10 text-brand-400 font-mono">v2.5</span>
+          </div>
+          <p class="text-[11px] text-slate-400" id="header-subtitle">Corpo & Composição</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5">
+        <button onclick="voltarParaChat()" class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition" title="Voltar ao chat do Telegram">
+          <i data-lucide="message-circle" class="w-4 h-4 text-sky-400"></i>
+        </button>
+        <button onclick="fecharMiniApp()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="Fechar">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTAINER DE CONTEÚDO PRINCIPAL (6 ABAS) -->
+  <main class="flex-1 px-3 sm:px-4 py-3 space-y-4 max-w-3xl mx-auto w-full">
+
+    <!-- =================================================================== -->
+    <!-- ABA 1: CORPO & PROTOCOLO -->
+    <!-- =================================================================== -->
+    <div id="tab-corpo" class="tab-pane hidden space-y-3.5">
+      <!-- Card Destaque Clínico -->
+      <div class="glass-card-accent rounded-xl p-4 shadow-lg">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i> Protocolo Corporal & Mounjaro
+          </span>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">Semana 16</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+          <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 block">Peso Atual</span>
+            <span class="text-lg font-black text-white" id="corpo-peso-atual">—</span>
+            <span class="text-[10px] text-emerald-400 font-medium block mt-0.5" id="corpo-peso-delta"> </span>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 block">Gordura (BF%)</span>
+            <span class="text-lg font-black text-sky-400" id="corpo-bf-atual">—</span>
+            <span class="text-[10px] text-slate-400 font-medium block mt-0.5">Meta: 15%</span>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 block">Dose Atual</span>
+            <span class="text-lg font-black text-amber-400" id="corpo-dose-atual">—</span>
+            <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="corpo-semana"> </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico de Evolução -->
+      <div class="glass-card rounded-xl p-3.5 space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="trending-down" class="w-3.5 h-3.5 text-brand-400"></i> Evolução Ponderal & Composição
+          </h3>
+          <span class="text-[10px] text-slate-400 font-mono">Últimas 12 semanas</span>
+        </div>
+        <div class="h-44 w-full">
+          <canvas id="graficoCorpoEvolucao"></canvas>
+        </div>
+      </div>
+
+      <!-- Metas e Nutrição Rápida -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="glass-card rounded-xl p-3 space-y-1">
+          <span class="text-[11px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="target" class="w-3 h-3 text-emerald-400"></i> Meta Proteica Diária
+          </span>
+          <div class="text-base font-extrabold text-emerald-400">180g / dia</div>
+          <p class="text-[10px] text-slate-400">1.8g/kg para preservação de massa magra sob GLP-1.</p>
+        </div>
+        <div class="glass-card rounded-xl p-3 space-y-1">
+          <span class="text-[11px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="droplet" class="w-3 h-3 text-sky-400"></i> Hidratação Mínima
+          </span>
+          <div class="text-base font-extrabold text-sky-400">3.5 L / dia</div>
+          <p class="text-[10px] text-slate-400">Prevenção de constipação e sobrecarga renal.</p>
+        </div>
+      </div>
+
+      <!-- Registro Rápido de Peso -->
+      <div class="glass-card rounded-xl p-3.5 space-y-2.5">
+        <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-brand-400"></i> Registrar Nova Pesagem
+        </h4>
+        <div class="flex items-center gap-2">
+          <input type="number" step="0.1" id="input-novo-peso" placeholder="Peso (kg)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500 w-full font-mono">
+          <input type="number" step="0.1" id="input-novo-bf" placeholder="BF%" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500 w-20 font-mono">
+          <button onclick="salvarPesagem()" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shrink-0 transition flex items-center gap-1">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i> Salvar
+          </button>
+        </div>
+        <p id="perfil-save-status" class="text-[10px] text-slate-400"></p>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ABA 2: PLANTÃO & LEITOS (ENFERMARIA SBAR) -->
+    <!-- =================================================================== -->
+    <div id="tab-leitos" class="tab-pane hidden space-y-3.5">
+      <div class="glass-card rounded-xl p-3.5 flex items-center justify-between">
+        <div>
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="hospital" class="w-3.5 h-3.5 text-indigo-400"></i> Painel de Leitos da Enfermaria
+          </h3>
+          <p class="text-[10px] text-slate-400 mt-0.5">Controle rápido de gravidade e passagem de plantão</p>
+        </div>
+        <button onclick="gerarSBARProntuario()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold shadow-md shadow-indigo-600/20 flex items-center gap-1.5 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar SBAR
+        </button>
+      </div>
+
+      <!-- Lista de Leitos -->
+      <div class="space-y-2" id="lista-leitos-container">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ABA 3: PRESCRIÇÃO & REMUME -->
+    <!-- =================================================================== -->
+    <div id="tab-remume" class="tab-pane hidden space-y-3.5">
+      <div class="glass-card rounded-xl p-3.5 space-y-2.5">
+        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="pill" class="w-3.5 h-3.5 text-rose-400"></i> Guia Rápido REMUME Ribeirão Preto
+        </h3>
+        <div class="relative">
+          <input type="text" id="busca-remume" oninput="filtrarRemume()" placeholder="Buscar medicamento ou apresentação..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
+        </div>
+      </div>
+
+      <p id="remume-status" role="status" class="text-xs text-slate-400">Catálogo e apresentações da base usada pelo bot.</p>
+      <button onclick="carregarRemume(true)" class="text-xs text-brand-400 px-3 py-2">Atualizar catálogo</button>
+
+      <!-- Lista de Fórmulas REMUME -->
+      <div class="space-y-2" id="lista-remume-container">
+        <!-- Itens preenchidos via JS -->
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ABA 4: CALCULADORAS RÁPIDAS -->
+    <!-- =================================================================== -->
+    <div id="tab-calculadoras" class="tab-pane hidden space-y-3.5">
+      <!-- Seletor de Calculadora -->
+      <div class="grid grid-cols-4 gap-1.5 text-center text-[10px] font-bold">
+        <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">DVA (Nora/Dobuta)</button>
+        <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
+        <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Clearance Cr</button>
+        <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Gasometria</button>
+      </div>
+
+      <!-- Subcalc 1: DVA -->
+      <div id="calc-dva" class="subcalc-pane glass-card rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i> Drogas Vasoativas em mL/h
+        </h4>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1">Peso do Paciente (kg):</label>
+            <input type="number" id="dva-peso" placeholder="Informe" oninput="calcularDVA()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">Droga:</label>
+            <select id="dva-droga" onchange="calcularDVA()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+              <option value="nora">Noradrenalina (64 mcg/mL)</option>
+              <option value="dobuta">Dobutamina (1000 mcg/mL)</option>
+              <option value="vaso">Vasopressina (Dose Fixa)</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1 text-xs" id="dva-resultado">
+          <!-- Resultado dinâmico -->
+        </div>
+      </div>
+
+      <!-- Subcalc 2: SRI / IOT -->
+      <div id="calc-sri" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Sequência Rápida de Intubação
+        </h4>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1">Peso (kg):</label>
+            <input type="number" id="sri-peso" placeholder="Informe" oninput="calcularSRI()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">Cenário Clínico:</label>
+            <select id="sri-cenario" onchange="calcularSRI()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+              <option value="padrao">Padrão / Hemodinâmica Estável</option>
+              <option value="choque">Choque / Hipotensão Grave</option>
+              <option value="asma">Broncoespasmo Grave / Asma</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1.5 text-xs" id="sri-resultado">
+          <!-- Resultado dinâmico -->
+        </div>
+      </div>
+
+      <!-- Subcalc 3: Clearance Cr -->
+      <div id="calc-crcl" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+          <i data-lucide="gauge" class="w-3.5 h-3.5"></i> Clearance de Creatinina (Cockcroft-Gault)
+        </h4>
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1">Idade:</label>
+            <input type="number" id="cr-idade" placeholder="Informe" oninput="calcularCrCl()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">Peso (kg):</label>
+            <input type="number" id="cr-peso" placeholder="Informe" oninput="calcularCrCl()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">Creatinina (mg/dL):</label>
+            <input type="number" step="0.1" id="cr-val" placeholder="Informe" oninput="calcularCrCl()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+          </div>
+        </div>
+        <div class="flex items-center gap-4 text-xs">
+          <label class="flex items-center gap-1.5 text-slate-300">
+            <input type="radio" name="cr-sexo" value="m" onchange="calcularCrCl()"> Masculino
+          </label>
+          <label class="flex items-center gap-1.5 text-slate-300">
+            <input type="radio" name="cr-sexo" value="f" onchange="calcularCrCl()"> Feminino (x 0.85)
+          </label>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs" id="crcl-resultado">
+          <!-- Resultado dinâmico -->
+        </div>
+      </div>
+
+      <!-- Subcalc 4: Gasometria -->
+      <div id="calc-gaso" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+          <i data-lucide="droplets" class="w-3.5 h-3.5"></i> Análise de Gasometria com Winter
+        </h4>
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1">pH:</label>
+            <input type="number" step="0.01" id="gaso-ph" placeholder="Informe" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">pCO2 (mmHg):</label>
+            <input type="number" id="gaso-pco2" placeholder="Informe" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">HCO3 (mEq/L):</label>
+            <input type="number" id="gaso-hco3" placeholder="Informe" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+          </div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs" id="gaso-resultado">
+          <!-- Resultado dinâmico -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ABA 5: ROTINA & ESTUDOS (TURMA J & MEDQUEST) -->
+    <!-- =================================================================== -->
+    <div id="tab-rotina" class="tab-pane hidden space-y-3.5">
+      <div class="glass-card-accent rounded-xl p-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-400"></i> Rodízio Internato — Turma J
+          </h3>
+          <span class="text-[10px] bg-brand-500/20 text-brand-300 px-2 py-0.5 rounded-full font-bold">Semana Ativa</span>
+        </div>
+        <p class="text-[11px] text-slate-300">Prioridades com peso ponderado de rodízio e estudos MedQuest.</p>
+      </div>
+
+      <!-- Blocos de Rotina Dinâmicos -->
+      <div id="rotina-blocos-container" class="space-y-2 text-xs">
+        <p class="text-slate-400 text-xs">Carregando rotina do dia...</p>
+      </div>
+
+      <!-- Bloco Noturno MedQuest -->
+      <div class="glass-card p-3.5 rounded-xl space-y-2">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Bloco de Estudos Noturno (MedQuest)
+          </h4>
+          <span class="text-[10px] text-slate-400 font-mono">20:30 - 22:30</span>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1">
+          <div class="text-white font-medium">• Foco: Sangramento de 1º Trimestre e DHEG</div>
+          <div class="text-slate-400">• Meta: 30 questões comentadas + revisão de flashcards Anki</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ABA 6: SOAP + PRECEPTOR IA -->
+    <!-- =================================================================== -->
+    <div id="tab-soap" class="tab-pane space-y-3.5">
+      <div class="glass-card rounded-xl p-3.5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i> Copiloto Clínico · SOAP & Conversa
+          </h3>
+          <button onclick="copiarSOAPProntuario()" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold flex items-center gap-1 transition shadow-md shadow-purple-600/20">
+            <i data-lucide="copy" class="w-3 h-3"></i> Copiar PEP
+          </button>
+        </div>
+
+        <p id="cockpit-status" role="status" class="text-xs text-slate-300">Conectando ao atendimento do Telegram…</p>
+
+        <!-- Bloco do SOAP Integral -->
+        <div class="p-3 rounded-lg bg-slate-900/90 border border-slate-800/80 max-h-56 overflow-y-auto">
+          <pre id="soap-integral" class="whitespace-pre-wrap break-words text-xs text-slate-100 font-mono" aria-label="SOAP do atendimento atual"></pre>
+        </div>
+
+        <!-- Chips de Ações Clínicas em 1 Toque -->
+        <div class="space-y-1.5 pt-1">
+          <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Ações Rápidas em 1 Toque</div>
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="executarAcaoConversa('plano')" class="px-2.5 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-semibold hover:bg-purple-500/30 flex items-center gap-1 transition">
+              <i data-lucide="file-check" class="w-3 h-3"></i> Fechar Plano
+            </button>
+            <button onclick="executarAcaoConversa('ef_normal')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
+              <i data-lucide="stethoscope" class="w-3 h-3"></i> EF 100% Normal
+            </button>
+            <button onclick="executarAcaoConversa('prescricao')" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
+              <i data-lucide="pill" class="w-3 h-3"></i> Prescrição UBS
+            </button>
+            <button onclick="provocarPreceptorSocratico()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
+              <i data-lucide="brain" class="w-3 h-3"></i> Preceptor
+            </button>
+            <button onclick="executarAcaoConversa('novo')" class="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-rose-400 text-[11px] font-semibold flex items-center gap-1 transition" title="Limpar e Iniciar Novo Caso">
+              <i data-lucide="trash-2" class="w-3 h-3"></i> Novo Caso
+            </button>
+          </div>
+        </div>
+
+        <div id="resposta-preceptor-box" class="hidden p-3 rounded-xl bg-purple-950/40 border border-purple-800/40 text-xs space-y-1.5 text-purple-200">
+          <span class="font-bold flex items-center gap-1 text-purple-300">
+            <i data-lucide="headphones" class="w-3.5 h-3.5"></i> Provocação do Preceptor:
+          </span>
+          <p id="resposta-preceptor-texto" class="italic"></p>
+        </div>
+
+        <!-- Feed de Conversa / Diálogo com o Copiloto -->
+        <div class="space-y-2 pt-2 border-t border-slate-800/80">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="message-square" class="w-3 h-3"></i> Diálogo Clínico Interativo
+            </span>
+            <button onclick="carregarSOAP()" class="text-[10px] text-slate-400 hover:text-slate-200 flex items-center gap-1">
+              <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i> Atualizar
+            </button>
+          </div>
+
+          <div id="feed-conversa-container" class="space-y-2 max-h-56 overflow-y-auto p-2.5 rounded-lg bg-surface-950/80 border border-slate-800/60 text-xs">
+            <div id="feed-vazio-aviso" class="text-slate-500 text-center py-2 text-[11px]">Nenhuma mensagem recente. Digite uma queixa, evolução ou use o microfone abaixo.</div>
+          </div>
+
+          <!-- Indicador de Carregamento Animado -->
+          <div id="conversa-loading" class="hidden p-2 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs flex items-center gap-2 animate-pulse">
+            <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i>
+            <span id="conversa-loading-texto">Processando caso clínico com IA...</span>
+          </div>
+
+          <!-- Barra de Entrada de Texto & Gravação de Voz -->
+          <div class="space-y-1.5">
+            <div id="gravador-status-bar" class="hidden flex items-center justify-between p-2 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs animate-pulse">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                <span class="font-bold">Gravando áudio...</span>
+                <span id="gravador-timer" class="font-mono font-bold text-white">00:00</span>
+              </div>
+              <button onclick="pararGravacaoAudio()" class="px-2 py-0.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px]">
+                Concluir & Enviar
+              </button>
+            </div>
+
+            <!-- Dica de gravação rápida no Telegram -->
+            <div class="px-2.5 py-1.5 rounded-lg bg-surface-900/90 border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                <span><strong>Plantão ágil:</strong> Dite áudio direto no chat do bot com 1 toque no mic nativo (sem caixas de permissão) — este SOAP é atualizado em tempo real!</span>
+              </span>
+            </div>
+
+            <div class="flex items-end gap-1.5">
+              <textarea id="input-conversa-texto" rows="2" placeholder="Queixa, evolução, exame, conduta ou pergunta..." class="flex-1 bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 resize-none"></textarea>
+
+              <button id="btn-gravar-voz" onclick="alternarGravacaoAudio()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-400 border border-purple-500/30 transition flex items-center justify-center" title="Gravar voz pelo Cockpit (o navegador pedirá autorização na 1ª vez)">
+                <i data-lucide="mic" class="w-4 h-4"></i>
+              </button>
+
+              <button onclick="enviarMensagemConversa()" class="p-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold transition flex items-center justify-center shadow-lg shadow-purple-600/30" title="Enviar mensagem">
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =================================================================== -->
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR TÁTIL (BOTTOM NAV NATIVO MOBILE) -->
+  <!-- =================================================================== -->
+  <nav class="fixed bottom-0 inset-x-0 bg-surface-900/95 backdrop-blur border-t border-slate-800/90 z-50 safe-bottom-nav">
+    <div class="grid grid-cols-6 h-14 max-w-3xl mx-auto px-1">
+      <button onclick="navegarAba('tab-soap', 'SOAP & Copiloto')" class="nav-btn flex flex-col items-center justify-center text-brand-400 transition" data-tab="tab-soap">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+        <span class="text-[9px] font-semibold mt-0.5">SOAP</span>
+      </button>
+      <button onclick="navegarAba('tab-leitos', 'Leitos & Enfermaria')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-leitos">
+        <div class="relative inline-flex">
+          <i data-lucide="hospital" class="w-5 h-5"></i>
+          <span id="badge-leitos" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-surface-900"></span>
+        </div>
+        <span class="text-[9px] font-medium mt-0.5">Leitos</span>
+      </button>
+      <button onclick="navegarAba('tab-remume', 'Prescrição & REMUME')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-remume">
+        <i data-lucide="pill" class="w-5 h-5"></i>
+        <span class="text-[9px] font-medium mt-0.5">REMUME</span>
+      </button>
+      <button onclick="navegarAba('tab-calculadoras', 'Calculadoras de Bolso')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-calculadoras">
+        <i data-lucide="calculator" class="w-5 h-5"></i>
+        <span class="text-[9px] font-medium mt-0.5">Cálculos</span>
+      </button>
+      <button onclick="navegarAba('tab-rotina', 'Rotina & Estudos')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-rotina">
+        <i data-lucide="calendar" class="w-5 h-5"></i>
+        <span class="text-[9px] font-medium mt-0.5">Rotina</span>
+      </button>
+      <button onclick="navegarAba('tab-corpo', 'Perfil & Rotina')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-corpo">
+        <i data-lucide="user-circle" class="w-5 h-5"></i>
+        <span class="text-[9px] font-medium mt-0.5">Perfil</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- TOAST FLUTUANTE DE NOTIFICAÇÃO -->
+  <div id="toast-notificacao" class="fixed top-14 inset-x-4 max-w-sm mx-auto z-50 hidden transition-all duration-300 transform -translate-y-2">
+    <div class="p-2.5 rounded-xl bg-slate-900/95 border border-slate-700 shadow-2xl flex items-center justify-between text-xs text-slate-100">
+      <span id="toast-mensagem">Notificação</span>
+      <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    </div>
+  </div>
+
+  <!-- SCRIPT LÓGICO COMPLETO DO COCKPIT MÓVEL -->
+  <script>
+    // 1. Inicialização do Telegram WebApp SDK
+    const tg = window.Telegram?.WebApp;
+    let cockpitSessionRaw = '';
+    let sessionFromUrl = '';
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      sessionFromUrl = sp.get('session') || sp.get('token') || '';
+    } catch (eUrl) {}
+    const sessaoAtiva = (typeof cockpitSessionRaw === 'string' && cockpitSessionRaw)
+      ? cockpitSessionRaw
+      : (sessionFromUrl || tg?.initData || '');
+
+    if (tg) {
+      try {
+        tg.ready();
+        tg.expand();
+        if (tg.enableClosingConfirmation) tg.enableClosingConfirmation();
+      } catch (e) {
+        console.warn("Telegram WebApp initialization error:", e);
+      }
+    }
+
+    function hapticFeedback(tipo = 'light') {
+      try {
+        if (tg?.HapticFeedback) {
+          tg.HapticFeedback.impactOccurred(tipo);
+        }
+      } catch (e) {}
+    }
+
+    function fecharMiniApp() {
+      hapticFeedback('medium');
+      if (tg?.close) {
+        tg.close();
+      } else {
+        window.history.back();
+      }
+    }
+
+    // 2. Navegação de Abas
+    function navegarAba(tabId, subtitulo) {
+      hapticFeedback('light');
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      const ativa = document.getElementById(tabId);
+      if (ativa) ativa.classList.remove('hidden');
+
+      // Atualiza botões
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.classList.remove('text-slate-400');
+          btn.classList.add('text-brand-400');
+        } else {
+          btn.classList.remove('text-brand-400');
+          btn.classList.add('text-slate-400');
+        }
+      });
+
+      // Atualiza cabeçalho
+      if (subtitulo) {
+        document.getElementById('header-subtitle').textContent = subtitulo;
+      }
+      if (tabId === 'tab-soap' || tabId === 'tab-leitos') carregarLeitos();
+      if (tabId === 'tab-remume') carregarRemume();
+      if (tabId === 'tab-corpo' || tabId === 'tab-rotina') carregarPerfil();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Toast de notificação
+    function copiarToast(mensagem) {
+      hapticFeedback('light');
+      const toast = document.getElementById('toast-notificacao');
+      const msgEl = document.getElementById('toast-mensagem');
+      if (!toast || !msgEl) return;
+      msgEl.textContent = mensagem;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2200);
+    }
+
+    function copiarTextoClipboard(texto, label = 'Copiado para o Prontuário!') {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(() => copiarToast(label));
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = texto;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        copiarToast(label);
+      }
+    }
+
+    // Dados clínicos vêm exclusivamente do servidor autenticado.
+    let cockpitDados = null;
+    let cockpitCache = { dados: null, timestamp: 0 };
+    const CACHE_TTL_MS = 30_000; // 30s
+    let cockpitCarregando = false;
+
+    const GAS_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwo6GqTmc0_8fl9peKlw5d5jpfL5nqsc-ozLrqHiVk2RHD4h968EZAG4P75i2qSBlw9EQ/exec";
+
+    function cockpitRpc(metodo, ...args) {
+      return new Promise(async (resolve, reject) => {
+        const credencial = sessaoAtiva || tg?.initData;
+        if (!credencial) {
+          reject(new Error('Sessão indisponível. Reabra pelo menu do Telegram.')); return;
+        }
+
+        // 1. Se executado dentro do Google Apps Script
+        if (window.google?.script?.run && typeof window.google.script.run[metodo] === 'function') {
+          window.google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(err => reject(new Error(
+              (err && err.message) ? err.message : 'Não foi possível concluir. Tente novamente.'
+            )))[metodo](credencial, ...args);
+          return;
+        }
+
+        // 2. Se executado no GitHub Pages (via API HTTP em segundo plano, zero banners)
+        try {
+          const resp = await fetch(GAS_BACKEND_URL + "?api=cockpit", {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+              metodo: metodo,
+              session: credencial,
+              args: args
+            })
+          });
+          const json = await resp.json();
+          if (json.ok) {
+            resolve(json.resultado);
+          } else {
+            reject(new Error(json.erro || "Falha na requisição ao servidor."));
+          }
+        } catch (fetchErr) {
+          reject(new Error("Erro de conexão com o servidor: " + (fetchErr.message || fetchErr)));
+        }
+      });
+    }
+
+    async function cockpitConsultarCached(forcar = false) {
+      if (!forcar && cockpitCache.dados && (Date.now() - cockpitCache.timestamp) < CACHE_TTL_MS) {
+        return cockpitCache.dados;
+      }
+      const dados = await cockpitRpc('cockpitConsultar');
+      cockpitCache = { dados, timestamp: Date.now() };
+      return dados;
+    }
+
+    function atualizarBadgeLeitos(leitos) {
+      const instavel = Array.isArray(leitos) && leitos.some(l => l.status === 'instavel');
+      const badge = document.getElementById('badge-leitos');
+      if (badge) badge.classList.toggle('hidden', !instavel);
+    }
+
+    async function carregarLeitos(forcar = false) {
+      if (cockpitCarregando) return;
+      cockpitCarregando = true;
+      const aviso = document.getElementById('cockpit-status');
+      if (aviso) aviso.textContent = 'Atualizando atendimento…';
+      const boxPreceptor = document.getElementById('resposta-preceptor-box');
+      if (boxPreceptor) boxPreceptor.classList.add('hidden');
+      try {
+        const dados = await cockpitConsultarCached(forcar);
+        cockpitDados = dados;
+        const soapEl = document.getElementById('soap-integral');
+        if (soapEl) soapEl.textContent = dados.soap || '';
+        if (aviso) {
+          aviso.textContent = dados.soap
+            ? 'SOAP do atendimento atual · atualizado agora'
+            : (dados.casoAtivo ? 'Atendimento ativo. Gere ou atualize o SOAP no chat.' : 'Nenhum atendimento ativo. Inicie um caso no chat.');
+        }
+        renderizarLeitos();
+        atualizarBadgeLeitos(dados.leitos);
+      } catch(e) {
+        cockpitDados = null;
+        const soapEl = document.getElementById('soap-integral');
+        if (soapEl) soapEl.textContent = '';
+        const leitosEl = document.getElementById('lista-leitos-container');
+        if (leitosEl) leitosEl.textContent = e.message;
+        if (aviso) aviso.textContent = e.message;
+      } finally { cockpitCarregando = false; }
+    }
+    function renderizarLeitos() {
+      const container = document.getElementById('lista-leitos-container');
+      container.replaceChildren();
+      if (!cockpitDados?.leitos.length) {container.textContent = 'Nenhum leito registrado no bot.'; return;}
+      cockpitDados.leitos.forEach(l => {
+        const card = document.createElement('div'); card.className = 'glass-card p-3 rounded-xl space-y-2';
+        const titulo = document.createElement('h3'); titulo.textContent = 'Leito ' + l.numero + ' · ' + l.status;
+        const texto = document.createElement('p'); texto.className = 'whitespace-pre-wrap text-sm'; texto.textContent = l.dados;
+        const data = document.createElement('p'); data.className = 'text-xs text-slate-400'; data.textContent = l.dataISO + ' · ' + l.atualizadoEm;
+        const seletor = document.createElement('select'); seletor.className = 'bg-slate-800 p-2 rounded text-sm'; seletor.setAttribute('aria-label', 'Alterar status do leito ' + l.numero);
+        const vazio = document.createElement('option'); vazio.value = ''; vazio.textContent = 'Alterar status…'; seletor.append(vazio);
+        [['estavel','Estável'],['vigilancia','Em vigilância'],['instavel','Instável'],['alta','Alta programada']].forEach(([valor,rotulo])=>{const o=document.createElement('option');o.value=valor;o.textContent=rotulo;seletor.append(o);});
+        seletor.onchange = async () => {
+          if (!seletor.value) return;
+          seletor.disabled = true;
+          try {await cockpitRpc('cockpitStatusLeito', l.numero, l.version, seletor.value); await carregarLeitos();}
+          catch(e) {copiarToast(e.message); seletor.value = '';}
+          finally {seletor.disabled = false;}
+        };
+        card.append(titulo,data,texto,seletor);container.append(card);
+      });
+    }
+    let passagemPendente = false;
+    async function gerarSBARProntuario() {
+      if (passagemPendente) return;
+      passagemPendente = true;
+      copiarToast('Preparando passagem com os leitos do bot…');
+      try {const texto = await cockpitRpc('cockpitPassagem'); copiarTextoClipboard(texto, 'Passagem SBAR copiada!');}
+      catch(e) {copiarToast(e.message);}
+      finally {passagemPendente = false;}
+    }
+
+    // Catálogo integral compartilhado com o bot; busca local sem novas consultas.
+    let remumeDatabase = null;
+    let remumeCarregando = false;
+    async function carregarRemume(forcar = false) {
+      if (remumeCarregando) return;
+      if (remumeDatabase && !forcar) {filtrarRemume(); return;}
+      remumeCarregando = true;
+      const aviso = document.getElementById('remume-status');
+      aviso.textContent = 'Carregando catálogo do bot…';
+      try {
+        const resposta = await cockpitRpc('cockpitRemume');
+        remumeDatabase = resposta.itens;
+        aviso.textContent = resposta.fonte + ' · ' + resposta.itens.length + ' apresentações. Para prescrever, use a função Prescrever no chat.';
+        filtrarRemume();
+      } catch(e) {
+        remumeDatabase = null;
+        document.getElementById('lista-remume-container').replaceChildren();
+        aviso.textContent = e.message;
+      } finally {remumeCarregando = false;}
+    }
+    function filtrarRemume() {
+      if (!remumeDatabase) return;
+      const normalizar = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      const busca = normalizar(document.getElementById('busca-remume').value.trim());
+      const filtrados = remumeDatabase.filter(linha => normalizar(linha).includes(busca));
+      const container = document.getElementById('lista-remume-container');container.replaceChildren();
+      if (!filtrados.length) {container.textContent = 'Nenhuma apresentação encontrada.'; return;}
+      filtrados.forEach(linha => {
+        const card = document.createElement('div');card.className = 'glass-card p-3 rounded-xl flex items-center gap-3';
+        const texto = document.createElement('span');texto.className = 'text-sm flex-1';texto.textContent = linha;
+        const copiar = document.createElement('button');copiar.className = 'px-2 py-2 text-xs text-brand-400';copiar.textContent = 'Copiar';
+        copiar.onclick = () => copiarTextoClipboard(linha, 'Apresentação copiada!');card.append(texto,copiar);container.append(card);
+      });
+    }
+
+    // 5. Calculadoras Clínicas
+    function abrirSubCalc(paneId, botao) {
+      hapticFeedback('light');
+      document.querySelectorAll('.subcalc-pane').forEach(el => el.classList.add('hidden'));
+      document.getElementById(paneId)?.classList.remove('hidden');
+
+      document.querySelectorAll('.subcalc-btn').forEach(b => {
+        b.className = "subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400";
+      });
+      if (botao) botao.className = "subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+    }
+
+    const pedidosCalc = {};
+    function solicitarCalculo(tipo, entrada, destino) {
+      const anterior = pedidosCalc[tipo];
+      if (anterior) clearTimeout(anterior.timer);
+      const pedido = {entrada};pedidosCalc[tipo] = pedido;
+      const resultado = document.getElementById(destino);
+      resultado.classList.add('whitespace-pre-wrap');
+      resultado.textContent = 'Conferindo parâmetros…';
+      pedido.timer = setTimeout(async () => {
+        try {
+          const resposta = await cockpitRpc('cockpitCalcular', tipo, entrada);
+          if (pedidosCalc[tipo] !== pedido) return;
+          // Aproveita o texto integral do bot, sem inserir HTML remoto no documento.
+          const doc = new DOMParser().parseFromString(resposta.textoFormatado || '', 'text/html');
+          resultado.textContent = doc.body.textContent || 'Não foi possível obter o resultado. Confira os parâmetros.';
+        } catch(e) {if (pedidosCalc[tipo] === pedido) resultado.textContent = e.message;}
+      }, 350);
+    }
+    const valorCalc = id => document.getElementById(id)?.value ?? '';
+    function calcularDVA() {
+      solicitarCalculo('dva', {peso:valorCalc('dva-peso'), droga:valorCalc('dva-droga')}, 'dva-resultado');
+    }
+    function calcularSRI() {
+      solicitarCalculo('sri', {peso:valorCalc('sri-peso'), cenario:valorCalc('sri-cenario')}, 'sri-resultado');
+    }
+    function calcularCrCl() {
+      solicitarCalculo('crcl', {idade:valorCalc('cr-idade'), peso:valorCalc('cr-peso'), creatinina:valorCalc('cr-val'), sexo:document.querySelector('input[name="cr-sexo"]:checked')?.value ?? ''}, 'crcl-resultado');
+    }
+    function calcularGaso() {
+      solicitarCalculo('gaso', {ph:valorCalc('gaso-ph'), pco2:valorCalc('gaso-pco2'), hco3:valorCalc('gaso-hco3')}, 'gaso-resultado');
+    }
+
+    // 6. SOAP & Copiloto Clínico Conversacional
+    async function carregarSOAP() {
+      await carregarLeitos();
+    }
+
+    function copiarSOAPProntuario() {
+      if (!cockpitDados?.soap) {
+        copiarToast('Atualize ou gere o SOAP no chat primeiro.');
+        return;
+      }
+      copiarTextoClipboard(cockpitDados.soap, 'SOAP integral copiado!');
+    }
+
+    let preceptorPendente = false;
+    async function provocarPreceptorSocratico() {
+      if (preceptorPendente) return;
+      if (!cockpitDados?.revision) {
+        copiarToast('Atualize o atendimento primeiro.');
+        return;
+      }
+      preceptorPendente = true;
+      const revision = cockpitDados.revision;
+      const box = document.getElementById('resposta-preceptor-box');
+      const txt = document.getElementById('resposta-preceptor-texto');
+      box.classList.remove('hidden');
+      txt.textContent = 'Preparando pergunta sobre o atendimento atual…';
+      try {
+        const resposta = await cockpitRpc('cockpitPreceptor', revision);
+        txt.textContent = cockpitDados?.revision === revision ? resposta : 'O atendimento mudou. Atualize o painel.';
+      } catch (e) {
+        txt.textContent = e.message;
+      } finally {
+        preceptorPendente = false;
+      }
+    }
+
+    function limparCamposSOAP() {
+      document.getElementById('resposta-preceptor-box').classList.add('hidden');
+      carregarLeitos();
+    }
+
+    function adicionarMensagemFeed(remetente, texto, meta) {
+      const container = document.getElementById('feed-conversa-container');
+      if (!container) return;
+      const avisoVazio = document.getElementById('feed-vazio-aviso');
+      if (avisoVazio) avisoVazio.style.display = 'none';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'space-y-1';
+
+      const cabecalho = document.createElement('div');
+      cabecalho.className = 'flex items-center gap-1.5 text-[10px] font-bold';
+
+      const balao = document.createElement('div');
+      balao.className = 'p-2.5 rounded-xl whitespace-pre-wrap leading-relaxed text-xs break-words';
+
+      if (remetente === 'usuario') {
+        cabecalho.className += ' text-slate-400 justify-end';
+        cabecalho.textContent = 'Você';
+        balao.className += ' bg-slate-800 text-slate-100 border border-slate-700/60 ml-6';
+      } else if (remetente === 'audio') {
+        cabecalho.className += ' text-rose-400 justify-end';
+        cabecalho.textContent = 'Áudio Enviado';
+        balao.className += ' bg-rose-950/40 text-rose-100 border border-rose-800/40 ml-6 font-mono text-[11px]';
+      } else {
+        cabecalho.className += ' text-purple-400';
+        cabecalho.textContent = 'Copiloto Clínico IA';
+        balao.className += ' bg-purple-950/40 text-purple-100 border border-purple-800/40 mr-4';
+      }
+
+      balao.textContent = texto;
+      wrapper.appendChild(cabecalho);
+      wrapper.appendChild(balao);
+      container.appendChild(wrapper);
+
+      if (window.lucide) lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function setConversaLoading(ativo, msg) {
+      const el = document.getElementById('conversa-loading');
+      const txt = document.getElementById('conversa-loading-texto');
+      if (!el) return;
+      if (ativo) {
+        if (txt) txt.textContent = msg || 'Processando caso clínico com IA...';
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    }
+
+    let conversaOcupada = false;
+
+    async function executarAcaoConversa(acao) {
+      if (conversaOcupada) return;
+      hapticFeedback('medium');
+      conversaOcupada = true;
+
+      const rotulos = {
+        'plano': '📋 Fechar Avaliação e Plano',
+        'ef_normal': '🩺 Exame Físico 100% Normal',
+        'prescricao': '💊 Gerar Prescrição Médica UBS',
+        'novo': '🗑️ Reiniciar / Novo Caso'
+      };
+
+      const statusMsgs = {
+        'plano': 'Consolidando caso e gerando Avaliação e Plano estruturado...',
+        'ef_normal': 'Registrando exame físico normal e atualizando SOAP...',
+        'prescricao': 'Elaborando prescrição médica conforme REMUME...',
+        'novo': 'Reiniciando prontuário e limpando caso anterior...'
+      };
+
+      adicionarMensagemFeed('usuario', rotulos[acao] || acao);
+      setConversaLoading(true, statusMsgs[acao] || 'Processando com IA...');
+
+      try {
+        const res = await cockpitRpc('cockpitConversar', { acao: acao });
+        if (res.resposta) {
+          adicionarMensagemFeed('ia', res.resposta);
+        }
+        if (res.soap !== undefined) {
+          const soapEl = document.getElementById('soap-integral');
+          if (soapEl) soapEl.textContent = res.soap;
+          if (cockpitDados) {
+            cockpitDados.soap = res.soap;
+            cockpitDados.revision = res.revision;
+          }
+          const avisoStatus = document.getElementById('cockpit-status');
+          if (avisoStatus) {
+            avisoStatus.textContent = res.soap ? 'SOAP do atendimento atual · atualizado agora' : 'Nenhum atendimento ativo. Inicie um caso no chat.';
+          }
+        }
+        copiarToast('Atualizado com sucesso!');
+      } catch (e) {
+        adicionarMensagemFeed('ia', '❌ Erro: ' + e.message);
+        copiarToast(e.message);
+      } finally {
+        setConversaLoading(false);
+        conversaOcupada = false;
+      }
+    }
+
+    async function enviarMensagemConversa() {
+      if (conversaOcupada) return;
+      const input = document.getElementById('input-conversa-texto');
+      if (!input) return;
+      const texto = input.value.trim();
+      if (!texto) return;
+
+      input.value = '';
+      hapticFeedback('light');
+      conversaOcupada = true;
+
+      adicionarMensagemFeed('usuario', texto);
+      setConversaLoading(true, 'Raciocinando caso clínico e atualizando SOAP...');
+
+      try {
+        const res = await cockpitRpc('cockpitConversar', { acao: 'enviar', texto: texto });
+        if (res.resposta) {
+          adicionarMensagemFeed('ia', res.resposta);
+        }
+        if (res.soap !== undefined) {
+          const soapEl = document.getElementById('soap-integral');
+          if (soapEl) soapEl.textContent = res.soap;
+          if (cockpitDados) {
+            cockpitDados.soap = res.soap;
+            cockpitDados.revision = res.revision;
+          }
+          const avisoStatus = document.getElementById('cockpit-status');
+          if (avisoStatus) {
+            avisoStatus.textContent = res.soap ? 'SOAP do atendimento atual · atualizado agora' : 'Nenhum atendimento ativo.';
+          }
+        }
+        copiarToast('Caso atualizado!');
+      } catch (e) {
+        adicionarMensagemFeed('ia', '❌ Erro: ' + e.message);
+        copiarToast(e.message);
+      } finally {
+        setConversaLoading(false);
+        conversaOcupada = false;
+      }
+    }
+
+    // Gravação e Envio de Áudio Nativo pelo Navegador (Web Audio / MediaRecorder)
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let gravadorIntervalo = null;
+    let gravadorSegundos = 0;
+    let gravandoAudio = false;
+
+    async function alternarGravacaoAudio() {
+      if (gravandoAudio) {
+        pararGravacaoAudio();
+        return;
+      }
+
+      if (!sessaoAtiva && !tg?.initData) {
+        copiarToast('Sessão indisponível. Reabra pelo menu /menu.');
+        return;
+      }
+      if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+        copiarToast('Microfone indisponível no WebView. Dica: dite o áudio diretamente no chat do bot!');
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+
+        let opcoes = {};
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/webm')) {
+          opcoes = { mimeType: 'audio/webm' };
+        } else if (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/mp4')) {
+          opcoes = { mimeType: 'audio/mp4' };
+        }
+
+        mediaRecorder = new MediaRecorder(stream, opcoes);
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            audioChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          stream.getTracks().forEach(track => track.stop());
+
+          if (audioChunks.length === 0) return;
+          const mimeFinal = mediaRecorder.mimeType || 'audio/webm';
+          const audioBlob = new Blob(audioChunks, { type: mimeFinal });
+          audioChunks = [];
+
+          adicionarMensagemFeed('audio', 'Áudio gravado (' + gravadorSegundos + 's) · Enviando para transcrição e análise...');
+          setConversaLoading(true, 'Transcrevendo e raciocinando caso com IA...');
+          conversaOcupada = true;
+
+          const reader = new FileReader();
+          reader.readAsDataURL(audioBlob);
+          reader.onloadend = async () => {
+            try {
+              const base64Data = String(reader.result).split(',')[1];
+              const res = await cockpitRpc('cockpitConversar', {
+                acao: 'enviar',
+                audioBase64: base64Data,
+                mime: mimeFinal
+              });
+
+              if (res.transcricao) {
+                adicionarMensagemFeed('usuario', 'Transcrição: ' + res.transcricao);
+              }
+              if (res.resposta) {
+                adicionarMensagemFeed('ia', res.resposta);
+              }
+              if (res.soap !== undefined) {
+                const soapEl = document.getElementById('soap-integral');
+                if (soapEl) soapEl.textContent = res.soap;
+                if (cockpitDados) {
+                  cockpitDados.soap = res.soap;
+                  cockpitDados.revision = res.revision;
+                }
+              }
+              copiarToast('Áudio processado!');
+            } catch (e) {
+              adicionarMensagemFeed('ia', '❌ Erro ao enviar áudio: ' + e.message);
+              copiarToast(e.message);
+            } finally {
+              setConversaLoading(false);
+              conversaOcupada = false;
+            }
+          };
+        };
+
+        mediaRecorder.start();
+        gravandoAudio = true;
+        hapticFeedback('medium');
+
+        const statusBar = document.getElementById('gravador-status-bar');
+        const timerEl = document.getElementById('gravador-timer');
+        const btnVoz = document.getElementById('btn-gravar-voz');
+        if (statusBar) statusBar.classList.remove('hidden');
+        if (btnVoz) {
+          btnVoz.classList.add('bg-rose-600', 'text-white', 'border-rose-400');
+          btnVoz.classList.remove('bg-slate-800', 'text-purple-400');
+        }
+
+        gravadorSegundos = 0;
+        if (timerEl) timerEl.textContent = '00:00';
+        gravadorIntervalo = setInterval(() => {
+          gravadorSegundos++;
+          const min = String(Math.floor(gravadorSegundos / 60)).padStart(2, '0');
+          const sec = String(gravadorSegundos % 60).padStart(2, '0');
+          if (timerEl) timerEl.textContent = min + ':' + sec;
+        }, 1000);
+
+      } catch (err) {
+        copiarToast(err?.name === 'NotAllowedError'
+          ? 'Microfone não autorizado no WebView. Dica: você pode ditar o caso direto no chat do bot sem pedir permissão!'
+          : 'Não foi possível iniciar o microfone (' + (err?.message || 'indisponível') + '). Dica: envie o áudio no chat do Telegram!');
+        console.error('Erro getUserMedia:', err);
+      }
+    }
+
+    function pararGravacaoAudio() {
+      if (!gravandoAudio) return;
+      gravandoAudio = false;
+      hapticFeedback('medium');
+
+      if (gravadorIntervalo) {
+        clearInterval(gravadorIntervalo);
+        gravadorIntervalo = null;
+      }
+
+      const statusBar = document.getElementById('gravador-status-bar');
+      const btnVoz = document.getElementById('btn-gravar-voz');
+      if (statusBar) statusBar.classList.add('hidden');
+      if (btnVoz) {
+        btnVoz.classList.remove('bg-rose-600', 'text-white', 'border-rose-400');
+        btnVoz.classList.add('bg-slate-800', 'text-purple-400');
+      }
+
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+    }
+
+    // 7. Gráfico da Aba Corpo
+    function inicializarGraficoCorpo() {
+      const ctx = document.getElementById('graficoCorpoEvolucao')?.getContext('2d');
+      if (!ctx) return;
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['S1', 'S2', 'S4', 'S6', 'S8', 'S10', 'S12', 'S14', 'S16'],
+          datasets: [{
+            label: 'Peso (kg)',
+            data: [113.0, 110.8, 107.5, 105.1, 103.0, 101.4, 99.8, 98.9, 98.2],
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            tension: 0.35,
+            fill: true,
+            pointBackgroundColor: '#22c55e'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    async function salvarPesagem() {
+      const pesoEl = document.getElementById('input-novo-peso');
+      const bfEl = document.getElementById('input-novo-bf');
+      const statusEl = document.getElementById('perfil-save-status');
+      const v = pesoEl?.value?.trim();
+      if (!v) { copiarToast('Informe o peso em kg.'); return; }
+      hapticFeedback('medium');
+      if (statusEl) statusEl.textContent = 'Salvando...';
+      try {
+        await cockpitRpc('cockpitRegistrarPeso', v, bfEl?.value?.trim() || null, null);
+        document.getElementById('corpo-peso-atual').textContent = parseFloat(v.replace(',','.')).toFixed(1) + ' kg';
+        if (bfEl?.value && document.getElementById('corpo-bf-atual')) {
+          document.getElementById('corpo-bf-atual').textContent = parseFloat(bfEl.value.replace(',','.')).toFixed(1) + '%';
+        }
+        if (pesoEl) pesoEl.value = '';
+        if (bfEl) bfEl.value = '';
+        if (statusEl) statusEl.textContent = 'Pesagem salva no servidor!';
+        copiarToast('Pesagem salva com sucesso!');
+      } catch (e) {
+        if (statusEl) statusEl.textContent = 'Erro: ' + e.message;
+        copiarToast(e.message);
+      }
+    }
+
+    // Retorno ao chat do Telegram
+    function voltarParaChat() {
+      hapticFeedback('light');
+      if (tg?.openTelegramLink) {
+        // Abre o link do bot no Telegram (URL do chat)
+        const chatUrl = 'https://t.me/' + (tg.initDataUnsafe?.via_bot?.username || 'ultrarotina_bot');
+        tg.openTelegramLink(chatUrl);
+      } else if (tg?.close) {
+        tg.close();
+      }
+    }
+
+    // Carrega dados dinâmicos da aba Perfil
+    async function carregarPerfil() {
+      try {
+        const dados = await cockpitRpc('cockpitPerfil');
+        if (dados.peso_atual) {
+          document.getElementById('corpo-peso-atual').textContent = dados.peso_atual.toFixed(1) + ' kg';
+        }
+        if (dados.bf) {
+          document.getElementById('corpo-bf-atual').textContent = dados.bf.toFixed(1) + '%';
+        }
+        if (dados.dose) {
+          document.getElementById('corpo-dose-atual').textContent = dados.dose;
+        }
+        if (dados.semana) {
+          const semEl = document.getElementById('corpo-semana');
+          if (semEl) semEl.textContent = 'Semana ' + dados.semana;
+          // Atualiza badge da semana no header da aba
+          const badgeSem = document.querySelector('.mounjaro-semana-badge');
+          if (badgeSem) badgeSem.textContent = 'Semana ' + dados.semana;
+        }
+        // Renderiza blocos de rotina
+        renderizarRotinaBlocos(dados.rotina_blocos || []);
+      } catch (e) {
+        // Falha silenciosa — dados opcionais, não bloqueia o app
+        console.warn('carregarPerfil:', e.message);
+      }
+    }
+
+    function renderizarRotinaBlocos(blocos) {
+      const container = document.getElementById('rotina-blocos-container');
+      if (!container) return;
+      container.replaceChildren();
+      if (!blocos || blocos.length === 0) {
+        container.innerHTML = '<p class="text-slate-400 text-xs">Nenhum bloco de rotina definido para hoje.</p>';
+        return;
+      }
+      blocos.slice(0, 6).forEach(bloco => {
+        const card = document.createElement('div');
+        card.className = 'glass-card p-3 rounded-xl flex items-center justify-between';
+        const info = document.createElement('div');
+        info.className = 'space-y-0.5';
+        const nome = document.createElement('span');
+        nome.className = 'font-bold text-white block text-xs';
+        nome.textContent = String(bloco.nome || bloco.titulo || bloco);
+        const det = document.createElement('span');
+        det.className = 'text-[10px] text-slate-400';
+        det.textContent = bloco.horario || bloco.descricao || '';
+        info.append(nome);
+        if (det.textContent) info.append(det);
+        const badge = document.createElement('span');
+        badge.className = 'px-2 py-0.5 rounded text-[10px] font-bold ' +
+          (bloco.ativo ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400');
+        badge.textContent = bloco.ativo ? 'Ativo' : (bloco.status || 'Pendente');
+        card.append(info, badge);
+        container.append(card);
+      });
+    }
+
+    // Inicialização ao carregar
+    window.addEventListener('DOMContentLoaded', () => {
+      // Carrega dados clínicos e perfil ao iniciar
+      carregarLeitos();
+      carregarPerfil();
+      ['dva-resultado','sri-resultado','crcl-resultado','gaso-resultado'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = 'Informe os parâmetros para calcular.';
+      });
+      inicializarGraficoCorpo();
+      const inputConversa = document.getElementById('input-conversa-texto');
+      if (inputConversa) {
+        inputConversa.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            enviarMensagemConversa();
+          }
+        });
+      }
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
