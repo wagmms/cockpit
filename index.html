@@ -546,15 +546,36 @@
       ? cockpitSessionRaw
       : (sessionFromUrl || tg?.initData || '');
 
-    if (tg) {
+    function expandirTelaCheia() {
+      if (!window.Telegram?.WebApp) return;
+      const t = window.Telegram.WebApp;
       try {
-        tg.ready();
-        tg.expand();
-        if (tg.enableClosingConfirmation) tg.enableClosingConfirmation();
+        t.ready();
+        if (typeof t.requestFullscreen === 'function') {
+          t.requestFullscreen();
+        }
+        if (!t.isExpanded && typeof t.expand === 'function') {
+          t.expand();
+        }
+        if (typeof t.disableVerticalSwipes === 'function') {
+          t.disableVerticalSwipes();
+        }
+        if (t.enableClosingConfirmation) {
+          t.enableClosingConfirmation();
+        }
       } catch (e) {
-        console.warn("Telegram WebApp initialization error:", e);
+        console.warn("Fullscreen expand error:", e);
       }
     }
+
+    if (tg) {
+      expandirTelaCheia();
+    }
+    window.addEventListener('DOMContentLoaded', expandirTelaCheia);
+    window.addEventListener('load', expandirTelaCheia);
+    setTimeout(expandirTelaCheia, 100);
+    setTimeout(expandirTelaCheia, 300);
+    setTimeout(expandirTelaCheia, 800);
 
     function hapticFeedback(tipo = 'light') {
       try {
