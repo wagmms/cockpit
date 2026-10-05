@@ -534,6 +534,9 @@
     // 1. Inicialização do Telegram WebApp SDK
     const tg = window.Telegram?.WebApp;
     let cockpitSessionRaw = '';
+    try {
+      cockpitSessionRaw = '';
+    } catch (eSession) {}
     let sessionFromUrl = '';
     try {
       const sp = new URLSearchParams(window.location.search);
