@@ -272,14 +272,14 @@
           <span class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full font-bold">MedQuest Live</span>
         </div>
 
-        <!-- Seletor de Protocolos em Pills com scroll horizontal -->
+        <!-- Seletor de Protocolos em Pills com scroll horizontal (5 Grandes Áreas Médicas) -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10.5px] font-bold no-scrollbar">
-          <button onclick="selecionarProtocoloUsp('cad', this)" id="proto-btn-cad" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-500/30 text-rose-200 border border-rose-500/40">🩸 CAD (Cetoacidose)</button>
-          <button onclick="selecionarProtocoloUsp('sca', this)" id="proto-btn-sca" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">🫀 SCA sem Supra</button>
-          <button onclick="selecionarProtocoloUsp('sepse', this)" id="proto-btn-sepse" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">🦠 Choque Séptico</button>
-          <button onclick="selecionarProtocoloUsp('tv', this)" id="proto-btn-tv" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">⚡ TV Instável (ACLS)</button>
-          <button onclick="selecionarProtocoloUsp('trauma', this)" id="proto-btn-trauma" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">🚨 Politrauma & FAST</button>
-          <button onclick="selecionarProtocoloUsp('anaf', this)" id="proto-btn-anaf" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">💉 Anafilaxia Grave</button>
+          <button onclick="selecionarProtocoloUsp('cad', this)" id="proto-btn-cad" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-blue-500/25 text-blue-200 border border-blue-400/50 shadow-sm transition">🩸 CAD (Clínica)</button>
+          <button onclick="selecionarProtocoloUsp('sca', this)" id="proto-btn-sca" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🫀 SCA sem Supra (Clínica)</button>
+          <button onclick="selecionarProtocoloUsp('sepse', this)" id="proto-btn-sepse" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🦠 Choque Séptico (Clínica)</button>
+          <button onclick="selecionarProtocoloUsp('tv', this)" id="proto-btn-tv" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">⚡ TV Instável (Clínica)</button>
+          <button onclick="selecionarProtocoloUsp('trauma', this)" id="proto-btn-trauma" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🚨 Politrauma & FAST (Cirurgia)</button>
+          <button onclick="selecionarProtocoloUsp('anaf', this)" id="proto-btn-anaf" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">💉 Anafilaxia (Pediatria)</button>
         </div>
 
         <!-- Ajuste de Peso Opcional para Doses Automáticas -->
@@ -789,25 +789,37 @@
         </div>
       </div>
 
-      <!-- Barra de Filtros por Pílulas das 5 Grandes Áreas -->
+      <!-- Barra de Filtros por Pílulas das 5 Grandes Áreas Médicas -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-        <button onclick="filtrarAreaAulas('todas')" class="pilula-area active px-3 py-1.5 rounded-full font-semibold whitespace-nowrap bg-brand-500/20 text-brand-300 border border-brand-500/40 transition" data-area="todas">
-          Todas <span class="ml-1 text-[10px] opacity-80" id="badge-count-todas">317</span>
+        <button onclick="filtrarAreaAulas('todas')" class="pilula-area active px-3 py-1.5 rounded-full font-bold whitespace-nowrap bg-brand-500/25 text-brand-200 border border-brand-400/50 shadow-sm transition flex items-center gap-1.5" data-area="todas">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-brand-400"></i>
+          <span>Todas</span>
+          <span class="ml-0.5 text-[10px] px-1 rounded-full bg-slate-800/80 font-mono text-slate-300" id="badge-count-todas">317</span>
         </button>
-        <button onclick="filtrarAreaAulas('Cirurgia Geral')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition" data-area="Cirurgia Geral">
-          Cirurgia <span class="ml-1 text-[10px] opacity-80" id="badge-count-cirurgia">75</span>
+        <button onclick="filtrarAreaAulas('Cirurgia Geral')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-emerald-300 hover:border-emerald-500/30 transition flex items-center gap-1.5" data-area="Cirurgia Geral">
+          <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Cirurgia</span>
+          <span class="ml-0.5 text-[10px] px-1 rounded-full bg-slate-800/80 font-mono text-emerald-400/90" id="badge-count-cirurgia">75</span>
         </button>
-        <button onclick="filtrarAreaAulas('Clínica Médica')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition" data-area="Clínica Médica">
-          Clínica <span class="ml-1 text-[10px] opacity-80" id="badge-count-clinica">111</span>
+        <button onclick="filtrarAreaAulas('Clínica Médica')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-blue-300 hover:border-blue-500/30 transition flex items-center gap-1.5" data-area="Clínica Médica">
+          <i data-lucide="stethoscope" class="w-3.5 h-3.5 text-blue-400"></i>
+          <span>Clínica</span>
+          <span class="ml-0.5 text-[10px] px-1 rounded-full bg-slate-800/80 font-mono text-blue-400/90" id="badge-count-clinica">111</span>
         </button>
-        <button onclick="filtrarAreaAulas('Ginecologia e Obstetrícia')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition" data-area="Ginecologia e Obstetrícia">
-          GO <span class="ml-1 text-[10px] opacity-80" id="badge-count-go">63</span>
+        <button onclick="filtrarAreaAulas('Ginecologia e Obstetrícia')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-rose-300 hover:border-rose-500/30 transition flex items-center gap-1.5" data-area="Ginecologia e Obstetrícia">
+          <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400"></i>
+          <span>GO</span>
+          <span class="ml-0.5 text-[10px] px-1 rounded-full bg-slate-800/80 font-mono text-rose-400/90" id="badge-count-go">63</span>
         </button>
-        <button onclick="filtrarAreaAulas('Pediatria')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition" data-area="Pediatria">
-          Pediatria <span class="ml-1 text-[10px] opacity-80" id="badge-count-ped">43</span>
+        <button onclick="filtrarAreaAulas('Pediatria')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-amber-300 hover:border-amber-500/30 transition flex items-center gap-1.5" data-area="Pediatria">
+          <i data-lucide="baby" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Pediatria</span>
+          <span class="ml-0.5 text-[10px] px-1 rounded-full bg-slate-800/80 font-mono text-amber-400/90" id="badge-count-ped">43</span>
         </button>
-        <button onclick="filtrarAreaAulas('Medicina Preventiva e Social')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition" data-area="Medicina Preventiva e Social">
-          Preventiva <span class="ml-1 text-[10px] opacity-80" id="badge-count-prev">25</span>
+        <button onclick="filtrarAreaAulas('Medicina Preventiva e Social')" class="pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-purple-300 hover:border-purple-500/30 transition flex items-center gap-1.5" data-area="Medicina Preventiva e Social">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-400"></i>
+          <span>Preventiva</span>
+          <span class="ml-0.5 text-[10px] px-1 rounded-full bg-slate-800/80 font-mono text-purple-400/90" id="badge-count-prev">25</span>
         </button>
       </div>
 
@@ -2366,16 +2378,17 @@
       if (!PROTOCOLOS_USP_SALA_VERMELHA[id]) return;
       hapticFeedback('selection');
       protocoloUspAtivo = id;
+      const proto = PROTOCOLOS_USP_SALA_VERMELHA[id];
+      const estilo = typeof obterEstiloAreaMedica === 'function' 
+        ? obterEstiloAreaMedica(proto.grandeArea || proto.titulo) 
+        : { activePillClass: 'bg-rose-500/30 text-rose-200 border border-rose-500/40' };
 
       document.querySelectorAll('.proto-btn').forEach(b => {
-        b.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400";
+        b.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition";
       });
-      if (botao) {
-        botao.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-500/30 text-rose-200 border border-rose-500/40";
-      } else {
-        const btnId = 'proto-btn-' + id;
-        const b = document.getElementById(btnId);
-        if (b) b.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-500/30 text-rose-200 border border-rose-500/40";
+      const elAlvo = botao || document.getElementById('proto-btn-' + id);
+      if (elAlvo) {
+        elAlvo.className = `proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg border font-bold shadow-sm transition ${estilo.activePillClass}`;
       }
 
       renderizarProtocoloUsp();
@@ -2386,6 +2399,9 @@
       if (!proto) return;
 
       const pesoVal = parseFloat(document.getElementById('usprp-peso')?.value) || null;
+      const estiloArea = typeof obterEstiloAreaMedica === 'function' 
+        ? obterEstiloAreaMedica(proto.grandeArea || proto.titulo) 
+        : { badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-500/30', icone: 'flame', textClass: 'text-rose-400' };
 
       // 1. Renderiza card de metas
       const metasContainer = document.getElementById('usprp-metas-card');
@@ -2393,7 +2409,13 @@
         metasContainer.replaceChildren();
         const header = document.createElement('div');
         header.className = 'font-bold text-white flex items-center justify-between';
-        header.innerHTML = `<span>${proto.titulo}</span><span class="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded font-mono">${proto.badge}</span>`;
+        header.innerHTML = `
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="${estiloArea.icone}" class="w-3.5 h-3.5 ${estiloArea.textClass}"></i>
+            <span>${proto.titulo}</span>
+          </span>
+          <span class="text-[9px] px-2 py-0.5 rounded font-mono font-bold ${estiloArea.badgeClass}">${proto.badge}</span>
+        `;
         
         const cenarioEl = document.createElement('p');
         cenarioEl.className = 'text-slate-300 text-[10.5px] italic';
@@ -2404,7 +2426,7 @@
         proto.metas.forEach(meta => {
           const m = document.createElement('div');
           m.className = 'text-slate-300 flex items-start gap-1';
-          m.innerHTML = `<span class="text-rose-400 font-bold">•</span> <span>${meta}</span>`;
+          m.innerHTML = `<span class="${estiloArea.textClass} font-bold">•</span> <span>${meta}</span>`;
           listaMetas.appendChild(m);
         });
 
@@ -2605,6 +2627,104 @@
     }
 
     // =========================================================================
+    // 5.1 PADRÃO VISUAL DAS 5 GRANDES ÁREAS MÉDICAS (MEDQUEST CLINICAL DESIGN)
+    // =========================================================================
+    const PADRAO_AREAS_MEDICAS = {
+      'Clínica Médica': {
+        nome: 'Clínica Médica',
+        sigla: 'Clínica',
+        cor: 'blue',
+        icone: 'stethoscope',
+        badgeClass: 'bg-blue-500/15 text-blue-300 border border-blue-500/30',
+        activePillClass: 'bg-blue-500/25 text-blue-200 border border-blue-400/50 shadow-sm shadow-blue-500/20',
+        inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-blue-300 hover:border-blue-500/30',
+        barClass: 'bg-blue-500',
+        textClass: 'text-blue-400',
+        borderClass: 'border-blue-500/40',
+        bgTintClass: 'bg-blue-500/10'
+      },
+      'Cirurgia Geral': {
+        nome: 'Cirurgia Geral',
+        sigla: 'Cirurgia',
+        cor: 'emerald',
+        icone: 'activity',
+        badgeClass: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
+        activePillClass: 'bg-emerald-500/25 text-emerald-200 border border-emerald-400/50 shadow-sm shadow-emerald-500/20',
+        inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-emerald-300 hover:border-emerald-500/30',
+        barClass: 'bg-emerald-500',
+        textClass: 'text-emerald-400',
+        borderClass: 'border-emerald-500/40',
+        bgTintClass: 'bg-emerald-500/10'
+      },
+      'Pediatria': {
+        nome: 'Pediatria',
+        sigla: 'Pediatria',
+        cor: 'amber',
+        icone: 'baby',
+        badgeClass: 'bg-amber-500/15 text-amber-300 border border-amber-500/30',
+        activePillClass: 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-sm shadow-amber-500/20',
+        inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-amber-300 hover:border-amber-500/30',
+        barClass: 'bg-amber-500',
+        textClass: 'text-amber-400',
+        borderClass: 'border-amber-500/40',
+        bgTintClass: 'bg-amber-500/10'
+      },
+      'Ginecologia e Obstetrícia': {
+        nome: 'Ginecologia e Obstetrícia',
+        sigla: 'GO',
+        cor: 'rose',
+        icone: 'heart',
+        badgeClass: 'bg-rose-500/15 text-rose-300 border border-rose-500/30',
+        activePillClass: 'bg-rose-500/25 text-rose-200 border border-rose-400/50 shadow-sm shadow-rose-500/20',
+        inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-rose-300 hover:border-rose-500/30',
+        barClass: 'bg-rose-500',
+        textClass: 'text-rose-400',
+        borderClass: 'border-rose-500/40',
+        bgTintClass: 'bg-rose-500/10'
+      },
+      'Medicina Preventiva e Social': {
+        nome: 'Medicina Preventiva e Social',
+        sigla: 'Preventiva',
+        cor: 'purple',
+        icone: 'shield-check',
+        badgeClass: 'bg-purple-500/15 text-purple-300 border border-purple-500/30',
+        activePillClass: 'bg-purple-500/25 text-purple-200 border border-purple-400/50 shadow-sm shadow-purple-500/20',
+        inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-purple-300 hover:border-purple-500/30',
+        barClass: 'bg-purple-500',
+        textClass: 'text-purple-400',
+        borderClass: 'border-purple-500/40',
+        bgTintClass: 'bg-purple-500/10'
+      }
+    };
+
+    function obterEstiloAreaMedica(nomeArea) {
+      if (!nomeArea) {
+        return {
+          nome: 'Geral', sigla: 'Geral', cor: 'slate', icone: 'layers',
+          badgeClass: 'bg-slate-800 text-slate-300 border border-slate-700',
+          activePillClass: 'bg-slate-800 text-white border border-slate-600',
+          inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800',
+          barClass: 'bg-slate-600', textClass: 'text-slate-300',
+          borderClass: 'border-slate-700', bgTintClass: 'bg-slate-800/30'
+        };
+      }
+      const norm = nomeArea.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      if (norm.includes('cirurg') || norm.includes('trauma')) return PADRAO_AREAS_MEDICAS['Cirurgia Geral'];
+      if (norm.includes('pediat')) return PADRAO_AREAS_MEDICAS['Pediatria'];
+      if (norm.includes('ginec') || norm.includes('obstet') || norm === 'go' || norm.includes('parto')) return PADRAO_AREAS_MEDICAS['Ginecologia e Obstetrícia'];
+      if (norm.includes('prevent') || norm.includes('social') || norm.includes('coletiva') || norm.includes('mfc') || norm.includes('epidemi')) return PADRAO_AREAS_MEDICAS['Medicina Preventiva e Social'];
+      if (norm.includes('clinic') || norm.includes('cardio') || norm.includes('intensiv') || norm.includes('emerg') || norm.includes('uti')) return PADRAO_AREAS_MEDICAS['Clínica Médica'];
+      return {
+        nome: nomeArea, sigla: nomeArea.split(' ')[0], cor: 'teal', icone: 'stethoscope',
+        badgeClass: 'bg-teal-500/15 text-teal-300 border border-teal-500/30',
+        activePillClass: 'bg-teal-500/25 text-teal-200 border border-teal-400/50',
+        inactivePillClass: 'bg-slate-900 text-slate-400 border border-slate-800',
+        barClass: 'bg-teal-500', textClass: 'text-teal-400',
+        borderClass: 'border-teal-500/40', bgTintClass: 'bg-teal-500/10'
+      };
+    }
+
+    // =========================================================================
     // 5.2 MÓDULO PONTO CEGO DO PLANTÃO (PRECEPTOR FOCUS & FSRS ENGINE)
     // =========================================================================
     const PONTOS_CEGOS_PLANTAO = [
@@ -2623,7 +2743,7 @@
       {
         id: 'sca_sem_supra_trombolitico',
         titulo: 'SCA sem Supra: Risco de Trombólise Iatrogênica',
-        area: 'Cardiologia',
+        area: 'Clínica Médica',
         armadilha: 'Prescrever trombolítico/fibrinolítico em SCA SEM supradesnivelamento de ST é contraindicação formal absoluta (aumenta mortalidade e hemorragia grave sem benefício recanalizador).',
         racional: 'O trombo na SAMSST é suboclusivo, branco e rico em plaquetas. O trombolítico lisa fibrina mas desestabiliza a placa e causa hemorragias sistêmicas severas.',
         diretriz: 'Conduta Padrão: Dupla antiagregação precoce (AAS + Ticagrelor), Enoxaparina 1 mg/kg SC 12/12h e CATE em até 24h para GRACE > 140.',
@@ -2635,7 +2755,7 @@
       {
         id: 'sepse_bundle_atb',
         titulo: 'Choque Séptico: Atraso Crítico de Antimicrobiano',
-        area: 'Terapia Intensiva',
+        area: 'Clínica Médica',
         armadilha: 'Postergar o antibiótico de amplo espectro para além de 1 hora aguardando transporte de culturas ou leito de UTI eleva a mortalidade em 8% a cada 60 min.',
         racional: 'A proliferação bacteriana e a tempestade de citocinas pró-inflamatórias desregulam o endotélio, perpetuando o choque distributivo e a disfunção de múltiplos órgãos.',
         diretriz: 'Bundle de 1h HC-UE: Lactato inicial + 2 hemoculturas rápidas + ATB de amplo espectro venoso em < 60 min + Cristaloide 30 mL/kg + Nora precoce.',
@@ -2647,7 +2767,7 @@
       {
         id: 'trauma_instavel_tc',
         titulo: 'Politrauma: O "Túnel da Morte" da Tomografia',
-        area: 'Cirurgia do Trauma',
+        area: 'Cirurgia Geral',
         armadilha: 'Enviar paciente politraumatizado instável hemodinamicamente (em choque) com FAST positivo para Tomografia Computadorizada (erro gravíssimo com PCR na sala de imagem).',
         racional: 'A tomografia exige imobilidade, distância da equipe de ressuscitação e atrasa em mais de 40 minutos o controle cirúrgico de sangramento exanguinante.',
         diretriz: 'Regra de Ouro ATLS / Sala Vermelha: Choque + FAST Positivo = Laparotomia Exploradora Imediata no Centro Cirúrgico (Damage Control Surgery).',
@@ -2659,7 +2779,7 @@
       {
         id: 'tv_sync_ausente',
         titulo: 'TV Instável: Choque sem Modo Sincronizado',
-        area: 'Emergência Cardiológica',
+        area: 'Clínica Médica',
         armadilha: 'Disparar cardioversor manual em taquicardia ventricular com pulso sem apertar o botão SYNC induz o fenômeno R-sobre-T, degenerando a TV em Fibrilação Ventricular imediata.',
         racional: 'A descarga assíncrona que atinge a fase vulnerável da repolarização ventricular (ápice da onda T) provoca dispersão refratária ventricular caótica.',
         diretriz: 'Protocolo ACLS: Confirmar flag "SYNC" no monitor, sedação rápida (Etomidato 0,2 mg/kg) se consciente e descarga sincronizada com 100 Joules.',
@@ -2671,7 +2791,7 @@
       {
         id: 'anaf_corticoide_primeiro',
         titulo: 'Anafilaxia: Corticoide em Vez de Adrenalina IM',
-        area: 'Pediatria & Emergência',
+        area: 'Pediatria',
         armadilha: 'Prescrever corticoide venoso ou anti-histamínico antes ou em substituição à Adrenalina intramuscular (corticoide demora horas para ter efeito genômico; adrenalina é a única droga salva-vidas imediata).',
         racional: 'Apenas a Adrenalina atua nos receptores alfa-1 promovendo vasoconstrição imediata contra o choque distributivo e beta-2 inibindo a degranulação mastocitária aguda.',
         diretriz: 'Dose Salva-Vidas: Adrenalina 1:1000 pura (0,01 mg/kg em crianças, máx 0,5 mg no adulto) IM no vasto lateral da coxa. Corticoide é mero coadjuvante de 2ª linha.',
@@ -2679,6 +2799,30 @@
         revisoesSrs: 12,
         retencaoEst: 93,
         subtemaMedquest: 'Anafilaxia Grave em Lactente e Adulto'
+      },
+      {
+        id: 'preeclampsia_sulfato',
+        titulo: 'Pré-Eclâmpsia Grave: Sulfato de Magnésio Mandatório',
+        area: 'Ginecologia e Obstetrícia',
+        armadilha: 'Administrar benzodiazepínicos (Diazepam) em crise convulsiva gravídica ou hiper-reflexia em vez de Sulfato de Magnésio (droga de escolha que reduz em 50% o risco de eclâmpsia).',
+        racional: 'O Sulfato de Magnésio atua como vasodilatador cerebral seletivo e antagonista de receptores NMDA centrais, protegendo a barreira hematoencefálica materna sem deprimir o feto.',
+        diretriz: 'Esquema Zuspan: Ataque de 4 g IV lento (20 min) + Manutenção contínua de 1 a 2 g/h em BI. Vigilância de reflexo patelar, diurese (> 25 mL/h) e FR (> 16 irpm). Antídoto: Gluconato de Cálcio 10% 10 mL.',
+        perguntaSocratica: 'Qual é o primeiro sinal clínico de intoxicação por magnésio que obriga a suspensão imediata da infusão do sulfato?',
+        revisoesSrs: 16,
+        retencaoEst: 89,
+        subtemaMedquest: 'Pré-Eclâmpsia Grave e Síndrome HELLP'
+      },
+      {
+        id: 'preventiva_rastreamento_inca',
+        titulo: 'Rastreamento: Sobrediagnóstico e Diretrizes do MS',
+        area: 'Medicina Preventiva e Social',
+        armadilha: 'Solicitar dosagem de PSA em homens assintomáticos sem decisão compartilhada ou realizar preventivo de colo uterino em mulheres < 25 anos ou com intervalo inferior a 3 anos após 2 negativos.',
+        racional: 'Testes de rastreamento indiscriminados geram viés de tempo de avanço (lead-time bias), biópsias desnecessárias, incontinência/disfunção erétil iatrogênicas e custos sem redução de mortalidade.',
+        diretriz: 'Diretrizes do MS/INCA: Citopatológico dos 25 aos 64 anos após sexarca (anual por 2 anos, depois trienal se negativos). Mamografia bienal dos 50 aos 69 anos. PSA não é recomendado para rastreamento populacional de rotina.',
+        perguntaSocratica: 'Qual é a diferença conceitual epidemiológica entre sensibilidade diagnóstica de um teste e o valor preditivo positivo no contexto de baixa prevalência?',
+        revisoesSrs: 25,
+        retencaoEst: 92,
+        subtemaMedquest: 'Rastreamento Populacional e Prevenção Quaternária'
       }
     ];
 
@@ -2695,7 +2839,12 @@
       const srsDescEl = document.getElementById('ponto-cego-srs-desc');
       const srsAccEl = document.getElementById('ponto-cego-srs-acc');
 
-      if (areaBadge) areaBadge.textContent = pc.area;
+      const estiloArea = obterEstiloAreaMedica(pc.area);
+
+      if (areaBadge) {
+        areaBadge.className = `text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${estiloArea.badgeClass}`;
+        areaBadge.innerHTML = `<i data-lucide="${estiloArea.icone}" class="w-3 h-3"></i> <span>${pc.area}</span>`;
+      }
       if (tituloEl) {
         tituloEl.textContent = pc.titulo;
         tituloEl.title = pc.titulo;
@@ -6554,13 +6703,25 @@
       hapticFeedback('light');
       aulasState.areaAtiva = area;
       document.querySelectorAll('.pilula-area').forEach(btn => {
-        if (btn.dataset.area === area) {
-          btn.className = 'pilula-area active px-3 py-1.5 rounded-full font-semibold whitespace-nowrap bg-brand-500/20 text-brand-300 border border-brand-500/40 transition';
+        const btnArea = btn.dataset.area;
+        if (btnArea === area) {
+          if (area === 'todas') {
+            btn.className = 'pilula-area active px-3 py-1.5 rounded-full font-bold whitespace-nowrap bg-brand-500/25 text-brand-200 border border-brand-400/50 shadow-sm transition flex items-center gap-1.5';
+          } else {
+            const estilo = obterEstiloAreaMedica(area);
+            btn.className = `pilula-area active px-3 py-1.5 rounded-full font-bold whitespace-nowrap border transition flex items-center gap-1.5 ${estilo.activePillClass}`;
+          }
         } else {
-          btn.className = 'pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition';
+          if (btnArea === 'todas') {
+            btn.className = 'pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition flex items-center gap-1.5';
+          } else {
+            const estilo = obterEstiloAreaMedica(btnArea);
+            btn.className = `pilula-area px-3 py-1.5 rounded-full font-medium whitespace-nowrap border transition flex items-center gap-1.5 ${estilo.inactivePillClass}`;
+          }
         }
       });
       renderizarCatalogoAulas();
+      if (window.lucide) lucide.createIcons();
     }
 
     let buscaAulasTimeout = null;
@@ -6654,63 +6815,71 @@
         modulosMap.get(chave).aulas.push(aula);
       });
 
-      // Montagem do HTML em blocos
+      // Montagem do HTML em blocos com design canônico das 5 Grandes Áreas
       let htmlModulos = '';
       modulosMap.forEach(grupo => {
         const totalMod = grupo.aulas.length;
         const assistidasMod = grupo.aulas.filter(a => aulasState.assistidas.has(a.id)).length;
         const todasConcluidas = assistidasMod === totalMod && totalMod > 0;
+        const estiloArea = obterEstiloAreaMedica(grupo.area);
         
         // Se há busca ativa, abre automaticamente os módulos correspondentes
         const estaAberto = aulasState.termoBusca.length > 0 || aulasState.modulosAbertos.has(grupo.chave);
 
         htmlModulos += `
-          <div class="glass-card rounded-xl overflow-hidden border border-slate-800/80 transition">
-            <!-- Cabeçalho do Módulo (Acordeão) -->
-            <button onclick="alternarModuloAberto('${grupo.chave.replace(/'/g, "\\'") }')" class="w-full p-3 flex items-center justify-between text-left hover:bg-slate-800/40 transition gap-2">
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-medium">${grupo.area.split(' ')[0]}</span>
-                  <span class="text-xs font-bold text-white truncate">${grupo.modulo}</span>
+          <div class="glass-card rounded-xl overflow-hidden border border-slate-800/80 transition flex items-stretch">
+            <!-- Barra lateral temática da Grande Área Médica (MedQuest style) -->
+            <div class="w-1.5 shrink-0 ${estiloArea.barClass}"></div>
+            <div class="min-w-0 flex-1">
+              <!-- Cabeçalho do Módulo (Acordeão) -->
+              <button onclick="alternarModuloAberto('${grupo.chave.replace(/'/g, "\\'") }')" class="w-full p-3 flex items-center justify-between text-left hover:bg-slate-800/40 transition gap-2">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] px-2 py-0.5 rounded ${estiloArea.badgeClass} font-bold inline-flex items-center gap-1">
+                      <i data-lucide="${estiloArea.icone}" class="w-3 h-3"></i>
+                      <span>${estiloArea.sigla}</span>
+                    </span>
+                    <span class="text-xs font-bold text-white truncate">${grupo.modulo}</span>
+                  </div>
+                  <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
+                    <span>${totalMod} ${totalMod === 1 ? 'aula flash' : 'aulas flash'}</span>
+                    <span>•</span>
+                    <span class="${todasConcluidas ? 'text-emerald-400 font-bold' : 'text-slate-400'}">${assistidasMod}/${totalMod} concluídas</span>
+                  </div>
                 </div>
-                <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
-                  <span>${totalMod} ${totalMod === 1 ? 'aula flash' : 'aulas flash'}</span>
-                  <span>•</span>
-                  <span class="${todasConcluidas ? 'text-emerald-400 font-bold' : 'text-slate-400'}">${assistidasMod}/${totalMod} concluídas</span>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  ${todasConcluidas ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>' : ''}
+                  <i data-lucide="${estaAberto ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 text-slate-400"></i>
                 </div>
-              </div>
-              <div class="flex items-center gap-2 flex-shrink-0">
-                ${todasConcluidas ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>' : ''}
-                <i data-lucide="${estaAberto ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 text-slate-400"></i>
-              </div>
-            </button>
+              </button>
 
-            <!-- Lista de Aulas do Módulo -->
-            ${estaAberto ? `
-              <div class="p-2 pt-0 space-y-1.5 border-t border-slate-800/60 bg-surface-950/40">
-                ${grupo.aulas.map(aula => {
-                  const assistida = aulasState.assistidas.has(aula.id);
-                  const isAtiva = aulasState.aulaAtiva && aulasState.aulaAtiva.id === aula.id;
-                  return `
-                    <div class="p-2.5 rounded-lg border ${isAtiva ? 'border-brand-500/60 bg-brand-500/10' : 'border-slate-800/80 bg-slate-900/60'} flex items-start justify-between gap-2.5 transition">
-                      <div class="min-w-0 flex-1 cursor-pointer" onclick="abrirAulaFlash('${aula.id}')">
-                        <div class="flex items-center gap-1.5">
-                          <button class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center flex-shrink-0 hover:scale-105 transition" title="Assistir aula">
-                            <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
-                          </button>
-                          <span class="text-[11px] font-bold ${assistida ? 'text-slate-400 line-through' : 'text-white'}">${aula.tit}</span>
+              <!-- Lista de Aulas do Módulo -->
+              ${estaAberto ? `
+                <div class="p-2 pt-0 space-y-1.5 border-t border-slate-800/60 bg-surface-950/40">
+                  ${grupo.aulas.map(aula => {
+                    const assistida = aulasState.assistidas.has(aula.id);
+                    const isAtiva = aulasState.aulaAtiva && aulasState.aulaAtiva.id === aula.id;
+                    return `
+                      <div class="p-2.5 rounded-lg border ${isAtiva ? `border-${estiloArea.cor}-500/60 bg-${estiloArea.cor}-500/10 shadow-sm` : 'border-slate-800/80 bg-slate-900/60'} flex items-start justify-between gap-2.5 transition">
+                        <div class="min-w-0 flex-1 cursor-pointer" onclick="abrirAulaFlash('${aula.id}')">
+                          <div class="flex items-center gap-1.5">
+                            <button class="w-5 h-5 rounded-full ${isAtiva ? `bg-${estiloArea.cor}-500 text-slate-950` : `${estiloArea.bgTintClass} ${estiloArea.textClass}`} flex items-center justify-center flex-shrink-0 hover:scale-105 transition" title="Assistir aula">
+                              <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
+                            </button>
+                            <span class="text-[11px] font-bold ${assistida ? 'text-slate-400 line-through' : 'text-white'}">${aula.tit}</span>
+                          </div>
+                          <p class="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">${aula.res}</p>
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">${aula.res}</p>
-                      </div>
 
-                      <button onclick="alternarAulaAssistida('${aula.id}', event)" class="p-1 rounded-md ${assistida ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'} transition flex-shrink-0 mt-0.5" title="${assistida ? 'Marcar como não assistida' : 'Marcar como assistida'}">
-                        <i data-lucide="${assistida ? 'check-check' : 'check'}" class="w-3.5 h-3.5"></i>
-                      </button>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            ` : ''}
+                        <button onclick="alternarAulaAssistida('${aula.id}', event)" class="p-1 rounded-md ${assistida ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'} transition flex-shrink-0 mt-0.5" title="${assistida ? 'Marcar como não assistida' : 'Marcar como assistida'}">
+                          <i data-lucide="${assistida ? 'check-check' : 'check'}" class="w-3.5 h-3.5"></i>
+                        </button>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : ''}
+            </div>
           </div>
         `;
       });
@@ -6719,7 +6888,7 @@
       lucide.createIcons();
     }
 
-        function abrirAulaFlash(aulaId) {
+    function abrirAulaFlash(aulaId) {
       hapticFeedback('medium');
       const aula = AULAS_FLASH_CATALOGO.find(a => a.id === aulaId);
       if (!aula) return;
@@ -6736,9 +6905,17 @@
       const linkDireto = document.getElementById('player-link-drive-direto');
       const placeholderLink = document.getElementById('player-placeholder-link');
 
+      const estiloArea = obterEstiloAreaMedica(aula.area);
+
       if (tituloAulaEl) tituloAulaEl.textContent = aula.tit;
-      if (areaBadgeEl) areaBadgeEl.textContent = aula.area.split(' ')[0];
-      if (moduloLabelEl) moduloLabelEl.textContent = aula.mod;
+      if (areaBadgeEl) {
+        areaBadgeEl.className = `text-[10px] px-2 py-0.5 rounded font-bold shrink-0 inline-flex items-center gap-1 ${estiloArea.badgeClass}`;
+        areaBadgeEl.innerHTML = `<i data-lucide="${estiloArea.icone}" class="w-3 h-3"></i> <span>${estiloArea.sigla}</span>`;
+      }
+      if (moduloLabelEl) {
+        moduloLabelEl.className = `text-[10px] font-bold truncate max-w-[200px] ${estiloArea.textClass}`;
+        moduloLabelEl.textContent = `${estiloArea.sigla} • ${aula.mod}`;
+      }
       if (resumoTextoEl) resumoTextoEl.textContent = aula.res || 'Sem resumo cadastrado para esta aula.';
       if (playerContainer) playerContainer.classList.remove('hidden');
 
