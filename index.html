@@ -695,18 +695,20 @@
           return;
         }
 
-        // 2. Se executado no GitHub Pages / Navegador (Render de alta velocidade ou GAS fallback)
-        let activeBackend = '';
+        // 2. Se executado no GitHub Pages / Navegador (Render primário de alta velocidade com fallback para GAS)
+        const RENDER_BACKEND = "https://ultra-rotina-backend.onrender.com";
+        const GAS_BACKEND = "https://script.google.com/macros/s/AKfycbwo6GqTmc0_8fl9peKlw5d5jpfL5nqsc-ozLrqHiVk2RHD4h968EZAG4P75i2qSBlw9EQ/exec";
+
+        let customBackend = '';
         try {
-          activeBackend = localStorage.getItem('cockpit_backend_url') || '';
+          customBackend = localStorage.getItem('cockpit_backend_url') || '';
         } catch (e) {}
-        const defaultBackend = "https://script.google.com/macros/s/AKfycbwo6GqTmc0_8fl9peKlw5d5jpfL5nqsc-ozLrqHiVk2RHD4h968EZAG4P75i2qSBlw9EQ/exec";
-        const targetUrl = activeBackend
-          ? (activeBackend.replace(/\/+$/, '') + '/api/cockpit')
-          : (defaultBackend + '?api=cockpit');
+
+        const primaryUrl = (customBackend || RENDER_BACKEND).replace(/\/+$/, '') + '/api/cockpit';
+        const fallbackUrl = GAS_BACKEND + '?api=cockpit';
 
         try {
-          const resp = await fetch(targetUrl, {
+          const resp = await fetch(primaryUrl, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({
@@ -718,11 +720,30 @@
           const json = await resp.json();
           if (json.ok) {
             resolve(json.resultado);
-          } else {
-            reject(new Error(json.erro || "Falha na requisição ao servidor."));
+            return;
           }
-        } catch (fetchErr) {
-          reject(new Error("Erro de conexão com o servidor: " + (fetchErr.message || fetchErr)));
+          throw new Error(json.erro || "Falha na resposta do servidor primário.");
+        } catch (primaryErr) {
+          console.warn("[Cockpit] Servidor primário indisponível. Tentando fallback para Google Apps Script...", primaryErr.message);
+          try {
+            const respFallback = await fetch(fallbackUrl, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({
+                metodo: metodo,
+                session: credencial,
+                args: args
+              })
+            });
+            const jsonFallback = await respFallback.json();
+            if (jsonFallback.ok) {
+              resolve(jsonFallback.resultado);
+              return;
+            }
+            reject(new Error(jsonFallback.erro || "Falha no servidor fallback."));
+          } catch (fallbackErr) {
+            reject(new Error("Erro de conexão com o servidor: " + (primaryErr.message || primaryErr)));
+          }
         }
       });
     }
