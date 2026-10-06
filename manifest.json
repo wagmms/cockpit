@@ -1,0 +1,19 @@
+{
+  "name": "Cockpit Móvel — Assistente Clínico & Pessoal",
+  "short_name": "Cockpit",
+  "description": "Assistente Clínico, Plantão Hospitalar e Rotina",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063823.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

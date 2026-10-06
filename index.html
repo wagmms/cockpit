@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Cockpit Móvel — Assistente Clínico & Pessoal</title>
 
+  <!-- PWA & Mobile Meta Tags -->
+  <meta name="theme-color" content="#020617">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+
   <!-- Telegram WebApp SDK Oficial -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <!-- Tailwind CSS via CDN -->
@@ -531,20 +538,36 @@
 
   <!-- SCRIPT LÓGICO COMPLETO DO COCKPIT MÓVEL -->
   <script>
-    // 1. Inicialização do Telegram WebApp SDK
+    // 1. Inicialização do Telegram WebApp SDK e Persistência de Sessão (PWA / Web)
     const tg = window.Telegram?.WebApp;
     let cockpitSessionRaw = '';
     try {
       cockpitSessionRaw = '';
     } catch (eSession) {}
     let sessionFromUrl = '';
+    let customBackendFromUrl = '';
     try {
       const sp = new URLSearchParams(window.location.search);
       sessionFromUrl = sp.get('session') || sp.get('token') || '';
+      customBackendFromUrl = sp.get('backend') || '';
     } catch (eUrl) {}
+
+    let sessionStored = '';
+    try {
+      sessionStored = localStorage.getItem('cockpit_session') || '';
+      if (customBackendFromUrl) {
+        localStorage.setItem('cockpit_backend_url', customBackendFromUrl);
+      }
+    } catch (eStore) {}
+
     const sessaoAtiva = (typeof cockpitSessionRaw === 'string' && cockpitSessionRaw)
       ? cockpitSessionRaw
-      : (sessionFromUrl || tg?.initData || '');
+      : (sessionFromUrl || sessionStored || tg?.initData || '');
+
+    // Salva a credencial permanentemente no navegador para modo PWA/Site independente
+    if (sessaoAtiva && typeof localStorage !== 'undefined') {
+      try { localStorage.setItem('cockpit_session', sessaoAtiva); } catch (e) {}
+    }
 
     function expandirTelaCheia() {
       if (!window.Telegram?.WebApp) return;
@@ -672,9 +695,18 @@
           return;
         }
 
-        // 2. Se executado no GitHub Pages (via API HTTP em segundo plano, zero banners)
+        // 2. Se executado no GitHub Pages / Navegador (Render de alta velocidade ou GAS fallback)
+        let activeBackend = '';
         try {
-          const resp = await fetch(GAS_BACKEND_URL + "?api=cockpit", {
+          activeBackend = localStorage.getItem('cockpit_backend_url') || '';
+        } catch (e) {}
+        const defaultBackend = "https://script.google.com/macros/s/AKfycbwo6GqTmc0_8fl9peKlw5d5jpfL5nqsc-ozLrqHiVk2RHD4h968EZAG4P75i2qSBlw9EQ/exec";
+        const targetUrl = activeBackend
+          ? (activeBackend.replace(/\/+$/, '') + '/api/cockpit')
+          : (defaultBackend + '?api=cockpit');
+
+        try {
+          const resp = await fetch(targetUrl, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({
@@ -1238,6 +1270,8 @@
         tg.openTelegramLink(chatUrl);
       } else if (tg?.close) {
         tg.close();
+      } else {
+        window.open('https://t.me/ultrarotina_bot', '_blank');
       }
     }
 
