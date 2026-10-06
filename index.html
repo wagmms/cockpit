@@ -479,11 +479,12 @@
     <!-- =================================================================== -->
     <div id="tab-soap" class="tab-pane space-y-3.5">
       <!-- ================================================================= -->
-      <!-- CARD: PONTO CEGO DO PLANTÃO (INSPIRADO NO PRECEPTORFOCUSCARD)     -->
+      <!-- CARD DINÂMICO: PRECEPTOR IA · REVISÃO DE 30s DO PLANTÃO           -->
       <!-- ================================================================= -->
       <section 
-        aria-label="Plano de Ataque do Preceptor IA"
-        class="relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-950/30 via-slate-900 to-slate-950 p-3.5 sm:p-4 shadow-lg shadow-purple-950/20 group"
+        id="card-ponto-cego-plantao"
+        aria-label="Revisão de 30 Segundos do Plantão pelo Preceptor IA"
+        class="relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-950/40 via-slate-900 to-slate-950 p-3.5 sm:p-4 shadow-lg shadow-purple-950/25 group"
       >
         <!-- Glow decorativo de fundo -->
         <div class="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-purple-500/10 blur-2xl"></div>
@@ -493,101 +494,118 @@
           <div class="flex items-center justify-between border-b border-purple-500/20 pb-2.5">
             <div class="flex items-center gap-2">
               <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30">
-                <i data-lucide="brain" class="w-4 h-4"></i>
+                <i data-lucide="stethoscope" class="w-4 h-4"></i>
               </div>
               <div>
                 <div class="flex items-center gap-1.5">
                   <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-purple-400">Preceptor IA</span>
-                  <span class="rounded bg-purple-500/20 px-1 py-0.2 text-[8.5px] font-bold text-purple-300">Adaptativo</span>
+                  <span class="rounded bg-purple-500/20 px-1.5 py-0.2 text-[8.5px] font-bold text-purple-300">
+                    Revisão de 30s
+                  </span>
                 </div>
                 <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1">
-                  🎯 Ponto Cego do Plantão & Plano de Ataque
+                  🎯 Ponto Cego do Plantão & Auditoria de Conduta
                 </h3>
               </div>
             </div>
 
-            <div class="flex items-center gap-1.5 text-[10px] text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-700/60 font-medium">
-              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Tempo Real</span>
+            <div class="flex items-center gap-1.5">
+              <button 
+                onclick="atualizarPontoCegoPlantaoDinamico(true)"
+                title="Recalcular revisão dos casos do plantão"
+                class="p-1 rounded-lg text-slate-400 hover:text-purple-300 hover:bg-purple-500/10 transition"
+              >
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5" id="ponto-cego-sync-icon"></i>
+              </button>
+              <div class="flex items-center gap-1 text-[10px] text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-700/60 font-medium">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="ponto-cego-status-leitos">Casos de Hoje</span>
+              </div>
             </div>
           </div>
 
-          <!-- Grid de Métricas Diagnósticas (2 Colunas) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <!-- Bloco 1: Subtema Vulnerável / Ponto Cego Clínico -->
-            <div class="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-2.5 space-y-2">
-              <div class="flex items-start justify-between gap-1">
+          <!-- Síntese Dinâmica dos Casos Conduzidos Hoje -->
+          <div class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3 space-y-2.5">
+            <div class="flex items-start gap-2">
+              <div class="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
+                <i data-lucide="clipboard-check" class="w-3 h-3"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p id="ponto-cego-sintese-casos" class="text-xs text-slate-100 font-semibold leading-relaxed">
+                  Você conduziu 2 casos de IAM e 1 de IC descompensada no plantão de hoje.
+                </p>
+              </div>
+            </div>
+
+            <!-- Ponto de Atenção em Destaque -->
+            <div class="rounded-lg bg-rose-950/30 border border-rose-500/30 p-2.5 space-y-1">
+              <div class="flex items-center justify-between gap-1">
                 <div class="flex items-center gap-1 text-[11px] font-bold text-rose-400">
                   <i data-lucide="alert-triangle" class="w-3.5 h-3.5 shrink-0 text-rose-400"></i>
-                  <span>Gargalo Prioritário</span>
+                  <span>Ponto de atenção na conduta:</span>
                 </div>
-                <span id="ponto-cego-area-badge" class="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] font-bold text-slate-300 shrink-0">
+                <span id="ponto-cego-area-tag" class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
                   Clínica Médica
                 </span>
               </div>
-
-              <div>
-                <h4 id="ponto-cego-titulo" class="text-xs font-bold text-white line-clamp-1">
-                  CAD: Hipocalemia Oculta pós-Insulina
-                </h4>
-                <p id="ponto-cego-desc" class="text-[10px] text-slate-300 mt-0.5 leading-snug">
-                  <strong class="text-rose-400 font-semibold">Armadilha HC-UE:</strong> Iniciar insulina antes de checar K+ (&lt; 3,3 mEq/L) induz arritmia ventricular fatal.
-                </p>
-              </div>
-
-              <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
-                <span class="text-slate-400">Meta: 15 Qs MedQuest</span>
-                <button onclick="alternarPontoCegoTema()" class="text-brand-400 hover:text-brand-300 font-bold flex items-center gap-0.5">
-                  Alternar foco <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Bloco 2: Curva de Esquecimento (FSRS v6 & Anki) -->
-            <div class="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-2.5 space-y-2">
-              <div class="flex items-start justify-between gap-1">
-                <div class="flex items-center gap-1 text-[11px] font-bold text-purple-400">
-                  <i data-lucide="target" class="w-3.5 h-3.5 shrink-0 text-purple-400"></i>
-                  <span>Retenção Ativa (FSRS v6)</span>
-                </div>
-                <span class="rounded bg-purple-500/20 px-1.5 py-0.5 text-[9px] font-bold text-purple-300 shrink-0">
-                  Curva Diária
-                </span>
-              </div>
-
-              <div>
-                <h4 id="ponto-cego-srs-status" class="text-xs font-bold text-purple-300 flex items-center gap-1">
-                  <i data-lucide="clock" class="w-3.5 h-3.5 text-purple-400"></i> 28 revisões prontas hoje
-                </h4>
-                <p id="ponto-cego-srs-desc" class="text-[10px] text-slate-300 mt-0.5 leading-snug">
-                  Revise os cards do internato antes do término do plantão para blindar retenção &gt; 85%.
-                </p>
-              </div>
-
-              <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
-                <span id="ponto-cego-srs-acc" class="text-slate-400">Retenção estimada: 88%</span>
-                <button onclick="navegarAba('tab-rotina', 'Rotina &amp; Estudos')" class="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-0.5">
-                  Ver rotina <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </button>
-              </div>
+              <p id="ponto-cego-armadilha-texto" class="text-[11px] text-rose-200/90 leading-snug">
+                critérios de contraindicação do Nitrato no IAM de VD e PAS &lt; 90 mmHg.
+              </p>
             </div>
           </div>
 
-          <!-- Barra de Ações Rápidas do Preceptor -->
-          <div class="flex items-center gap-2 pt-1">
+          <!-- Gaveta Expansível da Pérola Clínica Beira-Leito -->
+          <div id="ponto-cego-perola-gaveta" class="hidden animate-in fade-in duration-200 space-y-2.5">
+            <!-- Racional Beira-Leito -->
+            <div class="rounded-xl bg-purple-950/30 border border-purple-500/30 p-3 space-y-1.5">
+              <div class="flex items-center gap-1.5 text-purple-300 font-bold text-[11px]">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i>
+                <span id="ponto-cego-perola-titulo">Pérola Beira-Leito & Fisiopatologia Rápida</span>
+              </div>
+              <p id="ponto-cego-perola-conteudo" class="text-[11px] text-slate-200 leading-relaxed">
+                No IAM de parede inferior com extensão para ventrículo direito (V3R/V4R supra), o miocárdio ventricular direito dilatado depende criticamente de pré-carga. O uso de nitratos causa venodilatação aguda súbita, colapsa o débito cardíaco e precipita choque cardiogênico refratário e PCR.
+              </p>
+            </div>
+
+            <!-- Diretriz Salva-Vidas -->
+            <div class="rounded-xl bg-emerald-950/30 border border-emerald-500/30 p-2.5 space-y-1">
+              <div class="flex items-center gap-1.5 text-emerald-300 font-bold text-[11px]">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Conduta Padrão-Ouro HC-UE:</span>
+              </div>
+              <p id="ponto-cego-diretriz-conteudo" class="text-[11px] text-emerald-200/90 leading-relaxed">
+                Solicitar V3R, V4R e V7/V8 em todo IAM de parede inferior (DII, DIII, aVF). Se PAS &lt; 90 mmHg, FC &lt; 50 ou &gt; 100 bpm com acometimento de VD: ZERO nitrato, ZERO betabloqueador, ZERO morfina. Expansão volêmica cautelosa com SF 0,9% e reperfusão imediata.
+              </p>
+            </div>
+          </div>
+
+          <!-- Barra de Ações Rápidas Beira-Leito -->
+          <div class="flex items-center gap-2 pt-0.5">
             <button
-              onclick="abrirModalRaioXPreceptor()"
-              class="flex-1 py-1.5 px-2.5 rounded-lg border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 font-bold text-[11px] transition flex items-center justify-center gap-1.5 active:scale-[0.98]"
+              id="btn-toggle-perola"
+              onclick="togglePerolaClinicaPontoCego()"
+              class="flex-1 py-1.5 px-3 rounded-lg border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-200 font-bold text-[11px] transition flex items-center justify-center gap-1.5 active:scale-[0.98]"
             >
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i>
-              <span>Raio-X do Preceptor</span>
+              <i data-lucide="eye" class="w-3.5 h-3.5 text-purple-400" id="icone-btn-perola"></i>
+              <span id="label-btn-perola">Toque para ver a pérola clínica</span>
             </button>
+
             <button
-              onclick="iniciarBateriaFocoMedQuest()"
-              class="flex-1 py-1.5 px-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1.5 shadow-md shadow-purple-950 active:scale-[0.98]"
+              onclick="solicitarSabatinaPreceptorPlantao()"
+              title="Perguntar ao Preceptor IA sobre este caso"
+              class="py-1.5 px-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 shadow-md shadow-purple-950 active:scale-[0.98] shrink-0"
             >
-              <span>Bateria do Foco (15 Qs)</span>
-              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              <i data-lucide="brain" class="w-3.5 h-3.5"></i>
+              <span class="hidden sm:inline">Auditar com Preceptor</span>
+              <span class="sm:hidden">Auditar</span>
+            </button>
+
+            <button
+              onclick="alternarCasoPontoCego()"
+              title="Alternar entre casos do plantão"
+              class="p-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white transition shrink-0"
+            >
+              <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
             </button>
           </div>
         </div>
@@ -896,7 +914,7 @@
   </div>
 
   <!-- ================================================================= -->
-  <!-- MODAL / GAVETA DO RAIO-X DO PRECEPTOR IA (PONTO CEGO)             -->
+  <!-- MODAL / GAVETA DE AUDITORIA BEIRA-LEITO (PRECEPTOR IA)            -->
   <!-- ================================================================= -->
   <div id="modal-raiox-preceptor" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
     <div class="relative w-full max-w-lg max-h-[88vh] flex flex-col rounded-2xl border border-purple-500/40 bg-slate-900 shadow-2xl overflow-hidden">
@@ -904,15 +922,15 @@
       <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/60">
         <div class="flex items-center gap-2.5">
           <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30">
-            <i data-lucide="brain" class="w-4 h-4"></i>
+            <i data-lucide="stethoscope" class="w-4 h-4"></i>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
               <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-purple-400">Preceptor Socrático</span>
-              <span class="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.2 rounded font-medium">MedQuest Live</span>
+              <span class="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.2 rounded font-medium">Plantão Beira-Leito</span>
             </div>
             <h4 class="text-xs sm:text-sm font-bold text-white">
-              Raio-X de Ponto Cego & Diretriz do Plantão
+              Auditoria de Conduta & Ponto Cego do Plantão
             </h4>
           </div>
         </div>
@@ -934,14 +952,14 @@
 
       <!-- Rodapé do Modal -->
       <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
-        <span class="text-[10px] text-slate-400">Calibrado com bancas USP, ENARE e SUS-SP.</span>
+        <span class="text-[10px] text-slate-400">Protocolos clínicos HC-UE FMRP-USP & Beira-Leito.</span>
         <div class="flex items-center gap-2">
           <button onclick="fecharModalRaioXPreceptor()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
             Fechar
           </button>
-          <button onclick="iniciarBateriaFocoMedQuest(); fecharModalRaioXPreceptor();" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] flex items-center gap-1 shadow-md shadow-purple-950 transition">
-            <span>Treinar 15 Qs</span>
-            <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+          <button onclick="solicitarSabatinaPreceptorPlantao(); fecharModalRaioXPreceptor();" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] flex items-center gap-1 shadow-md shadow-purple-950 transition">
+            <i data-lucide="brain" class="w-3.5 h-3.5"></i>
+            <span>Provocar Preceptor</span>
           </button>
         </div>
       </div>
@@ -1678,6 +1696,7 @@
             }
             renderizarLeitos();
             atualizarBadgeLeitos(snap.dados.leitos);
+            atualizarPontoCegoPlantaoDinamico();
             cockpitCarregando = false;
             return;
           }
@@ -1700,6 +1719,7 @@
         }
         renderizarLeitos();
         atualizarBadgeLeitos(dados.leitos);
+        atualizarPontoCegoPlantaoDinamico();
       } catch(e) {
         // Fallback para snapshot salvo em caso de erro de rede repentino
         const snap = await carregarSnapshotOffline('leitos_dados');
@@ -1713,6 +1733,7 @@
           }
           renderizarLeitos();
           atualizarBadgeLeitos(snap.dados.leitos);
+          atualizarPontoCegoPlantaoDinamico();
           copiarToast('Sem conexão: exibindo dados do cache local.');
         } else {
           cockpitDados = null;
@@ -2731,154 +2752,311 @@
     }
 
     // =========================================================================
-    // 5.2 MÓDULO PONTO CEGO DO PLANTÃO (PRECEPTOR FOCUS & FSRS ENGINE)
+    // 5.2 MÓDULO PONTO CEGO DO PLANTÃO (PRECEPTOR IA · REVISÃO DINÂMICA DE 30s)
     // =========================================================================
-    const PONTOS_CEGOS_PLANTAO = [
+    const CATALOGO_PONTOS_CEGOS_PLANTAO = [
+      {
+        id: 'iam_vd_nitrato',
+        termo: 'IAM',
+        nomeCompleto: 'Infarto Agudo do Miocárdio (com suspeita de VD)',
+        area: 'Clínica Médica',
+        regex: /(?:iam|infarto|coronari|dor\s+tor[aá]cica|supra|vd|trombol[ií]tico|cate|angioplastia)/i,
+        pontoAtencao: 'critérios de contraindicação do Nitrato no IAM de VD e PAS < 90 mmHg.',
+        perolaClinica: 'No IAM de parede inferior com extensão para ventrículo direito (V3R/V4R supra), o miocárdio ventricular direito dilatado depende criticamente de pré-carga. O uso inadvertido de nitratos causa venodilatação aguda súbita, colapsa o débito cardíaco e precipita choque cardiogênico refratário e PCR.',
+        diretriz: 'Regra de Ouro HC-UE: Solicitar V3R, V4R e V7/V8 em todo IAM de parede inferior (DII, DIII, aVF). Se PAS < 90 mmHg, FC < 50 ou > 100 bpm com acometimento de VD: ZERO nitrato, ZERO betabloqueador, ZERO morfina. Expansão volêmica cautelosa com SF 0,9% e reperfusão imediata.',
+        perguntaSocratica: 'Se o paciente com IAM de parede inferior apresentar PAS de 80 mmHg e turgência jugular patológica após uso de nitrato, qual é a medida imediata de ressuscitação hemodinâmica?'
+      },
+      {
+        id: 'ic_descompensada_bb',
+        termo: 'IC descompensada',
+        nomeCompleto: 'Insuficiência Cardíaca Aguda / Congestão Pulmonar',
+        area: 'Clínica Médica',
+        regex: /(?:ic\s+descompensada|insufici[eê]ncia\s+card[ií]aca|eap|edema\s+agudo|congest[aã]o|furosemida|perfil\s+b|perfil\s+c)/i,
+        pontoAtencao: 'risco de introduzir ou titular betabloqueador na fase de congestão aguda ou instabilidade.',
+        perolaClinica: 'Em vigência de descompensação aguda (perfil B ou C), o miocárdio depende do tônus adrenérgico compensatório. Introduzir ou aumentar betabloqueador antes de compensar a volemia causa descompensação fulminante e choque cardiogênico. O foco prioritário imediato é vasodilatação venosa/arterial e diurese de alça.',
+        diretriz: 'HC-UE Emergência: Se perfil B (quente e úmido): Furosemida IV em bolus + Nitroglicerina/Nitroprussiato se PAS > 110. Betabloqueador: manter a dose prévia se euvolêmico/estável, mas NUNCA introduzir ou titular durante congestão aguda descompensada.',
+        perguntaSocratica: 'Em um paciente em edema agudo de pulmão hipertensivo com PAS de 200 mmHg, por que a prioridade é o vasodilatador venoso e arterial contínuo antes mesmo de doses cavalares de diuréticos?'
+      },
+      {
+        id: 'sepse_choque_atb',
+        termo: 'Sepse',
+        nomeCompleto: 'Sepse e Choque Séptico',
+        area: 'Clínica Médica',
+        regex: /(?:sepse|choque\s+s[eé]ptico|lactato|hemocultura|ceftriaxona|meropenem|qsofa|sofa)/i,
+        pontoAtencao: 'atraso no antimicrobiano de amplo espectro além de 1 hora e atraso na noradrenalina precoce.',
+        perolaClinica: 'Cada 60 minutos de atraso na primeira dose do antibiótico venoso adequado após identificação do choque séptico eleva a mortalidade em aproximadamente 8%. Não aguarde terminar 30 mL/kg de cristaloides se a PAM persistir < 65 mmHg: inicie noradrenalina em acesso periférico seguro de imediato.',
+        diretriz: 'Bundle de 1 Hora HC-UE: Dosar lactato sérico + coletar 2 pares de hemoculturas + infundir ATB de amplo espectro em < 60 min + cristaloides balanceados 30 mL/kg + noradrenalina precoce para alvo de PAM ≥ 65 mmHg.',
+        perguntaSocratica: 'Qual é o critério microcirculatório e tecidual que valida o início de vasopressor antes do término da reposição volêmica estrita de 30 mL/kg?'
+      },
       {
         id: 'cad_k_insulina',
-        titulo: 'CAD: Hipocalemia Oculta pós-Insulina',
+        termo: 'CAD',
+        nomeCompleto: 'Cetoacidose Diabética (Emergência Hiperglicêmica)',
         area: 'Clínica Médica',
-        armadilha: 'Iniciar insulina venosa antes de dosar Potássio Sérico (< 3,3 mEq/L) induz arritmia ventricular fatal por influxo maciço intracelular.',
-        racional: 'A insulina e a correção da acidose translocam o K+ extracelular para o interior dos miócitos e hepatócitos. Se K < 3,3, a insulina deve ser postergada até infusão de 20 a 40 mEq/h de KCl.',
-        diretriz: 'Regra de Ouro HC-UE: K < 3,3 adia insulina; K 3,3-5,2 adiciona 20-30 mEq KCl/L; associar SG 5% quando glicemia ≤ 250 mg/dL.',
-        perguntaSocratica: 'Se o paciente com CAD apresentar K+ de 3,1 mEq/L e glicemia de 650 mg/dL na admissão, qual é a conduta farmacológica prioritária nos primeiros 60 minutos?',
-        revisoesSrs: 28,
-        retencaoEst: 88,
-        subtemaMedquest: 'Cetoacidose Diabética e Emergências Endócrinas'
+        regex: /(?:cad|cetoacidose|glicemia|ceton[uú]ria|gasometria.*acidose|hgt)/i,
+        pontoAtencao: 'iniciar infusão de insulina venosa antes de checar Potássio Sérico (< 3,3 mEq/L).',
+        perolaClinica: 'A insulina e a correção volêmica promovem influxo maciço de potássio extracelular para o interior das células. Se o potássio sérico inicial for < 3,3 mEq/L, a insulina precipita hipocalemia severa súbita e parada cardíaca por fibrilação ventricular em poucos minutos.',
+        diretriz: 'Regra de Ouro HC-UE: K < 3,3 mEq/L: postergue a insulina, infunda KCl 20 a 40 mEq/h até K ≥ 3,3. K 3,3 a 5,2: inicie insulina regular 0,1 U/kg/h e adicione 20-30 mEq KCl/litro. Associar SG 5% quando glicemia atingir 250 mg/dL.',
+        perguntaSocratica: 'Se a glicemia capilar cair abaixo de 250 mg/dL mas o anion gap ainda estiver elevado (> 12), por que a insulina regular NUNCA deve ser desligada?'
       },
       {
-        id: 'sca_sem_supra_trombolitico',
-        titulo: 'SCA sem Supra: Risco de Trombólise Iatrogênica',
-        area: 'Clínica Médica',
-        armadilha: 'Prescrever trombolítico/fibrinolítico em SCA SEM supradesnivelamento de ST é contraindicação formal absoluta (aumenta mortalidade e hemorragia grave sem benefício recanalizador).',
-        racional: 'O trombo na SAMSST é suboclusivo, branco e rico em plaquetas. O trombolítico lisa fibrina mas desestabiliza a placa e causa hemorragias sistêmicas severas.',
-        diretriz: 'Conduta Padrão: Dupla antiagregação precoce (AAS + Ticagrelor), Enoxaparina 1 mg/kg SC 12/12h e CATE em até 24h para GRACE > 140.',
-        perguntaSocratica: 'Por que o uso de nitratos sublinguais é contraindicado se houver suspeita de infarto de ventrículo direito ou se a PAS for inferior a 90 mmHg?',
-        revisoesSrs: 19,
-        retencaoEst: 85,
-        subtemaMedquest: 'Síndromes Coronarianas Agudas (Com e Sem Supra)'
-      },
-      {
-        id: 'sepse_bundle_atb',
-        titulo: 'Choque Séptico: Atraso Crítico de Antimicrobiano',
-        area: 'Clínica Médica',
-        armadilha: 'Postergar o antibiótico de amplo espectro para além de 1 hora aguardando transporte de culturas ou leito de UTI eleva a mortalidade em 8% a cada 60 min.',
-        racional: 'A proliferação bacteriana e a tempestade de citocinas pró-inflamatórias desregulam o endotélio, perpetuando o choque distributivo e a disfunção de múltiplos órgãos.',
-        diretriz: 'Bundle de 1h HC-UE: Lactato inicial + 2 hemoculturas rápidas + ATB de amplo espectro venoso em < 60 min + Cristaloide 30 mL/kg + Nora precoce.',
-        perguntaSocratica: 'Qual é o critério fisiopatológico que justifica o início de Noradrenalina antes mesmo do término da infusão dos 30 mL/kg de cristaloides?',
-        revisoesSrs: 34,
-        retencaoEst: 82,
-        subtemaMedquest: 'Choque Séptico e Protocolo Sepse 1 Hora'
+        id: 'avc_isquemico_pa',
+        termo: 'AVCi',
+        nomeCompleto: 'Acidente Vascular Cerebral Isquêmico Agudo',
+        area: 'Neurologia',
+        regex: /(?:avc|avci|isqu[eê]mico|d[eé]ficit|hemiparesia|afasia|trombol[ií]se|nihss)/i,
+        pontoAtencao: 'redução intempestiva e agressiva da pressão arterial em janela aguda ou sem indicação formal.',
+        perolaClinica: 'A hipertensão arterial reativa na fase aguda do AVCi é um mecanismo protetor vital para manter o fluxo sanguíneo colateral na área de penumbra isquêmica. Baixar a PA precipitadamente colapsa a perfusão da penumbra e transforma tecido viável em infarto cerebral permanente.',
+        diretriz: 'Protocolo AVC HC-UE: Candidato a trombólise venosa: controle rigoroso se PA > 185x110 mmHg. Não candidato a trombólise: NÃO intervir na PA a menos que ultrapasse 220x120 mmHg ou haja lesão aguda de órgão-alvo (EAP, dissecção aórtica).',
+        perguntaSocratica: 'Qual é o limiar pressórico de segurança que autoriza a infusão de alteplase (rtPA) venoso na sala de emergência?'
       },
       {
         id: 'trauma_instavel_tc',
-        titulo: 'Politrauma: O "Túnel da Morte" da Tomografia',
+        termo: 'Politrauma',
+        nomeCompleto: 'Politrauma Grave com Choque Hemorrágico',
         area: 'Cirurgia Geral',
-        armadilha: 'Enviar paciente politraumatizado instável hemodinamicamente (em choque) com FAST positivo para Tomografia Computadorizada (erro gravíssimo com PCR na sala de imagem).',
-        racional: 'A tomografia exige imobilidade, distância da equipe de ressuscitação e atrasa em mais de 40 minutos o controle cirúrgico de sangramento exanguinante.',
-        diretriz: 'Regra de Ouro ATLS / Sala Vermelha: Choque + FAST Positivo = Laparotomia Exploradora Imediata no Centro Cirúrgico (Damage Control Surgery).',
-        perguntaSocratica: 'Por que a infusão agressiva de mais de 1,5 a 2 litros de Soro Fisiológico 0,9% frio agrava a coagulopatia no trauma grave?',
-        revisoesSrs: 15,
-        retencaoEst: 91,
-        subtemaMedquest: 'Politrauma com Choque Hemorrágico e E-FAST'
+        regex: /(?:trauma|politrauma|acidente|colis[aã]o|fast|hemorr[aá]gico|choque\s+hipovol)/i,
+        pontoAtencao: 'encaminhar paciente em choque com FAST positivo para Tomografia Computadorizada.',
+        perolaClinica: 'A tomografia computadorizada é o chamado "túnel da morte" no trauma instável: isola o doente da equipe de ressuscitação e atrasa em 40 minutos o controle cirúrgico. Paciente politraumatizado instável com líquido livre abdominal no FAST tem indicação mandatória de laparotomia imediata no centro cirúrgico.',
+        diretriz: 'Regra de Ouro ATLS / Sala Vermelha: Choque hemodinâmico + FAST Positivo = Centro Cirúrgico imediato (Laparotomia de Controle de Danos). Protocolo de Transfusão Maciça precoce 1:1:1 e Ácido Tranexâmico 1g IV em < 3h.',
+        perguntaSocratica: 'Por que o uso agressivo de cristaloides frios (SF 0,9%) em grandes volumes (> 1,5 L) é contraindicado no choque hemorrágico traumático?'
       },
       {
-        id: 'tv_sync_ausente',
-        titulo: 'TV Instável: Choque sem Modo Sincronizado',
+        id: 'status_epilepticus_benzo',
+        termo: 'Status Epilepticus',
+        nomeCompleto: 'Crise Convulsiva Prolongada / Estado de Mal Epiléptico',
+        area: 'Neurologia',
+        regex: /(?:crise\s+convulsiva|convuls[aã]o|epilep|status|diazepam|midazolam|fenito[ií]na)/i,
+        pontoAtencao: 'repetir doses de benzodiazepínicos indefinidamente sem escalonar para droga de 2ª linha após 5-10 min.',
+        perolaClinica: 'Com a persistência da crise convulsiva (> 5 minutos), ocorre internalização e perda de receptores GABAérgicos na membrana sináptica. Insistir em doses repetidas de benzodiazepínico falha em parar a crise e induz depressão respiratória grave com PCR sem escalonar para bloqueadores de canais de sódio.',
+        diretriz: 'Protocolo Sala Vermelha HC-UE: Minuto 0 a 5: ABC + glicemia + oxigênio. Minuto 5 a 10: Diazepam 10 mg IV lento (ou Midazolam IM). Se persistir após 5 min, mais 1 dose de benzo E iniciar imediatamente droga de 2ª linha: Fenitoína 20 mg/kg IV (máx 50 mg/min). Minuto 20+: IOT e anestésico contínuo.',
+        perguntaSocratica: 'Por que a velocidade máxima de infusão da Fenitoína venosa não pode ultrapassar 50 mg/minuto no adulto?'
+      },
+      {
+        id: 'crise_asmatica_broncodilatador',
+        termo: 'Crise Asmática',
+        nomeCompleto: 'Crise de Asma Aguda Grave / Broncoespasmo',
         area: 'Clínica Médica',
-        armadilha: 'Disparar cardioversor manual em taquicardia ventricular com pulso sem apertar o botão SYNC induz o fenômeno R-sobre-T, degenerando a TV em Fibrilação Ventricular imediata.',
-        racional: 'A descarga assíncrona que atinge a fase vulnerável da repolarização ventricular (ápice da onda T) provoca dispersão refratária ventricular caótica.',
-        diretriz: 'Protocolo ACLS: Confirmar flag "SYNC" no monitor, sedação rápida (Etomidato 0,2 mg/kg) se consciente e descarga sincronizada com 100 Joules.',
-        perguntaSocratica: 'Em qual situação clínica uma taquicardia ventricular com pulso DEVE ser chocada no modo assíncrono (desfibrilação pura)?',
-        revisoesSrs: 22,
-        retencaoEst: 86,
-        subtemaMedquest: 'Taquicardia Ventricular Monomórfica Instável'
+        regex: /(?:asma|broncoespasmo|sibilos|dpoc|salbutamol|ipratr[oó]pio|corticoide)/i,
+        pontoAtencao: 'subestimar a crise asmática grave quando há desaparecimento dos sibilos ("tórax silencioso").',
+        perolaClinica: 'O desaparecimento dos sibilos na crise asmática grave com taquipneia exaustiva não é sinal de melhora, mas sim de colapso ventilatório por obstrução extrema do fluxo aéreo (tórax silencioso). A gasometria mostrando PaCO2 "normal" ou elevado neste cenário indica falência respiratória iminente e fadiga diafragmática catastrófica.',
+        diretriz: 'Protocolo Sala Vermelha HC-UE: Inalação contínua de Beta-2 agonista (Salbutamol) + Brometo de Ipratrópio + Corticoide sistêmico venoso imediato (Hidrocortisona ou Metilprednisolona) + Sulfato de Magnésio 2g IV em 20 min nas crises graves.',
+        perguntaSocratica: 'Por que um valor de PaCO2 de 40 mmHg na gasometria arterial de um asmático em taquipneia intensa é um sinal de extrema gravidade?'
       },
       {
-        id: 'anaf_corticoide_primeiro',
-        titulo: 'Anafilaxia: Corticoide em Vez de Adrenalina IM',
-        area: 'Pediatria',
-        armadilha: 'Prescrever corticoide venoso ou anti-histamínico antes ou em substituição à Adrenalina intramuscular (corticoide demora horas para ter efeito genômico; adrenalina é a única droga salva-vidas imediata).',
-        racional: 'Apenas a Adrenalina atua nos receptores alfa-1 promovendo vasoconstrição imediata contra o choque distributivo e beta-2 inibindo a degranulação mastocitária aguda.',
-        diretriz: 'Dose Salva-Vidas: Adrenalina 1:1000 pura (0,01 mg/kg em crianças, máx 0,5 mg no adulto) IM no vasto lateral da coxa. Corticoide é mero coadjuvante de 2ª linha.',
-        perguntaSocratica: 'Por que a via intramuscular no músculo vasto lateral da coxa atinge níveis plasmáticos de adrenalina significativamente mais rápidos do que a via subcutânea ou deltoide?',
-        revisoesSrs: 12,
-        retencaoEst: 93,
-        subtemaMedquest: 'Anafilaxia Grave em Lactente e Adulto'
-      },
-      {
-        id: 'preeclampsia_sulfato',
-        titulo: 'Pré-Eclâmpsia Grave: Sulfato de Magnésio Mandatório',
+        id: 'preeclampsia_sulfato_magnesio',
+        termo: 'Pré-Eclâmpsia Grave',
+        nomeCompleto: 'Pré-Eclâmpsia com Sinais de Gravidade e Eclâmpsia',
         area: 'Ginecologia e Obstetrícia',
-        armadilha: 'Administrar benzodiazepínicos (Diazepam) em crise convulsiva gravídica ou hiper-reflexia em vez de Sulfato de Magnésio (droga de escolha que reduz em 50% o risco de eclâmpsia).',
-        racional: 'O Sulfato de Magnésio atua como vasodilatador cerebral seletivo e antagonista de receptores NMDA centrais, protegendo a barreira hematoencefálica materna sem deprimir o feto.',
-        diretriz: 'Esquema Zuspan: Ataque de 4 g IV lento (20 min) + Manutenção contínua de 1 a 2 g/h em BI. Vigilância de reflexo patelar, diurese (> 25 mL/h) e FR (> 16 irpm). Antídoto: Gluconato de Cálcio 10% 10 mL.',
-        perguntaSocratica: 'Qual é o primeiro sinal clínico de intoxicação por magnésio que obriga a suspensão imediata da infusão do sulfato?',
-        revisoesSrs: 16,
-        retencaoEst: 89,
-        subtemaMedquest: 'Pré-Eclâmpsia Grave e Síndrome HELLP'
+        regex: /(?:pr[eé]-ecl[aâ]mpsia|ecl[aâ]mpsia|gestante.*pa|protein[uú]ria|hellp|sulfato)/i,
+        pontoAtencao: 'administrar diazepam em convulsão gravídica em vez de Sulfato de Magnésio imediato.',
+        perolaClinica: 'Benzodiazepínicos não previnem a recorrência de crises eclâmpticas e provocam hipotonia e depressão respiratória fetal severa. O Sulfato de Magnésio é a única intervenção com evidência classe I que reduz a mortalidade materna em mais de 50% e estabiliza o endotélio microvascular cerebral.',
+        diretriz: 'Esquema Zuspan HC-UE: Ataque: Sulfato de Magnésio 4g IV em 20 min. Manutenção: 1 a 2 g/h em bomba de infusão contínua. Vigilância estrita de reflexo patelar, diurese (> 25 mL/h) e FR (> 16 irpm). Manter antídoto à beira do leito: Gluconato de Cálcio 10% 10 mL IV.',
+        perguntaSocratica: 'Qual é o primeiro reflexo osteotendíneo abolido na intoxicação por magnésio que antecede o colapso respiratório materno?'
       },
       {
-        id: 'preventiva_rastreamento_inca',
-        titulo: 'Rastreamento: Sobrediagnóstico e Diretrizes do MS',
-        area: 'Medicina Preventiva e Social',
-        armadilha: 'Solicitar dosagem de PSA em homens assintomáticos sem decisão compartilhada ou realizar preventivo de colo uterino em mulheres < 25 anos ou com intervalo inferior a 3 anos após 2 negativos.',
-        racional: 'Testes de rastreamento indiscriminados geram viés de tempo de avanço (lead-time bias), biópsias desnecessárias, incontinência/disfunção erétil iatrogênicas e custos sem redução de mortalidade.',
-        diretriz: 'Diretrizes do MS/INCA: Citopatológico dos 25 aos 64 anos após sexarca (anual por 2 anos, depois trienal se negativos). Mamografia bienal dos 50 aos 69 anos. PSA não é recomendado para rastreamento populacional de rotina.',
-        perguntaSocratica: 'Qual é a diferença conceitual epidemiológica entre sensibilidade diagnóstica de um teste e o valor preditivo positivo no contexto de baixa prevalência?',
-        revisoesSrs: 25,
-        retencaoEst: 92,
-        subtemaMedquest: 'Rastreamento Populacional e Prevenção Quaternária'
+        id: 'anafilaxia_adrenalina_im',
+        termo: 'Anafilaxia',
+        nomeCompleto: 'Anafilaxia e Choque Anafilático',
+        area: 'Pediatria',
+        regex: /(?:anafilaxia|choque\s+anafil[aá]tico|angioedema|estridor|urtic[aá]ria.*choque|adrenalina)/i,
+        pontoAtencao: 'prescrever corticoide ou anti-histamínico antes ou em vez de Adrenalina intramuscular imediata.',
+        perolaClinica: 'Corticoides demoram de 4 a 6 horas para ter efeito na transcrição proteica e não revertem o choque nem o broncoespasmo agudo. Anti-histamínicos apenas aliviam prurido cutâneo. Adrenalina IM no vasto lateral da coxa é a única droga salva-vidas com ação imediata nos receptores alfa-1 e beta-2.',
+        diretriz: 'Conduta Salva-Vidas Imediata: Adrenalina 1:1000 pura IM no vasto lateral da coxa (0,5 mg no adulto; 0,01 mg/kg em crianças, máx 0,3-0,5 mg). Repetir a cada 5 a 15 minutos se refratário. Decúbito dorsal com membros inferiores elevados.',
+        perguntaSocratica: 'Por que a via intramuscular no músculo vasto lateral da coxa atinge pico sérico de adrenalina significativamente superior à via subcutânea ou deltoide?'
       }
     ];
 
-    let indicePontoCegoAtual = 0;
+    let indicePontoCegoPlantao = 0;
+    let pontosCegosFiltradosHoje = [...CATALOGO_PONTOS_CEGOS_PLANTAO];
 
-    function renderizarPontoCegoPlantao() {
-      const pc = PONTOS_CEGOS_PLANTAO[indicePontoCegoAtual];
+    function analisarCasosPlantaoDinamico() {
+      const leitos = Array.isArray(cockpitDados?.leitos) ? cockpitDados.leitos : [];
+      const soapTexto = typeof cockpitDados?.soap === 'string' ? cockpitDados.soap : '';
+
+      const mapaOcorrencias = new Map();
+      const pontosIdentificados = [];
+
+      // 1. Analisa cada leito registrado no bot
+      leitos.forEach(l => {
+        const textoCompleto = `${l.status || ''} ${l.dados || ''}`;
+        CATALOGO_PONTOS_CEGOS_PLANTAO.forEach(pc => {
+          if (pc.regex.test(textoCompleto)) {
+            const qtd = mapaOcorrencias.get(pc.id) || 0;
+            mapaOcorrencias.set(pc.id, qtd + 1);
+            if (!pontosIdentificados.some(item => item.id === pc.id)) {
+              pontosIdentificados.push(pc);
+            }
+          }
+        });
+      });
+
+      // 2. Analisa o SOAP do atendimento em andamento
+      if (soapTexto && soapTexto.trim().length > 10) {
+        CATALOGO_PONTOS_CEGOS_PLANTAO.forEach(pc => {
+          if (pc.regex.test(soapTexto)) {
+            const qtd = mapaOcorrencias.get(pc.id) || 0;
+            mapaOcorrencias.set(pc.id, qtd + 1);
+            if (!pontosIdentificados.some(item => item.id === pc.id)) {
+              pontosIdentificados.push(pc);
+            }
+          }
+        });
+      }
+
+      if (pontosIdentificados.length === 0) {
+        pontosCegosFiltradosHoje = [...CATALOGO_PONTOS_CEGOS_PLANTAO];
+      } else {
+        pontosCegosFiltradosHoje = pontosIdentificados;
+      }
+
+      if (indicePontoCegoPlantao >= pontosCegosFiltradosHoje.length) {
+        indicePontoCegoPlantao = 0;
+      }
+
+      const pontoFoco = pontosCegosFiltradosHoje[indicePontoCegoPlantao];
+
+      let sinteseTexto = '';
+      if (mapaOcorrencias.size > 0) {
+        const partesCasos = [];
+        mapaOcorrencias.forEach((qtd, pcId) => {
+          const pc = CATALOGO_PONTOS_CEGOS_PLANTAO.find(item => item.id === pcId);
+          if (pc) {
+            partesCasos.push(`${qtd} ${qtd > 1 ? 'casos' : 'caso'} de ${pc.termo}`);
+          }
+        });
+
+        let fraseCasos = '';
+        if (partesCasos.length === 1) {
+          fraseCasos = partesCasos[0];
+        } else if (partesCasos.length === 2) {
+          fraseCasos = `${partesCasos[0]} e ${partesCasos[1]}`;
+        } else {
+          fraseCasos = `${partesCasos.slice(0, -1).join(', ')} e ${partesCasos[partesCasos.length - 1]}`;
+        }
+
+        sinteseTexto = `Você conduziu ${fraseCasos} no plantão de hoje.`;
+      } else if (leitos.length > 0) {
+        sinteseTexto = `Você possui ${leitos.length} ${leitos.length > 1 ? 'leitos ativos registrados' : 'leito ativo registrado'} no plantão de hoje.`;
+      } else {
+        // Exemplo clínico padrão de alta relevância quando sem leitos preenchidos
+        sinteseTexto = 'Você conduziu 2 casos de IAM e 1 de IC descompensada no plantão de hoje.';
+      }
+
+      return {
+        sinteseTexto,
+        pontoFoco,
+        totalCasosIdentificados: mapaOcorrencias.size,
+        totalLeitos: leitos.length
+      };
+    }
+
+    function atualizarPontoCegoPlantaoDinamico(manual = false) {
+      if (manual) hapticFeedback('selection');
+      const resultado = analisarCasosPlantaoDinamico();
+      const pc = resultado.pontoFoco;
       if (!pc) return;
 
-      const areaBadge = document.getElementById('ponto-cego-area-badge');
-      const tituloEl = document.getElementById('ponto-cego-titulo');
-      const descEl = document.getElementById('ponto-cego-desc');
-      const srsStatusEl = document.getElementById('ponto-cego-srs-status');
-      const srsDescEl = document.getElementById('ponto-cego-srs-desc');
-      const srsAccEl = document.getElementById('ponto-cego-srs-acc');
+      const sinteseEl = document.getElementById('ponto-cego-sintese-casos');
+      const armadilhaEl = document.getElementById('ponto-cego-armadilha-texto');
+      const areaTagEl = document.getElementById('ponto-cego-area-tag');
+      const perolaTituloEl = document.getElementById('ponto-cego-perola-titulo');
+      const perolaConteudoEl = document.getElementById('ponto-cego-perola-conteudo');
+      const diretrizConteudoEl = document.getElementById('ponto-cego-diretriz-conteudo');
+      const statusLeitosEl = document.getElementById('ponto-cego-status-leitos');
+      const syncIcon = document.getElementById('ponto-cego-sync-icon');
 
-      const estiloArea = obterEstiloAreaMedica(pc.area);
+      if (syncIcon && manual) {
+        syncIcon.classList.add('animate-spin');
+        setTimeout(() => syncIcon.classList.remove('animate-spin'), 600);
+      }
 
-      if (areaBadge) {
-        areaBadge.className = `text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${estiloArea.badgeClass}`;
-        areaBadge.innerHTML = `<i data-lucide="${estiloArea.icone}" class="w-3 h-3"></i> <span>${pc.area}</span>`;
+      if (sinteseEl) {
+        sinteseEl.textContent = resultado.sinteseTexto;
       }
-      if (tituloEl) {
-        tituloEl.textContent = pc.titulo;
-        tituloEl.title = pc.titulo;
+      if (armadilhaEl) {
+        armadilhaEl.textContent = pc.pontoAtencao;
       }
-      if (descEl) {
-        descEl.innerHTML = `<strong class="text-rose-400 font-semibold">Armadilha HC-UE:</strong> ${pc.armadilha}`;
+      if (areaTagEl) {
+        const estiloArea = obterEstiloAreaMedica(pc.area);
+        areaTagEl.className = `text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-full inline-flex items-center gap-1 ${estiloArea.badgeClass}`;
+        areaTagEl.innerHTML = `<i data-lucide="${estiloArea.icone}" class="w-3 h-3"></i> <span>${pc.area}</span>`;
       }
-      if (srsStatusEl) {
-        srsStatusEl.innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 text-purple-400"></i> ${pc.revisoesSrs} revisões prontas hoje`;
+      if (perolaTituloEl) {
+        perolaTituloEl.textContent = `Pérola Beira-Leito: ${pc.termo}`;
       }
-      if (srsDescEl) {
-        srsDescEl.textContent = `Revise os cards de ${pc.area} antes do término do plantão para blindar retenção > 85%.`;
+      if (perolaConteudoEl) {
+        perolaConteudoEl.textContent = pc.perolaClinica;
       }
-      if (srsAccEl) {
-        srsAccEl.textContent = `Retenção estimada: ${pc.retencaoEst}%`;
+      if (diretrizConteudoEl) {
+        diretrizConteudoEl.textContent = pc.diretriz;
+      }
+      if (statusLeitosEl) {
+        statusLeitosEl.textContent = resultado.totalLeitos > 0 ? `${resultado.totalLeitos} Leitos Hoje` : 'Plantão Ativo';
       }
 
       if (window.lucide) lucide.createIcons();
+      if (manual) copiarToast(`Ponto cego do plantão: ${pc.termo}`);
     }
 
-    function alternarPontoCegoTema() {
+    function togglePerolaClinicaPontoCego() {
+      hapticFeedback('light');
+      const gaveta = document.getElementById('ponto-cego-perola-gaveta');
+      const labelBtn = document.getElementById('label-btn-perola');
+      const iconeBtn = document.getElementById('icone-btn-perola');
+      if (!gaveta) return;
+
+      const estaOculto = gaveta.classList.contains('hidden');
+      if (estaOculto) {
+        gaveta.classList.remove('hidden');
+        if (labelBtn) labelBtn.textContent = 'Ocultar pérola clínica';
+        if (iconeBtn) iconeBtn.setAttribute('data-lucide', 'eye-off');
+      } else {
+        gaveta.classList.add('hidden');
+        if (labelBtn) labelBtn.textContent = 'Toque para ver a pérola clínica';
+        if (iconeBtn) iconeBtn.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function alternarCasoPontoCego() {
       hapticFeedback('selection');
-      indicePontoCegoAtual = (indicePontoCegoAtual + 1) % PONTOS_CEGOS_PLANTAO.length;
-      renderizarPontoCegoPlantao();
-      const pc = PONTOS_CEGOS_PLANTAO[indicePontoCegoAtual];
-      copiarToast(`Foco do Preceptor: ${pc.titulo}`);
+      if (pontosCegosFiltradosHoje.length <= 1) {
+        pontosCegosFiltradosHoje = [...CATALOGO_PONTOS_CEGOS_PLANTAO];
+      }
+      indicePontoCegoPlantao = (indicePontoCegoPlantao + 1) % pontosCegosFiltradosHoje.length;
+      atualizarPontoCegoPlantaoDinamico(false);
+      const pc = pontosCegosFiltradosHoje[indicePontoCegoPlantao];
+      copiarToast(`Revisão: ${pc.termo} (${pc.area})`);
     }
 
+    async function solicitarSabatinaPreceptorPlantao() {
+      hapticFeedback('medium');
+      const pc = pontosCegosFiltradosHoje[indicePontoCegoPlantao] || CATALOGO_PONTOS_CEGOS_PLANTAO[0];
+      const box = document.getElementById('resposta-preceptor-box');
+      const txt = document.getElementById('resposta-preceptor-texto');
+      if (box && txt) {
+        box.classList.remove('hidden');
+        txt.innerHTML = `
+          <div class="space-y-1.5">
+            <div class="text-[10px] font-extrabold uppercase text-purple-400 flex items-center gap-1">
+              <i data-lucide="brain" class="w-3.5 h-3.5"></i> Provocação Socrática do Preceptor (${pc.termo}):
+            </div>
+            <p class="text-xs text-purple-100 font-medium italic">
+              "${pc.perguntaSocratica}"
+            </p>
+            <div class="text-[9.5px] text-slate-400 pt-1 border-t border-purple-500/20 flex items-center justify-between">
+              <span>Foco: ${pc.area} · Conduta Crítica</span>
+              <button onclick="copiarToast('Responda mentalmente ou dite no chat do plantão.')" class="text-purple-300 hover:text-white font-bold">Como responder?</button>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // Modal de Auditoria Beira-Leito (Preceptor IA)
     async function abrirModalRaioXPreceptor() {
       hapticFeedback('medium');
       const modal = document.getElementById('modal-raiox-preceptor');
@@ -2893,7 +3071,7 @@
     }
 
     async function atualizarRaioXPreceptor(forcar = false) {
-      const pc = PONTOS_CEGOS_PLANTAO[indicePontoCegoAtual];
+      const pc = pontosCegosFiltradosHoje[indicePontoCegoPlantao] || CATALOGO_PONTOS_CEGOS_PLANTAO[0];
       const container = document.getElementById('raiox-modal-conteudo');
       const spinIcon = document.getElementById('raiox-spin-icon');
       if (!container) return;
@@ -2910,9 +3088,9 @@
             <i data-lucide="brain" class="w-4 h-4 text-purple-400 absolute"></i>
           </div>
           <div>
-            <h5 class="text-xs font-bold text-white">O Preceptor IA está avaliando seu perfil...</h5>
+            <h5 class="text-xs font-bold text-white">O Preceptor IA está auditando a conduta do plantão...</h5>
             <p class="text-[10.5px] text-slate-400 mt-1 max-w-xs mx-auto">
-              Cruzando o atendimento atual com as armadilhas mais recorrentes do HC-UE FMRP-USP, ENARE e SUS-SP.
+              Cruzando os casos atendidos com os protocolos e armadilhas beira-leito do HC-UE FMRP-USP.
             </p>
           </div>
         </div>
@@ -2931,43 +3109,39 @@
 
         let htmlParecer = `
           <div class="space-y-3 animate-in fade-in duration-300">
-            <!-- Card de Diagnóstico do Ponto Cego -->
             <div class="p-3 rounded-xl bg-purple-950/30 border border-purple-500/30 space-y-2">
               <div class="flex items-center justify-between">
                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-300 flex items-center gap-1">
-                  <i data-lucide="target" class="w-3.5 h-3.5 text-purple-400"></i> Diagnóstico de Ponto Cego
+                  <i data-lucide="target" class="w-3.5 h-3.5 text-purple-400"></i> Auditoria de Conduta do Plantão
                 </span>
                 <span class="text-[9px] bg-purple-500/20 text-purple-200 px-1.5 py-0.5 rounded font-bold">${pc.area}</span>
               </div>
-              <h4 class="text-xs font-bold text-white">${pc.titulo}</h4>
-              <p class="text-[11px] text-slate-300 leading-relaxed">${pc.racional}</p>
+              <h4 class="text-xs font-bold text-white">${pc.nomeCompleto}</h4>
+              <p class="text-[11px] text-slate-300 leading-relaxed">${pc.perolaClinica}</p>
             </div>
 
-            <!-- Card de Armadilha Clássica do HC-UE -->
             <div class="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 space-y-1.5">
               <div class="flex items-center gap-1.5 text-rose-300 font-bold text-[11px]">
-                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i> Armadilha Crítica das Bancas & Sala Vermelha
+                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i> Ponto Cego & Armadilha Beira-Leito
               </div>
-              <p class="text-[11px] text-rose-200/90 leading-relaxed">${pc.armadilha}</p>
+              <p class="text-[11px] text-rose-200/90 leading-relaxed">${pc.pontoAtencao}</p>
             </div>
 
-            <!-- Card de Diretriz de Conduta Imediata -->
             <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 space-y-1.5">
               <div class="flex items-center gap-1.5 text-emerald-300 font-bold text-[11px]">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Diretriz Salva-Vidas (Padrão Ouro)
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Diretriz Salva-Vidas (Padrão-Ouro HC-UE)
               </div>
               <p class="text-[11px] text-emerald-200/90 leading-relaxed">${pc.diretriz}</p>
             </div>
 
-            <!-- Provocação Socrática do Preceptor -->
             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
               <div class="flex items-center gap-1.5 text-amber-300 font-bold text-[11px]">
-                <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-400"></i> Provocação Socrática à Beira do Leito:
+                <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-400"></i> Provocação Socrática do Preceptor:
               </div>
               <p class="text-[11px] text-amber-100 italic leading-relaxed">
                 "${parecerTexto || pc.perguntaSocratica}"
               </p>
-              ${temCasoAtivo ? '<div class="text-[9.5px] text-slate-400 border-t border-slate-800/80 pt-1.5 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Análise sincronizada com o SOAP do atendimento ativo no Telegram.</div>' : ''}
+              ${temCasoAtivo ? '<div class="text-[9.5px] text-slate-400 border-t border-slate-800/80 pt-1.5 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Integrado ao atendimento ativo no SOAP.</div>' : ''}
             </div>
           </div>
         `;
@@ -2976,7 +3150,7 @@
       } catch (err) {
         container.innerHTML = `
           <div class="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs text-center space-y-2">
-            <p>Não foi possível carregar a análise da IA no momento.</p>
+            <p>Não foi possível carregar a análise no momento.</p>
             <button onclick="atualizarRaioXPreceptor(true)" class="px-3 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold">Tentar novamente</button>
           </div>
         `;
@@ -2986,14 +3160,10 @@
       }
     }
 
-    function iniciarBateriaFocoMedQuest() {
-      hapticFeedback('medium');
-      const pc = PONTOS_CEGOS_PLANTAO[indicePontoCegoAtual];
-      if (!pc) return;
-
-      const texto = `🎯 BATERIA DE RETIFICAÇÃO MEDQUEST\n• Tema: ${pc.titulo}\n• Grande Área: ${pc.area}\n• Subtema Oficial: ${pc.subtemaMedquest}\n• Meta: 15 Questões Comentadas + Revisão Ativa de Erros\n• Armadilha a Evitar: ${pc.armadilha}\n\nAbra o MedQuest para iniciar a sessão direcionada de alto rendimento.`;
-      copiarTextoClipboard(texto, `Plano do MedQuest (${pc.subtemaMedquest}) copiado!`);
-    }
+    // Aliases para compatibilidade retroativa
+    const renderizarPontoCegoPlantao = atualizarPontoCegoPlantaoDinamico;
+    const alternarPontoCegoTema = alternarCasoPontoCego;
+    const PONTOS_CEGOS_PLANTAO = CATALOGO_PONTOS_CEGOS_PLANTAO;
 
     let preceptorPendente = false;
     async function provocarPreceptorSocratico() {
