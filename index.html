@@ -233,19 +233,103 @@
     </div>
 
     <!-- =================================================================== -->
-    <!-- ABA 4: CALCULADORAS RÁPIDAS -->
+    <!-- ABA 4: EMERGÊNCIA & CALCULADORAS RÁPIDAS (USP-RP) -->
     <!-- =================================================================== -->
     <div id="tab-calculadoras" class="tab-pane hidden space-y-3.5">
-      <!-- Seletor de Calculadora -->
-      <div class="grid grid-cols-4 gap-1.5 text-center text-[10px] font-bold">
-        <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">DVA (Nora/Dobuta)</button>
-        <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
-        <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Clearance Cr</button>
-        <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Gasometria</button>
+      <!-- Seletor de Calculadora & Emergência -->
+      <div class="space-y-1.5">
+        <button onclick="abrirSubCalc('calc-usprp', this)" data-btn-type="usprp" class="subcalc-btn w-full py-2 px-2.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-bold flex items-center justify-between shadow-sm shadow-rose-950 transition active:scale-[0.99]">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-400"></i> 🚨 Checklists de Sala Vermelha (USP-RP)
+          </span>
+          <span class="text-[9px] bg-rose-500/30 text-rose-200 px-1.5 py-0.5 rounded font-mono font-bold tracking-tight">HC-UE</span>
+        </button>
+        <div class="grid grid-cols-4 gap-1 text-center text-[10px] font-bold">
+          <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">DVA</button>
+          <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
+          <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Clearance Cr</button>
+          <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Gasometria</button>
+        </div>
+      </div>
+
+      <!-- Subcalc 0: Checklists Sala Vermelha USP-RP (MedQuest OSCE Live) -->
+      <div id="calc-usprp" class="subcalc-pane glass-card rounded-xl p-3.5 space-y-3">
+        <!-- Cabeçalho do Protocolo -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+              <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i> Sala Vermelha · Protocolos HC-UE
+            </h4>
+            <p class="text-[10px] text-slate-400">Conduta de choque e baremas oficiais FMRP-USP</p>
+          </div>
+          <span class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full font-bold">MedQuest Live</span>
+        </div>
+
+        <!-- Seletor de Protocolos em Pills com scroll horizontal -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10.5px] font-bold no-scrollbar">
+          <button onclick="selecionarProtocoloUsp('cad', this)" id="proto-btn-cad" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-500/30 text-rose-200 border border-rose-500/40">🩸 CAD (Cetoacidose)</button>
+          <button onclick="selecionarProtocoloUsp('sca', this)" id="proto-btn-sca" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">🫀 SCA sem Supra</button>
+          <button onclick="selecionarProtocoloUsp('sepse', this)" id="proto-btn-sepse" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">🦠 Choque Séptico</button>
+          <button onclick="selecionarProtocoloUsp('tv', this)" id="proto-btn-tv" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">⚡ TV Instável (ACLS)</button>
+          <button onclick="selecionarProtocoloUsp('trauma', this)" id="proto-btn-trauma" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">🚨 Politrauma & FAST</button>
+          <button onclick="selecionarProtocoloUsp('anaf', this)" id="proto-btn-anaf" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400">💉 Anafilaxia Grave</button>
+        </div>
+
+        <!-- Ajuste de Peso Opcional para Doses Automáticas -->
+        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-xs">
+          <label for="usprp-peso" class="text-slate-300 text-[11px] font-medium flex items-center gap-1">
+            <i data-lucide="scale" class="w-3 h-3 text-brand-400"></i> Peso do Paciente (kg) p/ doses:
+          </label>
+          <div class="flex items-center gap-1.5">
+            <input type="number" id="usprp-peso" placeholder="Ex: 70" oninput="recalcularDosesProtocoloUsp()" class="w-16 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-mono text-center text-xs">
+            <span class="text-slate-400 text-[11px]">kg</span>
+          </div>
+        </div>
+
+        <!-- Card de Metas e Alvos Imediatos -->
+        <div id="usprp-metas-card" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1">
+          <!-- Preenchido dinamicamente via JS -->
+        </div>
+
+        <!-- Barra de Progresso do Checklist -->
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[10px] font-semibold">
+            <span id="usprp-progresso-texto" class="text-slate-300">Progresso da Conduta: 0/5 (0%)</span>
+            <span id="usprp-progresso-status" class="text-rose-400 font-mono">Pendente</span>
+          </div>
+          <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div id="usprp-progresso-barra" class="bg-rose-500 h-full w-0 transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <!-- Lista de Checklists Interativos -->
+        <div id="usprp-itens-container" class="space-y-2">
+          <!-- Preenchido dinamicamente via JS -->
+        </div>
+
+        <!-- Card de Erros Críticos & Contraindicações da USP-RP -->
+        <div class="p-3 rounded-lg bg-rose-950/40 border border-rose-800/60 space-y-1.5 text-xs text-rose-200">
+          <div class="font-bold flex items-center gap-1.5 text-rose-300 text-[11px]">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i> Armadilhas & Erros Críticos (HC-UE FMRP-USP)
+          </div>
+          <div id="usprp-erros-criticos" class="text-[10.5px] leading-relaxed space-y-1 text-rose-200/90">
+            <!-- Preenchido dinamicamente via JS -->
+          </div>
+        </div>
+
+        <!-- Ações do Checklist: Copiar PEP e Resetar -->
+        <div class="flex items-center gap-2 pt-1">
+          <button onclick="copiarChecklistUspProntuario()" class="flex-1 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950 transition active:scale-[0.98]">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Conduta para Prontuário
+          </button>
+          <button onclick="resetarChecklistUsp()" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs flex items-center gap-1 border border-slate-700 transition" title="Limpar checks">
+            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Resetar
+          </button>
+        </div>
       </div>
 
       <!-- Subcalc 1: DVA -->
-      <div id="calc-dva" class="subcalc-pane glass-card rounded-xl p-4 space-y-3">
+      <div id="calc-dva" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
         <h4 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
           <i data-lucide="zap" class="w-3.5 h-3.5"></i> Drogas Vasoativas em mL/h
         </h4>
@@ -628,9 +712,9 @@
         <i data-lucide="pill" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         <span class="text-[8.5px] sm:text-[9px] font-medium mt-0.5">REMUME</span>
       </button>
-      <button onclick="navegarAba('tab-calculadoras', 'Calculadoras de Bolso')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-calculadoras">
-        <i data-lucide="calculator" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-        <span class="text-[8.5px] sm:text-[9px] font-medium mt-0.5">Cálculos</span>
+      <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-calculadoras">
+        <i data-lucide="shield-alert" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        <span class="text-[8.5px] sm:text-[9px] font-medium mt-0.5">Emergência</span>
       </button>
       <button onclick="navegarAba('tab-aulas', 'Centro de Aulas R1')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 transition" data-tab="tab-aulas">
         <div class="relative inline-flex">
@@ -981,16 +1065,29 @@
       });
     }
 
-    // 5. Calculadoras Clínicas
+    // 5. Calculadoras Clínicas & Sala Vermelha
     function abrirSubCalc(paneId, botao) {
       hapticFeedback('light');
       document.querySelectorAll('.subcalc-pane').forEach(el => el.classList.add('hidden'));
       document.getElementById(paneId)?.classList.remove('hidden');
 
       document.querySelectorAll('.subcalc-btn').forEach(b => {
-        b.className = "subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400";
+        if (b.dataset.btnType === 'usprp') {
+          b.className = "subcalc-btn w-full py-2 px-2.5 rounded-lg bg-slate-800 text-rose-300 border border-slate-700 text-[11px] font-bold flex items-center justify-between transition active:scale-[0.99]";
+        } else {
+          b.className = "subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400 text-[10px] font-bold";
+        }
       });
-      if (botao) botao.className = "subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+      if (botao) {
+        if (botao.dataset.btnType === 'usprp') {
+          botao.className = "subcalc-btn w-full py-2 px-2.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-bold flex items-center justify-between shadow-sm shadow-rose-950 transition active:scale-[0.99]";
+        } else {
+          botao.className = "subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold";
+        }
+      }
+      if (paneId === 'calc-usprp') {
+        renderizarProtocoloUsp();
+      }
     }
 
     const pedidosCalc = {};
@@ -1023,6 +1120,707 @@
     }
     function calcularGaso() {
       solicitarCalculo('gaso', {ph:valorCalc('gaso-ph'), pco2:valorCalc('gaso-pco2'), hco3:valorCalc('gaso-hco3')}, 'gaso-resultado');
+    }
+
+    // =========================================================================
+    // 5.1 CHECKLISTS DE SALA VERMELHA (HC-UE FMRP-USP & MEDQUEST OSCE LIVE)
+    // =========================================================================
+    const PROTOCOLOS_USP_SALA_VERMELHA = {
+      cad: {
+        id: 'cad',
+        titulo: 'Cetoacidose Diabética (CAD)',
+        subtitulo: 'Protocolo HC-UE FMRP-USP · Emergências Endócrinas',
+        icone: 'droplet',
+        badge: 'USP-RP 2024 CM',
+        cenario: 'Paciente DM1 descompensado (glicemia > 250, acidose metabólica pH < 7.30, HCO3 < 15, cetonúria 4+, Kussmaul, desidratação grave).',
+        metas: [
+          'Meta glicêmica: Redução progressiva de 50 a 70 mg/dL por hora (evitar edema cerebral).',
+          'Meta de potássio: Manter K+ sérico entre 4.0 e 5.0 mEq/L.',
+          'Critério de cura: Ânion gap normalizado (≤ 12), HCO3 > 18 mEq/L, pH venoso > 7.30 e paciente tolerando dieta oral.'
+        ],
+        errosCriticos: [
+          'NUNCA iniciar insulina venosa se Potássio Sérico < 3.3 mEq/L ou desconhecido (risco de arritmia ventricular fatal por hipocalemia aguda).',
+          'NUNCA prescrever Bicarbonato de Sódio de rotina para pH > 6.9 (contraindicação formal pela ADA e HC-UE; piora hipocalemia e induz acidose liquórica paradoxal).',
+          'NUNCA suspender a insulina venosa assim que a glicemia atingir 200-250 mg/dL sem fechar o ânion gap. A regra de ouro é associar SG 5% e manter a insulina.'
+        ],
+        itens: [
+          {
+            id: 'cad_expansao',
+            categoria: 'Ressuscitação Volêmica',
+            prioridade: 'Imediato (1ª Hora)',
+            titulo: 'Expansão Volêmica Rápida com SF 0,9%',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                const min = Math.round(peso * 15);
+                const max = Math.round(peso * 20);
+                return `Soro Fisiológico 0,9% IV: ${min} a ${max} mL (15 a 20 mL/kg) infundidos na 1ª hora em acesso venoso periférico calibroso.`;
+              }
+              return 'Soro Fisiológico 0,9% IV: 1000 a 1500 mL na 1ª hora (15-20 mL/kg/h) em acesso calibroso.';
+            },
+            racional: 'Restaura volemia, perfusão renal e reduz hormônios contrarreguladores antes do efeito pleno da insulina.'
+          },
+          {
+            id: 'cad_potassio',
+            categoria: 'Eletrólitos',
+            prioridade: 'Mandatório',
+            titulo: 'Manejo Estratificado do Potássio Sérico (ANTES/COM Insulina)',
+            obterPrescricao: (peso) => {
+              return 'Coleta urgente de K+ sérico: \n• K < 3.3 mEq/L: ADIAR insulina! Repor 20 a 40 mEq KCl/h até K ≥ 3.3.\n• K 3.3 - 5.2 mEq/L: Adicionar 20 a 30 mEq KCl por litro de soro e iniciar insulina.\n• K > 5.2 mEq/L: Iniciar insulina SEM potássio; redosar K+ a cada 2 horas.';
+            },
+            racional: 'A insulina e a correção da acidose promovem influxo maciço de K+ para o intracelular, deflagrando hipocalemia letal.'
+          },
+          {
+            id: 'cad_insulina',
+            categoria: 'Insulinoterapia',
+            prioridade: '1ª Linha BIC',
+            titulo: 'Insulina Regular em Bomba de Infusão Contínua (BIC)',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                const taxa = (peso * 0.1).toFixed(1);
+                return `Insulina Regular: 100 UI em 100 mL de SF 0,9% (1 UI/mL). Infundir ${taxa} mL/h (= ${taxa} UI/h a 0,1 UI/kg/h) em BIC contínua. Alvo: queda de 50-70 mg/dL/h.`;
+              }
+              return 'Insulina Regular em BIC: 0,1 UI/kg/h (solução 1 UI/mL). Opcional bólus de 0,1 UI/kg IV. Monitorizar HGT de 1/1h.';
+            },
+            racional: 'Inibe a lipólise, bloqueia a cetogênese hepática e estimula a captação periférica de glicose.'
+          },
+          {
+            id: 'cad_sg5',
+            categoria: 'Regra de Ouro USP',
+            prioridade: 'Obrigatório em Glicemia < 250',
+            titulo: 'Associação de Soro Glicosado a 5% (SG 5%)',
+            obterPrescricao: (peso) => {
+              return 'Assim que Glicemia capilar ≤ 200 a 250 mg/dL: associar SG 5% a 100-150 mL/h (ou SG 5% + SF 0,9% 1:1) REDUZINDO a insulina para 0,05 UI/kg/h para manter glicemia 150-200 mg/dL até resolução completa.';
+            },
+            racional: 'Permite continuar infundindo insulina para fechar o ânion gap sem provocar hipoglicemia e edema cerebral.'
+          },
+          {
+            id: 'cad_resolucao',
+            categoria: 'Vigilância & Transição',
+            prioridade: 'Transição Segura',
+            titulo: 'Critérios de Resolução e Transição para Insulina Subcutânea',
+            obterPrescricao: (peso) => {
+              return 'Aplicar Insulina NPH ou Análogo Basal SC 1 a 2 horas ANTES de desligar a BIC quando preencher critérios: Glicemia < 200, HCO3 ≥ 18 mEq/L, pH venoso > 7.30 e Ânion Gap normalizado (≤ 12).';
+            },
+            racional: 'Desligar a BIC sem insulina basal prévia provoca cetoacidose rebote em 30 a 60 minutos pela meia-vida ultracurta da insulina venosa.'
+          }
+        ]
+      },
+      sca: {
+        id: 'sca',
+        titulo: 'SCA sem Supra / Angina Instável de Alto Risco',
+        subtitulo: 'Protocolo HC-UE FMRP-USP · Síndromes Coronarianas',
+        icone: 'heart-pulse',
+        badge: 'USP-RP 2024 CM',
+        cenario: 'Dor torácica isquêmica em repouso/crescendo (> 20 min), alteração dinâmica de ST/T e/ou troponina ultrassensível positiva, GRACE > 140.',
+        metas: [
+          'Tempo porta-ECG: Eletrocardiograma de 12 derivações realizado e laudado em até 10 minutos.',
+          'Estratificação precoce: Calcular escore GRACE/TIMI na admissão (GRACE > 140 = Alto Risco).',
+          'Tempo para CATE: Cineangiocoronariografia (estratégia invasiva precoce) em até 24 horas.'
+        ],
+        errosCriticos: [
+          'TROMBOLÍTICO É CONTRAINDICAÇÃO FORMAL ABSOLUTA em SCA sem supra! (Aumenta sangramento grave e mortalidade sem desfazer trombo suboclusivo branco rico em plaquetas).',
+          'NUNCA administrar Nitrato se PAS < 90 mmHg, suspeita de Infarto de Ventrículo Direito (solicitar V3R/V4R) ou uso recente de inibidores de fosfodiesterase-5 (Sildenafil < 24h ou Tadalafil < 48h).',
+          'NÃO adiar ou contraindicar cateterismo em paciente de alto risco com dor refratária ou instabilidade hemodinâmica/elétrica.'
+        ],
+        itens: [
+          {
+            id: 'sca_ecg',
+            categoria: 'Diagnóstico Eletrocardiográfico',
+            prioridade: 'Porta-ECG ≤ 10 min',
+            titulo: 'ECG de 12 Derivações + V3R/V4R/V7/V8',
+            obterPrescricao: (peso) => {
+              return 'Realizar ECG de 12 derivações imediatamente. Avaliar infradesnivelamento de ST (≥ 0,5 mm), inversão simétrica de onda T ou alterações transitórias. Repetir seriadinho a cada 15-30 min se dor persistente.';
+            },
+            racional: 'Documenta isquemia miocárdica transmural vs subendocárdica e descarta IAM com supra.'
+          },
+          {
+            id: 'sca_dapt',
+            categoria: 'Antiagregação Plaquetária',
+            prioridade: 'DAPT Imediato',
+            titulo: 'Dupla Antiagregação Plaquetária (AAS + Inibidor P2Y12)',
+            obterPrescricao: (peso) => {
+              return '• AAS: 200 a 300 mg via oral (mastigar e engolir).\n• Ticagrelor: 180 mg VO dose de ataque (ou Clopidogrel 300-600 mg VO se indisponibilidade ou contraindicação a Ticagrelor).';
+            },
+            racional: 'Bloqueia ativação plaquetária via COX-1 e receptor P2Y12, reduzindo expansão e trombose de stent.'
+          },
+          {
+            id: 'sca_anticoag',
+            categoria: 'Anticoagulação Plena',
+            prioridade: '1ª Linha SC',
+            titulo: 'Anticoagulação com Enoxaparina Subcutânea',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                const doseMg = Math.round(peso * 1.0);
+                return `Enoxaparina: ${doseMg} mg SC de 12 em 12 horas (1 mg/kg SC 12/12h). Se ClCr < 30 mL/min: ajustar para 1 mg/kg 1x ao dia.`;
+              }
+              return 'Enoxaparina: 1 mg/kg por via subcutânea de 12 em 12 horas (reduzir para 1 mg/kg 1x/dia se Clearance Cr < 30 mL/min).';
+            },
+            racional: 'Inibe o fator Xa e trombina com perfil mais previsível que a HNF, reduzindo eventos isquêmicos recorrentes.'
+          },
+          {
+            id: 'sca_antiisquemia',
+            categoria: 'Terapia Anti-isquêmica & Estatina',
+            prioridade: 'Alívio Sintomático',
+            titulo: 'Nitrato SL, Betabloqueador VO e Atorvastatina de Alta Potência',
+            obterPrescricao: (peso) => {
+              return '• Nitrato: Mononitrato de Isossorbida 5 mg SL se dor torácica ativa (PAS > 90 mmHg).\n• Betabloqueador: Metoprolol 25 a 50 mg VO nas primeiras 24h (se Killip I, sem BAV e FC > 60 bpm).\n• Estatina: Atorvastatina 80 mg VO à noite.';
+            },
+            racional: 'Reduz consumo miocárdico de O2, vasodilata coronárias e estabiliza o endotélio da placa aterosclerótica.'
+          },
+          {
+            id: 'sca_cate',
+            categoria: 'Estratificação Invasiva',
+            prioridade: 'Estratégia Invasiva < 24h',
+            titulo: 'Cineangiocoronariografia (CATE) em até 24 Horas',
+            obterPrescricao: (peso) => {
+              return 'Encaminhar para CATE em até 24h se GRACE > 140, elevação de troponina ou infra de ST transitório. Se dor refratária, choque cardiogênico ou arritmias ventriculares instáveis: CATE IMEDIATO (< 2h).';
+            },
+            racional: 'Define anatomia coronariana e viabiliza angioplastia primária precoce para revascularização da artéria culpada.'
+          }
+        ]
+      },
+      sepse: {
+        id: 'sepse',
+        titulo: 'Choque Séptico & Bundle de 1 Hora',
+        subtitulo: 'Protocolo HC-UE FMRP-USP / Surviving Sepsis',
+        icone: 'shield-alert',
+        badge: 'USP/Einstein 2024',
+        cenario: 'Infecção suspeita ou confirmada associada a disfunção orgânica aguda (PAM < 65 mmHg, Lactato arterial > 2 mmol/L ou refratariedade a volume).',
+        metas: [
+          'Meta hemodinâmica: Pressão Arterial Média (PAM) ≥ 65 mmHg.',
+          'Meta metabólica: Normalização ou queda > 20% do lactato sérico a cada 2 horas.',
+          'Tempo porta-antibiótico: Início da infusão do antibiótico de amplo espectro em < 60 minutos.'
+        ],
+        errosCriticos: [
+          'NUNCA atrasar a infusão de antibiótico de amplo espectro por mais de 1 hora para aguardar resultados de exames ou hemoculturas.',
+          'NUNCA usar Dopamina como vasopressor de primeira linha (Noradrenalina é o padrão-ouro absoluto por menor taxa de arritmias e menor mortalidade).',
+          'NÃO aguardar a conclusão dos 30 mL/kg de cristaloides para iniciar a Noradrenalina se o paciente estiver profundamente chocado (PAS < 70 ou PAM < 50 mmHg).'
+        ],
+        itens: [
+          {
+            id: 'sepse_lactato',
+            categoria: 'Diagnóstico & Perfusão',
+            prioridade: '≤ 1 Hora',
+            titulo: 'Dosagem Imediata de Lactato Sérico Arterial',
+            obterPrescricao: (peso) => {
+              return 'Coletar gasometria com lactato sérico na admissão. Lactato > 2 mmol/L indica hipoperfusão; se ≥ 4 mmol/L indica sepse grave/choque críptico e exige ressuscitação volêmica urgente.';
+            },
+            racional: 'Marcador substituto de hipóxia tecidual e metabolismo anaeróbico guiado por glicólise acelerada.'
+          },
+          {
+            id: 'sepse_culturas',
+            categoria: 'Diagnóstico Microbiológico',
+            prioridade: 'Antes do ATB',
+            titulo: 'Coleta de 2 Pares de Hemoculturas + Culturas do Foco',
+            obterPrescricao: (peso) => {
+              return 'Colher 2 pares de hemoculturas (sítios de punção periférica diferentes) + urina (urocultura) e/ou secreção traqueal antes do antibiótico, sem retardar a primeira dose além de 45 minutos.';
+            },
+            racional: 'Permite desescalonamento antimicrobiano direcionado e identificação do agente etiológico nosocomial/comunitário.'
+          },
+          {
+            id: 'sepse_atb',
+            categoria: 'Antimicrobiano Empírico',
+            prioridade: 'Imediato (< 60 min)',
+            titulo: 'Antibioticoterapia de Amplo Espectro Venosa',
+            obterPrescricao: (peso) => {
+              return 'Prescrever e infundir na 1ª hora: \n• Foco pulmonar/abdominal: Piperacilina-Tazobactam 4,5g IV em bólus/infusão estendida (ou Cefepime 2g IV).\n• Suspeita de infecção nosocomial/MRSA: associar Vancomicina 15-20 mg/kg IV.\n• Foco urinário: Ceftriaxona 2g IV ou Meropenem 1g IV se sepse grave.';
+            },
+            racional: 'Cada hora de atraso na administração do antimicrobiano eleva a mortalidade do choque séptico em até 7,6% a 8%.'
+          },
+          {
+            id: 'sepse_volume',
+            categoria: 'Ressuscitação Volêmica',
+            prioridade: '30 mL/kg em até 3h',
+            titulo: 'Expansão Volêmica com Cristaloide Balanceado (30 mL/kg)',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                const totalVol = Math.round(peso * 30);
+                return `Ringer Lactato ou SF 0,9%: ${totalVol} mL IV (30 mL/kg) infundidos nas primeiras 1 a 3 horas se PAM < 65 mmHg ou Lactato ≥ 4 mmol/L. Monitorar sinais de congestão pulmonar.`;
+              }
+              return 'Ringer Lactato ou Soro Fisiológico 0,9%: 30 mL/kg IV infundidos nas primeiras 3 horas (iniciar 1000 mL abertos nos primeiros 30 min).';
+            },
+            racional: 'Restaura a pré-carga cardíaca e o volume intravascular estressado em resposta à vasodilatação inflamatória.'
+          },
+          {
+            id: 'sepse_nora',
+            categoria: 'Vasopressor Precoce',
+            prioridade: '1ª Escolha DVA',
+            titulo: 'Noradrenalina em Bomba de Infusão Contínua (BIC)',
+            obterPrescricao: (peso) => {
+              return 'Noradrenalina (solução padrão 4 ampolas = 16 mg em 234 mL SG 5% = 64 mcg/mL). Iniciar a 0,05 a 0,1 mcg/kg/min (5 a 10 mL/h) e titular a cada 5-10 min para meta de PAM ≥ 65 mmHg.';
+            },
+            racional: 'Potente agonista alfa-1 adrenérgico que restaura tônus arteriolar periférico sem causar taquiarritmias excessivas.'
+          }
+        ]
+      },
+      tv: {
+        id: 'tv',
+        titulo: 'TV Monomórfica Instável (Cardioversão ACLS)',
+        subtitulo: 'Protocolo Sala Vermelha / Emergência Cardiológica',
+        icone: 'zap',
+        badge: 'UNIFESP/USP 2024',
+        cenario: 'Taquicardia de QRS largo regular (> 120 ms), FC > 150 bpm com pulso presente e sinais de instabilidade hemodinâmica.',
+        metas: [
+          'Reconhecer imediatamente os 4 sinais de instabilidade do ACLS.',
+          'Sincronização imediata (modo SYNC ativado no monitor).',
+          'Cardioversão elétrica sincronizada imediata com 100 Joules bifásico.'
+        ],
+        errosCriticos: [
+          'NUNCA administrar Amiodarona venosa ou outros antiarrítmicos em paciente com TV instável em choque (conduta que retarda o tratamento salvador e precipita PCR).',
+          'NUNCA disparar choque elétrico sem ativar o botão SINCRONIZADO (SYNC) em paciente com pulso (risco letal de disparar choque sobre a onda T induzindo Fibrilação Ventricular iatrogênica).',
+          'NÃO tentar cardioversão sem sedação/analgesia se o paciente estiver consciente, mas NUNCA atrasar o choque se o paciente estiver inconsciente ou colapsando.'
+        ],
+        itens: [
+          {
+            id: 'tv_sinais',
+            categoria: 'Avaliação de Instabilidade',
+            prioridade: 'Reconhecimento Imediato',
+            titulo: 'Identificação dos 4 Sinais de Instabilidade (ACLS)',
+            obterPrescricao: (peso) => {
+              return 'Pesquisar presença de: \n1) Hipotensão arterial (PAS < 90 ou PAM < 65 mmHg);\n2) Rebaixamento agudo do nível de consciência / síncope;\n3) Dor torácica isquêmica (angina ativa);\n4) Dispneia por edema agudo de pulmão / congestão.';
+            },
+            racional: 'A presença de qualquer um dos 4 critérios indica instabilidade hemodinâmica e exige cardioversão elétrica imediata.'
+          },
+          {
+            id: 'tv_carrinho',
+            categoria: 'Segurança & Monitorização',
+            prioridade: 'Imediato',
+            titulo: 'Carrinho de Parada, Pás Adesivas e O2 Suplementar',
+            obterPrescricao: (peso) => {
+              return 'Solicitar carrinho de emergência com desfibrilador bifásico. Posicionar pás adesivas no tórax (posição ântero-apical ou ântero-posterior). Ofertar O2 sob máscara de reservatório e manter acesso calibroso.';
+            },
+            racional: 'Prepara a equipe para o choque e oferece contingência para parada cardíaca com degeneração súbita de ritmo.'
+          },
+          {
+            id: 'tv_sync',
+            categoria: 'Segurança Elétrica',
+            prioridade: 'Mandatório!',
+            titulo: 'Ativação do Botão SINCRONIZADO (Modo SYNC)',
+            obterPrescricao: (peso) => {
+              return 'Pressionar o botão "SYNC" no cardioversor. Verificar no traçado do monitor os marcadores/pontos destacados exatamente sobre cada complexo R. Reduzir ganho ou mudar derivação se falhar a detecção.';
+            },
+            racional: 'Garante que a descarga elétrica caia no período refratário absoluto (onda R) e evite a fase vulnerável da repolarização ventricular (onda T).'
+          },
+          {
+            id: 'tv_sedacao',
+            categoria: 'Conforto & Sedação Rápida',
+            prioridade: 'Pré-Choque',
+            titulo: 'Sedação e Analgesia Rápida (Paciente Consciente)',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                const doseEtom = (peso * 0.2).toFixed(1);
+                return `Etomidato: ${doseEtom} mg IV (0,2 a 0,3 mg/kg) em bólus rápido (ou Midazolam 3 a 5 mg IV + Fentanil 50 mcg IV). Fornecer ventilação assistida se necessário.`;
+              }
+              return 'Etomidato: 0,2 a 0,3 mg/kg IV em bólus lento (ótima estabilidade hemodinâmica) OU Midazolam 3-5 mg + Fentanil 50-100 mcg IV.';
+            },
+            racional: 'Evita a dor atroz e o trauma psicológico da descarga elétrica em paciente que ainda preserva consciência.'
+          },
+          {
+            id: 'tv_choque',
+            categoria: 'Cardioversão Elétrica',
+            prioridade: 'Choque Sincronizado 100J',
+            titulo: 'Cardioversão Elétrica Sincronizada com 100 Joules (Bifásico)',
+            obterPrescricao: (peso) => {
+              return 'Carregar 100 Joules (bifásico). Verbalizar em voz alta e clara: "AFASTANDO TODOS DO LEITO! 1, 2, 3... CHOQUE!". Segurar o botão de choque pressionado até a entrega da corrente sincronizada na onda R.';
+            },
+            racional: 'Despolariza simultaneamente todo o miocárdio ventricular, quebrando o circuito de reentrada e permitindo o retorno do nó sinusal.'
+          }
+        ]
+      },
+      trauma: {
+        id: 'trauma',
+        titulo: 'Politrauma & Choque Hemorrágico (E-FAST)',
+        subtitulo: 'Protocolo Sala Vermelha de Trauma HC-UE FMRP-USP',
+        icone: 'crosshair',
+        badge: 'USP-RP 2023 CG',
+        cenario: 'Vítima de trauma fechado grave/colisão, hipotenso (PA < 90), taquicárdico (FC > 120), sinais de choque hemorrágico classe III/IV e FAST positivo.',
+        metas: [
+          'Avaliação primária rigorosa na sequência xABCDE do ATLS.',
+          'E-FAST beira-leito imediato executado dentro da Sala Vermelha.',
+          'Ácido Tranexâmico administrado na primeira hora (< 3h do trauma).',
+          'Protocolo de Transfusão Maciça balanceada 1:1:1 ativado precocemente.'
+        ],
+        errosCriticos: [
+          'ERRO GRAVÍSSIMO E FATAL: Encaminhar paciente politraumatizado instável hemodinamicamente com FAST positivo para Tomografia Computadorizada (TC)! Paciente instável vai direto para Laparotomia Exploradora no Centro Cirúrgico.',
+          'NUNCA realizar ressuscitação agressiva com litros excessivos de cristaloide (SF 0,9% frio > 1500 mL induz a tríade letal: acidose metabólica, hipotermia e coagulopatia dilucional).',
+          'NÃO postergar a infusão de Ácido Tranexâmico para além de 3 horas do momento do trauma (perda total de eficácia e aumento de risco trombótico).'
+        ],
+        itens: [
+          {
+            id: 'trauma_abcde',
+            categoria: 'Sistematização do ATLS',
+            prioridade: 'xABCDE Rigoroso',
+            titulo: 'Abordagem Primária xABCDE com Prancha e Colar',
+            obterPrescricao: (peso) => {
+              return '• x/A: Controle de hemorragias exanguinantes externas + via aérea com alinhamento cervical;\n• B: Ventilação e oximetria (descartar pneumotórax hipertensivo);\n• C: Circulação (pulsos, perfusão, controle de sangramentos);\n• D: Glasgow e pupilas;\n• E: Exposição total + controle rigoroso de hipotermia com manta aquecida.';
+            },
+            racional: 'Sistematização salva-vidas que prioriza o tratamento das lesões com maior potencial de óbito imediato.'
+          },
+          {
+            id: 'trauma_acessos',
+            categoria: 'Acesso Venoso & Coleta',
+            prioridade: 'Imediato',
+            titulo: 'Dois Acessos Venosos Periféricos Calibrosos (14G ou 16G)',
+            obterPrescricao: (peso) => {
+              return 'Puncionar 2 acessos periféricos curtos em membros superiores (calibre 14G ou 16G). Coletar amostras: tipagem sanguínea e prova cruzada, hemograma completo, coagulograma, plaquetas e gasometria com lactato.';
+            },
+            racional: 'Cateteres periféricos curtos e calibrosos oferecem menor resistência hidrodinâmica que cateteres venosos centrais pela lei de Poiseuille.'
+          },
+          {
+            id: 'trauma_efast',
+            categoria: 'Ultrassom Beira-Leito',
+            prioridade: 'Beira-Leito Sala Vermelha',
+            titulo: 'Execução Imediata de E-FAST na Sala Vermelha',
+            obterPrescricao: (peso) => {
+              return 'Realizar ultrassom beira-leito sem remover o paciente da sala de reanimação:\n1) Janela Pericárdica (subxifoidiana);\n2) Espaço Hepatorrenal (Morison);\n3) Espaço Esplenorrenal (Koller);\n4) Janela Pélvica (fundo de saco);\n5) Janelas Pleurais anteriores (pneumotórax/hemotórax).';
+            },
+            racional: 'Detecta líquido livre peritoneal ou derrame pericárdico com sensibilidade de 85-95% em segundos sem transporte.'
+          },
+          {
+            id: 'trauma_txa',
+            categoria: 'Antifibrinolítico',
+            prioridade: 'CRASH-2 Protocolo',
+            titulo: 'Prescrição Imediata de Ácido Tranexâmico (< 3 Horas)',
+            obterPrescricao: (peso) => {
+              return 'Ácido Tranexâmico: 1g IV diluído em 100 mL de SF 0,9% infundido em 10 minutos (ataque), seguido de 1g IV em infusão contínua em 8 horas.';
+            },
+            racional: 'Inibe a quebra do coágulo por plasmina, reduzindo a mortalidade por sangramento em até um terço no choque do trauma.'
+          },
+          {
+            id: 'trauma_ptm',
+            categoria: 'Ressuscitação Hemostática',
+            prioridade: '1:1:1 Balanceado',
+            titulo: 'Protocolo de Transfusão Maciça (CH : PFC : Plaquetas)',
+            obterPrescricao: (peso) => {
+              return 'Ativar Protocolo de Transfusão Maciça junto ao Hemocentro. Infundir concentrados de hemácias (O negativo ou compatível), plasma fresco congelado e plaquetas na proporção fixa 1:1:1 aquecidos. Limitar cristaloides a < 1000 mL.';
+            },
+            racional: 'Previne coagulopatia dilucional e simula sangue total, melhorando sobrevida e transporte de oxigênio.'
+          },
+          {
+            id: 'trauma_laparo',
+            categoria: 'Conduta Cirúrgica',
+            prioridade: 'Laparotomia de Emergência',
+            titulo: 'Transferência Direta para Centro Cirúrgico (Laparotomia Exploradora)',
+            obterPrescricao: (peso) => {
+              return 'Paciente com choque hemorrágico e FAST positivo = INDICAÇÃO FORMAL DE LAPAROTOMIA EXPLORADORA IMEDIATA. Não perder tempo com exames de imagem adicionais! Acionar equipe cirúrgica e anestesia.';
+            },
+            racional: 'O controle cirúrgico do sangramento (Damage Control Surgery) é a única medida curativa definitiva no hemoperitônio maciço.'
+          }
+        ]
+      },
+      anaf: {
+        id: 'anaf',
+        titulo: 'Anafilaxia Grave & Choque Anafilático',
+        subtitulo: 'Protocolo Sala Vermelha HC-Criança / FMRP-USP',
+        icone: 'syringe',
+        badge: 'UNICAMP/USP 2024 PED',
+        cenario: 'Início agudo (minutos a poucas horas) com acometimento mucocutâneo (urticária, angioedema) + comprometimento respiratório (estridor, broncoespasmo) e/ou choque circulatório.',
+        metas: [
+          'Adrenalina 1:1000 administrada imediatamente por via Intramuscular (IM) na face anterolateral da coxa.',
+          'Manter paciente em decúbito dorsal estrito com pernas elevadas.',
+          'Vigilância de 6 a 12 horas para prevenção e detecção precoce de reação anafilática bifásica.'
+        ],
+        errosCriticos: [
+          'NUNCA prescrever Corticoide ou Anti-histamínico antes ou em substituição à Adrenalina intramuscular (corticoide demora 4 a 6 horas para agir; a adrenalina é o ÚNICO fármaco que reverte choque e edema de glote imediato).',
+          'NUNCA aplicar Adrenalina por via subcutânea (absorção lenta e errática pela vasoconstrição cutânea).',
+          'NUNCA colocar o paciente de pé ou sentá-lo bruscamente (risco de síndrome da veia cava vazia com colapso do débito cardíaco e morte súbita posicional).'
+        ],
+        itens: [
+          {
+            id: 'anaf_adrenalina',
+            categoria: 'Droga Salva-Vidas de 1ª Linha',
+            prioridade: 'IMEDIATO IM COXA',
+            titulo: 'Adrenalina 1:1000 IM na Face Anterolateral da Coxa',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                if (peso < 30) {
+                  const doseMl = Math.min(0.3, Math.max(0.05, (peso * 0.01))).toFixed(2);
+                  return `Adrenalina 1:1000 (1 mg/mL) sem diluição: Aplicar ${doseMl} mL (= ${(doseMl*1).toFixed(2)} mg a 0,01 mg/kg) por via INTRAMUSCULAR no terço médio da face anterolateral da coxa (músculo vasto lateral). Repetir em 5-15 min se refratário.`;
+                } else {
+                  return 'Adrenalina 1:1000 (1 mg/mL) pura: Aplicar 0,5 mL (= 0,5 mg IM) no vasto lateral da coxa. Repetir a cada 5-15 min se persistir choque ou desconforto respiratório.';
+                }
+              }
+              return 'Adrenalina 1:1000 (1 mg/mL) Pura (sem diluir): \n• Crianças: 0,01 mg/kg IM (0,01 mL/kg - máx 0,3 a 0,5 mg);\n• Adultos: 0,5 mg IM (0,5 mL) na face anterolateral da coxa (vasto lateral).';
+            },
+            racional: 'Potente broncodilatador (beta-2), vasoconstritor periférico que reverte choque (alfa-1) e bloqueia a degranulação contínua de mastócitos (beta-2).'
+          },
+          {
+            id: 'anaf_posicao_o2',
+            categoria: 'Posicionamento & Oxigenação',
+            prioridade: 'Imediato',
+            titulo: 'Decúbito Dorsal com MMII Elevados + O2 de Alto Fluxo',
+            obterPrescricao: (peso) => {
+              return 'Posicionar o paciente deitado de costas com membros inferiores elevados (posição de Trendelenburg modificada). Fornecer oxigênio a 100% sob máscara facial com reservatório a 10-15 L/min.';
+            },
+            racional: 'Aumenta retorno venoso para o coração direito e previne descolamento hemodinâmico por pooling venoso esplâncnico e periférico.'
+          },
+          {
+            id: 'anaf_volume',
+            categoria: 'Ressuscitação Volêmica',
+            prioridade: 'Expansão Rápida',
+            titulo: 'Acesso Venoso e Cristaloide Rápido para Choque Distributivo',
+            obterPrescricao: (peso) => {
+              if (peso && peso > 0) {
+                const volMl = Math.round(peso * 20);
+                return `Soro Fisiológico 0,9%: ${volMl} mL IV (20 mL/kg) infundidos em bólus rápido de 10 a 20 minutos se hipotensão ou má perfusão. Se adulto, infundir 1000 a 2000 mL.`;
+              }
+              return 'Soro Fisiológico 0,9% IV em bólus rápido: 20 mL/kg em pediatria (ou 1000 a 2000 mL em adultos) para combater a vasoplegia e perda plasmática para o terceiro espaço.';
+            },
+            racional: 'Compensa a fuga capilar maciça gerada pela histamina e PAF, que pode desviar até 35% do volume intravascular em 10 minutos.'
+          },
+          {
+            id: 'anaf_segunda_linha',
+            categoria: 'Fármacos Coadjuvantes',
+            prioridade: '2ª Linha (Pós-Adrenalina)',
+            titulo: 'Anti-histamínico IV e Corticoide Sistêmico (Segunda Linha)',
+            obterPrescricao: (peso) => {
+              return 'Apenas APÓS a administração da adrenalina: \n• Corticoide: Metilprednisolona 1 a 2 mg/kg IV (máx 125 mg) ou Hidrocortisona 5 mg/kg IV (máx 500 mg);\n• Anti-histamínico: Difenidramina 1 mg/kg IV (máx 50 mg).';
+            },
+            racional: 'Medicamentos auxiliares: aliviam prurido e urticária cutânea e auxiliam na redução da gravidade de reações bifásicas tardias.'
+          },
+          {
+            id: 'anaf_vigilancia',
+            categoria: 'Vigilância Clínica',
+            prioridade: '6 a 12 Horas Observação',
+            titulo: 'Observação Prolongada e Prescrição de Autoinjetor de Adrenalina',
+            obterPrescricao: (peso) => {
+              return 'Manter sob monitorização contínua em leito de emergência por 6 a 12 horas pelo risco de reação bifásica (recrudescimento dos sintomas sem nova exposição). Orientar receita e treinamento para caneta autoinjetora de adrenalina (EpiPen).';
+            },
+            racional: 'Aproximadamente 5% a 20% dos pacientes com anafilaxia apresentam recaída grave horas após a resolução inicial do episódio.'
+          }
+        ]
+      }
+    };
+
+    let protocoloUspAtivo = 'cad';
+
+    function selecionarProtocoloUsp(id, botao) {
+      if (!PROTOCOLOS_USP_SALA_VERMELHA[id]) return;
+      hapticFeedback('selection');
+      protocoloUspAtivo = id;
+
+      document.querySelectorAll('.proto-btn').forEach(b => {
+        b.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400";
+      });
+      if (botao) {
+        botao.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-500/30 text-rose-200 border border-rose-500/40";
+      } else {
+        const btnId = 'proto-btn-' + id;
+        const b = document.getElementById(btnId);
+        if (b) b.className = "proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-500/30 text-rose-200 border border-rose-500/40";
+      }
+
+      renderizarProtocoloUsp();
+    }
+
+    function renderizarProtocoloUsp() {
+      const proto = PROTOCOLOS_USP_SALA_VERMELHA[protocoloUspAtivo];
+      if (!proto) return;
+
+      const pesoVal = parseFloat(document.getElementById('usprp-peso')?.value) || null;
+
+      // 1. Renderiza card de metas
+      const metasContainer = document.getElementById('usprp-metas-card');
+      if (metasContainer) {
+        metasContainer.replaceChildren();
+        const header = document.createElement('div');
+        header.className = 'font-bold text-white flex items-center justify-between';
+        header.innerHTML = `<span>${proto.titulo}</span><span class="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded font-mono">${proto.badge}</span>`;
+        
+        const cenarioEl = document.createElement('p');
+        cenarioEl.className = 'text-slate-300 text-[10.5px] italic';
+        cenarioEl.textContent = proto.cenario;
+
+        const listaMetas = document.createElement('div');
+        listaMetas.className = 'space-y-0.5 pt-1 border-t border-slate-800';
+        proto.metas.forEach(meta => {
+          const m = document.createElement('div');
+          m.className = 'text-slate-300 flex items-start gap-1';
+          m.innerHTML = `<span class="text-rose-400 font-bold">•</span> <span>${meta}</span>`;
+          listaMetas.appendChild(m);
+        });
+
+        metasContainer.append(header, cenarioEl, listaMetas);
+      }
+
+      // 2. Renderiza itens de conduta interativos
+      const itensContainer = document.getElementById('usprp-itens-container');
+      if (itensContainer) {
+        itensContainer.replaceChildren();
+
+        proto.itens.forEach((item, idx) => {
+          const checkKey = `usp_check_${proto.id}_${item.id}`;
+          const estaChecado = localStorage.getItem(checkKey) === 'true';
+
+          const card = document.createElement('div');
+          card.className = `p-2.5 rounded-xl border transition cursor-pointer select-none ${
+            estaChecado 
+              ? 'bg-emerald-950/30 border-emerald-500/40' 
+              : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
+          }`;
+          card.onclick = (e) => {
+            if (e.target.tagName !== 'INPUT') {
+              alternarCheckItemUsp(proto.id, item.id);
+            }
+          };
+
+          const topRow = document.createElement('div');
+          topRow.className = 'flex items-start gap-2.5';
+
+          const chk = document.createElement('input');
+          chk.type = 'checkbox';
+          chk.checked = estaChecado;
+          chk.className = 'mt-0.5 w-4 h-4 rounded text-emerald-500 focus:ring-0 bg-slate-950 border-slate-700 cursor-pointer';
+          chk.onchange = () => alternarCheckItemUsp(proto.id, item.id);
+
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'flex-1 space-y-1';
+
+          const badgeRow = document.createElement('div');
+          badgeRow.className = 'flex items-center justify-between gap-1';
+
+          const tituloEl = document.createElement('h5');
+          tituloEl.className = `text-xs font-bold ${estaChecado ? 'text-emerald-300 line-through' : 'text-white'}`;
+          tituloEl.textContent = item.titulo;
+
+          const prioridadeBadge = document.createElement('span');
+          prioridadeBadge.className = 'text-[9px] font-mono px-1.5 py-0.5 rounded font-bold ' + 
+            (item.prioridade.includes('Imediato') || item.prioridade.includes('Mandatório') 
+              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' 
+              : 'bg-slate-800 text-slate-300');
+          prioridadeBadge.textContent = item.prioridade;
+
+          badgeRow.append(tituloEl, prioridadeBadge);
+
+          const prescricaoBox = document.createElement('div');
+          prescricaoBox.className = 'p-2 rounded bg-slate-950/80 border border-slate-800/80 font-mono text-[10.5px] text-amber-200 whitespace-pre-wrap';
+          prescricaoBox.textContent = item.obterPrescricao(pesoVal);
+
+          const racionalEl = document.createElement('p');
+          racionalEl.className = 'text-[10px] text-slate-400 italic';
+          racionalEl.textContent = 'Racional FMRP: ' + item.racional;
+
+          contentDiv.append(badgeRow, prescricaoBox, racionalEl);
+          topRow.append(chk, contentDiv);
+          card.appendChild(topRow);
+
+          itensContainer.appendChild(card);
+        });
+      }
+
+      // 3. Renderiza erros críticos
+      const errosContainer = document.getElementById('usprp-erros-criticos');
+      if (errosContainer) {
+        errosContainer.replaceChildren();
+        proto.errosCriticos.forEach(erro => {
+          const eEl = document.createElement('div');
+          eEl.className = 'flex items-start gap-1.5';
+          eEl.innerHTML = `<span class="text-rose-400 font-bold shrink-0">❌</span> <span>${erro}</span>`;
+          errosContainer.appendChild(eEl);
+        });
+      }
+
+      atualizarProgressoUsp(proto.id);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function alternarCheckItemUsp(protoId, itemId) {
+      const checkKey = `usp_check_${protoId}_${itemId}`;
+      const atual = localStorage.getItem(checkKey) === 'true';
+      localStorage.setItem(checkKey, (!atual).toString());
+      hapticFeedback('selection');
+      renderizarProtocoloUsp();
+    }
+
+    function recalcularDosesProtocoloUsp() {
+      renderizarProtocoloUsp();
+    }
+
+    function atualizarProgressoUsp(protoId) {
+      const proto = PROTOCOLOS_USP_SALA_VERMELHA[protoId];
+      if (!proto) return;
+
+      const total = proto.itens.length;
+      let feitos = 0;
+      proto.itens.forEach(item => {
+        const checkKey = `usp_check_${proto.id}_${item.id}`;
+        if (localStorage.getItem(checkKey) === 'true') feitos++;
+      });
+
+      const pct = Math.round((feitos / total) * 100);
+      const txt = document.getElementById('usprp-progresso-texto');
+      const st = document.getElementById('usprp-progresso-status');
+      const barra = document.getElementById('usprp-progresso-barra');
+
+      if (txt) txt.textContent = `Progresso da Conduta: ${feitos}/${total} (${pct}%)`;
+      if (st) {
+        if (pct === 100) {
+          st.textContent = 'Concluído';
+          st.className = 'text-emerald-400 font-mono font-bold';
+        } else if (pct > 0) {
+          st.textContent = 'Em Andamento';
+          st.className = 'text-amber-400 font-mono font-bold';
+        } else {
+          st.textContent = 'Pendente';
+          st.className = 'text-rose-400 font-mono font-bold';
+        }
+      }
+      if (barra) {
+        barra.style.width = pct + '%';
+        barra.className = pct === 100 ? 'bg-emerald-500 h-full transition-all duration-300' : 'bg-rose-500 h-full transition-all duration-300';
+      }
+    }
+
+    function resetarChecklistUsp() {
+      const proto = PROTOCOLOS_USP_SALA_VERMELHA[protocoloUspAtivo];
+      if (!proto) return;
+      proto.itens.forEach(item => {
+        localStorage.removeItem(`usp_check_${proto.id}_${item.id}`);
+      });
+      copiarToast(`Checklist de ${proto.titulo} reiniciado.`);
+      renderizarProtocoloUsp();
+    }
+
+    function copiarChecklistUspProntuario() {
+      const proto = PROTOCOLOS_USP_SALA_VERMELHA[protocoloUspAtivo];
+      if (!proto) return;
+
+      const agora = new Date();
+      const dataHoraStr = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const pesoVal = parseFloat(document.getElementById('usprp-peso')?.value) || null;
+
+      let texto = `=== SALA VERMELHA · HC-UE FMRP-USP ===\n`;
+      texto += `PROTOCOLO: ${proto.titulo.toUpperCase()}\n`;
+      texto += `DATA/HORA: ${dataHoraStr}\n`;
+      if (pesoVal) texto += `PESO ESTIMADO DO PACIENTE: ${pesoVal} kg\n`;
+      texto += `\n--- CONDUTAS EXECUTADAS ---\n`;
+
+      let executados = 0;
+      let pendentes = 0;
+
+      proto.itens.forEach((item, idx) => {
+        const checkKey = `usp_check_${proto.id}_${item.id}`;
+        const estaChecado = localStorage.getItem(checkKey) === 'true';
+        const doseStr = item.obterPrescricao(pesoVal);
+
+        if (estaChecado) {
+          executados++;
+          texto += `[X] ${item.titulo}\n    Prescrição: ${doseStr.replace(/\n/g, '\n    ')}\n`;
+        } else {
+          pendentes++;
+          texto += `[ ] (PENDENTE) ${item.titulo}\n    Prescrição Prevista: ${doseStr.replace(/\n/g, '\n    ')}\n`;
+        }
+      });
+
+      texto += `\n--- METAS & VIGILÂNCIA HC-UE ---\n`;
+      proto.metas.forEach(m => {
+        texto += `• ${m}\n`;
+      });
+
+      texto += `\nStatus: ${executados} realizadas, ${pendentes} pendentes.\n`;
+      texto += `Protocolo de Referência: MedQuest / HC-UE FMRP-USP Sala Vermelha.`;
+
+      copiarTextoClipboard(texto, 'Conduta de Sala Vermelha copiada para o prontuário!');
     }
 
     // 6. SOAP & Copiloto Clínico Conversacional
@@ -1487,6 +2285,7 @@
         if (el) el.textContent = 'Informe os parâmetros para calcular.';
       });
       inicializarGraficoCorpo();
+      renderizarProtocoloUsp();
       const inputConversa = document.getElementById('input-conversa-texto');
       if (inputConversa) {
         inputConversa.addEventListener('keydown', (e) => {
