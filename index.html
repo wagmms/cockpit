@@ -605,21 +605,45 @@
         </div>
 
         <!-- Presets / Kits Rápidos em 1 Toque -->
-        <div class="space-y-1 pt-0.5">
-          <div class="text-[9.5px] uppercase tracking-wider font-semibold text-slate-400">Kits de Conduta em 1 Toque:</div>
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
-            <button onclick="adicionarKitPrescricao('sintomaticos')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25 transition flex items-center gap-1 active:scale-[0.97]">
-              <span>💊 Sintomáticos Básicos</span>
-            </button>
-            <button onclick="adicionarKitPrescricao('profilaxia')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/25 transition flex items-center gap-1 active:scale-[0.97]">
-              <span>🛡️ Profilaxia Hospitalar</span>
-            </button>
-            <button onclick="adicionarKitPrescricao('hidratacao')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 transition flex items-center gap-1 active:scale-[0.97]">
-              <span>💧 Hidratação SF 0.9%</span>
-            </button>
-            <button onclick="adicionarKitPrescricao('analgesia_forte')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition flex items-center gap-1 active:scale-[0.97]">
-              <span>⚡ Tramadol + Dipirona</span>
-            </button>
+        <div class="space-y-1.5 pt-0.5">
+          <div class="space-y-1">
+            <div class="text-[9.5px] uppercase tracking-wider font-semibold text-slate-400">Kits Hospitalares Básicos:</div>
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+              <button onclick="adicionarKitPrescricao('sintomaticos')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>💊 Sintomáticos Básicos</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('profilaxia')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>🛡️ Profilaxia Hospitalar</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('hidratacao')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>💧 Hidratação SF 0.9%</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('analgesia_forte')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>⚡ Tramadol + Dipirona</span>
+              </button>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="text-[9.5px] uppercase tracking-wider font-semibold text-rose-400 flex items-center gap-1">
+              <span>🦠 Esquemas Empíricos por Foco (Generalista / UBS):</span>
+            </div>
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+              <button onclick="adicionarKitPrescricao('atb_pac')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-teal-500/15 text-teal-300 border border-teal-500/30 hover:bg-teal-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>🫁 PAC (Amoxi+Clav)</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('atb_itu')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>🚽 ITU / Cistite (Fosfomicina)</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('atb_pielonefrite')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>⚠️ Pielonefrite (Ceftriaxona)</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('atb_pele')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30 hover:bg-fuchsia-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>🩹 Celulite / Erisipela</span>
+              </button>
+              <button onclick="adicionarKitPrescricao('atb_faringite')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+                <span>👅 Faringoamigdalite</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -682,12 +706,16 @@
           </span>
           <span class="text-[9px] bg-rose-500/30 text-rose-200 px-1.5 py-0.5 rounded font-mono font-bold tracking-tight">HC-UE</span>
         </button>
-        <div class="grid grid-cols-5 gap-1 text-center text-[10px] font-bold">
-          <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">DVA</button>
-          <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
-          <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Clearance</button>
-          <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Gaso</button>
-          <button onclick="abrirSubCalc('calc-crosscheck', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">🛡️ Segurança</button>
+        <div class="grid grid-cols-3 sm:grid-cols-9 gap-1 text-center text-[9.5px] font-bold">
+          <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">DVA</button>
+          <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
+          <button onclick="abrirSubCalc('calc-heart', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-rose-300">🫀 HEART</button>
+          <button onclick="abrirSubCalc('calc-pediatria', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-amber-300">👶 Pediátrico</button>
+          <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">Clearance</button>
+          <button onclick="abrirSubCalc('calc-atb', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-rose-300">💊 Ajuste ATB</button>
+          <button onclick="abrirSubCalc('calc-dhe', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-sky-300">⚡ DHE</button>
+          <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">Gaso</button>
+          <button onclick="abrirSubCalc('calc-crosscheck', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">🛡️ Segurança</button>
         </div>
       </div>
 
@@ -699,7 +727,7 @@
           </h4>
           <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold font-mono">RAM 0ms</span>
         </div>
-        <p class="text-[11px] text-slate-400">Varredura automática contra 219 interações locais, Guia HSL (ajuste renal e tetos de dose) e REMUME.</p>
+        <p class="text-[11px] text-slate-400">Varredura automática contra 285 interações locais, Guia HSL (ajuste renal e tetos de dose) e REMUME.</p>
 
         <div class="space-y-2">
           <div>
@@ -747,6 +775,8 @@
           <button onclick="selecionarProtocoloUsp('tv', this)" id="proto-btn-tv" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">⚡ TV Instável (Clínica)</button>
           <button onclick="selecionarProtocoloUsp('trauma', this)" id="proto-btn-trauma" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🚨 Politrauma & FAST (Cirurgia)</button>
           <button onclick="selecionarProtocoloUsp('anaf', this)" id="proto-btn-anaf" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">💉 Anafilaxia (Pediatria)</button>
+          <button onclick="selecionarProtocoloUsp('dengue', this)" id="proto-btn-dengue" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🦟 Dengue C/D (MS 2024)</button>
+          <button onclick="selecionarProtocoloUsp('has', this)" id="proto-btn-has" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">❤️ Crise HAS (SBC)</button>
         </div>
 
         <!-- Ajuste de Peso Opcional para Doses Automáticas -->
@@ -818,12 +848,18 @@
               <option value="nora">Noradrenalina (64 mcg/mL)</option>
               <option value="dobuta">Dobutamina (1000 mcg/mL)</option>
               <option value="vaso">Vasopressina (Dose Fixa)</option>
+              <option value="adrena">Adrenalina (16 mcg/mL - Choque/PCR)</option>
+              <option value="tridil">Nitroglicerina / Tridil (200 mcg/mL - EAP/SCA)</option>
+              <option value="nipride">Nitroprussiato / Nipride (200 mcg/mL - Crise HAS)</option>
             </select>
           </div>
         </div>
         <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1 text-xs" id="dva-resultado">
           <!-- Resultado dinâmico -->
         </div>
+        <button id="btn-copiar-dva" onclick="copiarDvaPEP()" class="hidden w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Conduta de DVA para o Prontuário
+        </button>
       </div>
 
       <!-- Subcalc 2: SRI / IOT -->
@@ -842,12 +878,16 @@
               <option value="padrao">Padrão / Hemodinâmica Estável</option>
               <option value="choque">Choque / Hipotensão Grave</option>
               <option value="asma">Broncoespasmo Grave / Asma</option>
+              <option value="neuro">Neurointensivismo / TCE / HIC</option>
             </select>
           </div>
         </div>
         <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1.5 text-xs" id="sri-resultado">
           <!-- Resultado dinâmico -->
         </div>
+        <button id="btn-copiar-sri" onclick="copiarSriPEP()" class="hidden w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Conduta de SRI para o Prontuário
+        </button>
       </div>
 
       <!-- Subcalc 3: Clearance Cr -->
@@ -880,30 +920,456 @@
         <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs" id="crcl-resultado">
           <!-- Resultado dinâmico -->
         </div>
+        <button id="btn-copiar-crcl" onclick="copiarCrClPEP()" class="hidden w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Parecer de ClCr para o Prontuário
+        </button>
+        <button id="btn-migrar-crcl-atb" onclick="migrarCrClParaAtb()" class="hidden w-full py-1.5 px-3 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-rose-500/30 transition">
+          <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i> 💊 Ajustar Antimicrobianos por este ClCr
+        </button>
       </div>
 
-      <!-- Subcalc 4: Gasometria -->
+      <!-- Subcalc: Ajuste Renal de Antimicrobianos (Guia HSL / IDSA) -->
+      <div id="calc-atb" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+            <i data-lucide="shield-plus" class="w-3.5 h-3.5 text-rose-400"></i> Ajuste Renal de Antimicrobianos
+          </h4>
+          <span class="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded-full font-bold font-mono">Guia HSL / IDSA</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Cálculo posológico determinístico beira-leito com faixas de ClCr e hemodiálise.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Antimicrobiano:</label>
+            <select id="atb-droga" onchange="calcularAtbCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white">
+              <option value="meropenem">Meropenem (Carbapenêmico)</option>
+              <option value="vancomicina">Vancomicina (Glicopeptídeo)</option>
+              <option value="piperacilina_tazobactam">Piperacilina + Tazobactam (Pip-Tazo)</option>
+              <option value="cefepime">Cefepime (Cefalosporina 4ª G)</option>
+              <option value="ceftriaxona">Ceftriaxona (Cefalosporina 3ª G)</option>
+              <option value="ciprofloxacino">Ciprofloxacino (Quinolona)</option>
+              <option value="polimixina_b">Polimixina B (Polipeptídeo)</option>
+              <option value="fluconazol">Fluconazol (Antifúngico)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Clearance de Creatinina (mL/min):</label>
+            <div class="flex gap-2">
+              <input type="number" id="atb-clcr" placeholder="Ex: 25" oninput="calcularAtbCockpit()" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+              <label class="flex items-center gap-1 text-[11px] text-slate-300 bg-slate-800/80 px-2 rounded-lg border border-slate-700 cursor-pointer">
+                <input type="checkbox" id="atb-hd" onchange="calcularAtbCockpit()"> HD
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chips de atalhos rápidos de ClCr -->
+        <div class="space-y-1">
+          <div class="text-[9.5px] uppercase tracking-wider font-semibold text-slate-400">Atalhos Rápidos de Função Renal:</div>
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+            <button onclick="definirClcrAtb(80)" class="whitespace-nowrap px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 transition">Normal (> 50)</button>
+            <button onclick="definirClcrAtb(40)" class="whitespace-nowrap px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition">ClCr 30-50</button>
+            <button onclick="definirClcrAtb(20)" class="whitespace-nowrap px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/30 hover:bg-orange-500/25 transition">ClCr 15-29</button>
+            <button onclick="definirClcrAtb(8)" class="whitespace-nowrap px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25 transition">ClCr &lt; 15</button>
+            <button onclick="definirClcrAtb(null, true)" class="whitespace-nowrap px-2 py-0.5 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/25 transition">Hemodiálise</button>
+          </div>
+        </div>
+
+        <!-- Box de Resultado -->
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-200" id="atb-resultado">
+          Selecione o antimicrobiano e informe o ClCr ou marque Hemodiálise.
+        </div>
+
+        <!-- Botão Copiar PEP -->
+        <button id="btn-copiar-atb" onclick="copiarAtbPEP()" class="w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-rose-500/30 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Ajuste de Antimicrobiano para o Prontuário
+        </button>
+      </div>
+
+      <!-- Subcalc: Distúrbios Hidroeletrolíticos (DHE - Sódio & Potássio) -->
+      <div id="calc-dhe" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-sky-400"></i> Distúrbios Hidroeletrolíticos (DHE)
+          </h4>
+          <span class="text-[9px] bg-sky-500/20 text-sky-300 border border-sky-500/40 px-2 py-0.5 rounded-full font-bold font-mono">Adrogué-Madias / SBC</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Correção de Sódio (teto de 8 mEq/24h contra Mielinólise Pontina) e manejo ágil de Hipercalemia.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Distúrbio / Módulo:</label>
+            <select id="dhe-modulo" onchange="alternarModuloDhe()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white">
+              <option value="hiponatremia">💧 Hiponatremia (Adrogué-Madias &amp; Salina 3%)</option>
+              <option value="hipercalemia">🚨 Hipercalemia (Potássio &amp; Cardioproteção)</option>
+              <option value="hipernatremia">🌵 Hipernatremia (Déficit de Água Livre)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Peso do Paciente (kg):</label>
+            <input type="number" id="dhe-peso" placeholder="Ex: 70" value="70" oninput="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+          </div>
+        </div>
+
+        <!-- Campos de Hiponatremia -->
+        <div id="dhe-painel-hipo" class="space-y-2 text-xs">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1">Na+ Atual (mEq/L):</label>
+              <input type="number" id="dhe-na-atual" placeholder="Ex: 118" oninput="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Solução:</label>
+              <select id="dhe-salina" onchange="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+                <option value="3">NaCl 3% (513 mEq/L)</option>
+                <option value="0.9">NaCl 0,9% (154 mEq/L)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Idade (anos):</label>
+              <input type="number" id="dhe-idade" placeholder="Ex: 50" value="50" oninput="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Sexo:</label>
+              <select id="dhe-sexo" onchange="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+                <option value="m">Masculino</option>
+                <option value="f">Feminino</option>
+              </select>
+            </div>
+          </div>
+          <!-- Chips rápidos de Na -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+            <span class="text-slate-400 text-[9.5px] uppercase">Na+:</span>
+            <button onclick="definirNaHipo(110)" class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/30">110 (Grave)</button>
+            <button onclick="definirNaHipo(118)" class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/30">118</button>
+            <button onclick="definirNaHipo(125)" class="px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30">125</button>
+            <button onclick="definirNaHipo(130)" class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">130</button>
+          </div>
+        </div>
+
+        <!-- Campos de Hipercalemia -->
+        <div id="dhe-painel-k" class="hidden space-y-2 text-xs">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1">K+ Sérico (mEq/L):</label>
+              <input type="number" step="0.1" id="dhe-k-atual" placeholder="Ex: 6.8" oninput="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div class="flex items-center pt-5">
+              <label class="flex items-center gap-2 text-xs text-rose-300 bg-rose-950/40 px-3 py-1.5 rounded-lg border border-rose-800/60 cursor-pointer">
+                <input type="checkbox" id="dhe-ecg-alt" onchange="calcularDheCockpit()">
+                <span>ECG Alterado (T tenda / QRS)</span>
+              </label>
+            </div>
+          </div>
+          <!-- Chips rápidos de K -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+            <span class="text-slate-400 text-[9.5px] uppercase">K+:</span>
+            <button onclick="definirK(5.6, false)" class="px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30">5.6 (Moderada)</button>
+            <button onclick="definirK(6.5, true)" class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/30">6.5 (Grave + ECG)</button>
+            <button onclick="definirK(7.2, true)" class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/30">7.2 (Crítica)</button>
+            <button onclick="definirK(8.3, true)" class="px-2 py-0.5 rounded-md bg-red-600/25 text-red-300 border border-red-500/50">8.3 (PCR Iminente)</button>
+          </div>
+        </div>
+
+        <!-- Campos de Hipernatremia -->
+        <div id="dhe-painel-hiper" class="hidden space-y-2 text-xs">
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1">Na+ Atual (mEq/L):</label>
+              <input type="number" id="dhe-na-hiper" placeholder="Ex: 158" oninput="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Idade (anos):</label>
+              <input type="number" id="dhe-hiper-idade" placeholder="Ex: 60" value="60" oninput="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Sexo:</label>
+              <select id="dhe-hiper-sexo" onchange="calcularDheCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+                <option value="m">Masculino</option>
+                <option value="f">Feminino</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+            <span class="text-slate-400 text-[9.5px] uppercase">Na+:</span>
+            <button onclick="definirNaHiper(150)" class="px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30">150</button>
+            <button onclick="definirNaHiper(158)" class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/30">158</button>
+            <button onclick="definirNaHiper(165)" class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/30">165</button>
+            <button onclick="definirNaHiper(178)" class="px-2 py-0.5 rounded-md bg-red-600/25 text-red-300 border border-red-500/50">178 (Extrema)</button>
+          </div>
+        </div>
+
+        <!-- Box de Resultado -->
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-200" id="dhe-resultado">
+          Selecione o distúrbio e preencha os valores para calcular a conduta segura.
+        </div>
+
+        <!-- Botão Copiar PEP -->
+        <button id="btn-copiar-dhe" onclick="copiarDhePEP()" class="w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-sky-500/30 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Parecer de DHE para o Prontuário
+        </button>
+      </div>
+
+      <!-- Subcalc 4: Gasometria Arterial · Análise em 5 Passos (Winter, Ânion Gap & Berlim) -->
       <div id="calc-gaso" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
-        <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
-          <i data-lucide="droplets" class="w-3.5 h-3.5"></i> Análise de Gasometria com Winter
-        </h4>
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+            <i data-lucide="droplets" class="w-3.5 h-3.5"></i> Gasometria Arterial · 5 Passos
+          </h4>
+          <span class="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded-full font-bold font-mono">Winter · AG · Berlim</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Classificação primária, compensação esperada, Ânion Gap sérico e corrigido, Razão Delta (Delta-Delta) e PaO₂/FiO₂.</p>
+
+        <!-- Chips de Cenários Clínicos Típicos em 1 Toque -->
+        <div class="space-y-1">
+          <div class="text-[10px] text-slate-400 font-medium">Cenários rápidos de plantão (1 toque):</div>
+          <div class="flex flex-wrap gap-1">
+            <button type="button" onclick="definirPresetGaso(7.40, 40, 24, 140, 102, 4.0, 95, 21)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 text-[10px] font-semibold border border-emerald-500/30 transition">🟢 Normal</button>
+            <button type="button" onclick="definirPresetGaso(7.15, 20, 7, 135, 98, 4.0, 92, 21)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 text-[10px] font-semibold border border-rose-500/30 transition">🔴 CAD / Cetoacidose</button>
+            <button type="button" onclick="definirPresetGaso(7.36, 58, 33, 138, 96, 3.8, 62, 24)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 text-[10px] font-semibold border border-amber-500/30 transition">🟡 DPOC Retentor</button>
+            <button type="button" onclick="definirPresetGaso(7.24, 28, 12, 138, 102, 3.0, 65, 50)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 text-[10px] font-semibold border border-rose-500/30 transition">🔴 Choque / SDRA</button>
+            <button type="button" onclick="definirPresetGaso(7.52, 48, 38, 137, 88, 4.1, 90, 21)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 text-[10px] font-semibold border border-sky-500/30 transition">🔵 Vômitos / Alcalose</button>
+          </div>
+        </div>
+
+        <!-- Parâmetros Essenciais -->
         <div class="grid grid-cols-3 gap-2 text-xs">
           <div>
-            <label class="block text-slate-300 mb-1">pH:</label>
-            <input type="number" step="0.01" id="gaso-ph" placeholder="Informe" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+            <label class="block text-slate-300 mb-1 font-semibold">pH:</label>
+            <input type="number" step="0.01" id="gaso-ph" placeholder="Ex: 7.24" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
           </div>
           <div>
-            <label class="block text-slate-300 mb-1">pCO2 (mmHg):</label>
-            <input type="number" id="gaso-pco2" placeholder="Informe" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+            <label class="block text-slate-300 mb-1 font-semibold">pCO₂ (mmHg):</label>
+            <input type="number" step="0.1" id="gaso-pco2" placeholder="Ex: 28" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
           </div>
           <div>
-            <label class="block text-slate-300 mb-1">HCO3 (mEq/L):</label>
-            <input type="number" id="gaso-hco3" placeholder="Informe" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono">
+            <label class="block text-slate-300 mb-1 font-semibold">HCO₃⁻ (mEq/L):</label>
+            <input type="number" step="0.1" id="gaso-hco3" placeholder="Ex: 12" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
           </div>
         </div>
-        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs" id="gaso-resultado">
+
+        <!-- Toggle Seção Avançada: Eletrólitos & Oxigenação -->
+        <div class="border-t border-slate-800/80 pt-2">
+          <button type="button" onclick="toggleGasoAvancado()" class="w-full flex items-center justify-between text-[11px] font-semibold text-rose-300 hover:text-rose-200 py-1 transition">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="flask-conical" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>🧪 Ânion Gap, Delta-Delta &amp; Oxigenação (Opcional)</span>
+            </span>
+            <span id="gaso-avancado-chevron" class="text-xs text-slate-400">▼</span>
+          </button>
+
+          <div id="gaso-secao-avancada" class="hidden space-y-2.5 pt-2">
+            <!-- Linha Eletrólitos -->
+            <div class="grid grid-cols-3 gap-2 text-xs">
+              <div>
+                <label class="block text-slate-300 mb-1 text-[11px]">Na⁺ (mEq/L):</label>
+                <input type="number" step="0.5" id="gaso-na" placeholder="Ex: 138" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
+              </div>
+              <div>
+                <label class="block text-slate-300 mb-1 text-[11px]">Cl⁻ (mEq/L):</label>
+                <input type="number" step="0.5" id="gaso-cl" placeholder="Ex: 102" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
+              </div>
+              <div>
+                <label class="block text-slate-300 mb-1 text-[11px]">Albumina (g/dL):</label>
+                <input type="number" step="0.1" id="gaso-alb" placeholder="Ex: 4.0" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
+              </div>
+            </div>
+
+            <!-- Linha Oxigenação -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="block text-slate-300 mb-1 text-[11px]">PaO₂ (mmHg):</label>
+                <input type="number" step="1" id="gaso-pao2" placeholder="Ex: 75" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
+              </div>
+              <div>
+                <label class="block text-slate-300 mb-1 text-[11px]">FiO₂ (% ou 0.21-1.0):</label>
+                <input type="number" step="1" id="gaso-fio2" placeholder="Ex: 21 ou 50" oninput="calcularGaso()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white font-mono text-center">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono whitespace-pre-wrap leading-relaxed" id="gaso-resultado">
           <!-- Resultado dinâmico -->
         </div>
+
+        <div class="flex gap-2">
+          <button id="btn-copiar-gaso" onclick="copiarGasoPEP()" class="hidden flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition shadow-sm active:scale-[0.99]">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Gasometria para o Prontuário
+          </button>
+          <button type="button" onclick="limparGaso()" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs font-semibold border border-slate-700 transition">
+            Limpar
+          </button>
+        </div>
+      </div>
+
+      <!-- Subcalc: Escore HEART & SCA (Dor Torácica / SBC / AHA / ESC) -->
+      <div id="calc-heart" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+            <i data-lucide="heart-pulse" class="w-3.5 h-3.5"></i> Escore HEART &amp; Dor Torácica (SCA)
+          </h4>
+          <span class="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded-full font-bold font-mono">SBC · AHA · ESC</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Estratificação de dor torácica no PS, risco de MACE em 6 semanas, indicação de DAPT e bloqueios cruzados (Prasugrel/AVC e Omeprazol).</p>
+
+        <!-- Chips de Cenários Rápidos do Plantão (1 toque) -->
+        <div class="space-y-1">
+          <div class="text-[10px] text-slate-400 font-medium">Cenários rápidos de plantão (1 toque):</div>
+          <div class="flex flex-wrap gap-1">
+            <button type="button" onclick="definirPresetHeart(0, 0, 38, 0, 0, false, false, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 text-[10px] font-semibold border border-emerald-500/30 transition">🟢 Baixo Risco (HEART 0)</button>
+            <button type="button" onclick="definirPresetHeart(1, 1, 56, 1, 0, false, false, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 text-[10px] font-semibold border border-amber-500/30 transition">🟡 Intermediário (HEART 4)</button>
+            <button type="button" onclick="definirPresetHeart(2, 2, 68, 2, 2, false, false, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 text-[10px] font-semibold border border-rose-500/30 transition">🔴 Alto Risco / SCASST (HEART 10)</button>
+            <button type="button" onclick="definirPresetHeart(2, 2, 62, 2, 2, true, false, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-rose-400 text-[10px] font-semibold border border-rose-500/50 transition">🚨 IAM Trombólise</button>
+            <button type="button" onclick="definirPresetHeart(2, 2, 65, 2, 1, false, true, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 text-[10px] font-semibold border border-purple-500/30 transition">⚠️ AVC Prévio (Prasugrel Bloq)</button>
+          </div>
+        </div>
+
+        <!-- Inputs Estruturados do HEART -->
+        <div class="space-y-2 text-xs">
+          <!-- 1. História Clínica -->
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">1. História Clínica (H):</label>
+            <select id="heart-historia" onchange="calcularHeartCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+              <option value="0">Pouco ou não suspeita (dor atípica, pontual, reprodutível à palpação) [0 pt]</option>
+              <option value="1">Moderadamente suspeita (elementos anginosos mistos/equivalentes) [1 pt]</option>
+              <option value="2" selected>Altamente suspeita (retroesternal, aperto, irradiação, diaforese) [2 pts]</option>
+            </select>
+          </div>
+
+          <!-- 2. ECG -->
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">2. Eletrocardiograma (E):</label>
+            <select id="heart-ecg" onchange="calcularHeartCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+              <option value="0">Normal [0 pt]</option>
+              <option value="1">Alteração inespecífica de repolarização / BRE prévio / SVE [1 pt]</option>
+              <option value="2" selected>Desvio significativo de ST (&gt;= 0.5 mm) ou inversão profunda de T [2 pts]</option>
+            </select>
+          </div>
+
+          <!-- 3. Idade e FR -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">3. Idade (A):</label>
+              <input type="number" id="heart-idade" value="62" min="18" max="110" oninput="calcularHeartCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center font-mono">
+              <span class="text-[10px] text-slate-400 block mt-0.5">&lt;45 (0), 45-64 (1), &gt;=65 (2)</span>
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">4. Fatores de Risco (R):</label>
+              <select id="heart-fr" onchange="calcularHeartCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+                <option value="0">Nenhum fator de risco conhecido [0 pt]</option>
+                <option value="1">1 ou 2 fatores (HAS, DM, DLP, Fumo, Obesidade, HF) [1 pt]</option>
+                <option value="2" selected>&gt;= 3 fatores OU aterosclerose/DAC documentada [2 pts]</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 5. Troponina -->
+          <div>
+            <label class="block text-slate-300 mb-1 font-semibold">5. Troponina (T):</label>
+            <select id="heart-troponina" onchange="calcularHeartCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+              <option value="0">Normal (abaixo do percentil 99 / limite superior) [0 pt]</option>
+              <option value="1">Elevada 1 a 3x o limite superior de referência [1 pt]</option>
+              <option value="2" selected>Elevada &gt; 3x o limite superior (necrose miocárdica confirmada) [2 pts]</option>
+            </select>
+          </div>
+
+          <!-- Salvaguardas & Parâmetros de Segurança DAPT -->
+          <div class="pt-2 border-t border-slate-800 space-y-1.5">
+            <div class="text-[11px] font-semibold text-rose-300 flex items-center gap-1">
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Bloqueios Sentinela &amp; Condições Especiais:
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="heart-trombolise" onchange="calcularHeartCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>Fibrinólise / Trombólise</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="heart-avc" onchange="calcularHeartCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>AVC ou AIT prévio</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="heart-omeprazol" onchange="calcularHeartCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>Uso de Omeprazol</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="heart-anticoag" onchange="calcularHeartCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>Anticoagulação (FA/DOAC)</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="heart-iam-vd" onchange="calcularHeartCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>Suspeita IAM-VD / Sildenafil</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="heart-choque" onchange="calcularHeartCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>Choque / Killip &gt;= II</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono whitespace-pre-wrap leading-relaxed" id="heart-resultado">
+          <!-- Resultado dinâmico -->
+        </div>
+
+        <div class="flex gap-2">
+          <button id="btn-copiar-heart" onclick="copiarHeartPEP()" class="hidden flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition shadow-sm active:scale-[0.99]">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Parecer HEART &amp; DAPT para Prontuário
+          </button>
+          <button type="button" onclick="limparHeart()" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs font-semibold border border-slate-700 transition">
+            Limpar
+          </button>
+        </div>
+      </div>
+
+      <!-- Subcalc 5: Pediatria & PALS (Holliday-Segar, PCR e Sintomáticos) -->
+      <div id="calc-pediatria" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="baby" class="w-3.5 h-3.5"></i> Pediatria · Holliday-Segar &amp; PALS
+          </h4>
+          <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold font-mono">SBP / AHA</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1">Peso da Criança (kg):</label>
+            <input type="number" step="0.1" id="ped-peso" placeholder="Ex: 12" oninput="calcularPediatriaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">Módulo / Protocolo:</label>
+            <select id="ped-modulo" onchange="alternarModuloPediatria()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+              <option value="holliday">💧 Hidratação Holliday-Segar</option>
+              <option value="pals">🚨 PALS Emergência / PCR</option>
+              <option value="posologia">💊 Doses de Bolso / Sintomáticos</option>
+            </select>
+          </div>
+        </div>
+        <div id="ped-campo-condicao" class="text-xs">
+          <label class="block text-slate-300 mb-1">Condição Clínica (Holliday-Segar):</label>
+          <select id="ped-condicao" onchange="calcularPediatriaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+            <option value="manutencao_padrao">Padrão (100% Holliday-Segar)</option>
+            <option value="restricao_bronquiolite">Restrição Bronquiolite / BVA (70%)</option>
+            <option value="restricao_ic">Restrição Cardíaca / Edema (60%)</option>
+            <option value="febre">Febre &gt; 38°C (+12%/°C insensível)</option>
+            <option value="desidratacao_leve">Reposição de Perdas / Déficit (125%)</option>
+          </select>
+        </div>
+        <div id="ped-campo-droga" class="hidden text-xs">
+          <label class="block text-slate-300 mb-1">Fármaco Pediátrico:</label>
+          <select id="ped-droga" onchange="calcularPediatriaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+            <option value="dipirona">Dipirona gotas (1 gota/kg máx 40gts)</option>
+            <option value="paracetamol">Paracetamol gotas (1 gota/kg máx 35gts)</option>
+            <option value="ibuprofeno">Ibuprofeno gotas (1 gota/kg máx 40gts)</option>
+            <option value="amoxicilina">Amoxicilina 250mg/5mL (50 mg/kg/dia)</option>
+            <option value="amoxicilina_oma">Amoxicilina OMA (90 mg/kg/dia)</option>
+          </select>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs space-y-1.5" id="pediatria-resultado">
+          <span class="text-slate-500">Informe o peso da criança para obter os cálculos instantaneamente.</span>
+        </div>
+        <button onclick="copiarPediatriaPEP()" class="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs flex items-center justify-center gap-1.5 border border-amber-500/30 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Conduta Pediátrica para o Prontuário
+        </button>
       </div>
     </div>
 
@@ -1124,6 +1590,27 @@
             </button>
             <button onclick="abrirModalGinecologiaAmbulatorial()" class="px-2.5 py-1.5 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 text-[11px] font-semibold hover:bg-fuchsia-500/30 flex items-center gap-1 transition">
               <i data-lucide="flower-2" class="w-3 h-3"></i> Ginecologia &amp; APS
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-pediatria');" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
+              <i data-lucide="baby" class="w-3 h-3"></i> Pediatria &amp; PALS
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-dva');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+              <i data-lucide="zap" class="w-3 h-3"></i> DVA &amp; Choque
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-sri');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
+              <i data-lucide="shield-alert" class="w-3 h-3"></i> Intubação (SRI)
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-atb');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+              <i data-lucide="shield-plus" class="w-3 h-3"></i> Ajuste ATB
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-dhe');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
+              <i data-lucide="zap" class="w-3 h-3"></i> DHE &amp; Eletrólitos
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-gaso');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+              <i data-lucide="droplets" class="w-3 h-3"></i> Gasometria &amp; Winter
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-heart');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+              <i data-lucide="heart-pulse" class="w-3 h-3"></i> Dor Torácica &amp; HEART
             </button>
             <button onclick="copiarReceitaLimpaPEP()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
               <i data-lucide="receipt" class="w-3 h-3"></i> Receita PEP
@@ -1782,6 +2269,14 @@
         <div>
           <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Queixa Principal & HDA Rápida</label>
           <textarea id="amb-input-queixa" rows="2" placeholder="Ex: Paciente hipertenso há 5 anos para renovação de receita e ajuste pressórico. Assintomático..." class="w-full rounded-lg bg-slate-950 border border-slate-800 p-2 text-slate-100 text-xs focus:border-teal-500 focus:outline-none"></textarea>
+          <div class="flex items-center gap-1 mt-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+            <span class="text-[9px] text-slate-500 font-bold uppercase shrink-0">Atalhos Rápidos:</span>
+            <button type="button" onclick="setSoapQueixaRapida('has')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">HAS Rotina</button>
+            <button type="button" onclick="setSoapQueixaRapida('dm')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">DM2 Rotina</button>
+            <button type="button" onclick="setSoapQueixaRapida('ivas')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">Tosse / Gripe</button>
+            <button type="button" onclick="setSoapQueixaRapida('lombalgia')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">Lombalgia</button>
+            <button type="button" onclick="setSoapQueixaRapida('dispepsia')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">Dispepsia / DRGE</button>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -1887,10 +2382,28 @@
               <option value="15">15 (quinze) dias</option>
               <option value="30">30 (trinta) dias</option>
             </select>
+            <div class="flex items-center gap-1 mt-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+              <span class="text-[9px] text-slate-500 font-bold uppercase shrink-0">Dias:</span>
+              <button type="button" onclick="setAtestadoDias(1)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">1d</button>
+              <button type="button" onclick="setAtestadoDias(2)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">2d</button>
+              <button type="button" onclick="setAtestadoDias(3)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">3d</button>
+              <button type="button" onclick="setAtestadoDias(5)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">5d</button>
+              <button type="button" onclick="setAtestadoDias(7)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">7d</button>
+              <button type="button" onclick="setAtestadoDias(14)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">14d</button>
+            </div>
           </div>
           <div>
             <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Diagnóstico / CID-10</label>
             <input id="atestado-input-motivo" type="text" placeholder="Ex: M54.5 Lombalgia / J00 Resfriado..." class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-amber-500 focus:outline-none" />
+            <div class="flex items-center gap-1 mt-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+              <span class="text-[9px] text-slate-500 font-bold uppercase shrink-0">CIDs:</span>
+              <button type="button" onclick="setAtestadoCid('J06.9 - Infecção de Vias Aéreas Superiores')" class="whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9.5px] border border-slate-700/60">IVAS</button>
+              <button type="button" onclick="setAtestadoCid('A09 - Gastroenterite Aguda')" class="whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9.5px] border border-slate-700/60">GECA</button>
+              <button type="button" onclick="setAtestadoCid('M54.5 - Lombalgia Aguda')" class="whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9.5px] border border-slate-700/60">Lombalgia</button>
+              <button type="button" onclick="setAtestadoCid('A90 - Dengue sem Sinais de Alarme')" class="whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9.5px] border border-slate-700/60">Dengue</button>
+              <button type="button" onclick="setAtestadoCid('G44.2 - Cefaleia Tensional')" class="whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9.5px] border border-slate-700/60">Cefaleia</button>
+              <button type="button" onclick="setAtestadoCid('B34.2 - Síndrome Gripal')" class="whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9.5px] border border-slate-700/60">Gripe</button>
+            </div>
           </div>
         </div>
 
@@ -1970,6 +2483,9 @@
         </button>
         <button onclick="alternarSecaoPrenatal('sec-pn-farmaco', this)" id="btn-pn-farmaco" class="pn-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
           💊 Risco Farmacológico
+        </button>
+        <button onclick="alternarSecaoPrenatal('sec-pn-soro', this)" id="btn-pn-soro" class="pn-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          🔬 Sorologias & Exames
         </button>
       </div>
 
@@ -2143,6 +2659,105 @@
             </div>
             <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1 text-[11px]" id="pn-farmaco-alertas"></div>
             <div class="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/30 space-y-1 text-[11px]" id="pn-farmaco-alternativas"></div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO 5: INTERPRETAÇÃO DE SOROLOGIAS E EXAMES DE PRÉ-NATAL (MS & FEBRASGO) -->
+        <div id="sec-pn-soro" class="pn-sec-pane hidden space-y-3">
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-400 flex items-center gap-1">
+              <i data-lucide="microscope" class="w-3 h-3"></i> Painel Laboratorial de Rotina (1º, 2º e 3º Trimestres)
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Glicemia de Jejum (mg/dL):</label>
+                <input type="number" id="pn-soro-gj" placeholder="Ex: 94 (se ≥ 92: DMG no 1º tri)" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Idade Gestacional Atual (semanas):</label>
+                <input type="number" id="pn-soro-sem" placeholder="Ex: 12 (fundamental para avidez e Anti-D)" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Toxoplasmose IgG / IgM:</label>
+                <div class="flex gap-1">
+                  <select id="pn-soro-toxo-igg" class="w-1/2 bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-1.5 text-xs text-white outline-none">
+                    <option value="">IgG: --</option>
+                    <option value="nao_reagente">IgG Não Reagente</option>
+                    <option value="reagente">IgG Reagente</option>
+                  </select>
+                  <select id="pn-soro-toxo-igm" class="w-1/2 bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-1.5 text-xs text-white outline-none">
+                    <option value="">IgM: --</option>
+                    <option value="nao_reagente">IgM Não Reagente</option>
+                    <option value="reagente">IgM Reagente</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Avidez de IgG (se IgG+ e IgM+ até 16s):</label>
+                <input type="number" id="pn-soro-avidez" placeholder="Ex: 65% (≥60% alta / &lt;50% baixa)" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Sífilis / VDRL / Teste Rápido:</label>
+                <input type="text" id="pn-soro-vdrl" placeholder="Ex: Reagente 1:8 ou Não Reagente" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Anti-HIV / Teste Rápido:</label>
+                <select id="pn-soro-hiv" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+                  <option value="">HIV: Selecione</option>
+                  <option value="nao_reagente">Não Reagente</option>
+                  <option value="reagente">Reagente (TARV + Não amamentar)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Hepatite B (HBsAg):</label>
+                <select id="pn-soro-hbsag" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+                  <option value="">HBsAg: Selecione</option>
+                  <option value="nao_reagente">Não Reagente</option>
+                  <option value="reagente">Reagente (HBIG + Vacina RN em 12h)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Urocultura / Urina:</label>
+                <input type="text" id="pn-soro-uro" placeholder="Ex: E. coli &gt; 10^5 UFC/mL ou Negativa" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Hemoglobina (Hb em g/dL):</label>
+                <input type="number" id="pn-soro-hb" placeholder="Ex: 10.4 (se &lt; 11: anemia)" step="0.1" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Fator Rh &amp; Coombs Indireto:</label>
+                <div class="flex gap-1">
+                  <select id="pn-soro-rh" class="w-1/2 bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-1.5 text-xs text-white outline-none">
+                    <option value="">Rh: --</option>
+                    <option value="positivo">Rh Positivo</option>
+                    <option value="negativo">Rh Negativo</option>
+                  </select>
+                  <select id="pn-soro-coombs" class="w-1/2 bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-1.5 text-xs text-white outline-none">
+                    <option value="">Coombs: --</option>
+                    <option value="nao_reagente">Coombs Negativo</option>
+                    <option value="reagente">Coombs Reagente</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="interpretarSorologiasModal()" class="px-3.5 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-pink-950 transition">
+              <i data-lucide="stethoscope" class="w-3.5 h-3.5"></i>
+              <span>Interpretar Sorologias &amp; Condutas</span>
+            </button>
+          </div>
+
+          <!-- Box de Resultado das Sorologias -->
+          <div id="pn-box-resultado-soro" class="hidden p-3 rounded-xl bg-slate-950 border border-pink-500/30 space-y-2.5">
+            <div id="pn-soro-alertas-criticos" class="space-y-1.5"></div>
+            <div id="pn-soro-lista-avaliados" class="space-y-2"></div>
+            <div class="pt-2 flex justify-end">
+              <button onclick="copiarLaudoSorologiasParaPep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-pink-300 border border-pink-500/30 font-bold text-[10.5px] flex items-center gap-1 transition">
+                <i data-lucide="copy" class="w-3 h-3"></i> Copiar Laudo para PEP
+              </button>
+            </div>
           </div>
         </div>
 
@@ -4102,6 +4717,28 @@
         analgesia_forte: [
           'Dipirona 1g IV em 100mL SF de 6/6h fixo',
           'Cloridrato de Tramadol 50mg IV diluído em 100mL SF 0,9% a correr em 20 min de 8/8h se dor EVA >= 7'
+        ],
+        atb_pac: [
+          'Amoxicilina + Clavulanato de Potássio 875/125 mg VO de 12/12h por 7 dias (PAC Leve/Moderada)',
+          'Azitromicina 500 mg VO 1x/dia por 3 a 5 dias (se germe atípico ou comorbidade associada)'
+        ],
+        atb_itu: [
+          'Fosfomicina Trometamol 3g pó oral: 1 envelope VO dose única à noite em jejum',
+          'Dipirona 500 mg VO de 6/6h se disúria ou dor lombar/pélvica'
+        ],
+        atb_pielonefrite: [
+          'Ceftriaxona 1g IV em 100mL SF 0,9% de 24/24h (internação / caso moderado-grave)',
+          'Opção Ambulatorial Oral: Ciprofloxacino 500 mg VO de 12/12h por 7 dias',
+          'Dipirona 1g IV de 6/6h se febre (Tax >= 37.8°C)',
+          'Hidratação SF 0,9% 1000 mL IV em 8h'
+        ],
+        atb_pele: [
+          'Cefalexina 500 mg VO de 6/6h por 7 a 10 dias (Erisipela / Celulite leve)',
+          'Opção Hospitalar: Oxacilina 2g IV em 100mL SF 0,9% de 4/4h (se moderada ou internação)'
+        ],
+        atb_faringite: [
+          'Penicilina G Benzatina 1.200.000 UI IM profunda dose única (ou 600.000 UI se < 27 kg)',
+          'Alternativa Oral: Amoxicilina 500 mg VO de 8/8h por 10 dias'
         ]
       };
 
@@ -4572,6 +5209,10 @@
       document.querySelectorAll('.subcalc-pane').forEach(el => el.classList.add('hidden'));
       document.getElementById(paneId)?.classList.remove('hidden');
 
+      if (!botao && paneId) {
+        botao = document.querySelector(`.subcalc-btn[onclick*="'${paneId}'"]`);
+      }
+
       document.querySelectorAll('.subcalc-btn').forEach(b => {
         if (b.dataset.btnType === 'usprp') {
           b.className = "subcalc-btn w-full py-2 px-2.5 rounded-lg bg-slate-800 text-rose-300 border border-slate-700 text-[11px] font-bold flex items-center justify-between transition active:scale-[0.99]";
@@ -4628,6 +5269,30 @@
       const pedido = {entrada};pedidosCalc[tipo] = pedido;
       resultado.classList.add('whitespace-pre-wrap');
       resultado.textContent = 'Conferindo parâmetros…';
+      function atualizarBtnCopiarCalculo(idAlvo, textoValido) {
+        const mapa = {
+          'dva-resultado': 'btn-copiar-dva',
+          'sri-resultado': 'btn-copiar-sri',
+          'crcl-resultado': 'btn-copiar-crcl',
+          'gaso-resultado': 'btn-copiar-gaso',
+          'atb-resultado': 'btn-copiar-atb',
+          'dhe-resultado': 'btn-copiar-dhe',
+          'heart-resultado': 'btn-copiar-heart'
+        };
+        const btnId = mapa[idAlvo];
+        const ehValido = textoValido && !textoValido.includes('Informe') && !textoValido.includes('Preencha') && !textoValido.includes('Não foi possível') && !textoValido.includes('Erro ao calcular');
+        if (btnId) {
+          const btn = document.getElementById(btnId);
+          if (btn) {
+            btn.classList.toggle('hidden', !ehValido);
+          }
+        }
+        if (idAlvo === 'crcl-resultado') {
+          const btnMigrar = document.getElementById('btn-migrar-crcl-atb');
+          if (btnMigrar) btnMigrar.classList.toggle('hidden', !ehValido);
+        }
+      }
+
       pedido.timer = setTimeout(async () => {
         // Se estiver offline, recupera diretamente do cache criptografado de cálculos
         if (isDeviceOffline()) {
@@ -4635,11 +5300,13 @@
           if (calcCache && calcCache.textoFormatado) {
             const doc = new DOMParser().parseFromString(calcCache.textoFormatado, 'text/html');
             resultado.textContent = (doc.body.textContent || '') + '\n\n[Cache Criptografado · Disponível Offline 0ms]';
+            atualizarBtnCopiarCalculo(id, resultado.textContent);
             return;
           }
           const resLocal = calcularOfflineLocal(tipo, entrada);
           if (resLocal) {
             resultado.textContent = resLocal;
+            atualizarBtnCopiarCalculo(id, resultado.textContent);
             return;
           }
         }
@@ -4653,12 +5320,14 @@
           // Aproveita o texto integral do bot, sem inserir HTML remoto no documento.
           const doc = new DOMParser().parseFromString(resposta.textoFormatado || '', 'text/html');
           resultado.textContent = doc.body.textContent || 'Não foi possível obter o resultado. Confira os parâmetros.';
+          atualizarBtnCopiarCalculo(id, resultado.textContent);
         } catch(e) {
           if (pedidosCalc[tipo] === pedido) {
             const calcCache = await carregarCalculoOffline(tipo, entrada);
             if (calcCache && calcCache.textoFormatado) {
               const doc = new DOMParser().parseFromString(calcCache.textoFormatado, 'text/html');
               resultado.textContent = (doc.body.textContent || '') + '\n\n[Cache Criptografado · Disponível Offline 0ms]';
+              atualizarBtnCopiarCalculo(id, resultado.textContent);
               return;
             }
             const resLocal = calcularOfflineLocal(tipo, entrada);
@@ -4667,6 +5336,7 @@
             } else {
               resultado.textContent = e.message;
             }
+            atualizarBtnCopiarCalculo(id, resultado.textContent);
           }
         }
       }, 350);
@@ -4680,7 +5350,7 @@
           if (isNaN(peso) || peso <= 0) return 'Informe o peso do paciente para calcular a taxa de infusão.';
           const alertaObesidade = peso > 150 ? '\n🚨 OBESIDADE SEVERA (> 150 kg): O cálculo por peso real gera doses excessivas. Considere usar Peso Ideal ou titular estritamente pela PAM alvo.' : '';
           const droga = String(entrada.droga || 'nora').toLowerCase();
-          if (droga === 'nora') {
+          if (droga === 'nora' || droga.includes('noradren')) {
             const c = 64; // mcg/mL (16mg em 250mL SG5%)
             const vIni = ((0.1 * peso * 60) / c).toFixed(1);
             const vMed = ((0.5 * peso * 60) / c).toFixed(1);
@@ -4690,7 +5360,7 @@
               `• Dose Média (0,5 mcg/kg/min): ${vMed} mL/h em BIC\n` +
               `• Dose Máxima (2,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
               `⚠️ Alvo: PAM ≥ 65 mmHg. Preferir acesso central (periférico apenas de resgate em veia calibrosa de antebraço).` + alertaObesidade;
-          } else if (droga === 'dobuta') {
+          } else if (droga === 'dobuta' || droga.includes('dobutam')) {
             const c = 1000; // mcg/mL (250mg em 250mL SG5%)
             const vIni = ((2.5 * peso * 60) / c).toFixed(1);
             const vMed = ((5.0 * peso * 60) / c).toFixed(1);
@@ -4700,11 +5370,38 @@
               `• Dose Titulada (5,0 mcg/kg/min): ${vMed} mL/h em BIC\n` +
               `• Dose Máxima (20,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
               `⚠️ Contraindicada em hipotensão grave isolada (PAS < 85-90 mmHg) sem vasopressor associado.` + alertaObesidade;
-          } else if (droga === 'vaso') {
+          } else if (droga === 'vaso' || droga.includes('vasopress')) {
             return `💉 VASOPRESSINA (Solução Padrão: 1 amp [20 UI] + 100mL SF0,9% = 0,2 UI/mL) [OFFLINE]\n` +
               `• Dose Fixa (0,01 a 0,04 UI/min): 3 a 12 mL/h em BIC contínua\n` +
               `• Dose de Escolha: 0,03 UI/min (9 mL/h em BIC)\n` +
               `⚠️ Droga de 2ª linha poupadora de noradrenalina no choque séptico refratário. Não titular.`;
+          } else if (droga === 'adrena' || droga.includes('adren')) {
+            const c = 16; // mcg/mL (4mg em 250mL SG5%)
+            const vIni = ((0.05 * peso * 60) / c).toFixed(1);
+            const vMed = ((0.10 * peso * 60) / c).toFixed(1);
+            const vMax = ((0.50 * peso * 60) / c).toFixed(1);
+            return `💉 ADRENALINA (Solução Padrão: 4 amp [4mg] + 246mL SG5% = 16 mcg/mL) [OFFLINE]\n` +
+              `• Dose Inicial (0,05 mcg/kg/min): ${vIni} mL/h em BIC\n` +
+              `• Dose Média (0,10 mcg/kg/min): ${vMed} mL/h em BIC\n` +
+              `• Dose Máxima (0,50 mcg/kg/min): ${vMax} mL/h em BIC\n` +
+              `⚠️ Alvo: PAM ≥ 65 mmHg. Indicação: Choque Séptico refratário a noradrenalina ou anafilaxia refratária. Causa taquicardia e hiperlactatemia tipo B.` + alertaObesidade;
+          } else if (droga === 'tridil' || droga.includes('nitroglic')) {
+            return `💉 NITROGLICERINA / TRIDIL (Solução Padrão: 1 amp [50mg/10mL] + 240mL SG5% = 200 mcg/mL) [OFFLINE]\n` +
+              `• Dose Inicial (5 mcg/min): 1,5 mL/h em BIC (titular a cada 5-10 min)\n` +
+              `• Dose Moderada (20 mcg/min): 6,0 mL/h em BIC\n` +
+              `• Dose Alta / EAP (50 mcg/min): 15,0 mL/h em BIC\n` +
+              `• Dose Máxima (200 mcg/min): 60,0 mL/h em BIC\n` +
+              `⚠️ Alvo: alívio da congestão/isquemia. Contraindicada em Infarto de VD, PAS < 90 mmHg e uso de IPDE-5 (Sildenafil 24h, Tadalafil 48h).`;
+          } else if (droga === 'nipride' || droga.includes('nitropruss')) {
+            const c = 200; // mcg/mL (50mg em 250mL SG5%)
+            const vIni = ((0.3 * peso * 60) / c).toFixed(1);
+            const vMed = ((1.0 * peso * 60) / c).toFixed(1);
+            const vMax = ((2.0 * peso * 60) / c).toFixed(1);
+            return `💉 NITROPRUSSIATO DE SÓDIO / NIPRIDE (Solução: 1 amp [50mg] + 248mL SG5% = 200 mcg/mL fotoprotetor) [OFFLINE]\n` +
+              `• Dose Inicial (0,3 mcg/kg/min): ${vIni} mL/h em BIC\n` +
+              `• Dose Média (1,0 mcg/kg/min): ${vMed} mL/h em BIC\n` +
+              `• Dose Máxima (2,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
+              `⚠️ Emergência Hipertensiva: redução de PAM ≤ 20-25% na 1ª hora. Risco de intoxicação por cianeto se uso > 48h ou ClCr < 30 mL/min.` + alertaObesidade;
           }
         } else if (tipo === 'sri') {
           const peso = parseFloat(String(entrada.peso).replace(',', '.'));
@@ -4712,7 +5409,7 @@
           const alertaObesidade = peso > 150 ? '\n🚨 OBESIDADE SEVERA (> 150 kg): Risco de sobredose. Utilize o Peso Ideal (IBW) para Fentanil, Quetamina, Etomidato e Rocurônio. Apenas a Succinilcolina pode ser no peso real.' : '';
           const cenario = String(entrada.cenario || 'padrao').toLowerCase();
           const fentanil = (3 * peso).toFixed(0);
-          if (cenario === 'choque') {
+          if (cenario.includes('choque') || cenario.includes('sepse') || cenario.includes('hipotens')) {
             const quetamina = (1.5 * peso).toFixed(0);
             const rocuronio = (1.2 * peso).toFixed(0);
             return `🚨 SRI · CENÁRIO CHOQUE / INSTABILIDADE HEMODINÂMICA [OFFLINE]\n` +
@@ -4721,7 +5418,7 @@
               `3. Sedação / Hipnótico: QUETAMINA ${quetamina} mg IV bolus (1,5 mg/kg - preserva drive simpático)\n` +
               `4. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV bolus (1,2 mg/kg)\n` +
               `⚠️ Evitar Midazolam/Propofol (vasodilatação severa e colapso pressórico).` + alertaObesidade;
-          } else if (cenario === 'asma') {
+          } else if (cenario.includes('asma') || cenario.includes('bronco') || cenario.includes('dpoc')) {
             const quetamina = (1.5 * peso).toFixed(0);
             const rocuronio = (1.2 * peso).toFixed(0);
             return `🚨 SRI · CENÁRIO BRONCOESPASMO SEVERO / ASMA [OFFLINE]\n` +
@@ -4729,6 +5426,15 @@
               `2. Sedação / Hipnótico: QUETAMINA ${quetamina} mg IV (1,5 mg/kg - potente broncodilatador)\n` +
               `3. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV (1,2 mg/kg)\n` +
               `⚠️ Evitar Succinilcolina e Morfina (risco de liberação de histamina).` + alertaObesidade;
+          } else if (cenario.includes('neuro') || cenario.includes('tce') || cenario.includes('hic') || cenario.includes('avc')) {
+            const etomidato = (0.3 * peso).toFixed(1);
+            const rocuronio = (1.2 * peso).toFixed(0);
+            return `🚨 SRI · CENÁRIO NEUROINTENSIVISMO / TCE / HIC [OFFLINE]\n` +
+              `1. Pré-oxigenação: O2 a 100% por 3-5 minutos (manter SpO2 > 94%)\n` +
+              `2. Analgesia & Pré-tratamento: Fentanil ${fentanil} mcg IV lento (3 mcg/kg - atenua elevação da PIC na laringoscopia)\n` +
+              `3. Sedação / Hipnótico: ETOMIDATO ${etomidato} mg IV (0,3 mg/kg - estabilidade hemodinâmica sem elevar PIC)\n` +
+              `4. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV (1,2 mg/kg - preferível à succinilcolina para evitar picos de PIC)\n` +
+              `⚠️ Alvos: Manter PAS > 100-110 mmHg (Diretrizes BTF) para garantir Pressão de Perfusão Cerebral (PPC = PAM - PIC). Evitar hipotensão e hipóxia a todo custo.` + alertaObesidade;
           } else {
             const etomidato = (0.3 * peso).toFixed(1);
             const succi = (1.5 * peso).toFixed(0);
@@ -4760,26 +5466,575 @@
           const pco2 = parseFloat(String(entrada.pco2).replace(',', '.'));
           const hco3 = parseFloat(String(entrada.hco3).replace(',', '.'));
           if (isNaN(ph) || isNaN(pco2) || isNaN(hco3)) return 'Preencha pH, pCO2 e HCO3 válidos.';
-          let dist = [];
-          if (ph < 7.35) dist.push('ACIDEMIA (pH < 7,35)');
-          else if (ph > 7.45) dist.push('ALCALEMIA (pH > 7,45)');
-          else dist.push('pH NORMAL (7,35 - 7,45)');
 
-          if (hco3 < 22) {
-            const pco2Esp = 1.5 * hco3 + 8;
-            const min = (pco2Esp - 2).toFixed(1);
-            const max = (pco2Esp + 2).toFixed(1);
-            let comp = `pCO2 esperado (Winter): ${min} a ${max} mmHg.`;
-            if (pco2 > pco2Esp + 2) comp += `\n🚨 pCO2 medido (${pco2}) > esperado: ACIDOSE RESPIRATÓRIA ASSOCIADA (distúrbio misto).`;
-            else if (pco2 < pco2Esp - 2) comp += `\n⚠️ pCO2 medido (${pco2}) < esperado: ALCALOSE RESPIRATÓRIA ASSOCIADA.`;
-            else comp += `\n✅ Compensação respiratória adequada.`;
-            return `🩸 GASOMETRIA ARTERIAL [OFFLINE]\n• ${dist.join(' / ')}\n• Acidose Metabólica primária (HCO3 ${hco3} mEq/L)\n• ${comp}`;
-          } else if (hco3 > 26) {
-            const pco2Esp = 0.7 * hco3 + 21;
-            return `🩸 GASOMETRIA ARTERIAL [OFFLINE]\n• ${dist.join(' / ')}\n• Alcalose Metabólica primária (HCO3 ${hco3} mEq/L)\n• pCO2 esperado: ${(pco2Esp - 2).toFixed(1)} a ${(pco2Esp + 2).toFixed(1)} mmHg.`;
-          } else {
-            return `🩸 GASOMETRIA ARTERIAL [OFFLINE]\n• ${dist.join(' / ')}\n• Componente metabólico (HCO3: ${hco3} mEq/L)\n• Componente respiratório (pCO2: ${pco2} mmHg)`;
+          const na = entrada.na !== undefined && entrada.na !== '' && entrada.na !== null ? parseFloat(String(entrada.na).replace(',', '.')) : null;
+          const cl = entrada.cl !== undefined && entrada.cl !== '' && entrada.cl !== null ? parseFloat(String(entrada.cl).replace(',', '.')) : null;
+          const alb = entrada.alb !== undefined && entrada.alb !== '' && entrada.alb !== null ? parseFloat(String(entrada.alb).replace(',', '.')) : null;
+          const pao2 = entrada.pao2 !== undefined && entrada.pao2 !== '' && entrada.pao2 !== null ? parseFloat(String(entrada.pao2).replace(',', '.')) : (entrada.po2 ? parseFloat(String(entrada.po2).replace(',', '.')) : null);
+          const fio2Raw = entrada.fio2 !== undefined && entrada.fio2 !== '' && entrada.fio2 !== null ? parseFloat(String(entrada.fio2).replace(',', '.')) : null;
+
+          let avisos = [];
+          if (ph < 6.80) {
+            avisos.push('🚨 ACIDEMIA EXTREMA (pH < 6.80): Limite crítico de viabilidade. Risco de PCR por colapso cardiovascular e perda de resposta a catecolaminas. Priorizar ventilação e avaliar diálise de urgência / NaHCO3 de resgate.');
           }
+          if (hco3 <= 5) {
+            avisos.push('🚨 BICARBONATO EXTREMAMENTE CONSUMIDO (≤ 5 mEq/L): Acidose metabólica severa com esgotamento da capacidade tampão.');
+          }
+
+          // Checagem de consistência biológica de Henderson-Hasselbalch
+          const phCalc = 6.1 + Math.log10(hco3 / (0.0307 * pco2));
+          if (!isNaN(phCalc) && isFinite(phCalc) && Math.abs(phCalc - ph) > 0.1) {
+            avisos.push(`Inconsistência interna (pH calculado ≈ ${phCalc.toFixed(2)} vs medido ${ph.toFixed(2)}): verificar se a amostra é arterial ou erro de digitação.`);
+          }
+
+          // 1. Distúrbio Primário
+          const pHbaixo = ph < 7.35;
+          const pHalto = ph > 7.45;
+          const acMet = hco3 < 22;
+          const alMet = hco3 > 26;
+          const acResp = pco2 > 45;
+          const alResp = pco2 < 35;
+
+          let distPrimario = '';
+          if (pHbaixo) {
+            if (acMet && acResp) distPrimario = 'Acidose Mista (Metabólica + Respiratória)';
+            else if (acMet) distPrimario = 'Acidose Metabólica Primária';
+            else if (acResp) distPrimario = 'Acidose Respiratória Primária';
+            else distPrimario = 'Acidemia sem alteração evidente de PaCO2/HCO3';
+          } else if (pHalto) {
+            if (alMet && alResp) distPrimario = 'Alcalose Mista (Metabólica + Respiratória)';
+            else if (alMet) distPrimario = 'Alcalose Metabólica Primária';
+            else if (alResp) distPrimario = 'Alcalose Respiratória Primária';
+            else distPrimario = 'Alcalemia sem alteração evidente de PaCO2/HCO3';
+          } else {
+            if (acMet && alResp) distPrimario = 'Distúrbio Misto com pH normal (Acidose Metabólica + Alcalose Respiratória)';
+            else if (alMet && acResp) distPrimario = 'Distúrbio Misto com pH normal (Alcalose Metabólica + Acidose Respiratória)';
+            else if (acMet || alMet || acResp || alResp) distPrimario = 'pH normal compensado ou distúrbio misto';
+            else distPrimario = 'Gasometria Normal / Sem distúrbio ácido-base aparente';
+          }
+
+          // 2. Compensação Esperada
+          let compLinhas = [];
+          if (acMet && !pHalto) {
+            const base = 1.5 * hco3 + 8;
+            const mn = (base - 2).toFixed(1);
+            const mx = (base + 2).toFixed(1);
+            compLinhas.push(`• Fórmula de Winter: PaCO2 esperada entre ${mn} e ${mx} mmHg`);
+            if (pco2 > base + 2) compLinhas.push(`  🚨 PaCO2 medida (${pco2}) > esperada: ACIDOSE RESPIRATÓRIA ASSOCIADA (distúrbio misto)`);
+            else if (pco2 < base - 2) compLinhas.push(`  ⚠️ PaCO2 medida (${pco2}) < esperada: ALCALOSE RESPIRATÓRIA ASSOCIADA`);
+            else compLinhas.push(`  ✅ Compensação respiratória adequada`);
+          } else if (alMet && !pHbaixo) {
+            const b2 = 40 + 0.7 * (hco3 - 24);
+            const mn2 = (b2 - 2).toFixed(1);
+            const mx2 = (b2 + 2).toFixed(1);
+            compLinhas.push(`• PaCO2 esperada: ${mn2} a ${mx2} mmHg`);
+            if (pco2 > b2 + 2) compLinhas.push(`  🚨 PaCO2 acima do esperado: Acidose Respiratória associada`);
+            else if (pco2 < b2 - 2) compLinhas.push(`  ⚠️ PaCO2 abaixo do esperado: Alcalose Respiratória associada`);
+            else compLinhas.push(`  ✅ Compensação respiratória adequada`);
+          } else if (acResp && !acMet && pHbaixo) {
+            const ag1 = (24 + 0.1 * (pco2 - 40)).toFixed(1);
+            const cr1 = (24 + 0.35 * (pco2 - 40)).toFixed(1);
+            compLinhas.push(`• HCO3 esperado: ${ag1} (aguda) a ${cr1} (crônica) mEq/L`);
+            if (hco3 < parseFloat(ag1) - 2) compLinhas.push(`  🚨 HCO3 abaixo do esperado: Acidose Metabólica associada`);
+            else if (hco3 > parseFloat(cr1) + 2) compLinhas.push(`  ⚠️ HCO3 acima do esperado: Alcalose Metabólica associada`);
+            else compLinhas.push(`  ✅ Compatível com acidose respiratória pura`);
+          } else if (alResp && !alMet && pHalto) {
+            const cr2 = (24 - 0.5 * (40 - pco2)).toFixed(1);
+            const ag2 = (24 - 0.2 * (40 - pco2)).toFixed(1);
+            compLinhas.push(`• HCO3 esperado: ${cr2} (crônica) a ${ag2} (aguda) mEq/L`);
+            if (hco3 > parseFloat(ag2) + 2) compLinhas.push(`  ⚠️ HCO3 acima do esperado: Alcalose Metabólica associada`);
+            else if (hco3 < parseFloat(cr2) - 2) compLinhas.push(`  🚨 HCO3 abaixo do esperado: Acidose Metabólica associada`);
+            else compLinhas.push(`  ✅ Compatível com alcalose respiratória pura`);
+          }
+
+          // 3 & 4. Ânion Gap e Razão Delta (Delta-Delta)
+          let agLinhas = [];
+          if (na !== null && cl !== null && !isNaN(na) && !isNaN(cl)) {
+            const ag = Math.round((na - (cl + hco3)) * 10) / 10;
+            let agFinal = ag;
+            if (alb !== null && !isNaN(alb)) {
+              agFinal = Math.round((ag + 2.5 * (4.0 - alb)) * 10) / 10;
+              agLinhas.push(`• Ânion Gap Sérico: ${ag} mEq/L | AG Corrigido (Albumina ${alb} g/dL): ${agFinal} mEq/L`);
+            } else {
+              agLinhas.push(`• Ânion Gap Sérico: ${ag} mEq/L (Valor de referência: 8 a 12 mEq/L)`);
+            }
+
+            if (agFinal > 12) {
+              agLinhas.push(`• Classificação: ÂNION GAP ELEVADO (> 12 mEq/L) — MUDPILES (Cetoacidose, Uremia, Lactato, Tóxicos)`);
+              if (hco3 < 24) {
+                const delta = Math.round(((agFinal - 12) / (24 - hco3)) * 100) / 100;
+                let deltaDesc = '';
+                if (delta < 0.4) deltaDesc = `Razão delta ${delta} (< 0,4): Predomínio de ACIDOSE HIPERCLORÊMICA associada`;
+                else if (delta < 0.8) deltaDesc = `Razão delta ${delta} (0,4–0,8): Acidose mista (AG elevado + hiperclorêmica)`;
+                else if (delta <= 2.0) deltaDesc = `Razão delta ${delta} (0,8–2,0): Acidose de Ânion Gap elevado pura`;
+                else deltaDesc = `Razão delta ${delta} (> 2,0): ALCALOSE METABÓLICA associada ou retenção prévia de HCO3`;
+                agLinhas.push(`• ${deltaDesc}`);
+              }
+            } else {
+              agLinhas.push(`• Classificação: ÂNION GAP NORMAL (≤ 12 mEq/L) — Acidose hiperclorêmica (perdas TGI, ATR, SF 0,9%)`);
+            }
+          }
+
+          // 5. Oxigenação (PaO2 / FiO2)
+          let oxLinhas = [];
+          if (pao2 !== null && fio2Raw !== null && !isNaN(pao2) && !isNaN(fio2Raw)) {
+            const fio2Dec = fio2Raw > 1 ? fio2Raw / 100 : fio2Raw;
+            const pf = Math.round(pao2 / fio2Dec);
+            let classifPf = pf > 300 ? 'Oxigenação Normal (> 300)' :
+                            pf > 200 ? 'SDRA Leve (Berlim: 201–300)' :
+                            pf > 100 ? 'SDRA Moderada (Berlim: 101–200)' :
+                            '🚨 SDRA Grave (Berlim: ≤ 100)';
+            oxLinhas.push(`• Relação PaO2/FiO2: ${pf} mmHg (PaO2 ${pao2} mmHg com FiO2 ${(fio2Dec * 100).toFixed(0)}%)`);
+            oxLinhas.push(`• Classificação: ${classifPf}`);
+            avisos.push('Critérios de Berlim (SDRA): quadro agudo (< 7 dias), opacidades bilaterais no RX/TC, PEEP ≥ 5 cmH2O e sem causa cardiogênica exclusiva.');
+          }
+
+          let resTxt = `🩸 GASOMETRIA ARTERIAL · ANÁLISE EM 5 PASSOS [OFFLINE]\n\n` +
+            `🔴 DIAGNÓSTICO & DISTÚRBIO PRIMÁRIO:\n` +
+            `• ${distPrimario}\n` +
+            `• pH: ${ph.toFixed(2)} | pCO2: ${pco2} mmHg | HCO3: ${hco3} mEq/L\n\n`;
+
+          if (compLinhas.length > 0) {
+            resTxt += `🟡 COMPENSAÇÃO ESPERADA:\n` + compLinhas.join('\n') + `\n\n`;
+          }
+
+          if (agLinhas.length > 0) {
+            resTxt += `🧪 ÂNION GAP & RAZÃO DELTA:\n` + agLinhas.join('\n') + `\n\n`;
+          }
+
+          if (oxLinhas.length > 0) {
+            resTxt += `🫁 OXIGENAÇÃO & BERLIM (PaO2/FiO2):\n` + oxLinhas.join('\n') + `\n\n`;
+          }
+
+          if (avisos.length > 0) {
+            resTxt += `⚠️ ALERTAS CLÍNICOS & CONDUTA:\n` + avisos.map(a => `• ${a}`).join('\n');
+          }
+
+          return resTxt.trim();
+        } else if (tipo === 'sorologias_prenatal') {
+          const resSoro = interpretarSorologiasOfflineLocal(entrada);
+          return resSoro && resSoro.textoFormatado ? resSoro.textoFormatado : 'Nenhum exame analisado.';
+        } else if (tipo === 'pediatria' || tipo === 'holliday' || tipo === 'pals') {
+          const peso = parseFloat(String(entrada.peso).replace(',', '.'));
+          if (isNaN(peso) || peso <= 0) return 'Informe o peso da criança (kg) para calcular.';
+          const modo = String(entrada.modo || (tipo === 'pals' ? 'pals' : 'holliday')).toLowerCase();
+
+          if (modo === 'pals') {
+            const pesoCalc = Math.max(0.3, Math.min(peso, 50));
+            let adrMg = (pesoCalc * 0.01).toFixed(2);
+            let adrMl = (pesoCalc * 0.1).toFixed(1);
+            if (parseFloat(adrMg) > 1) { adrMg = "1.00"; adrMl = "10.0"; }
+            let amioMg = Math.min(300, Math.round(pesoCalc * 5));
+            const chq1 = Math.round(pesoCalc * 2 * 10) / 10;
+            const chq2 = Math.round(pesoCalc * 4 * 10) / 10;
+            let tetSem = pesoCalc < 1 ? "2.5 mm" : pesoCalc < 3 ? "3.0 mm" : pesoCalc < 10 ? "3.5 mm" : (pesoCalc < 20 ? "4.0 a 5.0 mm" : "5.5 a 6.5 mm");
+            let tetCom = pesoCalc < 3 ? "Não recomendado" : pesoCalc < 10 ? "3.0 mm" : (pesoCalc < 20 ? "3.5 a 4.5 mm" : "5.0 a 6.0 mm");
+            let fix = (pesoCalc + 6).toFixed(1) + " cm no lábio";
+
+            return `👶 PALS · REANIMAÇÃO PEDIÁTRICA [OFFLINE]\n` +
+              `🔴 AÇÃO IMEDIATA / DROGAS DE PCR:\n` +
+              `• Adrenalina 1:10.000 (0,1 mg/mL): ${adrMg} mg (${adrMl} mL) IV/IO a cada 3-5 min\n` +
+              `• Amiodarona (50 mg/mL): ${amioMg} mg (${(amioMg/50).toFixed(1)} mL) em bolus (FV/TV sem pulso)\n` +
+              `• Lidocaína 2% (20 mg/mL): ${Math.min(100, Math.round(pesoCalc))} mg (${(Math.min(100, Math.round(pesoCalc))/20).toFixed(1)} mL)\n\n` +
+              `⚡ DESFIBRILAÇÃO (JOULES):\n` +
+              `• 1º Choque (2 J/kg): ${chq1} Joules | 2º Choque (4 J/kg): ${chq2} Joules\n\n` +
+              `🫁 VIA AÉREA & INTUBAÇÃO:\n` +
+              `• Tubo sem cuff: ${tetSem} | Com cuff: ${tetCom}\n` +
+              `• Fixação: ${fix}\n` +
+              `⚠️ Flush de 5 mL SF 0,9% após cada droga IV/IO. RCE: monitorar SpO2 e normocapnia.`;
+          } else if (modo === 'posologia') {
+            const droga = String(entrada.farmaco || entrada.droga || 'dipirona').toLowerCase();
+            if (droga.includes('amoxi_oma') || droga.includes('amoxicilina_oma')) {
+              const doseDia = Math.min(3000, Math.round(peso * 90));
+              const mlDia = Math.round(doseDia / 50);
+              const mlDose = (mlDia / 2).toFixed(1);
+              return `💊 AMOXICILINA 250mg/5mL (DOSE ALTA OMA: 90 mg/kg/dia) [OFFLINE]\n` +
+                `🔴 DOSE: ${mlDose} mL VO de 12 em 12 horas por 10 dias\n` +
+                `🟡 Total diário: ${doseDia} mg (${mlDia} mL/dia)\n` +
+                `⚠️ Teto adulto seguro: máximo 3.000 mg/dia (60 mL/dia).`;
+            } else if (droga.includes('amoxi')) {
+              const doseDia = Math.min(1500, Math.round(peso * 50));
+              const mlDia = Math.round(doseDia / 50);
+              const mlDose = (mlDia / 3).toFixed(1);
+              return `💊 AMOXICILINA 250mg/5mL (DOSE PADRÃO: 50 mg/kg/dia) [OFFLINE]\n` +
+                `🔴 DOSE: ${mlDose} mL VO de 8 em 8 horas por 10 dias\n` +
+                `🟡 Total diário: ${doseDia} mg (${mlDia} mL/dia)\n` +
+                `⚠️ Teto adulto seguro: máximo 1.500 mg/dia (30 mL/dia = 10 mL 8/8h).`;
+            } else if (droga.includes('paracetamol')) {
+              const gotas = Math.min(35, Math.round(peso));
+              return `💊 PARACETAMOL GOTAS 200 mg/mL (10-15 mg/kg/dose) [OFFLINE]\n` +
+                `🔴 DOSE: ${gotas} gotas VO a cada 6 horas se dor ou febre (máx 4x/dia)\n` +
+                `⚠️ Teto seguro: máximo 35 gotas por tomada (ou 750 mg). Não exceder 5 tomadas em 24h.`;
+            } else if (droga.includes('ibuprofeno')) {
+              const gotas = Math.min(40, Math.round(peso));
+              return `💊 IBUPROFENO GOTAS 100 mg/mL (5-10 mg/kg/dose) [OFFLINE]\n` +
+                `🔴 DOSE: ${gotas} gotas VO a cada 8 horas se dor ou febre\n` +
+                `⚠️ Teto seguro: máximo 40 gotas por tomada (200 mg). Contraindicado em desidratação e < 6 meses.`;
+            } else {
+              const gotas = Math.min(40, Math.round(peso));
+              return `💊 DIPIRONA GOTAS 500 mg/mL (10-15 mg/kg/dose) [OFFLINE]\n` +
+                `🔴 DOSE: ${gotas} gotas VO a cada 6 horas se dor ou febre (máx 4x/dia)\n` +
+                `⚠️ Teto seguro: máximo 40 gotas (1.000 mg) por dose em adolescentes/adultos.`;
+            }
+          } else {
+            let volBasal = 0;
+            if (peso <= 10) volBasal = peso * 100;
+            else if (peso <= 20) volBasal = 1000 + (peso - 10) * 50;
+            else volBasal = 1500 + (peso - 20) * 20;
+
+            const cond = String(entrada.condicaoClinica || 'manutencao_padrao').toLowerCase();
+            let perc = 100;
+            let justif = 'Manutenção basal habitual (100% de Holliday-Segar)';
+            if (cond.includes('bronquiolite')) { perc = 70; justif = 'Restrição Bronquiolite/BVA (70% - prevenção de sobrecarga pulmonar)'; }
+            else if (cond.includes('ic') || cond.includes('cardio') || cond.includes('edema')) { perc = 60; justif = 'Restrição Cardiopatia/Edema (60% - prevenção de congestão)'; }
+            else if (cond.includes('desidratacao') || cond.includes('perda')) { perc = 125; justif = 'Reposição de Perdas / Déficit leve (125%)'; }
+            else if (cond.includes('febre')) { perc = 112; justif = 'Acréscimo por Febre (+12% perdas insensíveis)'; }
+
+            const volAjustado = Math.round((volBasal * perc) / 100);
+            const vazaoH = (volAjustado / 24).toFixed(1);
+            const naMeq = ((volAjustado / 100) * 2.5).toFixed(1);
+            const kMeq = ((volAjustado / 100) * 2.0).toFixed(1);
+            const tig = ((5 * (volAjustado / 24)) / (peso * 6)).toFixed(1);
+
+            return `💧 HIDRATAÇÃO HOLLIDAY-SEGAR [OFFLINE]\n` +
+              `🔴 CONDUTA & VAZÃO EM BOMBA:\n` +
+              `• Volume Total 24h: ${volAjustado} mL/dia (${justif})\n` +
+              `• Vazão Contínua na BIC: ${vazaoH} mL/h (Regra 4-2-1)\n\n` +
+              `🟡 PRESCRIÇÃO ELETROLÍTICA & TIG (SBP/AAP):\n` +
+              `• Sódio (NaCl 20%): ${naMeq} mEq/dia (2,5 mEq/100 mL)\n` +
+              `• Potássio (KCl 10%): ${kMeq} mEq/dia (2,0 mEq/100 mL — após diurese)\n` +
+              `• TIG em SG 5%: ${tig} mg/kg/min (Alvo: 4 a 6 mg/kg/min)\n` +
+              `⚠️ Adicionar KCl apenas após confirmação de diurese para prevenir hipercalemia letal.`;
+          }
+        } else if (tipo === 'ajuste_atb' || tipo === 'atb') {
+          const droga = String(entrada.droga || entrada.farmaco || 'meropenem').toLowerCase();
+          const clcrVal = entrada.clcr !== null && entrada.clcr !== undefined && entrada.clcr !== '' ? parseFloat(String(entrada.clcr).replace(',', '.')) : null;
+          const hd = Boolean(entrada.hemodialise || entrada.hd);
+
+          let nomeExib = 'Antimicrobiano';
+          let dosePadrao = '';
+          let doseAjust = '';
+          let cuidados = '';
+          let monitoriz = '';
+
+          if (droga.includes('vanco')) {
+            nomeExib = 'Vancomicina (Glicopeptídeo)';
+            dosePadrao = 'Ataque: 25-30 mg/kg (máx 2g). Manutenção: 15-20 mg/kg a cada 8-12h.';
+            if (hd) {
+              doseAjust = 'Ataque 25-30 mg/kg; redoses subsequentes (500-1000 mg) pós-hemodiálise guiadas por nível sérico.';
+            } else if (clcrVal >= 90) {
+              doseAjust = '15-20 mg/kg EV a cada 8-12h (em infusão lenta de pelo menos 1-2h).';
+            } else if (clcrVal >= 50) {
+              doseAjust = '15-20 mg/kg EV a cada 12h.';
+            } else if (clcrVal >= 20) {
+              doseAjust = '15 mg/kg EV a cada 24h.';
+            } else {
+              doseAjust = 'Dose de ataque 25 mg/kg; redoses (a cada 48 a 96h) guiadas por nível sérico pré-dose (alvo vale 15-20 mcg/mL).';
+            }
+            cuidados = 'Infusão lenta (máx 10 mg/min ou 1g em 60 min) para prevenir síndrome do homem vermelho. Hidratação adequada.';
+            monitoriz = 'Nível de vale sérico pré-4ª dose (alvo: 15-20 mcg/mL para infecções graves ou AUC/MIC 400-600). Creatinina a cada 48h.';
+          } else if (droga.includes('mero')) {
+            nomeExib = 'Meropenem (Carbapenêmico)';
+            dosePadrao = '1g EV a cada 8h (2g 8/8h em meningite ou sepse grave).';
+            if (hd) {
+              doseAjust = '500 mg EV a cada 24h, administrado imediatamente APÓS a hemodiálise nos dias de sessão.';
+            } else if (clcrVal > 50) {
+              doseAjust = '1g EV a cada 8h (recomenda-se infusão estendida em 3 horas para otimização PK/PD).';
+            } else if (clcrVal >= 26) {
+              doseAjust = '1g EV a cada 12h (infusão estendida em 3 horas).';
+            } else if (clcrVal >= 10) {
+              doseAjust = '500 mg EV a cada 12h.';
+            } else {
+              doseAjust = '500 mg EV a cada 24h.';
+            }
+            cuidados = 'Compatível com infusão estendida (3 horas) para maximizar tempo acima da MIC (T > MIC).';
+            monitoriz = 'Função renal e vigilância de crises convulsivas em doses elevadas com disfunção renal.';
+          } else if (droga.includes('pip') || droga.includes('tazo')) {
+            nomeExib = 'Piperacilina + Tazobactam (Pip-Tazo)';
+            dosePadrao = '4,5g EV a cada 6h (infusão de 3-4h) ou 4,5g a cada 8h (infusão de 4h).';
+            if (hd) {
+              doseAjust = '2,25g EV a cada 8h + dose de reforço de 0,75g após cada sessão de hemodiálise.';
+            } else if (clcrVal > 40) {
+              doseAjust = '4,5g EV a cada 6h (ou 4,5g 8/8h em infusão estendida de 3-4h).';
+            } else if (clcrVal >= 20) {
+              doseAjust = '2,25g EV a cada 6h (ou 3,375g EV a cada 8h).';
+            } else {
+              doseAjust = '2,25g EV a cada 8h.';
+            }
+            cuidados = 'Evitar associação com Vancomicina além de 48-72h se houver alternativa, pelo risco de IRA sinérgica.';
+            monitoriz = 'Creatinina sérica diária; eletrólitos (contém 2,79 mEq de Na+ por grama de piperacilina).';
+          } else if (droga.includes('cefepim')) {
+            nomeExib = 'Cefepime (Cefalosporina 4ª G)';
+            dosePadrao = '2g EV a cada 8h (infusão em 30 min ou estendida em 3h).';
+            if (hd) {
+              doseAjust = '1g EV dose de ataque no D1; depois 500 mg a 1g EV a cada 24h (administrar dose após a hemodiálise nos dias de sessão).';
+            } else if (clcrVal >= 60) {
+              doseAjust = '2g EV a cada 8h.';
+            } else if (clcrVal >= 30) {
+              doseAjust = '2g EV a cada 12h.';
+            } else if (clcrVal >= 11) {
+              doseAjust = '2g EV a cada 24h.';
+            } else {
+              doseAjust = '1g EV a cada 24h.';
+            }
+            cuidados = '⚠️ RISCO CRÍTICO DE ENCEFALOPATIA POR CEFEPIME: se CrCl reduzido sem ajuste, causa rebaixamento, confusão e mioclonias.';
+            monitoriz = 'Exame neurológico diário e função renal.';
+          } else if (droga.includes('ceftriax')) {
+            nomeExib = 'Ceftriaxona (Cefalosporina 3ª G)';
+            dosePadrao = '1g a 2g EV a cada 24h (2g 12/12h em meningite bacteriana).';
+            doseAjust = 'NÃO REQUER AJUSTE RENAL. Manter 1g a 2g EV a cada 24h (eliminação mista renal 60% e biliar 40%).';
+            cuidados = 'Não infundir simultaneamente com soluções que contenham cálcio (como Ringer Lactato) na mesma via pelo risco de precipitação fatal.';
+            monitoriz = 'Transaminases e bilirrubinas se uso prolongado.';
+          } else if (droga.includes('cipro')) {
+            nomeExib = 'Ciprofloxacino (Quinolona)';
+            dosePadrao = '400 mg EV a cada 12h ou 500-750 mg VO a cada 12h.';
+            if (hd) {
+              doseAjust = '400 mg EV a cada 24h ou 500 mg VO a cada 24h (administrar após diálise).';
+            } else if (clcrVal > 50) {
+              doseAjust = '400 mg EV 12/12h ou 500 mg VO 12/12h.';
+            } else if (clcrVal >= 30) {
+              doseAjust = '400 mg EV 12/12h ou 500 mg VO 12/12h (monitorar se terapia prolongada).';
+            } else {
+              doseAjust = '400 mg EV a cada 24h ou 500 mg VO a cada 24h.';
+            }
+            cuidados = 'Prolongamento do intervalo QTc; evitar quelantes orais (cálcio, ferro, antiácidos) se via oral.';
+            monitoriz = 'ECG se associado a outras drogas que prolongam QT; função renal.';
+          } else if (droga.includes('polimix')) {
+            nomeExib = 'Polimixina B (Polipeptídeo)';
+            dosePadrao = 'Ataque: 20.000 a 25.000 UI/kg (peso magro). Manutenção: 15.000 a 25.000 UI/kg/dia divididos em 2 doses (12/12h).';
+            doseAjust = 'NÃO REDUZIR DOSE NA INSUFICIÊNCIA RENAL. Depuração predominantemente não-renal. Reduções causam subdosagem e falha terapêutica grave.';
+            cuidados = 'Diferente da Colistina, a Polimixina B mantém dose plena com suporte e vigilância de IRA.';
+            monitoriz = 'Creatinina sérica a cada 24-48h; bloqueio neuromuscular / parestesias.';
+          } else if (droga.includes('fluconazol')) {
+            nomeExib = 'Fluconazol (Antifúngico)';
+            dosePadrao = 'Ataque: 400-800 mg dose única. Manutenção: 200-400 mg EV/VO a cada 24h.';
+            if (hd) {
+              doseAjust = '100% da dose recomendada administrada imediatamente APÓS cada sessão de hemodiálise.';
+            } else if (clcrVal > 50) {
+              doseAjust = 'Manter 100% da dose recomendada (200-400 mg a cada 24h).';
+            } else {
+              doseAjust = 'Dose de ataque plena no D1; a partir de então, REDUZIR PARA 50% DA DOSE (100-200 mg a cada 24h).';
+            }
+            cuidados = 'Potente inibidor de CYP3A4; verificar interações com imunossupressores e anticoagulantes orais.';
+            monitoriz = 'Enzimas hepáticas (TGO/TGP) e eletrólitos.';
+          }
+
+          if (clcrVal !== null && clcrVal > 130) {
+            cuidados += ' ⚠️ ARC (> 130 mL/min): Risco de subdosagem. Considerar infusão estendida.';
+          }
+
+          return `💉 AJUSTE RENAL DE ANTIMICROBIANOS (IDSA / GUIA HSL) [OFFLINE]\n\n` +
+            `🔴 DOSE AJUSTADA:\n• ${nomeExib}: ${doseAjust}\n\n` +
+            `🟡 DOSE PADRÃO:\n• ${dosePadrao}\n\n` +
+            `⚠️ CUIDADOS & ORIENTAÇÕES:\n• ${cuidados}\n\n` +
+            `ℹ️ MONITORIZAÇÃO:\n• ${monitoriz}`;
+        } else if (tipo === 'dhe') {
+          const modo = String(entrada.modo || 'hiponatremia').toLowerCase();
+          const peso = parseFloat(String(entrada.peso || 70).replace(',', '.'));
+          const idade = entrada.idade ? parseFloat(String(entrada.idade).replace(',', '.')) : 40;
+          const sexo = entrada.sexo ? String(entrada.sexo).toLowerCase() : 'm';
+
+          let fator = 0.6;
+          if (sexo === 'f' || sexo === 'feminino') {
+            fator = idade >= 65 ? 0.45 : 0.5;
+          } else {
+            fator = idade >= 65 ? 0.5 : 0.6;
+          }
+          const act = Math.max(0.1, Math.round(peso * fator * 10) / 10);
+
+          if (modo === 'hipercalemia' || entrada.kAtual !== undefined) {
+            const k = parseFloat(String(entrada.kAtual || 0).replace(',', '.'));
+            if (isNaN(k) || k <= 0) return 'Informe o valor do Potássio (K+) sérico.';
+            const ecg = Boolean(entrada.ecgAlterado);
+            let grav = 'Normal';
+            let condutas = [];
+            let alertaCard = ecg ? 'ALERTA VERMELHO: Toxicidade cardíaca no ECG. Gluconato de Cálcio NÃO reduz K+, apenas estabiliza o miocárdio.' : '';
+
+            if (k > 8.0) {
+              grav = 'Extrema / Risco Iminente de PCR em Assistolia ou FV';
+              alertaCard = '🚨 ALERTA VERMELHO MÁXIMO (K+ > 8.0 mEq/L): Risco iminente de PCR. Gluconato de Cálcio 10% IV IMEDIATO e acionamento urgente de Nefrologia para Hemodiálise!';
+              condutas.push('🚨 EMERGÊNCIA ZERO: Gluconato de Cálcio 10% 20 mL IV em 3 min imediatamente. Repetir em 5-10 min se ritmo não normalizar.');
+              condutas.push('HEMODIÁLISE DE URGÊNCIA: Acionar imediatamente nefrologia e UTI para cateter de diálise.');
+            } else if (k >= 6.5 || ecg) {
+              grav = 'Grave / Urgência Médica';
+              condutas.push('ESTABILIZAÇÃO DA MEMBRANA: Gluconato de Cálcio 10% 10 a 20 mL IV lento (3-5 min). Repetir se ECG não melhorar em 5-10 min.');
+            } else if (k >= 5.5) {
+              grav = 'Moderada';
+            }
+
+            if (k > 5.5) {
+              condutas.push('REDISTRIBUIÇÃO: Glicoinsulina (Solução Polarizante) 10 UI Regular + 100 mL SG 50% IV em 20-30 min. Queda esperada: 0.5-1.2 mEq/L.');
+              condutas.push('REDISTRIBUIÇÃO: Salbutamol 10-20 mg (20-40 gotas) em nebulização com 3-5 mL SF 0,9% em 10-15 min.');
+            }
+            if (k > 5.0) {
+              condutas.push('ELIMINAÇÃO: Furosemida 40-80 mg IV bolus (se função renal e volemia permitirem).');
+              condutas.push('ELIMINAÇÃO: Resina de troca de potássio (Sorcal) 15-30g VO ou retal.');
+            }
+
+            return `⚡ MANEJO EMERGENCIAL DE HIPERCALEMIA (SBC / KDIGO) [OFFLINE]\n\n` +
+              `🔴 ESTRATIFICAÇÃO & GRAVIDADE:\n• Potássio Sérico: ${k} mEq/L\n• Classificação: ${grav}\n\n` +
+              `🟡 CONDUTAS ESCALONADAS:\n` + condutas.map(c => `• ${c}`).join('\n') + '\n\n' +
+              (alertaCard ? `⚠️ ALERTA CARDÍACO:\n• ${alertaCard}\n\n` : '') +
+              `ℹ️ MONITORIZAÇÃO:\n• Monitorização cardíaca contínua e repetir dosagem de K+ em 2 horas.`;
+          } else if (modo === 'hipernatremia') {
+            const na = parseFloat(String(entrada.naAtual || 0).replace(',', '.'));
+            if (isNaN(na) || na <= 0) return 'Informe o valor do Sódio (Na+) sérico.';
+            if (na <= 140) return 'Na+ ≤ 140 mEq/L. Sem déficit de água livre.';
+            const defL = Math.round(act * ((na / 140) - 1) * 100) / 100;
+            const def24h = Math.round(defL * 500);
+
+            return `🌵 HIPERNATREMIA — DÉFICIT DE ÁGUA LIVRE (ADROGUÉ-MADIAS) [OFFLINE]\n\n` +
+              `🔴 DÉFICIT CALCULADO:\n• Sódio Atual: ${na} mEq/L | ACT: ${act} L\n• Déficit Total de Água Livre: ${defL} Litros\n\n` +
+              `🟡 PROGRAMAÇÃO DA REPOSIÇÃO (48 HORAS):\n• 1ªs 24 horas: Repor 50% do déficit (${def24h} mL de água livre ou SG 5%)\n• 24h a 48h: Repor os 50% restantes + perdas insensíveis\n• Vias: Água potável por SNG/SNE (preferencial se TGI íntegro) ou SG 5% IV\n\n` +
+              `⚠️ ALERTA DE SEGURANÇA & TETOS:\n• Queda máxima de Na: 8-10 mEq/L em 24h (risco de edema cerebral agudo).\n\n` +
+              `ℹ️ MONITORIZAÇÃO:\n• Dosar Na sérico a cada 4 a 6 horas durante a correção.`;
+          } else {
+            // Hiponatremia
+            const na = parseFloat(String(entrada.naAtual || 0).replace(',', '.'));
+            if (isNaN(na) || na <= 0) return 'Informe o valor do Sódio (Na+) sérico.';
+            const salina = parseFloat(String(entrada.salina || 3).replace(',', '.'));
+            const conc = salina === 3 ? 513 : 154;
+            if (na >= conc) return `Sódio atual (${na} mEq/L) é maior ou igual à concentração da solução (${conc} mEq/L).`;
+
+            const varPorLitro = Math.round(((conc - na) / (act + 1)) * 10) / 10;
+            const vol24h = Math.round((8 / varPorLitro) * 1000);
+            const taxaH = Math.round((vol24h / 24) * 10) / 10;
+            const solNome = salina === 3 ? 'NaCl 3% (513 mEq/L)' : 'NaCl 0,9% (154 mEq/L)';
+
+            let alertaGrav = '';
+            if (na < 105) {
+              alertaGrav = '🚨 HIPONATREMIA GRAVÍSSIMA (Na < 105 mEq/L): Risco iminente de herniação cerebral, convulsões e coma. Tratamento imediato com Salina 3% (100-150 mL em 10-20 min) sob monitorização contínua em UTI.\n';
+            }
+
+            return `💧 CORREÇÃO DE HIPONATREMIA (FÓRMULA DE ADROGUÉ-MADIAS) [OFFLINE]\n\n` +
+              `🔴 AÇÃO IMEDIATA / INFUSÃO EM BIC:\n` +
+              `• Solução Escolhida: ${solNome}\n` +
+              `• Variação Esperada de Na+ com 1 L: +${varPorLitro} mEq/L\n` +
+              `• Taxa Segura de Infusão: ${taxaH} mL/h em BIC\n` +
+              `• Volume Total Seguro em 24h (Teto 8 mEq): ${vol24h} mL\n\n` +
+              `🟡 SINTOMAS GRAVES / RESGATE NEUROLÓGICO (CONVULSÃO / COMA):\n` +
+              `• Bolus de Emergência: 100 a 150 mL de NaCl 3% IV em 10-20 min.\n` +
+              `• Pode repetir até 2 vezes se sintomas neurológicos persistirem (meta: subir 4-6 mEq/L).\n\n` +
+              `⚠️ TETOS RÍGIDOS CONTRA MIELINÓLISE PONTINA (SDO):\n` +
+              alertaGrav +
+              `• NÃO ULTRAPASSAR 8 mEq/L nas 1ªs 24h e 18 mEq/L em 48h.\n` +
+              (peso > 150 ? '• ⚠️ OBESIDADE SEVERA (> 150 kg): O tecido adiposo tem teor reduzido de água. Risco de hipervolemia.\n' : '') + '\n' +
+              `ℹ️ MONITORIZAÇÃO & RESGATE:\n` +
+              `• Dosar sódio sérico a cada 2 a 4 horas. Se subida > 8 mEq em 24h: suspender salina e infundir SG 5% ou Desmopressina (DDAVP).`;
+          }
+        } else if (tipo === 'heart' || tipo === 'sca' || tipo === 'cardiologia') {
+          const hist = Number(entrada.historia !== undefined ? entrada.historia : 2);
+          const ecg = Number(entrada.ecg !== undefined ? entrada.ecg : 2);
+          const idade = Number(entrada.idade) || 60;
+          let ptsIdade = 0;
+          if (idade >= 65) ptsIdade = 2;
+          else if (idade >= 45) ptsIdade = 1;
+
+          let ptsFr = Number(entrada.fr !== undefined ? entrada.fr : (entrada.frCount >= 3 || entrada.dacPrevia ? 2 : (entrada.frCount >= 1 ? 1 : 0)));
+          const trop = Number(entrada.troponina !== undefined ? entrada.troponina : 2);
+
+          const scoreHeart = hist + ecg + ptsIdade + ptsFr + trop;
+          let riscoHeart = "";
+          let taxaMace = "";
+          let condutaHeart = "";
+
+          if (scoreHeart <= 3) {
+            riscoHeart = "BAIXO RISCO (0 a 3 pontos)";
+            taxaMace = "0.9% a 1.7% em 6 semanas";
+            condutaHeart = "Candidato a protocolo de alta precoce e investigação ambulatorial rápida, se troponina seriada negativa e delta estável.";
+          } else if (scoreHeart <= 6) {
+            riscoHeart = "RISCO INTERMEDIÁRIO (4 a 6 pontos)";
+            taxaMace = "12% a 16.6% em 6 semanas";
+            condutaHeart = "Internação hospitalar (observação/enfermaria) para monitorização, dosagem seriada de troponina e estratificação não-invasiva (Angio-TC de coronárias ou teste funcional).";
+          } else {
+            riscoHeart = "ALTO RISCO (7 a 10 pontos)";
+            taxaMace = "50% a 65% em 6 semanas";
+            condutaHeart = "Internação IMEDIATA em Unidade Coronariana (UCO/UTI) e indicação de Estratégia Invasiva Precoce (Cateterismo cardíaco em < 24h). Monitorização contínua.";
+          }
+
+          // DAPT
+          const trombolise = Boolean(entrada.trombolise);
+          const avcPrevio = Boolean(entrada.avcPrevio || entrada.avc || entrada.aitPrevio);
+          const usoOmeprazol = Boolean(entrada.usoOmeprazol || entrada.omeprazol);
+          const anticoag = Boolean(entrada.anticoagulacao || entrada.anticoag || entrada.fibrilacaoAtrial);
+          const alergiaAas = Boolean(entrada.alergiaAas);
+
+          let aasTxt = "";
+          if (alergiaAas) {
+            aasTxt = "• AAS: CONTRAINDICAÇÃO FORMAL (Alergia referida). Monoterapia alternativa ou dessensibilização rápida.";
+          } else {
+            aasTxt = "• AAS: Ataque 162 a 300 mg VO mastigado (2 a 3 cp infantis 100 mg) | Manutenção 81 a 100 mg VO 1x/dia contínuo";
+          }
+
+          let p2y12Txt = "";
+          let alertasBloqueios = [];
+
+          if (trombolise) {
+            if (idade > 75) {
+              p2y12Txt = "• Clopidogrel (Trombólise > 75 anos): SEM DOSE DE ATAQUE! Apenas 75 mg VO inicial | Manutenção 75 mg VO 1x/dia";
+              alertasBloqueios.push("REGRA DE SEGURANÇA EM TROMBÓLISE: Idade > 75 anos requer OMISSÃO da dose de ataque de Clopidogrel (fazer apenas 75 mg VO).");
+            } else {
+              p2y12Txt = "• Clopidogrel (Trombólise padrão): Ataque 300 mg VO dose única | Manutenção 75 mg VO 1x/dia";
+            }
+          } else if (anticoag) {
+            p2y12Txt = "• Clopidogrel (com Anticoagulante/DOAC): Ataque 300 a 600 mg VO | Manutenção 75 mg VO 1x/dia (menor risco hemorrágico em terapia combinada)";
+          } else if (avcPrevio) {
+            p2y12Txt = "• Ticagrelor: Ataque 180 mg VO | Manutenção 90 mg VO 12/12h";
+            alertasBloqueios.push("BLOQUEIO SENTINELA DE PRASUGREL: Antecedente de AVC/AIT contraindica terminantemente o Prasugrel (Ensaio TRITON-TIMI 38 - risco de sangramento intracraniano fatal).");
+          } else {
+            p2y12Txt = "• Ticagrelor (1ª Linha): Ataque 180 mg VO | Manutenção 90 mg VO 12/12h\n• Alternativa (se ICP imediata): Prasugrel 60 mg ataque | 10 mg/dia (5 mg se idade >= 75 ou peso < 60 kg)\n• Alternativa: Clopidogrel 300-600 mg ataque | 75 mg/dia";
+          }
+
+          const usaClopi = trombolise || anticoag || Boolean(entrada.clopidogrel);
+          if (usaClopi && usoOmeprazol) {
+            alertasBloqueios.push("INTERAÇÃO CYP2C19 (Clopidogrel + Omeprazol): Omeprazol inibe ativação do Clopidogrel. CONDUTA: Substituir imediatamente por Pantoprazol.");
+          }
+
+          // Adjuvantes
+          let adjTxt = "";
+          const clcr = Number(entrada.clcr) || 70;
+          if (clcr < 30) {
+            adjTxt += "• Enoxaparina (Ajuste Renal ClCr < 30): 1 mg/kg SC 1x ao dia (a cada 24h) OU Heparina Não Fracionada (HNF)\n";
+          } else if (trombolise && idade >= 75) {
+            adjTxt += "• Enoxaparina (> 75a em Trombólise): Omitir bolus IV! Fazer 0.75 mg/kg SC de 12/12h (máx 75 mg nas 2 primeiras doses)\n";
+          } else {
+            adjTxt += "• Enoxaparina: 1 mg/kg SC de 12/12h (bolus IV de 30 mg apenas se IAMCSST < 75 anos)\n";
+          }
+          adjTxt += "• Atorvastatina: 80 mg VO dose de ataque precoce (estatina de alta potência)\n";
+
+          const iamVd = Boolean(entrada.iamVd || entrada.iamVdOuSildenafil);
+          const choque = Boolean(entrada.choque || entrada.killipGrave);
+          if (iamVd) {
+            alertasBloqueios.push("BLOQUEIO FATAL DE NITRATOS: Contraindicado formalmente em Infarto de Ventrículo Direito (IAM-VD / derivações V3R/V4R) ou uso recente de IPDE-5 (Sildenafil 24h, Tadalafil 48h) devido ao risco iminente de choque refratário por queda súbita de pré-carga.");
+          } else {
+            adjTxt += "• Nitrato (Dinitrato de Isossorbida 5 mg SL): se dor isquêmica refratária e PAS > 100 mmHg sem sinais de IAM-VD ou uso de IPDE-5\n";
+          }
+
+          if (choque) {
+            alertasBloqueios.push("CONTRAINDICAÇÃO DE BETABLOQUEADOR: Bloqueio absoluto na fase aguda em vigência de choque cardiogênico, Killip >= II (congestão pulmonar/estertoração) ou bradicardia/bloqueio AV.");
+          } else {
+            adjTxt += "• Betabloqueador (Metoprolol 25-50 mg VO): indicado nas primeiras 24h apenas se paciente estável, sem congestão pulmonar e sem risco de choque";
+          }
+
+          let saida = `🫀 ESCORE HEART & DOR TORÁCICA / SCA (SBC / AHA / ESC) [OFFLINE]\n\n` +
+            `🔴 ESTRATIFICAÇÃO & CONDUTA BEIRA-LEITO:\n` +
+            `• HEART Score: ${scoreHeart} pontos — ${riscoHeart}\n` +
+            `• Taxa de MACE (6 semanas): ${taxaMace}\n` +
+            `• Conduta: ${condutaHeart}\n\n` +
+            `🟡 DUPLO BLOQUEIO PLAQUETÁRIO (DAPT):\n` +
+            `${aasTxt}\n` +
+            `${p2y12Txt}\n\n` +
+            `💉 ADJUVANTES & ANTICOAGULAÇÃO:\n` +
+            `${adjTxt}\n`;
+
+          if (alertasBloqueios.length > 0) {
+            saida += `\n⚠️ BLOQUEIOS SENTINELA & CONTRAINDICAÇÕES:\n` +
+              alertasBloqueios.map(a => `• ${a}`).join('\n') + `\n`;
+          }
+
+          saida += `\nℹ️ MONITORIZAÇÃO:\n• ECG seriado (a cada 15-30 min se dor contínua), curva de troponina ultrassensível (0h/1h ou 0h/2h) e monitorização multiparamétrica.`;
+
+          return saida;
         }
       } catch (e) {
         return 'Erro ao calcular: ' + e.message;
@@ -4796,11 +6051,379 @@
     function calcularCrCl() {
       solicitarCalculo('crcl', {idade:valorCalc('cr-idade'), peso:valorCalc('cr-peso'), creatinina:valorCalc('cr-val'), sexo:document.querySelector('input[name="cr-sexo"]:checked')?.value ?? ''}, 'crcl-resultado');
     }
+    function toggleGasoAvancado() {
+      const el = document.getElementById('gaso-secao-avancada');
+      const chevron = document.getElementById('gaso-avancado-chevron');
+      if (!el) return;
+      const escondido = el.classList.toggle('hidden');
+      if (chevron) chevron.textContent = escondido ? '▼' : '▲';
+    }
+    function definirPresetGaso(ph, pco2, hco3, na, cl, alb, pao2, fio2) {
+      hapticFeedback('light');
+      const setV = (id, val) => {
+        const inp = document.getElementById(id);
+        if (inp) inp.value = val !== null && val !== undefined ? val : '';
+      };
+      setV('gaso-ph', ph);
+      setV('gaso-pco2', pco2);
+      setV('gaso-hco3', hco3);
+      setV('gaso-na', na);
+      setV('gaso-cl', cl);
+      setV('gaso-alb', alb);
+      setV('gaso-pao2', pao2);
+      setV('gaso-fio2', fio2);
+
+      const secaoAvancada = document.getElementById('gaso-secao-avancada');
+      if ((na || cl || alb || pao2 || fio2) && secaoAvancada?.classList.contains('hidden')) {
+        toggleGasoAvancado();
+      }
+      calcularGaso();
+    }
+    function limparGaso() {
+      hapticFeedback('light');
+      ['gaso-ph', 'gaso-pco2', 'gaso-hco3', 'gaso-na', 'gaso-cl', 'gaso-alb', 'gaso-pao2', 'gaso-fio2'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const res = document.getElementById('gaso-resultado');
+      if (res) res.textContent = 'Informe os parâmetros para calcular.';
+      const btn = document.getElementById('btn-copiar-gaso');
+      if (btn) btn.classList.add('hidden');
+    }
     function calcularGaso() {
-      solicitarCalculo('gaso', {ph:valorCalc('gaso-ph'), pco2:valorCalc('gaso-pco2'), hco3:valorCalc('gaso-hco3')}, 'gaso-resultado');
+      solicitarCalculo('gaso', {
+        ph: valorCalc('gaso-ph'),
+        pco2: valorCalc('gaso-pco2'),
+        hco3: valorCalc('gaso-hco3'),
+        na: valorCalc('gaso-na'),
+        cl: valorCalc('gaso-cl'),
+        alb: valorCalc('gaso-alb'),
+        pao2: valorCalc('gaso-pao2'),
+        fio2: valorCalc('gaso-fio2')
+      }, 'gaso-resultado');
+    }
+    function copiarDvaPEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('dva-resultado')?.innerText || '';
+      if (!txt || txt.includes('Informe o peso')) {
+        copiarToast('Calcule a taxa de DVA primeiro.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Conduta de DVA copiada para o Prontuário!');
+    }
+    function copiarSriPEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('sri-resultado')?.innerText || '';
+      if (!txt || txt.includes('Informe o peso')) {
+        copiarToast('Calcule a SRI primeiro.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Conduta de SRI copiada para o Prontuário!');
+    }
+    function copiarCrClPEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('crcl-resultado')?.innerText || '';
+      if (!txt || txt.includes('Preencha Idade')) {
+        copiarToast('Calcule o Clearance de Creatinina primeiro.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Parecer de ClCr copiado para o Prontuário!');
+    }
+    function copiarGasoPEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('gaso-resultado')?.innerText || '';
+      if (!txt || txt.includes('Preencha pH')) {
+        copiarToast('Calcule a Gasometria primeiro.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Análise gasométrica copiada para o Prontuário!');
+    }
+    function definirPresetHeart(hist, ecg, idade, fr, trop, trombolise = false, avc = false, omeprazol = false, anticoag = false, iamVd = false) {
+      hapticFeedback('light');
+      const setSelect = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = String(val);
+      };
+      setSelect('heart-historia', hist);
+      setSelect('heart-ecg', ecg);
+      const inputIdade = document.getElementById('heart-idade');
+      if (inputIdade) inputIdade.value = String(idade);
+      setSelect('heart-fr', fr);
+      setSelect('heart-troponina', trop);
+
+      const setCheck = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = Boolean(val);
+      };
+      setCheck('heart-trombolise', trombolise);
+      setCheck('heart-avc', avc);
+      setCheck('heart-omeprazol', omeprazol);
+      setCheck('heart-anticoag', anticoag);
+      setCheck('heart-iam-vd', iamVd);
+      calcularHeartCockpit();
+    }
+    function limparHeart() {
+      hapticFeedback('light');
+      const setSelect = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = String(val);
+      };
+      setSelect('heart-historia', 0);
+      setSelect('heart-ecg', 0);
+      const inputIdade = document.getElementById('heart-idade');
+      if (inputIdade) inputIdade.value = '50';
+      setSelect('heart-fr', 0);
+      setSelect('heart-troponina', 0);
+      ['heart-trombolise', 'heart-avc', 'heart-omeprazol', 'heart-anticoag', 'heart-iam-vd', 'heart-choque'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = false;
+      });
+      const res = document.getElementById('heart-resultado');
+      if (res) res.textContent = 'Preencha os dados do paciente para avaliar o escore HEART e DAPT.';
+      const btn = document.getElementById('btn-copiar-heart');
+      if (btn) btn.classList.add('hidden');
+    }
+    function calcularHeartCockpit() {
+      const entrada = {
+        historia: Number(valorCalc('heart-historia') || 0),
+        ecg: Number(valorCalc('heart-ecg') || 0),
+        idade: Number(valorCalc('heart-idade') || 50),
+        fr: Number(valorCalc('heart-fr') || 0),
+        troponina: Number(valorCalc('heart-troponina') || 0),
+        trombolise: Boolean(document.getElementById('heart-trombolise')?.checked),
+        avcPrevio: Boolean(document.getElementById('heart-avc')?.checked),
+        usoOmeprazol: Boolean(document.getElementById('heart-omeprazol')?.checked),
+        anticoagulacao: Boolean(document.getElementById('heart-anticoag')?.checked),
+        iamVd: Boolean(document.getElementById('heart-iam-vd')?.checked),
+        choque: Boolean(document.getElementById('heart-choque')?.checked)
+      };
+      solicitarCalculo('heart', entrada, 'heart-resultado');
+    }
+    function copiarHeartPEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('heart-resultado')?.innerText || '';
+      if (!txt || txt.includes('Preencha os dados')) {
+        copiarToast('Calcule o Escore HEART primeiro.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Parecer HEART & DAPT copiado para o Prontuário!');
+    }
+    function definirClcrAtb(valor, hd = false) {
+      const inputClcr = document.getElementById('atb-clcr');
+      const inputHd = document.getElementById('atb-hd');
+      if (inputClcr) inputClcr.value = valor !== null && valor !== undefined ? valor : '';
+      if (inputHd) inputHd.checked = Boolean(hd);
+      calcularAtbCockpit();
+    }
+    function migrarCrClParaAtb() {
+      hapticFeedback('medium');
+      const resCr = document.getElementById('crcl-resultado')?.innerText || '';
+      const match = resCr.match(/Clearance Estimado.*?(\d+(?:\.\d+)?)\s*mL\/min/i) || resCr.match(/(\d+(?:\.\d+)?)\s*mL\/min/i);
+      abrirSubCalc('calc-atb');
+      if (match && match[1]) {
+        definirClcrAtb(Math.round(parseFloat(match[1])));
+        copiarToast('ClCr de ' + Math.round(parseFloat(match[1])) + ' mL/min aplicado no ajuste!');
+      } else {
+        const peso = valorCalc('cr-peso');
+        if (peso) {
+          copiarToast('Informe o ClCr ou selecione um atalho rápido.');
+        }
+      }
+    }
+    function calcularAtbCockpit() {
+      const droga = valorCalc('atb-droga') || 'meropenem';
+      const clcr = valorCalc('atb-clcr');
+      const hd = document.getElementById('atb-hd')?.checked || false;
+
+      if (!clcr && !hd && droga !== 'ceftriaxona' && droga !== 'polimixina_b') {
+        const el = document.getElementById('atb-resultado');
+        if (el) el.textContent = 'Informe o Clearance de Creatinina (mL/min) ou marque a opção de Hemodiálise (HD).';
+        return;
+      }
+
+      solicitarCalculo('ajuste_atb', { droga, clcr: clcr ? parseFloat(clcr) : null, hemodialise: hd }, 'atb-resultado');
+    }
+    function copiarAtbPEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('atb-resultado')?.innerText || '';
+      if (!txt || txt.includes('Informe o Clearance')) {
+        copiarToast('Calcule o ajuste renal antes de copiar.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Ajuste de Antimicrobiano copiado para o Prontuário!');
+    }
+    function alternarModuloDhe() {
+      const mod = document.getElementById('dhe-modulo')?.value || 'hiponatremia';
+      const painelHipo = document.getElementById('dhe-painel-hipo');
+      const painelK = document.getElementById('dhe-painel-k');
+      const painelHiper = document.getElementById('dhe-painel-hiper');
+      if (painelHipo) painelHipo.classList.toggle('hidden', mod !== 'hiponatremia');
+      if (painelK) painelK.classList.toggle('hidden', mod !== 'hipercalemia');
+      if (painelHiper) painelHiper.classList.toggle('hidden', mod !== 'hipernatremia');
+      calcularDheCockpit();
+    }
+    function definirNaHipo(val) {
+      const el = document.getElementById('dhe-na-atual');
+      if (el) el.value = val;
+      calcularDheCockpit();
+    }
+    function definirK(val, ecg = false) {
+      const elK = document.getElementById('dhe-k-atual');
+      const elEcg = document.getElementById('dhe-ecg-alt');
+      if (elK) elK.value = val;
+      if (elEcg) elEcg.checked = Boolean(ecg);
+      calcularDheCockpit();
+    }
+    function definirNaHiper(val) {
+      const el = document.getElementById('dhe-na-hiper');
+      if (el) el.value = val;
+      calcularDheCockpit();
+    }
+    function calcularDheCockpit() {
+      const mod = document.getElementById('dhe-modulo')?.value || 'hiponatremia';
+      const peso = valorCalc('dhe-peso') || 70;
+      if (mod === 'hipercalemia') {
+        const kAtual = valorCalc('dhe-k-atual');
+        const ecgAlt = document.getElementById('dhe-ecg-alt')?.checked || false;
+        if (!kAtual) {
+          const el = document.getElementById('dhe-resultado');
+          if (el) el.textContent = 'Informe o valor do Potássio (K+) sérico em mEq/L ou selecione um atalho rápido.';
+          return;
+        }
+        solicitarCalculo('dhe', { modo: 'hipercalemia', kAtual: parseFloat(kAtual), ecgAlterado: ecgAlt, peso: parseFloat(peso) }, 'dhe-resultado');
+      } else if (mod === 'hipernatremia') {
+        const naAtual = valorCalc('dhe-na-hiper');
+        const idade = valorCalc('dhe-hiper-idade') || 60;
+        const sexo = valorCalc('dhe-hiper-sexo') || 'm';
+        if (!naAtual) {
+          const el = document.getElementById('dhe-resultado');
+          if (el) el.textContent = 'Informe o valor do Sódio (Na+) sérico em mEq/L ou selecione um atalho rápido.';
+          return;
+        }
+        solicitarCalculo('dhe', { modo: 'hipernatremia', naAtual: parseFloat(naAtual), peso: parseFloat(peso), idade: parseFloat(idade), sexo }, 'dhe-resultado');
+      } else {
+        // Hiponatremia
+        const naAtual = valorCalc('dhe-na-atual');
+        const salina = valorCalc('dhe-salina') || 3;
+        const idade = valorCalc('dhe-idade') || 50;
+        const sexo = valorCalc('dhe-sexo') || 'm';
+        if (!naAtual) {
+          const el = document.getElementById('dhe-resultado');
+          if (el) el.textContent = 'Informe o valor do Sódio (Na+) sérico em mEq/L ou selecione um atalho rápido.';
+          return;
+        }
+        solicitarCalculo('dhe', { modo: 'hiponatremia', naAtual: parseFloat(naAtual), salina: parseFloat(salina), peso: parseFloat(peso), idade: parseFloat(idade), sexo }, 'dhe-resultado');
+      }
+    }
+    function copiarDhePEP() {
+      hapticFeedback('light');
+      const txt = document.getElementById('dhe-resultado')?.innerText || '';
+      if (!txt || txt.includes('Informe o valor') || txt.includes('Selecione o distúrbio')) {
+        copiarToast('Calcule o distúrbio hidroeletrolítico antes de copiar.');
+        return;
+      }
+      copiarTextoClipboard(txt, 'Conduta de DHE copiada para o Prontuário!');
+    }
+    function alternarModuloPediatria() {
+      const mod = document.getElementById('ped-modulo')?.value || 'holliday';
+      const campoCond = document.getElementById('ped-campo-condicao');
+      const campoDroga = document.getElementById('ped-campo-droga');
+      if (campoCond) campoCond.classList.toggle('hidden', mod !== 'holliday');
+      if (campoDroga) campoDroga.classList.toggle('hidden', mod !== 'posologia');
+      calcularPediatriaCockpit();
+    }
+    function calcularPediatriaCockpit() {
+      const peso = valorCalc('ped-peso');
+      const modulo = valorCalc('ped-modulo') || 'holliday';
+      const condicao = valorCalc('ped-condicao') || 'manutencao_padrao';
+      const droga = valorCalc('ped-droga') || 'dipirona';
+      if (!peso) {
+        const el = document.getElementById('pediatria-resultado');
+        if (el) el.textContent = 'Informe o peso da criança para obter os cálculos instantaneamente.';
+        return;
+      }
+      solicitarCalculo('pediatria', { peso, modo: modulo, condicaoClinica: condicao, farmaco: droga }, 'pediatria-resultado');
+    }
+    function copiarPediatriaPEP() {
+      const res = document.getElementById('pediatria-resultado')?.textContent || '';
+      if (!res || res.includes('Informe o peso')) {
+        copiarToast('Informe o peso para calcular antes de copiar.');
+        return;
+      }
+      copiarTextoClipboard(res, 'Conduta pediátrica copiada para o PEP!');
     }
 
     let ultimoCrossCheckResultado = null;
+
+    function executarCrossCheckOfflineLocal(texto) {
+      const t = String(texto || '').toLowerCase();
+      const alertas = [];
+      const interacoes = [];
+
+      // 1. Amiodarona + Fluconazol / Quinolona / Azitromicina
+      if (t.includes('amiodarona') && (t.includes('fluconazol') || t.includes('cipro') || t.includes('levo') || t.includes('azitro'))) {
+        alertas.push('🚨 ALERTA CRÍTICO: Amiodarona + Agente prolongador de QTc (Fluconazol/Quinolona/Azitromicina). Risco iminente de Torsades de Pointes e PCR em FV. Monitorar ECG contínuo e eletrólitos (K+, Mg++).');
+        interacoes.push({ gravidade: 'grave', drogas: 'Amiodarona + QTc' });
+      }
+
+      // 2. Clopidogrel + Omeprazol
+      if (t.includes('clopidogrel') && t.includes('omeprazol')) {
+        alertas.push('⚠️ INTERAÇÃO MODERADA/GRAVE: Omeprazol inibe CYP2C19, bloqueando a conversão do Clopidogrel no metabólito ativo antiplaquetário. Recomendação: substituir por Pantoprazol.');
+        interacoes.push({ gravidade: 'moderada', drogas: 'Clopidogrel + Omeprazol' });
+      }
+
+      // 3. IECA / BRA + Espironolactona + Potássio
+      if ((t.includes('enalapril') || t.includes('captopril') || t.includes('losartana')) && (t.includes('espironolactona') || t.includes('kcl') || t.includes('potassio'))) {
+        alertas.push('🚨 ALERTA DE HIPERCALEMIA: Associação de bloqueador do SRAA com diurético poupador de K+ ou cloreto de potássio. Risco severo de hipercalemia fatal (K+ > 6.0 mEq/L). Monitorar K+ sérico.');
+        interacoes.push({ gravidade: 'grave', drogas: 'IECA/BRA + Poupador K+' });
+      }
+
+      // 4. Tramadol + Ondansetrona / ISRS
+      if (t.includes('tramadol') && (t.includes('ondansetrona') || t.includes('fluoxetina') || t.includes('sertralina') || t.includes('venlafaxina'))) {
+        alertas.push('⚠️ RISCO DE SÍNDROME SEROTONINÉRGICA: Tramadol associado a agentes serotoninérgicos (Ondansetrona/ISRS). Além disso, Ondansetrona pode antagonizar analgesia do Tramadol.');
+        interacoes.push({ gravidade: 'moderada', drogas: 'Tramadol + Serotoninérgicos' });
+      }
+
+      // 5. Ceftriaxona + Ringer Lactato / Cálcio
+      if (t.includes('ceftriaxona') && (t.includes('ringer') || t.includes('calcio') || t.includes('gluconato'))) {
+        alertas.push('🛑 INCOMPATIBILIDADE FATAL NO Y-SITE: Ceftriaxona + Soluções contendo Cálcio (Ringer Lactato / Gluconato). Risco de precipitação intravascular e dano pulmonar/renal. Não infundir na mesma via.');
+        interacoes.push({ gravidade: 'grave', drogas: 'Ceftriaxona + Cálcio' });
+      }
+
+      // 6. Furosemida + Amicacina / Gentamicina
+      if (t.includes('furosemida') && (t.includes('amicacina') || t.includes('gentamicina'))) {
+        alertas.push('🚨 SINERGISMO DE TOXICIDADE: Furosemida + Aminoglicosídeo. Potencialização severa de nefrotoxicidade e ototoxicidade irreversível. Monitorar diurese e creatinina.');
+        interacoes.push({ gravidade: 'grave', drogas: 'Furosemida + Aminoglicosídeo' });
+      }
+
+      // 7. Metformina + ClCr < 30 / Contraste
+      if (t.includes('metformina') && (t.includes('contraste') || t.includes('clcr 1') || t.includes('clcr 2') || t.includes('dialise'))) {
+        alertas.push('🛑 CONTRAINDICAÇÃO FORMAL: Metformina em disfunção renal grave (ClCr < 30 mL/min) ou procedimento com contraste iodado. Risco de acidose lática severa. Suspender e iniciar insulina.');
+        interacoes.push({ gravidade: 'grave', drogas: 'Metformina + Disfunção Renal' });
+      }
+
+      // 8. Fenitoína + Solução Glicosada
+      if (t.includes('fenitoina') && (t.includes('sg 5') || t.includes('glicose') || t.includes('glicosad'))) {
+        alertas.push('🛑 INCOMPATIBILIDADE FÍSICO-QUÍMICA: Fenitoína precipita imediatamente em soluções glicosadas. Diluir EXCLUSIVAMENTE em Soro Fisiológico 0,9% em linha com filtro.');
+        interacoes.push({ gravidade: 'grave', drogas: 'Fenitoína + Glicose' });
+      }
+
+      const temCriticos = alertas.some(a => a.includes('CRÍTICO') || a.includes('FATAL') || a.includes('CONTRAINDICAÇÃO'));
+      let textoFmt = '';
+      if (alertas.length > 0) {
+        textoFmt = alertas.join('\n\n');
+      } else {
+        textoFmt = '✅ Nenhuma interação grave ou incompatibilidade crítica imediata detectada para os termos informados na base de contingência local em RAM.';
+      }
+
+      return {
+        ok: true,
+        offline: true,
+        temAlertasCriticos: temCriticos,
+        interacoes: interacoes,
+        textoFormatado: textoFmt
+      };
+    }
 
     async function executarCrossCheckCockpit() {
       const entrada = document.getElementById('crosscheck-input')?.value?.trim();
@@ -4815,7 +6438,7 @@
 
       container.classList.remove('hidden');
       badge.className = 'p-2.5 rounded-lg border bg-slate-800/80 border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-2 animate-pulse';
-      badge.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin text-emerald-400"></i> Varrendo 219 interações e Guia HSL em RAM...';
+      badge.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin text-emerald-400"></i> Varrendo 285 interações e Guia HSL em RAM...';
       detalhes.textContent = 'Processando...';
       if (window.lucide) lucide.createIcons();
 
@@ -4838,9 +6461,21 @@
         copiarToast('Varredura concluída (' + (resp.benchmark_ms || 1) + 'ms)');
         if (window.lucide) lucide.createIcons();
       } catch (err) {
-        badge.className = 'p-2.5 rounded-lg border bg-rose-950/60 border-rose-800 text-rose-300 text-xs font-semibold flex items-center gap-2';
-        badge.innerHTML = '<i data-lucide="x-circle" class="w-4 h-4 text-rose-400"></i> Falha na checagem: ' + err.message;
-        detalhes.textContent = err.message;
+        // Fallback determinístico de contingência offline
+        const offlineRes = executarCrossCheckOfflineLocal(entrada);
+        ultimoCrossCheckResultado = offlineRes;
+        if (offlineRes.temAlertasCriticos) {
+          badge.className = 'p-2.5 rounded-lg border bg-rose-500/20 border-rose-500/50 text-rose-200 text-xs font-bold flex items-center gap-2';
+          badge.innerHTML = '<i data-lucide="alert-octagon" class="w-4 h-4 text-rose-400"></i> 🛑 Alerta Crítico (Modo Offline em RAM)';
+        } else if (offlineRes.interacoes && offlineRes.interacoes.length > 0) {
+          badge.className = 'p-2.5 rounded-lg border bg-amber-500/20 border-amber-500/50 text-amber-200 text-xs font-bold flex items-center gap-2';
+          badge.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i> ⚠️ Interações Moderadas (Modo Offline em RAM)';
+        } else {
+          badge.className = 'p-2.5 rounded-lg border bg-emerald-500/20 border-emerald-500/50 text-emerald-200 text-xs font-bold flex items-center gap-2';
+          badge.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> 🛡️ Sem Interações Graves (Modo Offline em RAM)';
+        }
+        detalhes.textContent = offlineRes.textoFormatado;
+        copiarToast('Varredura offline concluída (0ms)');
         if (window.lucide) lucide.createIcons();
       }
     }
@@ -5331,6 +6966,112 @@
               return 'Manter sob monitorização contínua em leito de emergência por 6 a 12 horas pelo risco de reação bifásica (recrudescimento dos sintomas sem nova exposição). Orientar receita e treinamento para caneta autoinjetora de adrenalina (EpiPen).';
             },
             racional: 'Aproximadamente 5% a 20% dos pacientes com anafilaxia apresentam recaída grave horas após a resolução inicial do episódio.'
+          }
+        ]
+      },
+      dengue: {
+        id: 'dengue',
+        grandeArea: 'Clínica Médica',
+        titulo: 'Dengue Grave / Sinais de Alarme (C e D)',
+        subtitulo: 'Protocolo Ministério da Saúde 2024 · Arboviroses',
+        icone: 'alert-triangle',
+        badge: 'MS 2024',
+        cenario: 'Paciente com dengue suspeita ou confirmada apresentando sinais de alarme (Grupo C: dor abdominal intensa, vômitos, lipotimia) ou choque/sangramento grave (Grupo D).',
+        metas: [
+          'Meta volêmica Grupo C: SF 0,9% 10 mL/kg/h nas primeiras 2h; reavaliar Ht e diurese.',
+          'Meta de choque Grupo D: SF 0,9% 20 mL/kg em 20 minutos (repetir até 3 vezes se necessário).',
+          'Alvo de estabilização: PAM ≥ 65 mmHg, diurese ≥ 1 mL/kg/h e hematócrito em queda ou estabilizado.'
+        ],
+        errosCriticos: [
+          'NUNCA prescrever AINEs ou AAS (risco severo de hemorragia e choque).',
+          'NUNCA liberar paciente Grupo C ou D para domicílio: internação obrigatória.',
+          'NUNCA esquecer de dosar hematócrito seriado a cada 2 horas no choque.'
+        ],
+        itens: [
+          {
+            id: 'dengue_expansao_c',
+            categoria: 'Ressuscitação Volêmica Grupo C',
+            prioridade: 'Imediato (Fase Rápida)',
+            titulo: 'Fase de Expansão Leito de Observação (10 mL/kg/h)',
+            obterPrescricao: (peso) => {
+              const p = peso || 70;
+              const vol = Math.round(p * 10);
+              return `Soro Fisiológico 0,9% IV: ${vol} mL/h nas primeiras 2 horas. Reavaliar Ht e sinais vitais após término.`;
+            },
+            racional: 'Combate o extravasamento plasmático precoce antes da instalação do choque irreversível.'
+          },
+          {
+            id: 'dengue_choque_d',
+            categoria: 'Choque Hipovolêmico Grupo D',
+            prioridade: 'Emergência Sala Vermelha',
+            titulo: 'Bólus de Ressuscitação Rápida (20 mL/kg em 20 min)',
+            obterPrescricao: (peso) => {
+              const p = peso || 70;
+              const vol = Math.round(p * 20);
+              return `Soro Fisiológico 0,9% IV em bólus pressurizado: ${vol} mL em 20 minutos. Pode repetir até 3 vezes.`;
+            },
+            racional: 'Restaura a pré-carga e a perfusão orgânica na vigência de colapso circulatório.'
+          },
+          {
+            id: 'dengue_sintomaticos',
+            categoria: 'Sintomáticos & Notificação',
+            prioridade: 'Mandatório',
+            titulo: 'Analgesia Segura e Notificação Imediata SINAN',
+            obterPrescricao: () => {
+              return 'Dipirona 1g IV a cada 6 horas se dor ou febre (evitar AINEs e AAS). Notificação compulsória imediata (24h) ao SINAN.';
+            },
+            racional: 'Alívio seguro da dor sem interferir na hemostasia ou aumentar risco de sangramento gastrointestinal.'
+          }
+        ]
+      },
+      has: {
+        id: 'has',
+        grandeArea: 'Clínica Médica',
+        titulo: 'Crise Hipertensiva vs Pseudocrise',
+        subtitulo: 'Diretrizes SBC 2024 / AHA · Sala Vermelha',
+        icone: 'heart',
+        badge: 'SBC 2024',
+        cenario: 'Elevação aguda da PA (≥ 180×120 mmHg) com ou sem lesão aguda de órgão-alvo (EAP, Encefalopatia, Dissecção de Aorta, SCA, AVC).',
+        metas: [
+          'Emergência Hipertensiva Geral: Redução de 20-25% da PAM na 1ª hora na Sala Vermelha/UTI.',
+          'Dissecção de Aorta: PAS < 120 mmHg e FC < 60 bpm em 20 minutos com Betabloqueador + Nitroprussiato.',
+          'Urgência/Pseudocrise: Redução gradual em 24 a 48h com medicações orais. Evitar queda brusca.'
+        ],
+        errosCriticos: [
+          'NUNCA prescrever Nifedipino sublingual/ação rápida (risco de AVC e IAM por queda abrupta e taquicardia reflexa).',
+          'NUNCA usar vasodilatador isolado (Nitroprussiato) na Dissecção Aórtica sem prévio betabloqueio (aumenta o cisalhamento dP/dt).',
+          'NUNCA normalizar abruptamente a PA na Urgência Hipertensiva assintomática.'
+        ],
+        itens: [
+          {
+            id: 'has_emergencia_nipride',
+            categoria: 'Emergência Hipertensiva',
+            prioridade: 'BIC Contínua',
+            titulo: 'Nitroprussiato de Sódio IV Titulado em Bomba',
+            obterPrescricao: (peso) => {
+              return 'Nitroprussiato de Sódio 50 mg em 250 mL SG 5% (proteger da luz): iniciar a 0.3 a 0.5 mcg/kg/min em BIC, titulando a cada 5 min visando queda de 20-25% da PAM na 1ª hora.';
+            },
+            racional: 'Vasodilatador arterial e venoso potente de início imediato e meia-vida ultracurta para titulação precisa.'
+          },
+          {
+            id: 'has_disseccao_esmolol',
+            categoria: 'Dissecção Aórtica',
+            prioridade: 'Primeiro Passo Obrigatório',
+            titulo: 'Betabloqueador IV (Esmolol / Metoprolol) ANTES de Vasodilatador',
+            obterPrescricao: () => {
+              return 'Metoprolol 5 mg IV a cada 5 min (máx 15 mg) ou Esmolol em BIC até FC < 60 bpm. Meta: PAS < 120 e FC < 60 em 20 min.';
+            },
+            racional: 'Reduz a força de ejeção ventricular (dP/dt) prevenindo a propagação ou rotura da falsa luz aórtica.'
+          },
+          {
+            id: 'has_urgencia_oral',
+            categoria: 'Urgência / Pseudocrise',
+            prioridade: 'Via Oral',
+            titulo: 'Manejo Oral Gradual: Captopril ou Clonidina',
+            obterPrescricao: () => {
+              return 'Se Pseudocrise: repouso 30 min + analgesia. Se Urgência persistente: Captopril 25 mg VO (ou Clonidina 0.100 mg VO). Alta com ajuste ambulatorial para 24-48h.';
+            },
+            racional: 'Evita isquemia de órgãos vitais acostumados à autorreguração pressórica elevada crônica.'
           }
         ]
       }
@@ -5852,10 +7593,308 @@
     }
 
     // =========================================================================
-    // MÓDULO SOAP AMBULATORIAL ÁGIL & ATESTADOS CFM (FRONTEND)
+    // MÓDULO SOAP AMBULATORIAL ÁGIL & ATESTADOS CFM (FRONTEND & OFFLINE DETERMINÍSTICO)
     // =========================================================================
     let cacheSoapAmbulatorialGerado = '';
     let cacheAtestadoCfmGerado = '';
+
+    function setAtestadoDias(dias) {
+      hapticFeedback('light');
+      const sel = document.getElementById('atestado-select-dias');
+      if (sel) {
+        sel.value = String(dias);
+        copiarToast(`${dias} dia(s) selecionado(s)`);
+      }
+    }
+
+    function setAtestadoCid(cidTexto) {
+      hapticFeedback('light');
+      const inp = document.getElementById('atestado-input-motivo');
+      const chk = document.getElementById('atestado-check-cid');
+      if (inp) inp.value = cidTexto;
+      if (chk) chk.checked = true;
+      copiarToast(`CID selecionado: ${cidTexto}`);
+    }
+
+    function setSoapQueixaRapida(tipo) {
+      hapticFeedback('light');
+      const qInput = document.getElementById('amb-input-queixa');
+      const efSelect = document.getElementById('amb-select-modelo-ef');
+      const paInput = document.getElementById('amb-sv-pa');
+      const glicInput = document.getElementById('amb-sv-glicemia');
+      const fcInput = document.getElementById('amb-sv-fc');
+
+      if (tipo === 'has') {
+        if (qInput) qInput.value = 'Paciente hipertenso em acompanhamento ambulatorial para controle pressórico e renovação de receita médica. Nega dor torácica, dispneia ou cefaleia.';
+        if (efSelect) efSelect.value = 'has_rotina';
+        if (paInput && !paInput.value) paInput.value = '130/84';
+        if (fcInput && !fcInput.value) fcInput.value = '72';
+      } else if (tipo === 'dm') {
+        if (qInput) qInput.value = 'Paciente diabético tipo 2 em acompanhamento regular para controle glicêmico e rastreio de complicações crônicas. Nega sintomas poliúricos, polidípsicos ou lesões nos pés.';
+        if (efSelect) efSelect.value = 'dm_rotina';
+        if (paInput && !paInput.value) paInput.value = '124/80';
+        if (glicInput && !glicInput.value) glicInput.value = '118';
+        if (fcInput && !fcInput.value) fcInput.value = '74';
+      } else if (tipo === 'ivas') {
+        if (qInput) qInput.value = 'Paciente com tosse seca, coriza hialina e odinofagia leve há 3 dias. Afebril ao toque, nega dispneia ou dor torácica.';
+        if (efSelect) efSelect.value = 'respiratorio_ivas';
+        if (paInput && !paInput.value) paInput.value = '120/80';
+        if (fcInput && !fcInput.value) fcInput.value = '76';
+      } else if (tipo === 'lombalgia') {
+        if (qInput) qInput.value = 'Paciente com dor em região lombar baixa de caráter mecânico há 5 dias após esforço físico. Nega irradiação para membros inferiores, parestesias ou sintomas esfincterianos.';
+        if (efSelect) efSelect.value = 'lombalgia_postural';
+        if (paInput && !paInput.value) paInput.value = '120/80';
+        if (fcInput && !fcInput.value) fcInput.value = '70';
+      } else if (tipo === 'dispepsia') {
+        if (qInput) qInput.value = 'Paciente com queixa de queimação epigástrica e pirose pós-prandial há 2 semanas. Nega perda ponderal, disfagia, vômitos ou melena.';
+        if (efSelect) efSelect.value = 'dispepsia_gastro';
+        if (paInput && !paInput.value) paInput.value = '120/80';
+        if (fcInput && !fcInput.value) fcInput.value = '72';
+      }
+      copiarToast('Atalho rápido aplicado ao formulário!');
+    }
+
+    function converterNumeroPorExtensoOffline(num) {
+      const n = parseInt(num, 10);
+      const mapa = {
+        1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco',
+        6: 'seis', 7: 'sete', 8: 'oito', 9: 'nove', 10: 'dez',
+        11: 'onze', 12: 'doze', 13: 'treze', 14: 'quatorze', 15: 'quinze',
+        16: 'dezesseis', 17: 'dezessete', 18: 'dezoito', 19: 'dezenove', 20: 'vinte',
+        21: 'vinte e um', 22: 'vinte e dois', 23: 'vinte e três', 24: 'vinte e quatro',
+        25: 'vinte e cinco', 26: 'vinte e seis', 27: 'vinte e sete', 28: 'vinte e oito',
+        29: 'vinte e nove', 30: 'trinta', 45: 'quarenta e cinco', 60: 'sessenta', 90: 'noventa'
+      };
+      return mapa[n] || String(n);
+    }
+
+    function gerarAtestadoOfflineLocal(dados) {
+      dados = dados || {};
+      const paciente = dados.pacienteNome || dados.paciente || 'Ao Portador';
+      const doc = dados.pacienteDoc || dados.doc || '[Documento de Identidade/CPF]';
+      const dias = parseInt(dados.dias || 1, 10);
+      const diasExtenso = converterNumeroPorExtensoOffline(dias);
+      const dataStr = dados.data || new Date().toLocaleDateString('pt-BR');
+      const cidade = dados.cidade || 'Ribeirão Preto - SP';
+      const medico = dados.medicoNome || 'Dr. Wagner Moraes';
+      const crm = dados.medicoCrm || 'CRM/SP';
+
+      const linhas = [
+        '======================================================================',
+        '                           ATESTADO MÉDICO                            ',
+        '======================================================================',
+        '',
+        'Atesto para os devidos fins de comprovação que o(a) paciente:',
+        'Nome: ' + paciente,
+        'Documento: ' + doc,
+        '',
+        'Foi atendido(a) sob meus cuidados profissionais nesta data e necessita de',
+        dias + ' (' + diasExtenso + ') dia(s) de repouso e recuperação clínica, necessitando de afastamento de suas atividades laborais e escolares,',
+        'a contar a partir de ' + dataStr + '.',
+        ''
+      ];
+
+      if (dados.incluirCid && dados.cid) {
+        linhas.push('Diagnóstico / CID-10: ' + dados.cid);
+        linhas.push('(Código de diagnóstico incluído a pedido e com autorização expressa do paciente, em conformidade com as Resoluções CFM nº 1.658/2002 e nº 1.851/2008).');
+        linhas.push('');
+      } else {
+        linhas.push('(Diagnóstico omitido nos termos do sigilo médico e do art. 5º da Resolução CFM nº 1.658/2002).');
+        linhas.push('');
+      }
+
+      linhas.push('Local e Data: ' + cidade + ', ' + dataStr + '.');
+      linhas.push('');
+      linhas.push('__________________________________________________________');
+      linhas.push(medico + ' · ' + crm);
+      linhas.push('======================================================================');
+
+      return {
+        sucesso: true,
+        offline: true,
+        textoAtestado: linhas.join('\n')
+      };
+    }
+
+    function gerarSOAPAmbulatorialOfflineLocal(dados) {
+      dados = dados || {};
+      const paciente = dados.pacienteNome || 'Ao Portador';
+      const qp = dados.queixaPrincipal || 'Consulta de rotina / acompanhamento ambulatorial';
+      const dataStr = dados.data || new Date().toLocaleDateString('pt-BR');
+      const sv = dados.sinaisVitais || {};
+      const modeloEf = dados.modeloExameFisico || 'checkup_geral';
+
+      // Bloco S
+      const blocoS = [
+        '• Queixa Principal (QP): ' + qp,
+        '• História da Doença Atual (HDA): Paciente comparece para avaliação clínica ambulatorial em UBS/APS, relatando ' + qp + '.',
+        '• Medicações de Uso Contínuo: Conforme prontuário prévio ou nega uso contínuo.',
+        '• Alergias: Nega alergias medicamentosas conhecidas.',
+        '• Antecedentes Pessoais / Hábitos: Nega tabagismo ativo; sem outras comorbidades relatadas.'
+      ].join('\n');
+
+      // Bloco O
+      const linhasSv = [];
+      if (sv.pa) linhasSv.push('PA: ' + sv.pa + ' mmHg');
+      if (sv.fc) linhasSv.push('FC: ' + sv.fc + ' bpm');
+      if (sv.glicemia) linhasSv.push('Glicemia: ' + sv.glicemia + ' mg/dL');
+      if (sv.peso) linhasSv.push('Peso: ' + sv.peso + ' kg');
+      const textoSv = linhasSv.length ? linhasSv.join(' | ') : 'Sinais vitais normais aferidos na triagem.';
+
+      const modelosTexto = {
+        checkup_geral: 'Ectoscopia: BEG, LOTE, corado, hidratado, anictérico, acianótico, afebril.\nACV: RCR 2T BNF sem sopros.\nAR: MVUA sem ruídos adventícios.\nAbdome: Plano, flácido, indolor, RHA normoativos, sem visceromegalias.\nExtremidades: Sem edema de MMII, pulsos pediosos e tibiais cheios e simétricos.',
+        has_rotina: 'Ectoscopia: BEG, LOTE, corado, hidratado, acianótico, sem desconforto.\nACV: RCR 2T BNF sem sopros em focos cardíacos, B2 normofonética. Ausculta de carótidas limpa bilateralmente.\nAR: MV presente bilateralmente sem estertores crepitantes em bases.\nAbdome: Flácido, indolor, sem sopros abdominais.\nExtremidades: Sem edema de MMII (cacifo negativo), pulsos periféricos amplos e simétricos.',
+        dm_rotina: 'Ectoscopia: BEG, LOTE, corado, hidratado, sem hálito cetônico.\nACV: RCR 2T BNF sem sopros. AR: MV presente sem ruídos adventícios.\nExame dos Pés: Pele hidratada sem fissuras ou calosidades hiperqueratóticas. Sensibilidade tátil protetora com monofilamento 10g preservada em 4 pontos plantares bilaterais. Diapasão 128Hz presente em hálux bilateral. Pulsos pediosos e tibiais posteriores cheios e simétricos.',
+        respiratorio_ivas: 'Ectoscopia: BEG, LOTE, corado, hidratado, eupneico em ar ambiente.\nOroscopia: Mucosa jugal hidratada, úvula centrada, sem placas ou exsudatos amigdalianos.\nOtoscopia: Condutos pérvios, membranas timpânicas íntegras e translúcidas bilateralmente.\nAR: MVUA bilateralmente sem sibilos, roncos ou estertores crepitantes.',
+        dispepsia_gastro: 'Ectoscopia: BEG, LOTE, corado, hidratado, anictérico.\nAbdome: Plano/globoso, flácido, depressível, leve desconforto epigástrico à palpação profunda, sem massas.\nSinais Específicos: Blumberg ausente, Murphy negativo, Giordano negativo bilateralmente.\nVisceromegalias: Fígado e baço impalpáveis. RHA presentes e normoativos.',
+        lombalgia_postural: 'Ectoscopia: Marcha autônoma sem claudicação, ponta dos pés e calcanhares preservados.\nColuna Lombar: Alinhamento preservado. Leve contratura paravertebral lombar bilateral sem dor óssea à palpação.\nManobras: Teste de Lasègue NEGATIVO bilateralmente (elevação da perna estendida até 70° sem dor radicular).\nNeurológico: Força motora grau 5/5 em MMII, reflexos patelares presentes e simétricos.',
+        cefaleia_neuro: 'Ectoscopia: BEG, Glasgow 15, fala fluente.\nPares Cranianos: Pupilas isocóricas e fotorreagentes, motricidade ocular normal, mímica facial simétrica.\nMotor/Reflexos: Força grau 5/5 simétrica nos 4 membros, reflexos vivos 2+/4+, Babinski ausente.\nSinais Meníngeos: Rigidez de nuca ausente, Kernig e Brudzinski negativos.',
+        saude_mental: 'Aparência: Asseado, postura colaborativa. Lúcido e plenamente orientado autopsiquicamente e alopsiquicamente.\nHumor/Afeto: Humor eutímico ou reativo à queixa, afeto modulado, sem embotamento.\nPensamento: Lógico, coerente, sem ideação delirante ou risco de autoextermínio. Sensopercepção íntegra.'
+      };
+
+      const textoEf = modelosTexto[modeloEf] || modelosTexto.checkup_geral;
+      const blocoO = '• Sinais Vitais: ' + textoSv + '\n' + textoEf;
+
+      // Análise de PA (SBC 2024)
+      let analisePa = '';
+      if (sv.pa && String(sv.pa).includes('/')) {
+        const partes = String(sv.pa).split('/');
+        const pas = parseFloat(partes[0]);
+        const pad = parseFloat(partes[1]);
+        if (!isNaN(pas) && !isNaN(pad)) {
+          if (pas >= 180 || pad >= 120) {
+            analisePa = '⚠️ Crise Hipertensiva (PA >= 180x120 mmHg) - Rastrear Lesão Aguda de Órgão-Alvo / Emergência';
+          } else if (pas >= 180 || pad >= 110) {
+            analisePa = 'Hipertensão Estágio 3 (PAS >= 180 ou PAD >= 110 mmHg)';
+          } else if (pas >= 160 || pad >= 100) {
+            analisePa = 'Hipertensão Estágio 2 (PAS 160-179 ou PAD 100-109 mmHg)';
+          } else if (pas >= 140 || pad >= 90) {
+            analisePa = 'Hipertensão Estágio 1 (PAS 140-159 ou PAD 90-99 mmHg)';
+          } else if (pas >= 130 || pad >= 85) {
+            analisePa = 'Pré-Hipertensão (PAS 130-139 ou PAD 85-89 mmHg)';
+          } else if (pas >= 120 || pad >= 80) {
+            analisePa = 'PA Normal (PAS 120-129 ou PAD 80-84 mmHg)';
+          } else {
+            analisePa = 'PA Ótima (< 120/80 mmHg)';
+          }
+        }
+      }
+
+      // Análise de Glicemia (SBD 2024-2025)
+      let analiseGlic = '';
+      if (sv.glicemia) {
+        const g = parseFloat(String(sv.glicemia).replace(',', '.'));
+        if (!isNaN(g) && g > 0) {
+          if (g >= 200) {
+            analiseGlic = '⚠️ Hiperglicemia Acentuada (>= 200 mg/dL) - Avaliar sintomas clássicos e compensação';
+          } else if (g >= 126) {
+            analiseGlic = 'Glicemia de Jejum Elevada (>= 126 mg/dL) - Critério de rastreio para DM';
+          } else if (g >= 100) {
+            analiseGlic = 'Glicemia de Jejum Alterada (100-125 mg/dL) - Pré-Diabetes';
+          } else {
+            analiseGlic = 'Glicemia Normal (< 100 mg/dL)';
+          }
+        }
+      }
+
+      // Bloco A
+      const diagMap = {
+        has_rotina: '1. Hipertensão Arterial Sistêmica Primária (CID-10: I10 / CIAP-2: K86)',
+        dm_rotina: '1. Diabetes Mellitus Tipo 2 sem complicações agudas (CID-10: E11.9 / CIAP-2: T90)',
+        respiratorio_ivas: '1. Infecção Aguda das Vias Aéreas Superiores / IVAS (CID-10: J06.9 / CIAP-2: R74)',
+        dispepsia_gastro: '1. Dispepsia Funcional / Doença do Refluxo Gastroesofágico (CID-10: K30 / CIAP-2: D87)',
+        lombalgia_postural: '1. Dor Lombar Baixa / Lombalgia Aguda Mecânica (CID-10: M54.5 / CIAP-2: L03)',
+        cefaleia_neuro: '1. Cefaleia Tensional / Cefaleia Primária a Esclarecer (CID-10: G44.2 / CIAP-2: N95)',
+        saude_mental: '1. Episódio Depressivo Leve a Moderado / Ansiedade Generalizada (CID-10: F41.1 / CIAP-2: P74)',
+        checkup_geral: '1. Acompanhamento e Avaliação Clínica de Rotina (CID-10: Z00.0 / CIAP-2: A98)'
+      };
+      let blocoA = diagMap[modeloEf] || diagMap.checkup_geral;
+      if (analisePa) blocoA += '\n• Classificação Pressórica (SBC): ' + analisePa;
+      if (analiseGlic) blocoA += '\n• Avaliação Glicêmica (SBD): ' + analiseGlic;
+
+      // Bloco P
+      const planoMap = {
+        has_rotina: [
+          '💊 Prescrição Farmacológica (REMUME):',
+          '  1) Losartana Potássica 50 mg --- 1 comp VO 1x/dia pela manhã.',
+          '  2) Hidroclorotiazida 25 mg --- 1 comp VO 1x/dia pela manhã (se necessário associação).',
+          '\n🥗 MEV: Dieta DASH com restrição de sódio (< 2g/dia), atividade física aeróbica 150 min/semana.',
+          '🔬 Exames: Creatinina, Potássio, Glicemia, Perfil Lipídico, EAS, ECG.',
+          '🚨 Sinais de Alarme: Procurar PS se cefaleia em trovoada, dor torácica, turvação visual ou déficit motor.',
+          '📅 Retorno: Reavaliação clínica e controle em 30 a 60 dias.'
+        ],
+        dm_rotina: [
+          '💊 Prescrição Farmacológica (REMUME):',
+          '  1) Metformina 850 mg --- 1 comp VO após o almoço e jantar (início gradual).',
+          '\n🥗 MEV: Redução de carboidratos simples, cessação de ultraprocessados, cuidados diários com os pés (hidratação, calçado fechado e macio).',
+          '🔬 Exames: Hemoglobina Glicada (HbA1c - meta < 7%), Creatinina, Razão Albuminúria/Creatinúria, Perfil Lipídico.',
+          '🚨 Sinais de Alarme: Procurar PS se glicemia > 300 com náuseas/vômitos ou lesão nova em extremidades.',
+          '📅 Retorno: Retorno em 60 a 90 dias com checagem de HbA1c.'
+        ],
+        respiratorio_ivas: [
+          '💊 Prescrição Sintomática (REMUME):',
+          '  1) Dipirona 500 mg --- 1 a 2 comp VO até de 6/6h se dor ou febre.',
+          '  2) Soro Fisiológico 0.9% --- Lavagem nasal abundante de 4 a 6x ao dia.',
+          '\n🥗 Cuidados: Hidratação oral vigorosa (água, chás), repouso relativo, ambiente ventilado.',
+          '🚨 Sinais de Alarme: Retornar imediatamente se falta de ar, estridor, dor torácica ventilatório-dependente ou febre > 72h.',
+          '📅 Retorno: Retorno em 5 a 7 dias se ausência de melhora clínica.'
+        ],
+        lombalgia_postural: [
+          '💊 Prescrição Sintomática (REMUME):',
+          '  1) Dipirona 500 mg --- 1 comp VO de 6/6h se dor.',
+          '  2) Ciclobenzaprina 5 mg --- 1 comp VO à noite por 3 a 5 dias.',
+          '\n🥗 Orientações: Evitar repouso absoluto no leito, manter movimentação leve, compressas mornas locais por 20 min.',
+          '🚨 Sinais de Alarme: Red flags de síndrome da cauda equina (anestesia em sela, retenção urinária súbita, perda de força rápida em MMII).',
+          '📅 Retorno: Reavaliação em 7 a 14 dias se persistência.'
+        ],
+        dispepsia_gastro: [
+          '💊 Prescrição Farmacológica (REMUME):',
+          '  1) Omeprazol 20 mg --- 1 cápsula VO em jejum 30 minutos antes do café por 4 semanas.',
+          '\n🥗 MEV: Fracionar refeições, evitar deitar até 2h após comer, elevar cabeceira da cama, reduzir café, álcool e frituras.',
+          '🚨 Sinais de Alarme: Sinais de alarme para EDA precoce (disfagia, perda ponderal inexplicada, vômitos persistentes, anemia ou idade > 55 anos).',
+          '📅 Retorno: Retorno em 30 dias para avaliar resposta terapêutica.'
+        ],
+        checkup_geral: [
+          '💊 Conduta Geral / Promoção de Saúde:',
+          '  1) Orientações preventivas e atualização do calendário vacinal do adulto/idoso.',
+          '\n🥗 MEV: Alimentação balanceada, hidratação de 2L/dia, atividade física regular 150 min/sem.',
+          '🔬 Exames de Rastreamento (se elegível por idade/sexo): Perfil lipídico, glicemia de jejum, mamografia / citopatológico.',
+          '📅 Retorno: Reavaliação anual de rotina ou conforme necessidade clínica.'
+        ]
+      };
+
+      const planoLinhas = planoMap[modeloEf] || planoMap.checkup_geral;
+      const blocoP = planoLinhas.join('\n');
+
+      const textoProntuario = [
+        '======================================================================',
+        '                  PRONTUÁRIO CLÍNICO AMBULATORIAL (SOAP)              ',
+        '======================================================================',
+        'Data: ' + dataStr,
+        'Paciente: ' + paciente,
+        '',
+        '[S - SUBJETIVO]',
+        blocoS,
+        '',
+        '[O - OBJETIVO]',
+        blocoO,
+        '',
+        '[A - AVALIAÇÃO]',
+        blocoA,
+        '',
+        '[P - PLANO]',
+        blocoP,
+        '======================================================================'
+      ].join('\n');
+
+      return {
+        sucesso: true,
+        offline: true,
+        soap: {
+          textoProntuario: textoProntuario
+        }
+      };
+    }
 
     function abrirModalAmbulatorioSOAP() {
       hapticFeedback('medium');
@@ -5885,24 +7924,27 @@
       if (preResultado) preResultado.textContent = 'Processando diretrizes clínicas e gerando SOAP estruturado...';
       if (boxResultado) boxResultado.classList.remove('hidden');
 
-      try {
-        const resp = await cockpitRpc('cockpitSoapAmbulatorial', [{
-          pacienteNome: paciente,
-          queixaPrincipal: queixa,
-          modeloExameFisico: modeloEf,
-          sinaisVitais: { pa, glicemia, fc, peso }
-        }]);
+      const params = {
+        pacienteNome: paciente,
+        queixaPrincipal: queixa,
+        modeloExameFisico: modeloEf,
+        sinaisVitais: { pa, glicemia, fc, peso }
+      };
 
-        if (resp && resp.soap && resp.soap.textoProntuario) {
-          cacheSoapAmbulatorialGerado = resp.soap.textoProntuario;
-          if (preResultado) preResultado.textContent = cacheSoapAmbulatorialGerado;
-          copiarToast('SOAP Ambulatorial gerado com sucesso!');
-        } else {
-          throw new Error(resp?.erro || 'Resposta inválida do servidor');
-        }
+      let resp = null;
+      try {
+        resp = await cockpitRpc('cockpitSoapAmbulatorial', [params]);
       } catch (err) {
-        if (preResultado) preResultado.textContent = 'Erro ao gerar SOAP: ' + err.message;
-        copiarToast('Falha ao conectar com o backend.');
+        resp = gerarSOAPAmbulatorialOfflineLocal(params);
+      }
+
+      if (resp && resp.soap && resp.soap.textoProntuario) {
+        cacheSoapAmbulatorialGerado = resp.soap.textoProntuario;
+        if (preResultado) preResultado.textContent = cacheSoapAmbulatorialGerado;
+        copiarToast(resp.offline ? 'SOAP gerado localmente (Offline Seguro)!' : 'SOAP Ambulatorial gerado com sucesso!');
+      } else {
+        if (preResultado) preResultado.textContent = 'Erro ao processar SOAP ambulatorial.';
+        copiarToast('Falha ao gerar SOAP.');
       }
     }
 
@@ -5940,25 +7982,28 @@
       if (preResultado) preResultado.textContent = 'Gerando atestado médico oficial...';
       if (boxResultado) boxResultado.classList.remove('hidden');
 
-      try {
-        const resp = await cockpitRpc('cockpitGerarAtestadoTexto', [{
-          pacienteNome: paciente,
-          pacienteDoc: doc,
-          dias: dias,
-          cid: motivo,
-          incluirCid: incluirCid
-        }]);
+      const params = {
+        pacienteNome: paciente,
+        pacienteDoc: doc,
+        dias: dias,
+        cid: motivo,
+        incluirCid: incluirCid
+      };
 
-        if (resp && resp.textoAtestado) {
-          cacheAtestadoCfmGerado = resp.textoAtestado;
-          if (preResultado) preResultado.textContent = cacheAtestadoCfmGerado;
-          copiarToast('Atestado CFM gerado!');
-        } else {
-          throw new Error(resp?.erro || 'Resposta inválida do servidor');
-        }
+      let resp = null;
+      try {
+        resp = await cockpitRpc('cockpitGerarAtestadoTexto', [params]);
       } catch (err) {
-        if (preResultado) preResultado.textContent = 'Erro ao gerar atestado: ' + err.message;
-        copiarToast('Falha ao conectar com o backend.');
+        resp = gerarAtestadoOfflineLocal(params);
+      }
+
+      if (resp && resp.textoAtestado) {
+        cacheAtestadoCfmGerado = resp.textoAtestado;
+        if (preResultado) preResultado.textContent = cacheAtestadoCfmGerado;
+        copiarToast(resp.offline ? 'Atestado gerado localmente (Offline Seguro)!' : 'Atestado CFM gerado!');
+      } else {
+        if (preResultado) preResultado.textContent = 'Erro ao processar atestado médico.';
+        copiarToast('Falha ao gerar atestado.');
       }
     }
 
@@ -6265,6 +8310,341 @@
         return;
       }
       copiarTextoClipboard(cacheResumoPrenatalGerado, 'Resumo de Pré-Natal copiado para o PEP!');
+    }
+
+    let cacheLaudoSorologiasGerado = '';
+
+    function interpretarSorologiasOfflineLocal(dados) {
+      dados = dados || {};
+      const avaliados = [];
+      const alertasCriticos = [];
+
+      function norm(val) {
+        if (!val) return '';
+        return String(val).toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
+      function ehReagente(str) {
+        if (!str) return false;
+        const s = norm(str);
+        if (s.indexOf('nao') >= 0 || s.indexOf('neg') >= 0 || s === '-' || s.indexOf('ausente') >= 0) return false;
+        return s.indexOf('rea') >= 0 || s.indexOf('pos') >= 0 || s === '+' || s.indexOf('1:') >= 0;
+      }
+
+      const sem = Number(dados.semanasGestacao) || 0;
+
+      // 1. Glicemia
+      const gj = Number(dados.glicemiaJejum);
+      if (!isNaN(gj) && gj > 0) {
+        const it = { exame: 'Glicemia de Jejum', valor: gj + ' mg/dL' };
+        if (gj < 92) {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Glicemia de jejum dentro dos limites fisiológicos.';
+          it.conduta = 'Realizar TOTG 75g universal entre 24 e 28 semanas de gestação.';
+        } else if (gj >= 92 && gj <= 125) {
+          it.status = 'CRITICO';
+          it.diagnostico = 'DIABETES MELLITUS GESTACIONAL (DMG) CONFIRMADO.';
+          it.conduta = 'Glicemia de jejum entre 92 e 125 mg/dL no 1º trimestre JÁ FIRMA DIAGNÓSTICO DEFINITIVO de DMG (dispensa e contraindica TOTG 75g). Iniciar Terapia Nutricional, MEV e automonitorização glicêmica capilar.';
+          alertasCriticos.push('🩸 DMG CONFIRMADO NO 1º TRI (GJ ' + gj + ' mg/dL): Manejo de DMG imediato; contraindicado TOTG 75g.');
+        } else {
+          it.status = 'CRITICO';
+          it.diagnostico = 'DIABETES MELLITUS PRÉ-GESTACIONAL (OVERT DIABETES).';
+          it.conduta = 'Glicemia de jejum >= 126 mg/dL indica diabetes prévio. Encaminhar urgente ao PNAR e iniciar insulinoterapia.';
+          alertasCriticos.push('🚨 OVERT DIABETES (GJ ' + gj + ' mg/dL): Risco de malformação congênita. PNAR urgente.');
+        }
+        avaliados.push(it);
+      }
+
+      // 2. Toxoplasmose
+      if (dados.toxoIgg || dados.toxoIgm) {
+        const it = { exame: 'Sorologia para Toxoplasmose (IgG e IgM)' };
+        const gPos = ehReagente(dados.toxoIgg);
+        const mPos = ehReagente(dados.toxoIgm);
+        it.valor = 'IgG ' + (gPos ? 'Reagente' : 'Não Reagente') + ' | IgM ' + (mPos ? 'Reagente' : 'Não Reagente');
+        if (!gPos && !mPos) {
+          it.status = 'ATENCAO';
+          it.diagnostico = 'Gestante Suscetível (Sem anticorpos).';
+          it.conduta = 'Profilaxia primária rigorosa (alimentos bem lavados, carnes bem cozidas, sem contato com fezes de gatos). Repetir sorologia a cada trimestre.';
+        } else if (gPos && !mPos) {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Imunidade Pregressa / Infecção Remota.';
+          it.conduta = 'Feto protegido contra toxoplasmose congênita. Não necessita de novas sorologias de rotina.';
+        } else if (!gPos && mPos) {
+          it.status = 'CRITICO';
+          it.diagnostico = 'Infecção Aguda Muito Precoce OU IgM Falso-Positivo.';
+          it.conduta = 'Iniciar IMEDIATAMENTE Espiramicina 1g VO 8/8h e repetir sorologia em 2 a 3 semanas. Encaminhar ao PNAR.';
+          alertasCriticos.push('⚠️ TOXOPLASMOSE IgM+ ISOLADO: Iniciar Espiramicina 1g 8/8h e recoletar em 2-3 semanas.');
+        } else {
+          it.status = 'CRITICO';
+          const avidez = Number(dados.toxoAvidez);
+          if (sem > 0 && sem <= 16 && !isNaN(avidez) && avidez > 0) {
+            if (avidez >= 60) {
+              it.status = 'NORMAL';
+              it.diagnostico = 'Infecção Antiga / Imunidade Pré-Gestacional (Avidez Alta antes de 16s).';
+              it.conduta = 'Avidez ALTA (>= 60%) colhida até 16s confirma infecção prévia à gestação (> 3-4 meses). Risco fetal afastado.';
+            } else if (avidez < 50) {
+              it.diagnostico = 'INFECÇÃO AGUDA GESTACIONAL CONFIRMADA (Avidez Baixa < 50%).';
+              it.conduta = 'Avidez BAIXA (< 50%) até 16s confirma infecção na gestação. Iniciar/manter Espiramicina 1g 8/8h e encaminhar PNAR para amniocentese com PCR a partir de 18s.';
+              alertasCriticos.push('🚨 TOXOPLASMOSE AGUDA CONFIRMADA: Espiramicina 1g 8/8h e PNAR para amniocentese a partir de 18s.');
+            } else {
+              it.diagnostico = 'Avidez Intermediária (50 a 59%).';
+              it.conduta = 'Resultado indeterminado. Tratar preventivamente como infecção aguda com Espiramicina 1g 8/8h e encaminhar ao PNAR.';
+            }
+          } else {
+            it.diagnostico = 'IgG e IgM Reagentes (Aguardando / Sem teste de avidez precoce).';
+            it.conduta = 'Se IG <= 16s, solicitar Teste de Avidez urgente e iniciar Espiramicina 1g 8/8h. Se > 16s, assumir infecção aguda e referenciar ao PNAR.';
+            alertasCriticos.push('⚠️ TOXOPLASMOSE IgG+ IgM+: Iniciar Espiramicina 1g 8/8h e investigar no PNAR.');
+          }
+        }
+        avaliados.push(it);
+      }
+
+      // 3. Sífilis
+      if (dados.vdrl) {
+        const it = { exame: 'Rastreio de Sífilis (VDRL / Teste Rápido)', valor: String(dados.vdrl) };
+        if (ehReagente(dados.vdrl)) {
+          it.status = 'CRITICO';
+          it.diagnostico = 'SÍFILIS NA GESTANTE CONFIRMADA.';
+          it.conduta = 'Penicilina G Benzatina 2.400.000 UI IM por semana por 3 semanas (Dose total: 7.200.000 UI). Intervalo máximo entre doses de 7 a 9 dias (se > 9 dias, reiniciar ciclo). Tratar simultaneamente o parceiro sexual e notificar (SINAN). VDRL mensal.';
+          alertasCriticos.push('🚨 SÍFILIS NA GESTAÇÃO: Penicilina Benzatina imediata e convocação do parceiro!');
+        } else {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Não Reagente.';
+          it.conduta = 'Repetir no 3º trimestre e no momento do parto.';
+        }
+        avaliados.push(it);
+      }
+
+      // 4. HIV
+      if (dados.hiv) {
+        const it = { exame: 'Rastreio de HIV', valor: String(dados.hiv) };
+        if (ehReagente(dados.hiv)) {
+          it.status = 'CRITICO';
+          it.diagnostico = 'INFECÇÃO PELO HIV EM GESTANTE.';
+          it.conduta = 'Iniciar TARV imediatamente (Dolutegravir + Tenofovir + Lamivudina). Solicitar Carga Viral e CD4. Encaminhar ao SAE/PNAR. CONTRAINDICAÇÃO ABSOLUTA DE AMAMENTAÇÃO (prescrever Cabergolina 1mg dose única no pós-parto).';
+          alertasCriticos.push('🚨 GESTANTE HIV+: Iniciar TARV no ato e CONTRAINDICAR AMAMENTAÇÃO.');
+        } else {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Não Reagente.';
+          it.conduta = 'Repetir no 3º trimestre e na admissão do parto.';
+        }
+        avaliados.push(it);
+      }
+
+      // 5. Hepatite B
+      if (dados.hbsag) {
+        const it = { exame: 'Hepatite B (HBsAg)', valor: String(dados.hbsag) };
+        if (ehReagente(dados.hbsag)) {
+          it.status = 'CRITICO';
+          it.diagnostico = 'HBsAg REAGENTE — HEPATITE B CRÔNICA/ATIVA.';
+          it.conduta = 'Encaminhar ao PNAR para HBV-DNA e transaminases. CONDUTA OBRIGATÓRIA NO RECÉM-NASCIDO: Administrar Vacina de Hepatite B + Imunoglobulina Humana Específica (HBIG 0,5 mL IM) nas primeiras 12 horas de vida.';
+          alertasCriticos.push('🚨 HBsAg REAGENTE: Prescrever Vacina + HBIG no RN nas primeiras 12h de vida!');
+        } else {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Não Reagente.';
+          it.conduta = 'Verificar vacinação da gestante (3 doses de vacina hepatite B se suscetível).';
+        }
+        avaliados.push(it);
+      }
+
+      // 6. Urocultura
+      if (dados.urocultura) {
+        const it = { exame: 'Urocultura / Urina', valor: String(dados.urocultura) };
+        const uPos = norm(dados.urocultura).indexOf('pos') >= 0 || norm(dados.urocultura).indexOf('coli') >= 0 || norm(dados.urocultura).indexOf('ufc') >= 0;
+        if (uPos) {
+          it.status = 'CRITICO';
+          it.diagnostico = 'BACTERIÚRIA ASSINTOMÁTICA / ITU NA GESTAÇÃO.';
+          it.conduta = 'Tratamento compulsório na gestante para prevenir pielonefrite e prematuridade. Opções de 1ª linha: Fosfomicina 3g VO dose única OU Cefalexina 500mg VO 6/6h por 7 dias. Colher urocultura de controle de cura 7-14 dias pós-tratamento.';
+          alertasCriticos.push('⚠️ BACTERIÚRIA NA GESTAÇÃO: Tratar com Fosfomicina 3g ou Cefalexina por 7 dias.');
+        } else {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Urocultura Negativa.';
+          it.conduta = 'Repetir no 3º trimestre de rotina.';
+        }
+        avaliados.push(it);
+      }
+
+      // 7. Hemoglobina
+      const hb = Number(dados.hb);
+      if (!isNaN(hb) && hb > 0) {
+        const it = { exame: 'Hemoglobina Materna', valor: hb + ' g/dL' };
+        if (hb >= 11.0) {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Ausência de Anemia.';
+          it.conduta = 'Manter profilaxia com Sulfato Ferroso (40 mg Fe elementar/dia) a partir da 20ª semana.';
+        } else if (hb >= 8.0) {
+          it.status = 'ATENCAO';
+          it.diagnostico = 'ANEMIA GESTACIONAL LEVE A MODERADA (Hb 8,0 a 10,9 g/dL).';
+          it.conduta = 'Iniciar dose terapêutica de Sulfato Ferroso: 120 a 200 mg de ferro elementar/dia. Repetir hemograma em 30 a 60 dias.';
+          alertasCriticos.push('⚠️ ANEMIA GESTACIONAL (Hb ' + hb + ' g/dL): Elevar Sulfato Ferroso para 120-200mg Fe/dia.');
+        } else {
+          it.status = 'CRITICO';
+          it.diagnostico = 'ANEMIA GESTACIONAL GRAVE (Hb < 8,0 g/dL).';
+          it.conduta = 'Encaminhar imediatamente ao PNAR / Serviço Hospitalar para investigação e Ferro Parenteral IV.';
+          alertasCriticos.push('🚨 ANEMIA GRAVE NA GESTANTE (Hb ' + hb + ' g/dL): PNAR / Ferro IV imediato.');
+        }
+        avaliados.push(it);
+      }
+
+      // 8. Rh e Coombs
+      if (dados.rh) {
+        const it = { exame: 'Fator Rh e Coombs Indireto', valor: String(dados.rh) + (dados.coombs ? ' / Coombs: ' + dados.coombs : '') };
+        const rhNeg = norm(dados.rh).indexOf('neg') >= 0 || norm(dados.rh) === '-';
+        if (!rhNeg) {
+          it.status = 'NORMAL';
+          it.diagnostico = 'Mãe Rh Positivo.';
+          it.conduta = 'Sem risco de aloimunização Rh(D). Seguimento habitual.';
+        } else {
+          const coombsPos = ehReagente(dados.coombs);
+          if (!coombsPos) {
+            it.status = 'ATENCAO';
+            it.diagnostico = 'Mãe Rh Negativo com Coombs Indireto Negativo (Não Sensibilizada).';
+            it.conduta = 'Repetir Coombs Indireto mensalmente a partir de 24 semanas. Administrar Imunoglobulina Anti-D 300 mcg IM na 28ª semana e pós-parto se RN Rh+.';
+          } else {
+            it.status = 'CRITICO';
+            it.diagnostico = 'MÃE RH NEGATIVO COM COOMBS POSITIVO (ALOIMUNIZADA).';
+            it.conduta = 'Aloimunização Rh instalada. NÃO aplicar Anti-D. Titular Coombs indireto: se >= 1:16, encaminhar urgente ao PNAR para Doppler de Artéria Cerebral Média (ACM).';
+            alertasCriticos.push('🚨 ALOIMUNIZAÇÃO Rh CONFIRMADA (Coombs+): Encaminhar urgente ao PNAR para Doppler de ACM.');
+          }
+        }
+        avaliados.push(it);
+      }
+
+      const linhas = [
+        '======================================================================',
+        '      PAINEL DE INTERPRETAÇÃO DE SOROLOGIAS E EXAMES DE PRÉ-NATAL     ',
+        '======================================================================',
+        'Diretrizes: Ministério da Saúde (MS) & FEBRASGO [OFFLINE]',
+        'Total de Exames Analisados: ' + avaliados.length
+      ];
+      if (alertasCriticos.length > 0) {
+        linhas.push('----------------------------------------------------------------------');
+        linhas.push('🚨 ALERTAS CRÍTICOS BEIRA-LEITO:');
+        alertasCriticos.forEach(a => linhas.push('• ' + a));
+      }
+      linhas.push('----------------------------------------------------------------------');
+      linhas.push('PARECER DETERMINÍSTICO E CONDUTAS DETALHADAS:');
+      avaliados.forEach(it => {
+        const ico = it.status === 'CRITICO' ? '🔴' : (it.status === 'ATENCAO' ? '🟡' : '🟢');
+        linhas.push(ico + ' [' + it.exame + ']: ' + it.valor);
+        linhas.push('   Diagnóstico: ' + it.diagnostico);
+        linhas.push('   Conduta Imediata: ' + it.conduta);
+        linhas.push('');
+      });
+
+      return {
+        sucesso: true,
+        avaliados: avaliados,
+        alertasCriticos: alertasCriticos,
+        textoFormatado: linhas.join('\n')
+      };
+    }
+
+    async function interpretarSorologiasModal() {
+      hapticFeedback('medium');
+      const gjVal = document.getElementById('pn-soro-gj')?.value?.trim();
+      const semVal = document.getElementById('pn-soro-sem')?.value?.trim();
+      const toxIggVal = document.getElementById('pn-soro-toxo-igg')?.value;
+      const toxIgmVal = document.getElementById('pn-soro-toxo-igm')?.value;
+      const avidezVal = document.getElementById('pn-soro-avidez')?.value?.trim();
+      const vdrlVal = document.getElementById('pn-soro-vdrl')?.value?.trim();
+      const hivVal = document.getElementById('pn-soro-hiv')?.value;
+      const hbsagVal = document.getElementById('pn-soro-hbsag')?.value;
+      const uroVal = document.getElementById('pn-soro-uro')?.value?.trim();
+      const hbVal = document.getElementById('pn-soro-hb')?.value?.trim();
+      const rhVal = document.getElementById('pn-soro-rh')?.value;
+      const coombsVal = document.getElementById('pn-soro-coombs')?.value;
+
+      const params = {};
+      if (gjVal) params.glicemiaJejum = parseFloat(gjVal);
+      if (semVal) params.semanasGestacao = parseInt(semVal, 10);
+      if (toxIggVal) params.toxoIgg = toxIggVal;
+      if (toxIgmVal) params.toxoIgm = toxIgmVal;
+      if (avidezVal) params.toxoAvidez = parseFloat(avidezVal);
+      if (vdrlVal) params.vdrl = vdrlVal;
+      if (hivVal) params.hiv = hivVal;
+      if (hbsagVal) params.hbsag = hbsagVal;
+      if (uroVal) params.urocultura = uroVal;
+      if (hbVal) params.hb = parseFloat(hbVal);
+      if (rhVal) params.rh = rhVal;
+      if (coombsVal) params.coombs = coombsVal;
+
+      if (Object.keys(params).length === 0) {
+        copiarToast('Preencha ao menos um exame para interpretação.');
+        return;
+      }
+
+      const boxRes = document.getElementById('pn-box-resultado-soro');
+      const containerAlertas = document.getElementById('pn-soro-alertas-criticos');
+      const containerAvaliados = document.getElementById('pn-soro-lista-avaliados');
+
+      try {
+        let resp = null;
+        try {
+          resp = await cockpitRpc('cockpitInterpretarSorologiasPrenatal', [params]);
+        } catch (netErr) {
+          resp = interpretarSorologiasOfflineLocal(params);
+        }
+
+        if (resp && resp.sucesso && resp.avaliados) {
+          cacheLaudoSorologiasGerado = resp.textoFormatado;
+          if (boxRes) boxRes.classList.remove('hidden');
+
+          if (containerAlertas) {
+            if (resp.alertasCriticos && resp.alertasCriticos.length > 0) {
+              containerAlertas.innerHTML = resp.alertasCriticos.map(a => `
+                <div class="p-2 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-200 text-[11px] font-semibold flex items-start gap-1.5">
+                  <span class="mt-0.5">⚠️</span>
+                  <span>${a}</span>
+                </div>
+              `).join('');
+            } else {
+              containerAlertas.innerHTML = `
+                <div class="p-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold">
+                  ✅ Nenhum alerta crítico detectado no painel analisado.
+                </div>
+              `;
+            }
+          }
+
+          if (containerAvaliados) {
+            containerAvaliados.innerHTML = resp.avaliados.map(it => {
+              const badgeClass = it.status === 'CRITICO'
+                ? 'bg-rose-500/25 text-rose-300 border-rose-500/40'
+                : (it.status === 'ATENCAO'
+                  ? 'bg-amber-500/25 text-amber-300 border-amber-500/40'
+                  : 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40');
+              const badgeText = it.status === 'CRITICO' ? '🔴 Crítico' : (it.status === 'ATENCAO' ? '🟡 Atenção' : '🟢 Normal');
+              return `
+                <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-white text-[11.5px]">${it.exame}</span>
+                    <span class="text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${badgeClass}">${badgeText}</span>
+                  </div>
+                  <div class="text-[10.5px] text-slate-400"><strong class="text-slate-300">Valor informado:</strong> ${it.valor}</div>
+                  <div class="text-[11px] font-semibold text-slate-200"><strong class="text-slate-400">Diagnóstico:</strong> ${it.diagnostico}</div>
+                  <div class="p-2 rounded-lg bg-slate-950/70 border border-slate-800/80 text-[10.5px] text-pink-200/90 leading-relaxed">
+                    <strong class="text-pink-400 block mb-0.5">Conduta Imediata:</strong> ${it.conduta}
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+
+          copiarToast('Laudo de sorologias interpretado!');
+        } else {
+          throw new Error(resp?.erro || 'Falha ao interpretar sorologias.');
+        }
+      } catch (e) {
+        copiarToast('Erro: ' + e.message);
+      }
+    }
+
+    function copiarLaudoSorologiasParaPep() {
+      if (!cacheLaudoSorologiasGerado) {
+        copiarToast('Interprete as sorologias antes de copiar.');
+        return;
+      }
+      copiarTextoClipboard(cacheLaudoSorologiasGerado, 'Laudo de Sorologias copiado para o PEP!');
     }
 
     // =========================================================================
