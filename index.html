@@ -197,41 +197,158 @@
     <!-- =================================================================== -->
     <!-- ABA 2: PLANTÃO & LEITOS (ENFERMARIA SBAR) -->
     <!-- =================================================================== -->
-    <div id="tab-leitos" class="tab-pane hidden space-y-3.5">
-      <div class="glass-card rounded-xl p-3.5 flex items-center justify-between">
-        <div>
-          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-            <i data-lucide="hospital" class="w-3.5 h-3.5 text-indigo-400"></i> Painel de Leitos da Enfermaria
-          </h3>
-          <p class="text-[10px] text-slate-400 mt-0.5">Controle rápido de gravidade e passagem de plantão</p>
+    <div id="tab-leitos" class="tab-pane hidden space-y-3">
+      <!-- Painel Superior de Censo & Ações -->
+      <div class="glass-card rounded-xl p-3 sm:p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="hospital" class="w-3.5 h-3.5 text-indigo-400"></i> Painel de Leitos da Enfermaria
+            </h3>
+            <p class="text-[10px] text-slate-400 mt-0.5">Triagem de gravidade beira-leito e passagem SBAR</p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="carregarLeitos(true)" title="Atualizar leitos" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition active:scale-[0.98]">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="gerarSBARProntuario()" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold shadow-md shadow-indigo-600/20 flex items-center gap-1.5 transition active:scale-[0.98]">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> SBAR Geral
+            </button>
+          </div>
         </div>
-        <button onclick="gerarSBARProntuario()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold shadow-md shadow-indigo-600/20 flex items-center gap-1.5 transition">
-          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar SBAR
-        </button>
+
+        <!-- Censo Dinâmico / Indicadores Rápidos de Gravidade -->
+        <div class="grid grid-cols-4 gap-1.5 pt-0.5" id="censo-leitos-metricas">
+          <div class="bg-slate-900/90 border border-slate-800 rounded-lg p-1.5 text-center">
+            <div class="text-[9px] text-slate-400 font-medium">Ocupados</div>
+            <div id="censo-total-ocupados" class="text-xs font-bold text-white font-mono">0</div>
+          </div>
+          <div class="bg-rose-950/30 border border-rose-500/30 rounded-lg p-1.5 text-center">
+            <div class="text-[9px] text-rose-300 font-medium">🚨 Instáveis</div>
+            <div id="censo-total-instavel" class="text-xs font-bold text-rose-400 font-mono">0</div>
+          </div>
+          <div class="bg-amber-950/30 border border-amber-500/30 rounded-lg p-1.5 text-center">
+            <div class="text-[9px] text-amber-300 font-medium">⚠️ Vigilância</div>
+            <div id="censo-total-vigilancia" class="text-xs font-bold text-amber-400 font-mono">0</div>
+          </div>
+          <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-lg p-1.5 text-center">
+            <div class="text-[9px] text-emerald-300 font-medium">✅ Estáveis</div>
+            <div id="censo-total-estavel" class="text-xs font-bold text-emerald-400 font-mono">0</div>
+          </div>
+        </div>
+
+        <!-- Barra de Busca Instantânea de Leitos -->
+        <div class="relative">
+          <input type="text" id="busca-leitos" oninput="filtrarLeitos()" placeholder="Buscar por leito, diagnóstico, droga ou conduta..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-lg pl-8 pr-8 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2"></i>
+          <button id="btn-limpar-busca-leitos" onclick="limparBuscaLeitos()" class="hidden absolute right-2.5 top-2 text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Chips de Filtro Rápido por Gravidade (Scroll Horizontal) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10.5px] font-semibold no-scrollbar" id="filtro-leitos-chips">
+          <button onclick="definirFiltroLeito('todos', this)" class="chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-indigo-600/30 text-indigo-200 border border-indigo-500/50 transition">Todos (<span id="cont-filtro-todos">0</span>)</button>
+          <button onclick="definirFiltroLeito('instavel', this)" class="chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🚨 Instáveis (<span id="cont-filtro-instavel">0</span>)</button>
+          <button onclick="definirFiltroLeito('vigilancia', this)" class="chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">⚠️ Vigilância (<span id="cont-filtro-vigilancia">0</span>)</button>
+          <button onclick="definirFiltroLeito('estavel', this)" class="chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">✅ Estáveis (<span id="cont-filtro-estavel">0</span>)</button>
+          <button onclick="definirFiltroLeito('alta', this)" class="chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🛫 Alta (<span id="cont-filtro-alta">0</span>)</button>
+        </div>
       </div>
 
-      <!-- Lista de Leitos -->
-      <div class="space-y-2" id="lista-leitos-container">
-        <!-- Renderizado dinamicamente via JS -->
+      <!-- Lista de Leitos Responsiva -->
+      <div class="space-y-2.5" id="lista-leitos-container">
+        <!-- Renderizado dinamicamente via JS com cards de alta legibilidade -->
       </div>
     </div>
 
     <!-- =================================================================== -->
     <!-- ABA 3: PRESCRIÇÃO & REMUME -->
     <!-- =================================================================== -->
-    <div id="tab-remume" class="tab-pane hidden space-y-3.5">
-      <div class="glass-card rounded-xl p-3.5 space-y-2.5">
-        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-          <i data-lucide="pill" class="w-3.5 h-3.5 text-rose-400"></i> Guia Rápido REMUME Ribeirão Preto
-        </h3>
+    <div id="tab-remume" class="tab-pane hidden space-y-3">
+      <!-- BANDEJA / PAINEL RETRÁTIL DE PRESCRIÇÃO RÁPIDA BEIRA-LEITO -->
+      <div id="card-prescricao-rapida" class="glass-card rounded-xl border border-rose-500/30 p-3 sm:p-3.5 space-y-2.5 shadow-lg shadow-rose-950/20">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs">
+              <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+                Prescrição Rápida do Plantão
+              </h3>
+              <p class="text-[10px] text-slate-400" id="prescricao-itens-contagem">0 itens selecionados</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="copiarPrescricaoRapidaFormatada()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-md shadow-emerald-900/30 flex items-center gap-1 transition active:scale-[0.98]">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Prescrição
+            </button>
+            <button onclick="limparPrescricaoRapida()" title="Limpar itens" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition active:scale-[0.98]">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Presets / Kits Rápidos em 1 Toque -->
+        <div class="space-y-1 pt-0.5">
+          <div class="text-[9.5px] uppercase tracking-wider font-semibold text-slate-400">Kits de Conduta em 1 Toque:</div>
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10px] font-semibold no-scrollbar">
+            <button onclick="adicionarKitPrescricao('sintomaticos')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+              <span>💊 Sintomáticos Básicos</span>
+            </button>
+            <button onclick="adicionarKitPrescricao('profilaxia')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+              <span>🛡️ Profilaxia Hospitalar</span>
+            </button>
+            <button onclick="adicionarKitPrescricao('hidratacao')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+              <span>💧 Hidratação SF 0.9%</span>
+            </button>
+            <button onclick="adicionarKitPrescricao('analgesia_forte')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition flex items-center gap-1 active:scale-[0.97]">
+              <span>⚡ Tramadol + Dipirona</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lista de Itens na Prescrição Atual -->
+        <div id="prescricao-itens-container" class="space-y-1.5 max-h-36 overflow-y-auto p-2 rounded-lg bg-slate-900/90 border border-slate-800 text-xs">
+          <p id="prescricao-vazia-aviso" class="text-slate-500 text-center py-2 text-[11px]">Nenhum item na prescrição. Clique em "+ Prescrever" nos medicamentos abaixo ou use os Kits rápidos.</p>
+        </div>
+      </div>
+
+      <!-- GUIA RÁPIDO REMUME RIBEIRÃO PRETO COM FILTROS DE CLASSE -->
+      <div class="glass-card rounded-xl p-3 sm:p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="pill" class="w-3.5 h-3.5 text-rose-400"></i> Guia Rápido REMUME Ribeirão Preto
+          </h3>
+          <button onclick="carregarRemume(true)" class="text-[10px] text-brand-400 hover:text-brand-300 flex items-center gap-1">
+            <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i> Atualizar
+          </button>
+        </div>
+
+        <!-- Campo de Busca com Botão de Limpar -->
         <div class="relative">
-          <input type="text" id="busca-remume" oninput="filtrarRemume()" placeholder="Buscar medicamento ou apresentação..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          <input type="text" id="busca-remume" oninput="filtrarRemume()" placeholder="Buscar medicamento, dose ou apresentação..." class="w-full bg-slate-900 border border-slate-700/80 rounded-lg pl-8 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
+          <button id="btn-limpar-busca-remume" onclick="limparBuscaRemume()" class="hidden absolute right-2.5 top-2.5 text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Chips de Classes Farmacológicas com Scroll Horizontal -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[10.5px] font-semibold no-scrollbar" id="filtro-remume-categorias">
+          <button onclick="definirCategoriaRemume('todas', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-200 border border-rose-500/40 transition">Todas</button>
+          <button onclick="definirCategoriaRemume('antimicrobianos', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🦠 Antibióticos</button>
+          <button onclick="definirCategoriaRemume('analgesia', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">💊 Analgesia & AINE</button>
+          <button onclick="definirCategoriaRemume('cardio', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🫀 Cardio & HAS</button>
+          <button onclick="definirCategoriaRemume('gastro', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🧪 Gastro & IBP</button>
+          <button onclick="definirCategoriaRemume('psico', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🧠 Psico & Sedação</button>
+          <button onclick="definirCategoriaRemume('diabetes', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">💉 Insulinas & DM</button>
+          <button onclick="definirCategoriaRemume('respiratorio', this)" class="chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🫁 Respiratório</button>
         </div>
       </div>
 
       <p id="remume-status" role="status" class="text-xs text-slate-400">Catálogo e apresentações da base usada pelo bot.</p>
-      <button onclick="carregarRemume(true)" class="text-xs text-brand-400 px-3 py-2">Atualizar catálogo</button>
 
       <!-- Lista de Fórmulas REMUME -->
       <div class="space-y-2" id="lista-remume-container">
@@ -634,6 +751,9 @@
           <div class="flex flex-wrap gap-1.5">
             <button onclick="abrirModalSinteseDiaSOAP()" class="px-2.5 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold hover:bg-indigo-500/30 flex items-center gap-1 transition">
               <i data-lucide="layers" class="w-3 h-3"></i> Síntese do Dia (SOAP)
+            </button>
+            <button onclick="navegarAba('tab-remume', 'Prescrição & REMUME')" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+              <i data-lucide="clipboard-list" class="w-3 h-3"></i> Prescrição Rápida
             </button>
             <button onclick="executarAcaoConversa('plano')" class="px-2.5 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-semibold hover:bg-purple-500/30 flex items-center gap-1 transition">
               <i data-lucide="file-check" class="w-3 h-3"></i> Fechar Plano
@@ -1138,9 +1258,6 @@
     // 1. Inicialização do Telegram WebApp SDK e Persistência de Sessão (PWA / Web)
     const tg = window.Telegram?.WebApp;
     let cockpitSessionRaw = '';
-    try {
-      cockpitSessionRaw = '';
-    } catch (eSession) {}
     let sessionFromUrl = '';
     let customBackendFromUrl = '';
     try {
@@ -1809,59 +1926,428 @@
       } finally { cockpitCarregando = false; }
     }
 
+    // =========================================================================
+    // 3. LEITOS & ENFERMARIA SBAR (TRIAGEM VISUAL & CENSO EM TEMPO REAL)
+    // =========================================================================
+    let filtroLeitoAtual = 'todos';
+    let buscaLeitoTexto = '';
+    let categoriaRemumeAtual = 'todas';
+    let prescricaoItens = [];
+
+    // Carrega prescrição rápida persistida no localStorage
+    try {
+      const prescricaoSalva = localStorage.getItem('ultra_rotina_prescricao_rapida');
+      if (prescricaoSalva) {
+        prescricaoItens = JSON.parse(prescricaoSalva);
+      }
+    } catch(e) {}
+
+    // Motor de Prescrição Rápida Móvel
+    function salvarPrescricaoStorage() {
+      try {
+        localStorage.setItem('ultra_rotina_prescricao_rapida', JSON.stringify(prescricaoItens));
+      } catch(e) {}
+    }
+
+    function renderizarPrescricaoItens() {
+      const container = document.getElementById('prescricao-itens-container');
+      const contagemEl = document.getElementById('prescricao-itens-contagem');
+      if (!container) return;
+      container.replaceChildren();
+
+      if (contagemEl) {
+        contagemEl.textContent = `${prescricaoItens.length} ${prescricaoItens.length === 1 ? 'item selecionado' : 'itens selecionados'}`;
+      }
+
+      if (!prescricaoItens.length) {
+        const p = document.createElement('p');
+        p.id = 'prescricao-vazia-aviso';
+        p.className = 'text-slate-500 text-center py-2 text-[11px]';
+        p.textContent = 'Nenhum item na prescrição. Clique em "+ Prescrever" nos medicamentos abaixo ou use os Kits rápidos.';
+        container.append(p);
+        return;
+      }
+
+      prescricaoItens.forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between gap-2 p-1.5 rounded bg-slate-950/80 border border-slate-800 text-xs';
+        
+        const num = document.createElement('span');
+        num.className = 'font-mono text-slate-400 font-bold shrink-0 text-[10px]';
+        num.textContent = `${idx + 1}.`;
+
+        const desc = document.createElement('span');
+        desc.className = 'flex-1 text-slate-100 text-[11px] break-words';
+        desc.textContent = item;
+
+        const btnRemover = document.createElement('button');
+        btnRemover.className = 'text-slate-400 hover:text-rose-400 p-1 shrink-0 transition active:scale-[0.95]';
+        btnRemover.title = 'Remover item';
+        btnRemover.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+        btnRemover.onclick = () => removerItemPrescricao(idx);
+
+        row.append(num, desc, btnRemover);
+        container.append(row);
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function adicionarItemPrescricao(itemTexto) {
+      if (!itemTexto || typeof itemTexto !== 'string') return;
+      const textoLimpo = itemTexto.trim();
+      if (!textoLimpo) return;
+      if (prescricaoItens.includes(textoLimpo)) {
+        copiarToast('Medicamento já está na prescrição!');
+        return;
+      }
+      prescricaoItens.push(textoLimpo);
+      salvarPrescricaoStorage();
+      renderizarPrescricaoItens();
+      hapticFeedback('medium');
+      copiarToast('Adicionado à Prescrição!');
+    }
+
+    function removerItemPrescricao(indice) {
+      if (indice >= 0 && indice < prescricaoItens.length) {
+        prescricaoItens.splice(indice, 1);
+        salvarPrescricaoStorage();
+        renderizarPrescricaoItens();
+        hapticFeedback('light');
+        filtrarRemume();
+      }
+    }
+
+    function limparPrescricaoRapida() {
+      if (!prescricaoItens.length) return;
+      prescricaoItens = [];
+      salvarPrescricaoStorage();
+      renderizarPrescricaoItens();
+      hapticFeedback('light');
+      copiarToast('Prescrição limpa.');
+      filtrarRemume();
+    }
+
+    function adicionarKitPrescricao(tipo) {
+      hapticFeedback('medium');
+      const kits = {
+        sintomaticos: [
+          'Dipirona 1g IV em 100mL SF 0,9% de 6/6h se dor ou febre (Tax >= 37.8°C)',
+          'Ondansetrona 8mg IV de 8/8h se náuseas ou vômitos',
+          'Metoclopramida 10mg IV de 8/8h se vômitos refratários'
+        ],
+        profilaxia: [
+          'Enoxaparina 40mg SC 1x/dia (profilaxia de TEV hospitalar)',
+          'Omeprazol 40mg IV 1x/dia pela manhã em jejum (profilaxia de úlcera de estresse)'
+        ],
+        hidratacao: [
+          'Soro Fisiológico 0,9% 1000 mL IV em 8 horas (42 gotas/min)'
+        ],
+        analgesia_forte: [
+          'Dipirona 1g IV em 100mL SF de 6/6h fixo',
+          'Cloridrato de Tramadol 50mg IV diluído em 100mL SF 0,9% a correr em 20 min de 8/8h se dor EVA >= 7'
+        ]
+      };
+
+      const lista = kits[tipo] || [];
+      let novos = 0;
+      lista.forEach(item => {
+        if (!prescricaoItens.includes(item)) {
+          prescricaoItens.push(item);
+          novos++;
+        }
+      });
+      salvarPrescricaoStorage();
+      renderizarPrescricaoItens();
+      copiarToast(novos > 0 ? `Kit aplicado: +${novos} itens na prescrição` : 'Itens do kit já estavam inclusos.');
+      filtrarRemume();
+    }
+
+    function copiarPrescricaoRapidaFormatada() {
+      if (!prescricaoItens.length) {
+        copiarToast('Nenhum item na prescrição para copiar.');
+        return;
+      }
+      const dataHora = new Date().toLocaleString('pt-BR');
+      let cabecalho = `========================================\n` +
+                      `📋 PRESCRIÇÃO HOSPITALAR BEIRA-LEITO\n` +
+                      `Data: ${dataHora}\n` +
+                      `========================================\n\n`;
+      let corpo = prescricaoItens.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n');
+      let rodape = `\n\n----------------------------------------\n` +
+                   `• Cuidados: Sinais vitais 6/6h, glicemia se DM, cabeceira 30°.\n` +
+                   `• Comunicar: Sinais de alarme, hipotensão (PAS < 90), dor refratária.`;
+      copiarTextoClipboard(cabecalho + corpo + rodape, 'Prescrição copiada no padrão hospitalar!');
+    }
+
+    // Filtros e Gestão de Leitos
+    function filtrarLeitos() {
+      const input = document.getElementById('busca-leitos');
+      const btnLimpar = document.getElementById('btn-limpar-busca-leitos');
+      buscaLeitoTexto = (input ? input.value : '').trim().toLowerCase();
+      if (btnLimpar) {
+        btnLimpar.classList.toggle('hidden', !buscaLeitoTexto);
+      }
+      renderizarLeitos();
+    }
+
+    function limparBuscaLeitos() {
+      const input = document.getElementById('busca-leitos');
+      if (input) input.value = '';
+      filtrarLeitos();
+    }
+
+    function definirFiltroLeito(filtro, botao) {
+      hapticFeedback('light');
+      filtroLeitoAtual = filtro;
+      document.querySelectorAll('.chip-filtro-leito').forEach(b => {
+        b.className = 'chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition';
+      });
+      if (botao) {
+        botao.className = 'chip-filtro-leito whitespace-nowrap px-2.5 py-1 rounded-lg bg-indigo-600/30 text-indigo-200 border border-indigo-500/50 transition';
+      }
+      renderizarLeitos();
+    }
+
+    async function alterarStatusLeitoRapido(numero, version, novoStatus) {
+      hapticFeedback('medium');
+      const leito = cockpitDados?.leitos?.find(l => String(l.numero) === String(numero));
+      if (!leito) return;
+      const versaoAtual = version || leito.version;
+      const rotulos = { estavel: 'Estável', vigilancia: 'Em vigilância', instavel: 'Instável', alta: 'Alta programada' };
+      const rotuloStatus = rotulos[novoStatus] || novoStatus;
+
+      if (isDeviceOffline()) {
+        leito.status = novoStatus;
+        leito.atualizadoEm = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (cockpitDados) {
+          await salvarSnapshotOffline('leitos_dados', cockpitDados);
+        }
+        await enfileirarAcaoOffline('cockpitStatusLeito', [leito.numero, versaoAtual, novoStatus], `Leito ${leito.numero}: ${rotuloStatus}`);
+        copiarToast(`Leito ${leito.numero}: ${rotuloStatus} (salvo localmente)`);
+        renderizarLeitos();
+        atualizarIndicadorRede();
+        return;
+      }
+
+      try {
+        await cockpitRpc('cockpitStatusLeito', leito.numero, versaoAtual, novoStatus);
+        copiarToast(`Leito ${leito.numero}: ${rotuloStatus}`);
+        await carregarLeitos(true);
+      } catch(e) {
+        leito.status = novoStatus;
+        leito.atualizadoEm = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (cockpitDados) {
+          await salvarSnapshotOffline('leitos_dados', cockpitDados);
+        }
+        await enfileirarAcaoOffline('cockpitStatusLeito', [leito.numero, versaoAtual, novoStatus], `Leito ${leito.numero}: ${rotuloStatus}`);
+        copiarToast(`Sem sinal estável. Guardado na fila local.`);
+        renderizarLeitos();
+        atualizarIndicadorRede();
+      }
+    }
+
+    function copiarSBARLeitoIndividual(numero) {
+      hapticFeedback('light');
+      const leito = cockpitDados?.leitos?.find(l => String(l.numero) === String(numero));
+      if (!leito) return;
+      const rotulos = { estavel: 'ESTÁVEL', vigilancia: 'EM VIGILÂNCIA', instavel: 'INSTÁVEL', alta: 'ALTA PROGRAMADA' };
+      const statusTxt = rotulos[leito.status] || leito.status.toUpperCase();
+      const sbarTexto = `[LEITO ${leito.numero} · ${statusTxt}]\n` +
+                        `Atualizado em: ${leito.atualizadoEm || leito.dataISO}\n\n` +
+                        `${leito.dados}`;
+      copiarTextoClipboard(sbarTexto, `SBAR Leito ${leito.numero} copiado!`);
+    }
+
+    function prepararPrescricaoParaLeito(numero) {
+      hapticFeedback('light');
+      navegarAba('tab-remume', 'Prescrição & REMUME');
+      copiarToast(`Prescrevendo para Leito ${numero}. Use os Kits ou o Guia REMUME.`);
+    }
+
     function renderizarLeitos() {
       const container = document.getElementById('lista-leitos-container');
+      if (!container) return;
       container.replaceChildren();
-      if (!cockpitDados?.leitos.length) {container.textContent = 'Nenhum leito registrado no bot.'; return;}
-      cockpitDados.leitos.forEach(l => {
-        const card = document.createElement('div'); card.className = 'glass-card p-3 rounded-xl space-y-2';
-        const titulo = document.createElement('h3'); titulo.textContent = 'Leito ' + l.numero + ' · ' + l.status;
-        const texto = document.createElement('p'); texto.className = 'whitespace-pre-wrap text-sm'; texto.textContent = l.dados;
-        const data = document.createElement('p'); data.className = 'text-xs text-slate-400'; data.textContent = l.dataISO + ' · ' + l.atualizadoEm;
-        const seletor = document.createElement('select'); seletor.className = 'bg-slate-800 p-2 rounded text-sm'; seletor.setAttribute('aria-label', 'Alterar status do leito ' + l.numero);
-        const vazio = document.createElement('option'); vazio.value = ''; vazio.textContent = 'Alterar status…'; seletor.append(vazio);
-        [['estavel','Estável'],['vigilancia','Em vigilância'],['instavel','Instável'],['alta','Alta programada']].forEach(([valor,rotulo])=>{const o=document.createElement('option');o.value=valor;o.textContent=rotulo;seletor.append(o);});
-        seletor.onchange = async () => {
-          if (!seletor.value) return;
-          const novoStatus = seletor.value;
-          const rotuloStatus = seletor.options[seletor.selectedIndex]?.text || novoStatus;
-          seletor.disabled = true;
 
-          // Se estiver offline ou em modo plantão forçado: atualização otimista local
-          if (isDeviceOffline()) {
-            l.status = novoStatus;
-            l.atualizadoEm = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            if (cockpitDados) {
-              await salvarSnapshotOffline('leitos_dados', cockpitDados);
-            }
-            await enfileirarAcaoOffline('cockpitStatusLeito', [l.numero, l.version, novoStatus], `Leito ${l.numero}: ${rotuloStatus}`);
-            copiarToast(`Leito ${l.numero} alterado localmente! Será enviado ao reconectar.`);
-            renderizarLeitos();
-            atualizarIndicadorRede();
-            seletor.disabled = false;
-            return;
-          }
+      const todosLeitos = cockpitDados?.leitos || [];
 
-          try {
-            await cockpitRpc('cockpitStatusLeito', l.numero, l.version, novoStatus);
-            await carregarLeitos(true);
-          } catch(e) {
-            // Se falhou por instabilidade de rede: fallback otimista e enfileiramento
-            l.status = novoStatus;
-            l.atualizadoEm = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            if (cockpitDados) {
-              await salvarSnapshotOffline('leitos_dados', cockpitDados);
-            }
-            await enfileirarAcaoOffline('cockpitStatusLeito', [l.numero, l.version, novoStatus], `Leito ${l.numero}: ${rotuloStatus}`);
-            copiarToast(`Sem sinal estável. Alteração guardada na fila local.`);
-            renderizarLeitos();
-            atualizarIndicadorRede();
-          } finally {
-            seletor.disabled = false;
-          }
-        };
-        card.append(titulo,data,texto,seletor);container.append(card);
+      // Atualiza contadores do censo
+      const totalOcupados = todosLeitos.length;
+      const countInstavel = todosLeitos.filter(l => l.status === 'instavel').length;
+      const countVigilancia = todosLeitos.filter(l => l.status === 'vigilancia').length;
+      const countEstavel = todosLeitos.filter(l => l.status === 'estavel').length;
+      const countAlta = todosLeitos.filter(l => l.status === 'alta').length;
+
+      const elTotal = document.getElementById('censo-total-ocupados');
+      const elInst = document.getElementById('censo-total-instavel');
+      const elVig = document.getElementById('censo-total-vigilancia');
+      const elEst = document.getElementById('censo-total-estavel');
+
+      if (elTotal) elTotal.textContent = totalOcupados;
+      if (elInst) elInst.textContent = countInstavel;
+      if (elVig) elVig.textContent = countVigilancia;
+      if (elEst) elEst.textContent = countEstavel;
+
+      // Atualiza contadores nos chips
+      const chipTodos = document.getElementById('cont-filtro-todos');
+      const chipInst = document.getElementById('cont-filtro-instavel');
+      const chipVig = document.getElementById('cont-filtro-vigilancia');
+      const chipEst = document.getElementById('cont-filtro-estavel');
+      const chipAlta = document.getElementById('cont-filtro-alta');
+
+      if (chipTodos) chipTodos.textContent = totalOcupados;
+      if (chipInst) chipInst.textContent = countInstavel;
+      if (chipVig) chipVig.textContent = countVigilancia;
+      if (chipEst) chipEst.textContent = countEstavel;
+      if (chipAlta) chipAlta.textContent = countAlta;
+
+      if (!todosLeitos.length) {
+        container.textContent = 'Nenhum leito registrado no bot.';
+        return;
+      }
+
+      // Aplica filtros de gravidade e busca
+      const normalizar = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      const termoBusca = normalizar(buscaLeitoTexto);
+
+      const leitosFiltrados = todosLeitos.filter(l => {
+        if (filtroLeitoAtual !== 'todos' && l.status !== filtroLeitoAtual) return false;
+        if (!termoBusca) return true;
+        const textoCompleto = normalizar(`leito ${l.numero} ${l.status} ${l.dados}`);
+        return textoCompleto.includes(termoBusca);
       });
+
+      if (!leitosFiltrados.length) {
+        const msgVazio = document.createElement('div');
+        msgVazio.className = 'glass-card p-4 rounded-xl text-center text-slate-400 text-xs';
+        msgVazio.textContent = 'Nenhum leito encontrado para o filtro selecionado.';
+        container.append(msgVazio);
+        return;
+      }
+
+      leitosFiltrados.forEach(l => {
+        const statusConfig = {
+          instavel: {
+            borda: 'border-l-4 border-l-rose-500 bg-gradient-to-r from-rose-950/25 to-slate-900/80',
+            badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-500/40',
+            rotulo: '🚨 Instável',
+            icone: 'shield-alert'
+          },
+          vigilancia: {
+            borda: 'border-l-4 border-l-amber-500 bg-gradient-to-r from-amber-950/25 to-slate-900/80',
+            badgeClass: 'bg-amber-500/20 text-amber-300 border border-amber-500/40',
+            rotulo: '⚠️ Vigilância',
+            icone: 'alert-triangle'
+          },
+          estavel: {
+            borda: 'border-l-4 border-l-emerald-500 bg-gradient-to-r from-emerald-950/25 to-slate-900/80',
+            badgeClass: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
+            rotulo: '✅ Estável',
+            icone: 'check-circle-2'
+          },
+          alta: {
+            borda: 'border-l-4 border-l-sky-500 bg-gradient-to-r from-sky-950/25 to-slate-900/80',
+            badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-500/40',
+            rotulo: '🛫 Alta programada',
+            icone: 'log-out'
+          }
+        }[l.status] || {
+          borda: 'border-l-4 border-l-slate-600 bg-slate-900/80',
+          badgeClass: 'bg-slate-800 text-slate-300',
+          rotulo: l.status,
+          icone: 'hospital'
+        };
+
+        const card = document.createElement('div');
+        card.className = `glass-card p-3 sm:p-3.5 rounded-xl space-y-2.5 transition ${statusConfig.borda}`;
+
+        // Topo do Card
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between gap-2';
+
+        const titWrapper = document.createElement('div');
+        titWrapper.className = 'flex items-center gap-2';
+        
+        const badgeNumero = document.createElement('span');
+        badgeNumero.className = 'text-xs font-black text-white bg-slate-800/90 px-2 py-0.5 rounded-lg border border-slate-700/80 tracking-wide font-mono';
+        badgeNumero.textContent = `LEITO ${l.numero}`;
+
+        const badgeStatus = document.createElement('span');
+        badgeStatus.className = `text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 ${statusConfig.badgeClass}`;
+        badgeStatus.textContent = statusConfig.rotulo;
+
+        titWrapper.append(badgeNumero, badgeStatus);
+
+        const dataEl = document.createElement('span');
+        dataEl.className = 'text-[10px] text-slate-400 font-mono flex items-center gap-1';
+        dataEl.textContent = l.atualizadoEm || l.dataISO;
+
+        header.append(titWrapper, dataEl);
+
+        // Corpo do Card: dados clínicos
+        const texto = document.createElement('div');
+        texto.className = 'whitespace-pre-wrap text-xs text-slate-200 bg-slate-950/70 p-2.5 rounded-lg border border-slate-800/80 leading-relaxed break-words font-sans';
+        texto.textContent = l.dados;
+
+        // Seletor de Status em 1 Toque (Grade de 4 Chips Táteis para Mobile)
+        const statusBox = document.createElement('div');
+        statusBox.className = 'space-y-1';
+        
+        const labelStatus = document.createElement('div');
+        labelStatus.className = 'text-[9.5px] uppercase tracking-wider font-semibold text-slate-400';
+        labelStatus.textContent = 'Alterar Status em 1 Toque:';
+
+        const btnGrid = document.createElement('div');
+        btnGrid.className = 'grid grid-cols-4 gap-1 text-[10px] font-bold';
+
+        const opcoesStatus = [
+          { val: 'estavel', label: 'Estável', activeClass: 'bg-emerald-600/30 text-emerald-200 border-emerald-500/60 shadow-sm' },
+          { val: 'vigilancia', label: 'Vigilância', activeClass: 'bg-amber-600/30 text-amber-200 border-amber-500/60 shadow-sm' },
+          { val: 'instavel', label: 'Instável', activeClass: 'bg-rose-600/30 text-rose-200 border-rose-500/60 shadow-sm' },
+          { val: 'alta', label: 'Alta', activeClass: 'bg-sky-600/30 text-sky-200 border-sky-500/60 shadow-sm' }
+        ];
+
+        opcoesStatus.forEach(opt => {
+          const btn = document.createElement('button');
+          const isAtivo = l.status === opt.val;
+          btn.className = `py-1.5 px-1 rounded-lg border text-center transition active:scale-[0.96] ${
+            isAtivo
+              ? opt.activeClass
+              : 'bg-slate-900/90 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
+          }`;
+          btn.textContent = opt.label;
+          btn.onclick = () => alterarStatusLeitoRapido(l.numero, l.version, opt.val);
+          btnGrid.append(btn);
+        });
+
+        statusBox.append(labelStatus, btnGrid);
+
+        // Barra de Ações Rápidas por Leito
+        const acoesBar = document.createElement('div');
+        acoesBar.className = 'flex items-center gap-1.5 pt-1 border-t border-slate-800/80';
+
+        const btnSbar = document.createElement('button');
+        btnSbar.className = 'flex-1 py-1 px-2 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold flex items-center justify-center gap-1 transition active:scale-[0.97]';
+        btnSbar.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> Copiar SBAR';
+        btnSbar.onclick = () => copiarSBARLeitoIndividual(l.numero);
+
+        const btnRx = document.createElement('button');
+        btnRx.className = 'flex-1 py-1 px-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[10px] font-bold flex items-center justify-center gap-1 transition active:scale-[0.97]';
+        btnRx.innerHTML = '<i data-lucide="pill" class="w-3 h-3"></i> Prescrever';
+        btnRx.onclick = () => prepararPrescricaoParaLeito(l.numero);
+
+        const btnCalc = document.createElement('button');
+        btnCalc.className = 'py-1 px-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold flex items-center justify-center gap-1 transition active:scale-[0.97]';
+        btnCalc.innerHTML = '<i data-lucide="zap" class="w-3 h-3"></i> Cálculos';
+        btnCalc.onclick = () => navegarAba('tab-calculadoras', 'Emergência & Cálculos');
+
+        acoesBar.append(btnSbar, btnRx, btnCalc);
+
+        card.append(header, texto, statusBox, acoesBar);
+        container.append(card);
+      });
+
+      if (window.lucide) lucide.createIcons();
     }
 
     let passagemPendente = false;
@@ -1874,21 +2360,54 @@
       finally {passagemPendente = false;}
     }
 
-    // Catálogo integral compartilhado com o bot; busca local sem novas consultas.
+    // =========================================================================
+    // 4. PRESCRIÇÃO HOSPITALAR & REMUME RIBEIRÃO PRETO
+    // =========================================================================
     let remumeDatabase = null;
     let remumeCarregando = false;
+
+    // Mapa de palavras-chave por classe farmacológica para busca instantânea beira-leito
+    const REMUME_CATEGORIAS_KEYWORDS = {
+      antimicrobianos: ['amoxi', 'ceftriax', 'cipro', 'azitro', 'metro', 'piperac', 'mero', 'clinda', 'oxacil', 'vanco', 'genta', 'amicac', 'sulfametox', 'fluconazol', 'nitrofurantoina', 'claritro', 'levoflox', 'sulfadiazina', 'penicilina', 'cefalexina', 'doxiciclina', 'ampicilina'],
+      analgesia: ['dipirona', 'paracetamol', 'ibuprofeno', 'cetoprofeno', 'tramadol', 'morfina', 'codeina', 'diclofenaco', 'cetorolaco', 'dipidolor', 'fentanil', 'escopolamina', 'butilbrometo'],
+      cardio: ['losartan', 'enalapril', 'anlodipino', 'atenolol', 'hidroclorotiazida', 'furosemida', 'espironolactona', 'amiodarona', 'metoprolol', 'propranolol', 'captopril', 'carvedilol', 'digoxina', 'nitropruz', 'nitroglic', 'diltiazem', 'clonidina', 'sinvastatina', 'rosuvastatina', 'doxazosina', 'hidralazina'],
+      gastro: ['omeprazol', 'pantoprazol', 'ranitidina', 'ondansetrona', 'metoclopramida', 'dimeticona', 'lactulose', 'domperidona', 'hidroxido de aluminio', 'simeticona', 'bromoprida', 'oleo mineral'],
+      psico: ['diazepam', 'clonazepam', 'midazolam', 'haloperidol', 'risperidona', 'fluoxetina', 'sertralina', 'amitriptilina', 'quetiapina', 'olanzapina', 'clorpromazina', 'fenitoina', 'carbamazepina', 'acido valproico', 'fenobarbital', 'biperideno', 'carbonato de litio'],
+      diabetes: ['metformina', 'glibenclamida', 'gliclazida', 'insulina nph', 'insulina regular'],
+      respiratorio: ['salbutamol', 'fenoterol', 'ipratropio', 'budesonida', 'beclometasona', 'prednisona', 'prednisolona', 'hidrocortisona', 'dexametasona', 'acetilcisteina', 'aminofilina']
+    };
+
+    function limparBuscaRemume() {
+      const input = document.getElementById('busca-remume');
+      if (input) input.value = '';
+      filtrarRemume();
+    }
+
+    function definirCategoriaRemume(cat, botao) {
+      hapticFeedback('light');
+      categoriaRemumeAtual = cat;
+      document.querySelectorAll('.chip-categoria-remume').forEach(b => {
+        b.className = 'chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition';
+      });
+      if (botao) {
+        botao.className = 'chip-categoria-remume whitespace-nowrap px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-200 border border-rose-500/40 transition';
+      }
+      filtrarRemume();
+    }
+
     async function carregarRemume(forcar = false) {
+      renderizarPrescricaoItens();
       if (remumeCarregando) return;
       if (remumeDatabase && !forcar) {filtrarRemume(); return;}
       remumeCarregando = true;
       const aviso = document.getElementById('remume-status');
-      aviso.textContent = 'Carregando catálogo do bot…';
+      if (aviso) aviso.textContent = 'Carregando catálogo do bot…';
 
       if (isDeviceOffline()) {
         const snap = await carregarSnapshotOffline('remume_catalogo');
         if (snap && snap.dados && snap.dados.itens) {
           remumeDatabase = snap.dados.itens;
-          aviso.textContent = snap.dados.fonte + ' · ' + snap.dados.itens.length + ' apresentações (Cache Offline).';
+          if (aviso) aviso.textContent = snap.dados.fonte + ' · ' + snap.dados.itens.length + ' apresentações (Cache Offline).';
           filtrarRemume();
           remumeCarregando = false;
           return;
@@ -1899,34 +2418,95 @@
         const resposta = await cockpitRpc('cockpitRemume');
         remumeDatabase = resposta.itens;
         salvarSnapshotOffline('remume_catalogo', resposta);
-        aviso.textContent = resposta.fonte + ' · ' + resposta.itens.length + ' apresentações. Para prescrever, use a função Prescrever no chat.';
+        if (aviso) aviso.textContent = resposta.fonte + ' · ' + resposta.itens.length + ' apresentações disponíveis.';
         filtrarRemume();
       } catch(e) {
         const snap = await carregarSnapshotOffline('remume_catalogo');
         if (snap && snap.dados && snap.dados.itens) {
           remumeDatabase = snap.dados.itens;
-          aviso.textContent = snap.dados.fonte + ' · ' + snap.dados.itens.length + ' apresentações (Cache Offline de Emergência).';
+          if (aviso) aviso.textContent = snap.dados.fonte + ' · ' + snap.dados.itens.length + ' apresentações (Cache Offline de Emergência).';
           filtrarRemume();
         } else {
           remumeDatabase = null;
-          document.getElementById('lista-remume-container').replaceChildren();
-          aviso.textContent = e.message;
+          const container = document.getElementById('lista-remume-container');
+          if (container) container.replaceChildren();
+          if (aviso) aviso.textContent = e.message;
         }
       } finally {remumeCarregando = false;}
     }
+
     function filtrarRemume() {
       if (!remumeDatabase) return;
-      const normalizar = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-      const busca = normalizar(document.getElementById('busca-remume').value.trim());
-      const filtrados = remumeDatabase.filter(linha => normalizar(linha).includes(busca));
-      const container = document.getElementById('lista-remume-container');container.replaceChildren();
-      if (!filtrados.length) {container.textContent = 'Nenhuma apresentação encontrada.'; return;}
-      filtrados.forEach(linha => {
-        const card = document.createElement('div');card.className = 'glass-card p-3 rounded-xl flex items-center gap-3';
-        const texto = document.createElement('span');texto.className = 'text-sm flex-1';texto.textContent = linha;
-        const copiar = document.createElement('button');copiar.className = 'px-2 py-2 text-xs text-brand-400';copiar.textContent = 'Copiar';
-        copiar.onclick = () => copiarTextoClipboard(linha, 'Apresentação copiada!');card.append(texto,copiar);container.append(card);
+      const normalizar = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      const inputBusca = document.getElementById('busca-remume');
+      const btnLimpar = document.getElementById('btn-limpar-busca-remume');
+      const busca = normalizar(inputBusca ? inputBusca.value.trim() : '');
+      
+      if (btnLimpar) {
+        btnLimpar.classList.toggle('hidden', !busca);
+      }
+
+      const keywordsCat = REMUME_CATEGORIAS_KEYWORDS[categoriaRemumeAtual] || null;
+
+      const filtrados = remumeDatabase.filter(linha => {
+        const linhaNorm = normalizar(linha);
+        if (busca && !linhaNorm.includes(busca)) return false;
+        if (keywordsCat) {
+          const matchCat = keywordsCat.some(kw => linhaNorm.includes(kw));
+          if (!matchCat) return false;
+        }
+        return true;
       });
+
+      const container = document.getElementById('lista-remume-container');
+      if (!container) return;
+      container.replaceChildren();
+
+      if (!filtrados.length) {
+        const vazio = document.createElement('div');
+        vazio.className = 'glass-card p-4 rounded-xl text-center text-slate-400 text-xs';
+        vazio.textContent = 'Nenhuma apresentação encontrada para a pesquisa ou categoria.';
+        container.append(vazio);
+        return;
+      }
+
+      filtrados.forEach(linha => {
+        const card = document.createElement('div');
+        card.className = 'glass-card p-2.5 sm:p-3 rounded-xl flex items-center justify-between gap-2.5 transition hover:border-slate-700';
+
+        const texto = document.createElement('span');
+        texto.className = 'text-xs sm:text-sm text-slate-100 flex-1 leading-snug break-words';
+        texto.textContent = linha;
+
+        const acoes = document.createElement('div');
+        acoes.className = 'flex items-center gap-1.5 shrink-0';
+
+        const copiar = document.createElement('button');
+        copiar.className = 'px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10.5px] font-semibold text-slate-300 transition flex items-center gap-1 active:scale-[0.96]';
+        copiar.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> Copiar';
+        copiar.onclick = () => copiarTextoClipboard(linha, 'Apresentação copiada!');
+
+        const prescrever = document.createElement('button');
+        const jaAdicionado = prescricaoItens.includes(linha.trim());
+        prescrever.className = `px-2 py-1 rounded-md text-[10.5px] font-bold transition flex items-center gap-1 active:scale-[0.96] ${
+          jaAdicionado
+            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+            : 'bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30'
+        }`;
+        prescrever.innerHTML = jaAdicionado 
+          ? '<i data-lucide="check" class="w-3 h-3"></i> Adicionado' 
+          : '<i data-lucide="plus" class="w-3 h-3"></i> Prescrever';
+        prescrever.onclick = () => {
+          adicionarItemPrescricao(linha);
+          filtrarRemume();
+        };
+
+        acoes.append(copiar, prescrever);
+        card.append(texto, acoes);
+        container.append(card);
+      });
+
+      if (window.lucide) lucide.createIcons();
     }
 
     // 5. Calculadoras Clínicas & Sala Vermelha
@@ -3931,6 +4511,7 @@
       processarFilaSincronizacao(true);
 
       // Carrega dados clínicos e perfil ao iniciar
+      renderizarPrescricaoItens();
       carregarLeitos();
       carregarPerfil();
       ['dva-resultado','sri-resultado','crcl-resultado','gaso-resultado'].forEach(id => {
