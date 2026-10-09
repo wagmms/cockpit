@@ -5014,7 +5014,24 @@
       if (chipAlta) chipAlta.textContent = countAlta;
 
       if (!todosLeitos.length) {
-        container.textContent = 'Nenhum leito registrado no bot.';
+        const msgVazio = document.createElement('div');
+        msgVazio.className = 'glass-card p-6 rounded-2xl text-center space-y-3 border border-slate-800/80';
+        msgVazio.innerHTML = `
+          <div class="w-12 h-12 mx-auto rounded-full bg-slate-800/80 flex items-center justify-center text-slate-400">
+            <i data-lucide="bed" class="w-6 h-6 text-slate-400"></i>
+          </div>
+          <div class="space-y-1">
+            <div class="text-xs font-bold text-slate-200">Censo Vazio / Sem Leitos Ativos</div>
+            <div class="text-[11px] text-slate-400 max-w-xs mx-auto">Nenhum paciente internado registrado no bot até o momento.</div>
+          </div>
+          <div class="pt-1 flex justify-center gap-2">
+            <button onclick="copiarToast('Cadastre leitos no Telegram usando /leito <n> <dados> ou pelo hub /enfermaria.');" class="px-3 py-1.5 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 text-[11px] font-bold border border-indigo-500/40 transition">
+              Como Adicionar Leitos
+            </button>
+          </div>
+        `;
+        container.append(msgVazio);
+        if (window.lucide) lucide.createIcons({ root: container });
         return;
       }
 
@@ -5159,7 +5176,7 @@
         container.append(card);
       });
 
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) lucide.createIcons({ root: container });
     }
 
     let passagemPendente = false;
@@ -6271,6 +6288,115 @@
             `• Prescrição de Alta: Corticoide oral (Prednisona 40-50 mg/dia por 5-7 dias) + CI de manutenção (Budesonida 200-400 mcg 12/12h) + SABA de resgate com espaçador + Retorno em 2-7 dias.`;
 
           return saida;
+        } else if (tipo === 'kdigo' || tipo === 'lra') {
+          const crBasal = parseFloat(String(entrada.crBasal || entrada.cr_basal || entrada.creatininaBasal || 0).replace(',', '.'));
+          const crAtual = parseFloat(String(entrada.crAtual || entrada.cr_atual || entrada.creatininaAtual || entrada.creatinina || 0).replace(',', '.'));
+          if (isNaN(crBasal) || crBasal <= 0 || isNaN(crAtual) || crAtual <= 0) {
+            return 'Informe Creatinina Basal e Creatinina Atual válidas (mg/dL).';
+          }
+          const delta = Math.round((crAtual - crBasal) * 100) / 100;
+          const razao = Math.round((crAtual / crBasal) * 100) / 100;
+          let estagio = 0;
+          let descEstagio = 'Sem critérios KDIGO para LRA';
+          let conduta = 'Manter vigilância da função renal e evitar nefrotoxinas.';
+          if (razao >= 3.0 || crAtual >= 4.0 || delta >= 3.0) {
+            estagio = 3;
+            descEstagio = 'KDIGO Estágio 3 (LRA Grave / Falência)';
+            conduta = 'Avaliação nefrológica urgente, suspensão imediata de nefrotóxicos, ajuste de doses e vigilância para indicações de diálise de urgência (mnemônico AEIOU).';
+          } else if (razao >= 2.0) {
+            estagio = 2;
+            descEstagio = 'KDIGO Estágio 2 (LRA Moderada)';
+            conduta = 'Suspender nefrotóxicos, otimizar volemia e perfusão renal, monitorar débito urinário horário e dosar creatinina em 24h.';
+          } else if (delta >= 0.3 || razao >= 1.5) {
+            estagio = 1;
+            descEstagio = 'KDIGO Estágio 1 (LRA Precoce / Leve)';
+            conduta = 'Identificar causas descompensadoras, evitar contraste iodado e AINEs, reidratação criteriosa se hipovolemia.';
+          }
+          let alertaExtremo = '';
+          if (crAtual > 15.0) {
+            alertaExtremo = '\n🚨 CREATININA EXTREMA (> 15 mg/dL): Falência renal terminal com esgotamento de depuração. Risco iminente de uremia ameaçadora à vida e parada cardiorrespiratória por hipercalemia/acidose.';
+          }
+          return `🧪 LRA · CLASSIFICAÇÃO KDIGO [OFFLINE]\n\n` +
+            `🔴 ESTRATIFICAÇÃO:\n• Cr Basal: ${crBasal} mg/dL | Cr Atual: ${crAtual} mg/dL\n• Variação: +${delta} mg/dL (Razão: ${razao}x)\n• Estadiamento: ${descEstagio}\n\n` +
+            `🟡 CONDUTA BEIRA-LEITO:\n• ${conduta}` + alertaExtremo;
+        } else if (tipo === 'curb65' || tipo === 'pac') {
+          const c = Boolean(entrada.c || entrada.confusao);
+          const u = Boolean(entrada.u || entrada.ureiaAlta || (entrada.ureia && parseFloat(entrada.ureia) > 50));
+          const r = Boolean(entrada.r || entrada.taquipneia || (entrada.fr && parseFloat(entrada.fr) >= 30));
+          const b = Boolean(entrada.b || entrada.hipotensao || (entrada.pas && parseFloat(entrada.pas) < 90) || (entrada.pad && parseFloat(entrada.pad) <= 60));
+          const idadeVal = parseFloat(String(entrada.idade || 0).replace(',', '.'));
+          const id65 = Boolean(entrada.idade65 || idadeVal >= 65);
+          const score = (c ? 1 : 0) + (u ? 1 : 0) + (r ? 1 : 0) + (b ? 1 : 0) + (id65 ? 1 : 0);
+          let estr = '';
+          let local = '';
+          let atb = '';
+          if (score <= 1) {
+            estr = 'Baixo Risco (Mortalidade < 3%)';
+            local = 'Tratamento Ambulatorial seguro';
+            atb = 'Amoxicilina 500mg 8/8h VO por 5-7 dias (ou Amoxi + Clavulanato 875/125mg 12/12h se comorbidades; Macrolídeo Azitromicina 500mg/dia se alergia).';
+          } else if (score === 2) {
+            estr = 'Risco Moderado (Mortalidade ~9%)';
+            local = 'Internação em Enfermaria recomendada';
+            atb = 'Betalactâmico IV (Ceftriaxona 1-2g/dia ou Ampicilina/Sulbactam 1.5-3g 6/6h) + Macrolídeo (Azitromicina 500mg/dia).';
+          } else {
+            estr = `Alto Risco (Mortalidade ${score >= 4 ? '> 30%' : '15-20%'})`;
+            local = score >= 3 ? 'Internação Hospitalar / Avaliar vaga de UTI imediata' : 'Internação em Enfermaria com vigilância';
+            atb = 'Ceftriaxona 2g/dia IV + Azitromicina 500mg/dia IV. Se risco de Pseudomonas: Cefepime 2g 8/8h ou Pip-Tazo 4.5g 6/6h. Se risco de MRSA: associar Vancomicina.';
+          }
+          return `🫁 PNEUMONIA ADQUIRIDA NA COMUNIDADE · CURB-65 [OFFLINE]\n\n` +
+            `🔴 ESCORE CURB-65: ${score} ponto(s) — ${estr}\n` +
+            `• Local de Cuidado: ${local}\n\n` +
+            `🟡 CONDUTA ANTIMICROBIANA (SBPT / ATS):\n• ${atb}\n\n` +
+            `⚠️ Critérios de gravidade: Reavaliar se falha clínica em 48-72h.`;
+        } else if (tipo === 'dengue') {
+          const peso = parseFloat(String(entrada.peso || 70).replace(',', '.'));
+          const grupo = String(entrada.grupo || (entrada.choque ? 'D' : (entrada.alarme ? 'C' : (entrada.risco ? 'B' : 'A')))).toUpperCase();
+          let titulo = '';
+          let hidratacao = '';
+          let alertasDengue = '• CONTRAINDICAÇÃO ABSOLUTA: AINEs (Ibuprofeno, Cetoprofeno) e AAS terminantemente proibidos (risco de hemorragia grave).';
+          if (grupo === 'D') {
+            titulo = 'GRUPO D — DENGUE GRAVE / CHOQUE';
+            const bolusMl = Math.round(peso * 20);
+            hidratacao = `Sala Vermelha / UTI imediata.\n• Fase de Expansão: Soro Fisiológico 0,9% ou Ringer Lactato ${bolusMl} mL (${peso} kg x 20 mL/kg) IV RÁPIDO EM 20 MINUTOS.\n• Reavaliar clinicamente e hematócrito. Se sem melhora, repetir expansão até 3 vezes antes de drogas vasoativas.`;
+          } else if (grupo === 'C') {
+            titulo = 'GRUPO C — DENGUE COM SINAIS DE ALARME';
+            const vazao2h = Math.round(peso * 10);
+            hidratacao = `Internação / Leito de observação imediato.\n• Fase Rápida: SF 0,9% ou RL a ${vazao2h} mL/h (${peso} kg x 10 mL/kg/h) nas primeiras 2 HORAS.\n• Fase Manutenção: 25 mL/kg em 6 horas se hematócrito estável e diurese presente.`;
+          } else if (grupo === 'B') {
+            titulo = 'GRUPO B — DENGUE COM FATORES DE RISCO / SEM ALARME';
+            const totalB = Math.round(peso * 80);
+            const oral1Terco = Math.round(totalB / 3);
+            hidratacao = `Hidratação oral supervisionada na UBS/UPA.\n• Volume Total 24h: ${totalB} mL/dia (80 mL/kg/dia).\n• 1º terço (${oral1Terco} mL) com Soro de Reidratação Oral (SRO) nas primeiras 4 horas na unidade.\n• Solicitar Hemograma completo obrigatório e reavaliar com resultado.`;
+          } else {
+            titulo = 'GRUPO A — DENGUE AMBULATORIAL';
+            const totalA = Math.round(peso * 60);
+            const sroA = Math.round(totalA / 3);
+            hidratacao = `Tratamento ambulatorial.\n• Hidratação Oral: ${totalA} mL/dia (60 mL/kg/dia), sendo 1/3 (${sroA} mL) de SRO e 2/3 de líquidos caseiros (água, sucos, água de coco).\n• Sintomáticos: Dipirona ou Paracetamol. Retorno imediato se qualquer sinal de alarme.`;
+          }
+          return `🦟 MANEJO DE DENGUE & ARBOVIROSES (MS 2024) [OFFLINE]\n\n` +
+            `🔴 CLASSIFICAÇÃO: ${titulo}\n\n` +
+            `💧 HIDRATAÇÃO DETERMINÍSTICA (Peso: ${peso} kg):\n• ${hidratacao}\n\n` +
+            `⚠️ ALERTAS DE SEGURANÇA:\n${alertasDengue}`;
+        } else if (tipo === 'crise_has' || tipo === 'has') {
+          const pas = parseFloat(String(entrada.pas || 180).replace(',', '.'));
+          const pad = parseFloat(String(entrada.pad || 110).replace(',', '.'));
+          const loa = Boolean(entrada.loa || entrada.lesaoOrgaoAlvo || entrada.emergencia);
+          let classif = '';
+          let condutaHas = '';
+          if (loa || entrada.disseccao || entrada.eap || entrada.avc || entrada.eclampsia) {
+            classif = 'EMERGÊNCIA HIPERTENSIVA (Risco Iminente de Vida com Lesão de Órgão-Alvo)';
+            condutaHas = '• Encaminhamento imediato para Sala Vermelha / UTI com monitorização contínua e linha arterial.\n• Anti-hipertensivo parenteral em BIC: Nitroprussiato de Sódio (0,3-2 mcg/kg/min) ou Nitroglicerina (se SCA/EAP).\n• Meta: Redução de PAM em no máximo 20-25% na 1ª hora (exceção: Dissecção Aórtica aguda, meta PAS < 120 e FC < 60 em 20 min com betabloqueador primeiro!).';
+          } else if (pas >= 180 || pad >= 120) {
+            classif = 'URGÊNCIA HIPERTENSIVA (PA Severa sem Lesão Aguda de Órgão-Alvo)';
+            condutaHas = '• Redução gradual da PA em 24 a 48 horas (evitar quedas bruscas para prevenir isquemia cerebral/coronariana).\n• Medicação Oral: Captopril 25mg VO ou Clonidina 0.100mg VO.\n• Observação clínica por algumas horas e alta com encaminhamento para UBS/Ambulatório.';
+          } else {
+            classif = 'PSEUDOCRISE HIPERTENSIVA (Elevação Reativa da PA por Dor/Ansiedade/Cefaleia)';
+            condutaHas = '• NÃO prescrever anti-hipertensivos adicionais de emergência.\n• Tratar a causa de base: Repouso em ambiente calmo, analgesia adequada (Dipirona) ou ansiolítico leve se necessário.\n• Reavaliar a PA após 30-60 minutos.';
+          }
+          return `❤️ CRISE HIPERTENSIVA BEIRA-LEITO (SBC 2024) [OFFLINE]\n\n` +
+            `🔴 CLASSIFICAÇÃO (PA: ${pas}/${pad} mmHg):\n• ${classif}\n\n` +
+            `🟡 CONDUTA RECOMENDADA:\n${condutaHas}\n\n` +
+            `⚠️ BLOQUEIO SENTINELA: Contraindicação formal de Nifedipino sublingual de ação rápida (risco de queda pressórica incontrolável, AVC isquêmico e morte).`;
         }
       } catch (e) {
         return 'Erro ao calcular: ' + e.message;
@@ -15628,7 +15754,7 @@
     // Registro do PWA Service Worker (Cache-First 0ms Offline para plantão)
     if ('serviceWorker' in navigator && (window.location.protocol.startsWith('http') || window.location.protocol.startsWith('https'))) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then((reg) => {
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
           console.log('[PWA] Service Worker ativo em modo Cache-First:', reg.scope);
         }).catch((err) => {
           console.warn('[PWA] Service Worker offline não pôde ser registrado:', err.message);
