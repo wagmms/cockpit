@@ -3135,6 +3135,7 @@
         }
       };
     })();
+    if (typeof window !== 'undefined') window.CockpitCrypto = CockpitCrypto;
 
     // =========================================================================
     // 1.1 MOTOR OFFLINE-FIRST (INDEXEDDB VIA DEXIE V2 COM CRIPTOGRAFIA INTEGRAL)
@@ -3509,14 +3510,10 @@
         customBackend = localStorage.getItem('cockpit_backend_url') || '';
       } catch (e) {}
 
-      const activeUrl = customBackend || RENDER_BACKEND;
-      try {
-        const parsed = new URL(activeUrl);
-        const host = parsed.hostname.toLowerCase();
-        if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.') || host.startsWith('172.16.')) {
-          return 'NO_LOCAL';
-        }
-      } catch (e) {}
+      const activeUrl = String(customBackend || RENDER_BACKEND).toLowerCase();
+      if (activeUrl.includes('localhost') || activeUrl.includes('127.0.0.1') || activeUrl.includes('192.168.') || activeUrl.includes('10.') || activeUrl.includes('172.16.')) {
+        return 'NO_LOCAL';
+      }
 
       return 'NUVEM';
     }
@@ -3798,6 +3795,26 @@
       } catch (e) {}
     }
     setTimeout(inicializarCacheProtocolosLocais, 1200);
+
+    if (typeof window !== 'undefined') {
+      window.salvarSnapshotOffline = salvarSnapshotOffline;
+      window.carregarSnapshotOffline = carregarSnapshotOffline;
+      window.salvarProtocoloOffline = salvarProtocoloOffline;
+      window.carregarProtocoloOffline = carregarProtocoloOffline;
+      window.salvarCalculoOffline = salvarCalculoOffline;
+      window.carregarCalculoOffline = carregarCalculoOffline;
+      window.salvarConsultaOffline = salvarConsultaOffline;
+      window.carregarConsultaOffline = carregarConsultaOffline;
+      window.enfileirarAcaoOffline = enfileirarAcaoOffline;
+      window.obterFilaOffline = obterFilaOffline;
+      window.removerItemFilaOffline = removerItemFilaOffline;
+      window.limparFilaOffline = limparFilaOffline;
+      window.detectarModoConexao = detectarModoConexao;
+      window.atualizarIndicadorRede = atualizarIndicadorRede;
+      window.setForcedOfflineState = setForcedOfflineState;
+      window.isForcedOffline = isForcedOffline;
+      window.isDeviceOffline = isDeviceOffline;
+    }
 
     // Dados clínicos vêm do servidor autenticado ou do snapshot local offline.
     let cockpitDados = null;
@@ -4612,14 +4629,38 @@
       resultado.classList.add('whitespace-pre-wrap');
       resultado.textContent = 'Conferindo parâmetros…';
       pedido.timer = setTimeout(async () => {
+        // Se estiver offline, recupera diretamente do cache criptografado de cálculos
+        if (isDeviceOffline()) {
+          const calcCache = await carregarCalculoOffline(tipo, entrada);
+          if (calcCache && calcCache.textoFormatado) {
+            const doc = new DOMParser().parseFromString(calcCache.textoFormatado, 'text/html');
+            resultado.textContent = (doc.body.textContent || '') + '\n\n[Cache Criptografado · Disponível Offline 0ms]';
+            return;
+          }
+          const resLocal = calcularOfflineLocal(tipo, entrada);
+          if (resLocal) {
+            resultado.textContent = resLocal;
+            return;
+          }
+        }
+
         try {
           const resposta = await cockpitRpc('cockpitCalcular', tipo, entrada);
           if (pedidosCalc[tipo] !== pedido) return;
+          // Salva no cache de cálculos criptografado do IndexedDB para uso offline
+          await salvarCalculoOffline(tipo, entrada, resposta);
+          atualizarIndicadorRede();
           // Aproveita o texto integral do bot, sem inserir HTML remoto no documento.
           const doc = new DOMParser().parseFromString(resposta.textoFormatado || '', 'text/html');
           resultado.textContent = doc.body.textContent || 'Não foi possível obter o resultado. Confira os parâmetros.';
         } catch(e) {
           if (pedidosCalc[tipo] === pedido) {
+            const calcCache = await carregarCalculoOffline(tipo, entrada);
+            if (calcCache && calcCache.textoFormatado) {
+              const doc = new DOMParser().parseFromString(calcCache.textoFormatado, 'text/html');
+              resultado.textContent = (doc.body.textContent || '') + '\n\n[Cache Criptografado · Disponível Offline 0ms]';
+              return;
+            }
             const resLocal = calcularOfflineLocal(tipo, entrada);
             if (resLocal) {
               resultado.textContent = resLocal;
@@ -8758,6 +8799,22 @@
       if (!v) { copiarToast('Informe o peso em kg.'); return; }
       hapticFeedback('medium');
       if (statusEl) statusEl.textContent = 'Salvando...';
+
+      if (isDeviceOffline()) {
+        const pesoNum = parseFloat(v.replace(',','.'));
+        document.getElementById('corpo-peso-atual').textContent = pesoNum.toFixed(1) + ' kg';
+        if (bfEl?.value && document.getElementById('corpo-bf-atual')) {
+          document.getElementById('corpo-bf-atual').textContent = parseFloat(bfEl.value.replace(',','.')).toFixed(1) + '%';
+        }
+        await enfileirarAcaoOffline('cockpitRegistrarPeso', [v, bfEl?.value?.trim() || null, null], `Pesagem: ${v} kg`);
+        if (pesoEl) pesoEl.value = '';
+        if (bfEl) bfEl.value = '';
+        if (statusEl) statusEl.textContent = 'Salvo na Fila Offline (IndexedDB)';
+        copiarToast('Pesagem salva na Fila Offline!');
+        atualizarIndicadorRede();
+        return;
+      }
+
       try {
         await cockpitRpc('cockpitRegistrarPeso', v, bfEl?.value?.trim() || null, null);
         document.getElementById('corpo-peso-atual').textContent = parseFloat(v.replace(',','.')).toFixed(1) + ' kg';
@@ -8769,6 +8826,20 @@
         if (statusEl) statusEl.textContent = 'Pesagem salva no servidor!';
         copiarToast('Pesagem salva com sucesso!');
       } catch (e) {
+        const pesoNum = parseFloat(v.replace(',','.'));
+        if (!isNaN(pesoNum)) {
+          document.getElementById('corpo-peso-atual').textContent = pesoNum.toFixed(1) + ' kg';
+          if (bfEl?.value && document.getElementById('corpo-bf-atual')) {
+            document.getElementById('corpo-bf-atual').textContent = parseFloat(bfEl.value.replace(',','.')).toFixed(1) + '%';
+          }
+          await enfileirarAcaoOffline('cockpitRegistrarPeso', [v, bfEl?.value?.trim() || null, null], `Pesagem: ${v} kg`);
+          if (pesoEl) pesoEl.value = '';
+          if (bfEl) bfEl.value = '';
+          if (statusEl) statusEl.textContent = 'Instabilidade de sinal: salvo na Fila Offline!';
+          copiarToast('Salvo na Fila Offline!');
+          atualizarIndicadorRede();
+          return;
+        }
         if (statusEl) statusEl.textContent = 'Erro: ' + e.message;
         copiarToast(e.message);
       }
@@ -8788,37 +8859,57 @@
       }
     }
 
-    // Carrega dados dinâmicos da aba Perfil
+    // Carrega dados dinâmicos da aba Perfil com suporte a cache criptografado
     async function carregarPerfil() {
+      if (isDeviceOffline()) {
+        try {
+          const dadosCache = await carregarConsultaOffline('perfil_dados');
+          if (dadosCache) {
+            aplicarDadosPerfilNaTela(dadosCache);
+            return;
+          }
+        } catch (errOffline) {}
+      }
+
       try {
         const dados = await cockpitRpc('cockpitPerfil');
-        if (dados.peso_atual) {
-          document.getElementById('corpo-peso-atual').textContent = dados.peso_atual.toFixed(1) + ' kg';
-        } else {
-          const pesoEl = document.getElementById('corpo-peso-atual');
-          if (pesoEl && (pesoEl.textContent === '—' || !pesoEl.textContent.trim())) {
-            pesoEl.textContent = '74.0 kg';
-          }
-        }
-        if (dados.bf) {
-          document.getElementById('corpo-bf-atual').textContent = dados.bf.toFixed(1) + '%';
-        }
-        if (dados.dose) {
-          document.getElementById('corpo-dose-atual').textContent = dados.dose;
-        }
-        if (dados.semana) {
-          const semEl = document.getElementById('corpo-semana');
-          if (semEl) semEl.textContent = 'Semana ' + dados.semana;
-          // Atualiza badge da semana no header da aba
-          const badgeSem = document.querySelector('.protocolo-semana-badge');
-          if (badgeSem) badgeSem.textContent = 'Semana ' + dados.semana;
-        }
-        // Renderiza blocos de rotina
-        renderizarRotinaBlocos(dados.rotina_blocos || []);
+        await salvarConsultaOffline('perfil_dados', dados);
+        aplicarDadosPerfilNaTela(dados);
       } catch (e) {
-        // Falha silenciosa — dados opcionais, não bloqueia o app
+        try {
+          const dadosCache = await carregarConsultaOffline('perfil_dados');
+          if (dadosCache) {
+            aplicarDadosPerfilNaTela(dadosCache);
+            return;
+          }
+        } catch (err) {}
         console.warn('carregarPerfil:', e.message);
       }
+    }
+
+    function aplicarDadosPerfilNaTela(dados) {
+      if (!dados) return;
+      if (dados.peso_atual) {
+        document.getElementById('corpo-peso-atual').textContent = Number(dados.peso_atual).toFixed(1) + ' kg';
+      } else {
+        const pesoEl = document.getElementById('corpo-peso-atual');
+        if (pesoEl && (pesoEl.textContent === '—' || !pesoEl.textContent.trim())) {
+          pesoEl.textContent = '74.0 kg';
+        }
+      }
+      if (dados.bf) {
+        document.getElementById('corpo-bf-atual').textContent = Number(dados.bf).toFixed(1) + '%';
+      }
+      if (dados.dose) {
+        document.getElementById('corpo-dose-atual').textContent = dados.dose;
+      }
+      if (dados.semana) {
+        const semEl = document.getElementById('corpo-semana');
+        if (semEl) semEl.textContent = 'Semana ' + dados.semana;
+        const badgeSem = document.querySelector('.protocolo-semana-badge');
+        if (badgeSem) badgeSem.textContent = 'Semana ' + dados.semana;
+      }
+      renderizarRotinaBlocos(dados.rotina_blocos || []);
     }
 
     function renderizarRotinaBlocos(blocos) {
@@ -12949,11 +13040,14 @@
       atualizarProgressoGeral();
       copiarToast(jaAssistida ? 'Aula marcada como pendente.' : 'Aula concluída com sucesso!');
 
-      // Sincronização em segundo plano com o backend Render
-      try {
-        cockpitRpc('cockpitAlternarAula', aulaId, !jaAssistida);
-      } catch (e) {
-        console.warn('[Cockpit Aulas] Erro ao sincronizar com backend:', e.message);
+      // Sincronização em segundo plano ou fila offline
+      if (isDeviceOffline()) {
+        enfileirarAcaoOffline('cockpitAlternarAula', [aulaId, !jaAssistida], `Aula ${aulaId}: ${!jaAssistida ? 'Concluída' : 'Pendente'}`);
+      } else {
+        cockpitRpc('cockpitAlternarAula', aulaId, !jaAssistida).catch(err => {
+          console.warn('[Cockpit Aulas] Falha ao sincronizar, enfileirando:', err.message);
+          enfileirarAcaoOffline('cockpitAlternarAula', [aulaId, !jaAssistida], `Aula ${aulaId}: ${!jaAssistida ? 'Concluída' : 'Pendente'}`);
+        });
       }
     }
 
