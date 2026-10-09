@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Cockpit Móvel — Assistente Clínico & Pessoal</title>
+  <title>Ultra Rotina</title>
+  <meta name="description" content="Assistente Clínico & Cockpit PWA para rotina médica, cálculos e protocolos">
+  <meta property="og:title" content="Ultra Rotina">
+  <meta property="og:description" content="Assistente Clínico & Cockpit PWA para rotina médica, cálculos e protocolos">
 
   <!-- PWA & Mobile Meta Tags -->
   <meta name="theme-color" content="#020617">
@@ -368,11 +371,47 @@
           </span>
           <span class="text-[9px] bg-rose-500/30 text-rose-200 px-1.5 py-0.5 rounded font-mono font-bold tracking-tight">HC-UE</span>
         </button>
-        <div class="grid grid-cols-4 gap-1 text-center text-[10px] font-bold">
+        <div class="grid grid-cols-5 gap-1 text-center text-[10px] font-bold">
           <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">DVA</button>
           <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
-          <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Clearance Cr</button>
-          <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Gasometria</button>
+          <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Clearance</button>
+          <button onclick="abrirSubCalc('calc-gaso', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-slate-800 text-slate-400">Gaso</button>
+          <button onclick="abrirSubCalc('calc-crosscheck', this)" class="subcalc-btn py-2 px-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">🛡️ Segurança</button>
+        </div>
+      </div>
+
+      <!-- Subcalc: Cross-Check Farmacológico & Interações (RAM Local 0ms) -->
+      <div id="calc-crosscheck" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Segurança & Cross-Check Farmacológico
+          </h4>
+          <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold font-mono">RAM 0ms</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Varredura automática contra 219 interações locais, Guia HSL (ajuste renal e tetos de dose) e REMUME.</p>
+
+        <div class="space-y-2">
+          <div>
+            <label class="block text-slate-300 text-xs mb-1 font-medium">Medicamentos a cruzar ou texto da prescrição:</label>
+            <textarea id="crosscheck-input" rows="3" placeholder="Ex: amiodarona 200mg, fluconazol 150mg, enoxaparina 40mg, clcr 28" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="executarCrossCheckCockpit()" class="flex-1 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950 transition active:scale-[0.98]">
+              <i data-lucide="search" class="w-3.5 h-3.5"></i> Verificar Interações & Ajuste Renal
+            </button>
+            <button onclick="document.getElementById('crosscheck-input').value=''; document.getElementById('crosscheck-resultado').classList.add('hidden');" class="py-2 px-3 rounded-lg bg-slate-800 text-slate-400 hover:text-white text-xs border border-slate-700 transition">
+              Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- Container do Resultado -->
+        <div id="crosscheck-resultado" class="hidden space-y-2.5 pt-2 border-t border-slate-800">
+          <div id="crosscheck-status-badge" class="p-2.5 rounded-lg border text-xs font-semibold flex items-center gap-2"></div>
+          <div id="crosscheck-detalhes" class="p-3 rounded-lg bg-slate-900/90 border border-slate-800 text-[11px] font-mono whitespace-pre-wrap leading-relaxed text-slate-200 max-h-72 overflow-y-auto"></div>
+          <button onclick="copiarCrossCheckPEP()" class="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-bold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Parecer Farmacológico para o Prontuário
+          </button>
         </div>
       </div>
 
@@ -710,11 +749,19 @@
             <button
               onclick="solicitarSabatinaPreceptorPlantao()"
               title="Perguntar ao Preceptor IA sobre este caso"
-              class="py-1.5 px-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 shadow-md shadow-purple-950 active:scale-[0.98] shrink-0"
+              class="py-1.5 px-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 shadow-md shadow-purple-950 active:scale-[0.98] shrink-0"
             >
               <i data-lucide="brain" class="w-3.5 h-3.5"></i>
-              <span class="hidden sm:inline">Auditar com Preceptor</span>
-              <span class="sm:hidden">Auditar</span>
+              <span class="hidden sm:inline">Auditar</span>
+            </button>
+
+            <button
+              onclick="abrirModalPreceptorLive()"
+              title="Iniciar conversa por voz em tempo real no fone (Gemini 3.8 Live)"
+              class="py-1.5 px-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 shadow-md shadow-emerald-950 active:scale-[0.98] shrink-0 animate-pulse"
+            >
+              <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
+              <span>Voz Live</span>
             </button>
 
             <button
@@ -764,6 +811,9 @@
             <button onclick="abrirModalCentroObstetrico()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="activity" class="w-3 h-3"></i> Sala de Parto & HPP
             </button>
+            <button onclick="abrirModalGinecologiaAmbulatorial()" class="px-2.5 py-1.5 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 text-[11px] font-semibold hover:bg-fuchsia-500/30 flex items-center gap-1 transition">
+              <i data-lucide="flower-2" class="w-3 h-3"></i> Ginecologia &amp; APS
+            </button>
             <button onclick="copiarReceitaLimpaPEP()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
               <i data-lucide="receipt" class="w-3 h-3"></i> Receita PEP
             </button>
@@ -773,14 +823,17 @@
             <button onclick="executarAcaoConversa('plano')" class="px-2.5 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-semibold hover:bg-purple-500/30 flex items-center gap-1 transition">
               <i data-lucide="file-check" class="w-3 h-3"></i> Fechar Plano
             </button>
-            <button onclick="executarAcaoConversa('ef_normal')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
-              <i data-lucide="stethoscope" class="w-3 h-3"></i> EF 100% Normal
+            <button onclick="abrirModalExameFisicoNormal()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition" title="Exame Físico Normal Padrão e Modelos Dirigidos">
+              <i data-lucide="stethoscope" class="w-3 h-3"></i> EF Normal
             </button>
             <button onclick="executarAcaoConversa('prescricao')" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
               <i data-lucide="pill" class="w-3 h-3"></i> Prescrição UBS
             </button>
             <button onclick="provocarPreceptorSocratico()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
               <i data-lucide="brain" class="w-3 h-3"></i> Preceptor
+            </button>
+            <button onclick="abrirModalPreceptorLive()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
+              <i data-lucide="headphones" class="w-3 h-3"></i> Preceptor Live
             </button>
             <button onclick="executarAcaoConversa('novo')" class="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-rose-400 text-[11px] font-semibold flex items-center gap-1 transition" title="Limpar e Iniciar Novo Caso">
               <i data-lucide="trash-2" class="w-3 h-3"></i> Novo Caso
@@ -835,6 +888,19 @@
                 <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
                 <span><strong>Plantão ágil:</strong> Dite áudio direto no chat do bot com 1 toque no mic nativo (sem caixas de permissão) — este SOAP é atualizado em tempo real!</span>
               </span>
+            </div>
+
+            <!-- Barra de Inserção Rápida de Exame Físico -->
+            <div class="flex items-center justify-between pb-0.5">
+              <div class="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
+                <button type="button" onclick="inserirEfNormalRapidoDireto()" class="px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10.5px] font-semibold flex items-center gap-1 transition active:scale-95 shadow-sm" title="Inserir Exame Físico Normal Padrão diretamente no campo de texto">
+                  <i data-lucide="stethoscope" class="w-3 h-3"></i> Inserir EF Normal
+                </button>
+                <button type="button" onclick="abrirModalExameFisicoNormal()" class="px-2 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[10.5px] font-medium flex items-center gap-1 transition active:scale-95" title="Ver todos os modelos de Exame Físico direcionados">
+                  <i data-lucide="sliders-horizontal" class="w-3 h-3"></i> Modelos
+                </button>
+              </div>
+              <span class="text-[9.5px] text-slate-500 hidden sm:inline">1 toque para preencher evolução</span>
             </div>
 
             <div class="flex items-end gap-1.5">
@@ -1105,6 +1171,107 @@
   </div>
 
   <!-- ================================================================= -->
+  <!-- MODAL: PRECEPTOR IA — VOZ EM TEMPO REAL (GEMINI-3.8-LIVE)        -->
+  <!-- ================================================================= -->
+  <div id="modal-preceptor-live" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/85 backdrop-blur-md hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl border border-emerald-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal Live -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/80">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30">
+            <i data-lucide="headphones" class="w-5 h-5 animate-pulse"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-emerald-400">Preceptor Socrático Live</span>
+              <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono font-bold">gemini-3.8-live</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+              Discussão Clínica em Tempo Real no Fone
+            </h4>
+          </div>
+        </div>
+
+        <button onclick="fecharModalPreceptorLive()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Corpo da Sessão Live -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+        <!-- Visualizador / Status Card -->
+        <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex flex-col items-center justify-center text-center space-y-3">
+          <!-- Animação do Visualizador de Áudio -->
+          <div id="live-visualizer-container" class="relative flex items-center justify-center h-20 w-20">
+            <div id="live-pulse-ring" class="absolute inset-0 rounded-full border-2 border-emerald-500/20 scale-100 transition-all duration-300"></div>
+            <div id="live-avatar" class="h-14 w-14 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-950/60 transition-transform">
+              <i data-lucide="brain" class="w-7 h-7" id="live-avatar-icon"></i>
+            </div>
+          </div>
+
+          <div>
+            <div id="live-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+              <span class="h-2 w-2 rounded-full bg-slate-500" id="live-status-dot"></span>
+              <span id="live-status-text">Pronto para conectar ao vivo</span>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1.5 max-w-xs mx-auto">
+              Fale pelo microfone como se estivesse com o Preceptor FMRP-USP no fone. Latência &lt; 500ms com interrupção natural (barge-in).
+            </p>
+          </div>
+
+          <!-- Controles da Conexão Live -->
+          <div class="flex items-center gap-2 pt-1">
+            <button
+              id="btn-iniciar-live"
+              onclick="alternarSessaoLivePreceptor()"
+              class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-950 active:scale-95 transition"
+            >
+              <i data-lucide="mic" class="w-4 h-4" id="btn-iniciar-live-icone"></i>
+              <span id="btn-iniciar-live-label">Conectar Preceptor Live</span>
+            </button>
+
+            <button
+              id="btn-mutar-live"
+              onclick="toggleMuteLivePreceptor()"
+              class="hidden px-3 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 active:scale-95 transition"
+              title="Mutar/Desmutar Microfone"
+            >
+              <i data-lucide="mic-off" class="w-4 h-4" id="icone-btn-mutar-live"></i>
+              <span id="label-btn-mutar-live">Mudo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Transcrição ao Vivo dos Turnos da Discussão -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10.5px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="message-square" class="w-3 h-3 text-emerald-400"></i> Transcrição em Tempo Real
+            </span>
+            <button onclick="limparTranscricaoLive()" class="text-[10px] text-slate-400 hover:text-rose-300">
+              Limpar
+            </button>
+          </div>
+          <div id="live-transcricao-container" class="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 min-h-[140px] max-h-[220px] overflow-y-auto space-y-2 text-[11px] text-slate-300 font-sans">
+            <p class="text-slate-500 italic text-center py-4">Toque em "Conectar Preceptor Live" e fale o caso clínico no microfone para iniciar a sabatina socrática...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer com Ações -->
+      <div class="p-3 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between">
+        <button onclick="copiarTranscricaoLiveParaSOAP()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-200 text-xs font-bold flex items-center gap-1.5 transition">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>Enviar Caso ao SOAP</span>
+        </button>
+        <button onclick="fecharModalPreceptorLive()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
   <!-- MODAL: SÍNTESE CONSOLIDADA DE TODOS OS CASOS DO DIA (SOAP)        -->
   <!-- ================================================================= -->
   <div id="modal-sintese-dia-soap" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
@@ -1158,6 +1325,94 @@
           <button onclick="copiarSinteseDiaSOAPCompleta()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-md shadow-indigo-950 transition">
             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
             <span>Copiar Todos os SOAPs</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: EXAME FÍSICO NORMAL ESTRUTURADO (SEMIOLOGIA COMPLETA)       -->
+  <!-- ================================================================= -->
+  <div id="modal-exame-fisico-normal" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl border border-emerald-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/70">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30">
+            <i data-lucide="stethoscope" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-emerald-400">Semiologia Clínica</span>
+              <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-bold font-mono">Padrão Ouro</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white">
+              Exame Físico Normal Estruturado · Modelos Prontos
+            </h4>
+          </div>
+        </div>
+        <button onclick="fecharModalExameFisicoNormal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Conteúdo do Modal com Scroll -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs font-sans">
+        <!-- Seleção de Modelo / Especialidade -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+              Especialidade / Sistema Direcionado
+            </label>
+            <span id="ef-badge-sistema" class="text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              Adulto Segmentar (7 Segmentos)
+            </span>
+          </div>
+          <select id="ef-select-modelo" onchange="selecionarModeloEfModal(this.value)" class="w-full rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-slate-100 text-xs focus:border-emerald-500 focus:outline-none">
+            <option value="padrao_completo">🩺 Adulto Geral Completo (Padrão Ouro - Todos os Sistemas)</option>
+            <option value="pediatrico">👶 Pediátrico Completo (Lactente / Criança com Marcos)</option>
+            <option value="geriatrico">👵 Geriátrico / AGA (Cognição, Marcha, Funcionalidade)</option>
+            <option value="obstetrico">🤰 Obstétrico / Pré-Natal (AU, BCF, Leopold, Sem Dinâmica)</option>
+            <option value="cardiovascular">🫀 Cardiovascular &amp; HAS (Bulhas, Carótidas, Pulsos, Sem Edema)</option>
+            <option value="respiratorio">🫁 Respiratório &amp; Pneumo (MV Limpo, Sem Esforço, Oroscopia)</option>
+            <option value="abdome">🍎 Gastrointestinal &amp; Abdome (Flácido, Sem Dor, Blumberg/Murphy Neg)</option>
+            <option value="neurologico">🧠 Neurológico Completo (Glasgow 15, Pares Cranianos, Força 5/5)</option>
+            <option value="vascular">🩸 Vascular Periférico (Pulsos 2+/2+, TEC &lt;2s, Homans Negativo)</option>
+            <option value="ortopedico">🦴 Coluna &amp; Osteomuscular (Lasègue Negativo, Força e Mobilidade)</option>
+            <option value="saude_mental">🧠 Saúde Mental / Psíquico (Eutimia, Pensamento Lógico, Crítica)</option>
+          </select>
+        </div>
+
+        <!-- Editor / Visualizador do Exame Físico -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Texto para Prontuário (Editável Beira-Leito)
+            </span>
+            <button onclick="restaurarModeloEfAtual()" class="text-[10px] text-slate-400 hover:text-emerald-300 flex items-center gap-1 transition" title="Restaurar versão original do modelo">
+              <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Restaurar Modelo
+            </button>
+          </div>
+          <textarea id="ef-normal-editor-texto" rows="12" class="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-100 text-[11px] font-mono leading-relaxed focus:border-emerald-500 focus:outline-none resize-none" placeholder="Carregando modelo de exame físico..."></textarea>
+          <div class="flex items-center justify-between text-[10px] text-slate-500">
+            <span>Dica: você pode ajustar valores (ex: PA, FC, FR) diretamente aqui antes de inserir.</span>
+            <span id="ef-editor-contador" class="font-mono">0 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé do Modal com Ações Rápidas -->
+      <div class="border-t border-slate-800 p-3.5 bg-slate-950/80 flex flex-wrap items-center justify-between gap-2">
+        <button onclick="copiarEfNormalClipboard()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar (PEP)
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="enviarEfNormalDiretoSOAP()" class="px-3 py-1.5 rounded-lg bg-purple-600/30 hover:bg-purple-600/40 border border-purple-500/40 text-purple-200 text-xs font-bold flex items-center gap-1.5 transition">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Enviar ao SOAP (IA)
+          </button>
+          <button onclick="inserirEfNormalNoInput()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-emerald-950 transition active:scale-95">
+            <i data-lucide="file-input" class="w-3.5 h-3.5"></i> Inserir no Texto
           </button>
         </div>
       </div>
@@ -1908,6 +2163,270 @@
   <!-- ================================================================= -->
   <!-- MODAL: MODO PLANTÃO SEM SINAL (OFFLINE-FIRST COM INDEXEDDB/DEXIE) -->
   <!-- ================================================================= -->
+
+  <!-- ================================================================= -->
+  <!-- MODAL: GINECOLOGIA AMBULATORIAL DE CONSULTÓRIO (INCA, FIGO, OMS)  -->
+  <!-- ================================================================= -->
+  <div id="modal-ginecologia-ambulatorial" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-lg max-h-[88vh] flex flex-col rounded-2xl border border-fuchsia-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/60">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-fuchsia-500/20 text-fuchsia-400 ring-1 ring-fuchsia-500/30">
+            <i data-lucide="flower-2" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-fuchsia-400">Saúde da Mulher</span>
+            </div>
+            <h3 class="text-[13px] font-bold text-white leading-tight">
+              Ginecologia Ambulatorial · Consultório &amp; APS
+            </h3>
+          </div>
+        </div>
+        <button onclick="fecharModalGinecologiaAmbulatorial()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Segmented Control (4 abas) -->
+      <div class="flex items-center gap-1 p-2 border-b border-slate-800 bg-slate-950/40 overflow-x-auto">
+        <button onclick="alternarSecaoGineco('gin-sec-colo', this)" class="gin-pill-btn px-2.5 py-1 rounded-lg bg-fuchsia-500/25 text-fuchsia-200 border border-fuchsia-500/40 shadow-sm transition text-[10.5px] font-bold whitespace-nowrap">🔬 Colo Uterino</button>
+        <button onclick="alternarSecaoGineco('gin-sec-sua', this)" class="gin-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition text-[10.5px] font-bold whitespace-nowrap">🩸 SUA</button>
+        <button onclick="alternarSecaoGineco('gin-sec-anti', this)" class="gin-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition text-[10.5px] font-bold whitespace-nowrap">🛡️ Anticoncepção</button>
+        <button onclick="alternarSecaoGineco('gin-sec-leucorreia', this)" class="gin-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition text-[10.5px] font-bold whitespace-nowrap">🦠 Leucorreias</button>
+      </div>
+
+      <!-- Conteúdo scrollável -->
+      <div class="flex-1 overflow-y-auto p-3.5 space-y-3">
+
+        <!-- ABA 1: Rastreio de Colo Uterino (INCA/MS) -->
+        <div id="gin-sec-colo" class="gin-sec-pane space-y-2.5">
+          <label class="block text-[10.5px] font-bold text-fuchsia-300 uppercase tracking-wider">Rastreio de Câncer de Colo Uterino (INCA/MS)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Idade (anos)</label>
+              <input id="gin-input-colo-idade" type="number" value="30" min="10" max="99" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Laudo Citopatológico</label>
+              <select id="gin-input-colo-citologia" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-fuchsia-500 outline-none">
+                <option value="rotina">Rotina / Sem resultado</option>
+                <option value="negativo">Negativo / Normal</option>
+                <option value="asc_us">ASC-US</option>
+                <option value="lsil">LSIL (Baixo Grau)</option>
+                <option value="asc_h">ASC-H</option>
+                <option value="hsil">HSIL (Alto Grau)</option>
+                <option value="agc">AGC (Células Glandulares)</option>
+                <option value="carcinoma">Carcinoma Invasor</option>
+                <option value="insatisfatorio">Insatisfatório</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Exames Negativos Consecutivos</label>
+              <input id="gin-input-colo-negativos" type="number" value="0" min="0" max="10" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-fuchsia-500 outline-none">
+            </div>
+            <div class="flex flex-col gap-1 pt-3">
+              <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+                <input id="gin-input-colo-imuno" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-fuchsia-500"> Imunossuprimida
+              </label>
+              <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+                <input id="gin-input-colo-histerec" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-fuchsia-500"> Histerectomia Total
+              </label>
+              <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+                <input id="gin-input-colo-persist" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-fuchsia-500"> ASC-US/LSIL Persistente
+              </label>
+            </div>
+          </div>
+          <button onclick="avaliarColoUterinoModal()" class="w-full px-3 py-1.5 rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-fuchsia-950 transition">
+            <i data-lucide="search" class="w-3.5 h-3.5"></i>
+            <span>Avaliar Conduta INCA/MS</span>
+          </button>
+          <div id="gin-box-resultado-colo" class="hidden p-3 rounded-xl bg-slate-950 border border-fuchsia-500/30">
+            <pre id="gin-pre-resultado-colo" class="text-[10.5px] text-slate-200 font-mono whitespace-pre-wrap leading-relaxed"></pre>
+          </div>
+        </div>
+
+        <!-- ABA 2: Sangramento Uterino Anormal (SUA / PALM-COEIN) -->
+        <div id="gin-sec-sua" class="gin-sec-pane space-y-2.5 hidden">
+          <label class="block text-[10.5px] font-bold text-rose-300 uppercase tracking-wider">Sangramento Uterino Anormal (FIGO / PALM-COEIN)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Idade (anos)</label>
+              <input id="gin-input-sua-idade" type="number" value="32" min="10" max="99" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-rose-500 outline-none">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Beta-hCG</label>
+              <select id="gin-input-sua-bhcg" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-rose-500 outline-none">
+                <option value="nao_realizado">Não realizado</option>
+                <option value="negativo">Negativo</option>
+                <option value="positivo">Positivo</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">PAS (mmHg)</label>
+              <input id="gin-input-sua-pas" type="number" value="120" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-rose-500 outline-none">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">FC (bpm)</label>
+              <input id="gin-input-sua-fc" type="number" value="78" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-rose-500 outline-none">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Intensidade</label>
+              <select id="gin-input-sua-intensidade" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-rose-500 outline-none">
+                <option value="leve">Leve</option>
+                <option value="moderada" selected>Moderada</option>
+                <option value="grave_aguda">Grave/Aguda</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-sua-menopausa" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-rose-500"> Pós-Menopausa
+            </label>
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-sua-contraindicacao" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-rose-500"> Contraindicação a Estrogênio
+            </label>
+          </div>
+          <button onclick="avaliarSuaModal()" class="w-full px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-rose-950 transition">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+            <span>Avaliar SUA (PALM-COEIN)</span>
+          </button>
+          <div id="gin-box-resultado-sua" class="hidden p-3 rounded-xl bg-slate-950 border border-rose-500/30">
+            <pre id="gin-pre-resultado-sua" class="text-[10.5px] text-slate-200 font-mono whitespace-pre-wrap leading-relaxed"></pre>
+          </div>
+        </div>
+
+        <!-- ABA 3: Anticoncepção OMS (Categorias 1 a 4) -->
+        <div id="gin-sec-anti" class="gin-sec-pane space-y-2.5 hidden">
+          <label class="block text-[10.5px] font-bold text-indigo-300 uppercase tracking-wider">Critérios de Elegibilidade de Anticoncepção (OMS)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Idade (anos)</label>
+              <input id="gin-input-anti-idade" type="number" value="28" min="10" max="60" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-indigo-500 outline-none">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Enxaqueca</label>
+              <select id="gin-input-anti-enxaqueca" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-indigo-500 outline-none">
+                <option value="nenhuma">Nenhuma</option>
+                <option value="sem_aura">Sem Aura</option>
+                <option value="com_aura">Com Aura ⚠️</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-anti-tev" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500"> Histórico TVP/TEP
+            </label>
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-anti-has" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500"> HAS Grave / Descontrolada
+            </label>
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-anti-tabagismo" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500"> Tabagista
+            </label>
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-anti-lactacao" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500"> Amamentação / Pós-parto recente
+            </label>
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-anti-mama" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500"> Câncer de Mama Atual
+            </label>
+            <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+              <input id="gin-input-anti-diabetes" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500"> DM com Vasculopatia
+            </label>
+          </div>
+          <button onclick="avaliarAnticoncepcaoModal()" class="w-full px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950 transition">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>Avaliar Elegibilidade OMS</span>
+          </button>
+          <div id="gin-box-resultado-anti" class="hidden p-3 rounded-xl bg-slate-950 border border-indigo-500/30">
+            <pre id="gin-pre-resultado-anti" class="text-[10.5px] text-slate-200 font-mono whitespace-pre-wrap leading-relaxed"></pre>
+          </div>
+        </div>
+
+        <!-- ABA 4: Leucorreias (Candidíase, Vaginose, Tricomoníase) -->
+        <div id="gin-sec-leucorreia" class="gin-sec-pane space-y-2.5 hidden">
+          <label class="block text-[10.5px] font-bold text-emerald-300 uppercase tracking-wider">Síndromes Infecciosas Vulvovaginais (PCDT/MS)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Sintoma Predominante</label>
+              <select id="gin-input-leu-sintoma" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
+                <option value="">Não informado</option>
+                <option value="prurido">Prurido Vulvar Intenso</option>
+                <option value="odor_fetido">Odor Fétido (Peixe)</option>
+                <option value="ardencia">Ardência / Disúria</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Aspecto do Corrimento</label>
+              <select id="gin-input-leu-aspecto" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
+                <option value="">Não informado</option>
+                <option value="grumoso_branco">Grumoso/Branco (Leite Coalhado)</option>
+                <option value="branco_acinzentado_fino">Branco-Acinzentado Fino</option>
+                <option value="amarelo_esverdeado_bolhoso">Amarelo-Esverdeado Bolhoso</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">pH Vaginal</label>
+              <input id="gin-input-leu-ph" type="number" step="0.1" value="" placeholder="Ex: 4.5" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Whiff Test (KOH 10%)</label>
+              <select id="gin-input-leu-whiff" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
+                <option value="nao_realizado">Não realizado</option>
+                <option value="positivo">Positivo (+)</option>
+                <option value="negativo">Negativo (-)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400 font-semibold">Microscopia</label>
+              <select id="gin-input-leu-micro" class="w-full mt-0.5 px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
+                <option value="">Não realizada</option>
+                <option value="hifas_esporos">Hifas/Esporos (Candida)</option>
+                <option value="clue_cells">Clue Cells (Gardnerella)</option>
+                <option value="protozoarios_moveis">Protozoários Móveis (Trichomonas)</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1 pt-3">
+              <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+                <input id="gin-input-leu-gestante" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-emerald-500"> Gestante
+              </label>
+              <label class="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5">
+                <input id="gin-input-leu-recorrente" type="checkbox" class="rounded border-slate-600 bg-slate-800 text-emerald-500"> Recorrente (&ge; 4x/ano)
+              </label>
+            </div>
+          </div>
+          <button onclick="avaliarLeucorreiaModal()" class="w-full px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950 transition">
+            <i data-lucide="microscope" class="w-3.5 h-3.5"></i>
+            <span>Diagnosticar e Prescrever</span>
+          </button>
+          <div id="gin-box-resultado-leucorreia" class="hidden p-3 rounded-xl bg-slate-950 border border-emerald-500/30">
+            <pre id="gin-pre-resultado-leucorreia" class="text-[10.5px] text-slate-200 font-mono whitespace-pre-wrap leading-relaxed"></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rodapé -->
+      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
+        <button onclick="copiarCondutaGinecoParaPep()" class="px-3 py-1.5 rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-md shadow-fuchsia-950 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copiar Conduta para PEP</span>
+        </button>
+        <button onclick="fecharModalGinecologiaAmbulatorial()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="modal-plantao-offline" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
     <div class="relative w-full max-w-lg max-h-[88vh] flex flex-col rounded-2xl border border-amber-500/40 bg-slate-900 shadow-2xl overflow-hidden">
       <!-- Header do Modal -->
@@ -2543,7 +3062,9 @@
         }
 
         // 2. Se executado no GitHub Pages / Navegador (Render primário de alta velocidade com fallback para GAS)
-        const RENDER_BACKEND = "https://ultra-rotina-backend.onrender.com";
+        const RENDER_BACKEND = (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io'))
+          ? window.location.origin
+          : "https://ultra-rotina-backend.onrender.com";
         const GAS_BACKEND = "https://script.google.com/macros/s/AKfycbwo6GqTmc0_8fl9peKlw5d5jpfL5nqsc-ozLrqHiVk2RHD4h968EZAG4P75i2qSBlw9EQ/exec";
 
         let customBackend = '';
@@ -3290,12 +3811,41 @@
       }
     }
 
+    const FAIXAS_FISIO = {
+      peso: { min: 0.4, max: 350, rotulo: 'Peso', unidade: 'kg' },
+      idade: { min: 0, max: 125, rotulo: 'Idade', unidade: 'anos' },
+      creatinina: { min: 0.1, max: 30, rotulo: 'Creatinina', unidade: 'mg/dL' },
+      ph: { min: 6.70, max: 7.80, rotulo: 'pH', unidade: '' },
+      pco2: { min: 10, max: 150, rotulo: 'pCO₂', unidade: 'mmHg' },
+      hco3: { min: 2, max: 60, rotulo: 'HCO₃', unidade: 'mEq/L' }
+    };
+
+    function validarEntradaFisiologica(tipo, entrada) {
+      if (!entrada) return null;
+      for (const [campo, faixa] of Object.entries(FAIXAS_FISIO)) {
+        if (entrada[campo] !== undefined && entrada[campo] !== '' && entrada[campo] !== null) {
+          const num = parseFloat(String(entrada[campo]).replace(',', '.'));
+          if (!isNaN(num) && (num < faixa.min || num > faixa.max)) {
+            return `⚠️ ${faixa.rotulo} de ${num}${faixa.unidade ? ' ' + faixa.unidade : ''} fora da faixa biológica esperada (${faixa.min} a ${faixa.max}${faixa.unidade ? ' ' + faixa.unidade : ''}). Confirme se houve erro de digitação antes do cálculo.`;
+          }
+        }
+      }
+      return null;
+    }
+
     const pedidosCalc = {};
     function solicitarCalculo(tipo, entrada, destino) {
+      const alertaFisio = validarEntradaFisiologica(tipo, entrada);
+      const resultado = document.getElementById(destino);
+      if (alertaFisio) {
+        resultado.classList.add('whitespace-pre-wrap');
+        resultado.textContent = alertaFisio;
+        hapticFeedback('error');
+        return;
+      }
       const anterior = pedidosCalc[tipo];
       if (anterior) clearTimeout(anterior.timer);
       const pedido = {entrada};pedidosCalc[tipo] = pedido;
-      const resultado = document.getElementById(destino);
       resultado.classList.add('whitespace-pre-wrap');
       resultado.textContent = 'Conferindo parâmetros…';
       pedido.timer = setTimeout(async () => {
@@ -3320,6 +3870,66 @@
     }
     function calcularGaso() {
       solicitarCalculo('gaso', {ph:valorCalc('gaso-ph'), pco2:valorCalc('gaso-pco2'), hco3:valorCalc('gaso-hco3')}, 'gaso-resultado');
+    }
+
+    let ultimoCrossCheckResultado = null;
+
+    async function executarCrossCheckCockpit() {
+      const entrada = document.getElementById('crosscheck-input')?.value?.trim();
+      if (!entrada) {
+        copiarToast('Digite medicamentos para checagem.');
+        return;
+      }
+      hapticFeedback('medium');
+      const badge = document.getElementById('crosscheck-status-badge');
+      const detalhes = document.getElementById('crosscheck-detalhes');
+      const container = document.getElementById('crosscheck-resultado');
+
+      container.classList.remove('hidden');
+      badge.className = 'p-2.5 rounded-lg border bg-slate-800/80 border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-2 animate-pulse';
+      badge.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin text-emerald-400"></i> Varrendo 219 interações e Guia HSL em RAM...';
+      detalhes.textContent = 'Processando...';
+      if (window.lucide) lucide.createIcons();
+
+      try {
+        const resp = await cockpitRpc('cockpitChecarSeguranca', entrada);
+        ultimoCrossCheckResultado = resp;
+
+        if (resp.temAlertasCriticos) {
+          badge.className = 'p-2.5 rounded-lg border bg-rose-500/20 border-rose-500/50 text-rose-200 text-xs font-bold flex items-center gap-2';
+          badge.innerHTML = '<i data-lucide="alert-octagon" class="w-4 h-4 text-rose-400"></i> 🛑 Alerta Crítico Farmacológico Detectado';
+        } else if (resp.interacoes && resp.interacoes.length > 0) {
+          badge.className = 'p-2.5 rounded-lg border bg-amber-500/20 border-amber-500/50 text-amber-200 text-xs font-bold flex items-center gap-2';
+          badge.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i> ⚠️ Interações Moderadas Detectadas';
+        } else {
+          badge.className = 'p-2.5 rounded-lg border bg-emerald-500/20 border-emerald-500/50 text-emerald-200 text-xs font-bold flex items-center gap-2';
+          badge.innerHTML = '<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> ✅ Prescrição Sem Interações Graves';
+        }
+
+        detalhes.textContent = resp.textoFormatado || 'Nenhum alerta para os termos informados.';
+        copiarToast('Varredura concluída (' + (resp.benchmark_ms || 1) + 'ms)');
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        badge.className = 'p-2.5 rounded-lg border bg-rose-950/60 border-rose-800 text-rose-300 text-xs font-semibold flex items-center gap-2';
+        badge.innerHTML = '<i data-lucide="x-circle" class="w-4 h-4 text-rose-400"></i> Falha na checagem: ' + err.message;
+        detalhes.textContent = err.message;
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function copiarCrossCheckPEP() {
+      if (!ultimoCrossCheckResultado || !ultimoCrossCheckResultado.textoFormatado) {
+        copiarToast('Execute a checagem antes de copiar.');
+        return;
+      }
+      const dataHora = new Date().toLocaleString('pt-BR');
+      const textoPEP = '--- PARECER DE SEGURANÇA FARMACOLÓGICA ---\n' +
+        'Data/Hora: ' + dataHora + '\n\n' +
+        ultimoCrossCheckResultado.textoFormatado + '\n\n' +
+        'Prescritor responsável ciente das diretrizes e ajustes farmacológicos.';
+      navigator.clipboard?.writeText(textoPEP)
+        .then(() => copiarToast('Parecer farmacológico copiado p/ prontuário!'))
+        .catch(() => copiarToast('Erro ao copiar.'));
     }
 
     // =========================================================================
@@ -4050,6 +4660,267 @@
         return;
       }
       copiarTextoClipboard(cockpitDados.soap, 'SOAP integral copiado!');
+    }
+
+    // =========================================================================
+    // MÓDULO EXAME FÍSICO NORMAL ESTRUTURADO & MODELOS SEMIOLÓGICOS (FRONTEND)
+    // =========================================================================
+    const MODELOS_EF_COMPLETOS = {
+      padrao_completo: {
+        titulo: 'Adulto Geral Completo (Segmentar Padrão Ouro)',
+        sistemaBadge: 'Adulto Segmentar (7 Segmentos)',
+        texto: [
+          '[Exame Físico Geral e Segmentar Completo sem Alterações]:',
+          '• Geral: Bom estado geral (BEG), lúcido e orientado no tempo e espaço (LOTE), corado, hidratado, anictérico, acianótico, afebril ao toque, eupneico em ar ambiente.',
+          '• Sinais Vitais: PA: 120/80 mmHg | FC: 72 bpm (rítmico) | FR: 16 irpm | SpO2: 98% em ar ambiente | Tax: 36,5°C.',
+          '• Cabeça e Pescoço: Mucosas úmidas e coradas, oroscopia sem hiperemia ou exsudatos. Tireoide impalpável, sem linfonodomegalias cervicais. Carótidas com pulsos simétricos sem sopros, sem turgência jugular a 45°.',
+          '• Aparelho Cardiovascular (ACV): Ritmo cardíaco regular em 2 tempos (RCR 2T), bulhas normofonéticas (BNF), sem sopros ou extrassístoles. Pulsos periféricos presentes, amplos, cheios e simétricos bilateralmente.',
+          '• Aparelho Respiratório (AR): Murmúrio vesicular universalmente audível (MVUA), sem ruídos adventícios. Expansibilidade torácica preservada bilateralmente. Eupneico em ar ambiente.',
+          '• Abdome: Plano, flácido, depressível, indolor à palpação superficial e profunda. Ruídos hidroaéreos (RHA) normoativos. Fígado e baço impalpáveis. Descompressão brusca negativa (Blumberg ausente). Sem massas palpáveis.',
+          '• Extremidades / Vascular: Sem edema de membros inferiores (ausência de sinal do cacifo). Panturrilhas livres sem empastamento (sinal de Homans negativo). Tempo de enchimento capilar (TEC) < 2 segundos. Pulsos pediosos cheios.',
+          '• Neurológico Sumário: Glasgow 15, pupilas isocóricas e fotorreagentes direta e consensualmente. Força motora grau 5/5 simétrica. Sem déficits focais. Rigidez de nuca ausente, Kernig e Brudzinski negativos.'
+        ].join('\n')
+      },
+      pediatrico: {
+        titulo: 'Pediátrico Completo (Lactente / Criança com Marcos)',
+        sistemaBadge: 'Pediátrico & Puericultura',
+        texto: [
+          '[Exame Físico Pediátrico Normal]:',
+          '• Ectoscopia: Bom estado geral, ativo e reativo, corado, hidratado, anictérico, acianótico, afebril. Choro forte e prontamente consolável ao colo materno. Boa interação com o examinador.',
+          '• Sinais Vitais: FC: 110 bpm | FR: 28 irpm | SpO2: 99% em ar ambiente | Tax: 36,6°C.',
+          '• Crânio e Face: Fontanela anterior normotensa, plana e aberta. Perímetro cefálico compatível com a idade. Suturas cranianas sem cavalgamentos patológicos.',
+          '• Oroscopia / Otoscopia: Oroscopia sem hiperemia, sem placas ou aftas em mucosa jugal; otoscopia bilateral com membranas timpânicas íntegras, translúcidas e brilhantes com reflexo luminoso presente.',
+          '• Aparelho Respiratório: Eupneico em ar ambiente, sem tiragem subcostal, retração intercostal ou batimento de asa de nariz. Murmúrio vesicular presente bilateralmente sem ruídos adventícios.',
+          '• Aparelho Cardiovascular: RCR 2T, bulhas normofonéticas sem sopros audíveis. Pulsos femorais e radiais cheios e sincrônicos bilateralmente. Perfusão capilar periférica < 2s.',
+          '• Abdome: Semigloboso, flácido, indolor à palpação, RHA normoativos. Fígado palpável a 1 cm do RCD (fisiológico), baço impalpável. Sem hérnias umbilicais ou inguinais dolorosas.',
+          '• Membros e Quadris: Tônus muscular adequado para a idade. Manobras de Ortolani e Barlow negativas bilateralmente (sem estalidos ou instabilidade de quadris). Movimentação espontânea dos 4 membros.'
+        ].join('\n')
+      },
+      geriatrico: {
+        titulo: 'Geriátrico / Avaliação Geriátrica Ampla (AGA)',
+        sistemaBadge: 'Geriátrico & Funcionalidade (AGA)',
+        texto: [
+          '[Avaliação Geriátrica Ampla / Exame Físico do Idoso]:',
+          '• Ectoscopia: BEG, lúcido e orientado no tempo e espaço (LOTE), corado, hidratado, anictérico, acianótico, afebril. Higiene pessoal preservada.',
+          '• Sinais Vitais e Hipotensão Ortostática: PA sentado: 124/78 mmHg | PA ortostase (3 min): 120/76 mmHg (pesquisa de hipotensão ortostática negativa). FC: 68 bpm.',
+          '• Cognição e Humor: MEEM preservado para a escolaridade. Teste do Relógio normal. Escala GDS-15 sem sintomas depressivos.',
+          '• Funcionalidade: Totalmente independente para ABVDs (Katz 6/6) e autônomo para AIVDs (Lawton & Brody 27/27).',
+          '• Marcha e Equilíbrio: Teste Timed Up and Go (TUG) realizado em 8,5 segundos (< 10s = baixo risco de quedas). Marcha firme sem apoio. Romberg negativo.',
+          '• Cardiopulmonar: ACV: RCR 2T BNF sem sopros ou B3/B4. Sem turgência jugular. AR: MV presente bilateralmente sem estertores crepitantes em bases.',
+          '• Abdome e Nutrição: Abdome flácido, indolor, sem visceromegalias. Circunferência de panturrilha: 34 cm (> 31 cm, trofismo preservado). Força de preensão manual preservada.',
+          '• Pele e Extremidades: Pele íntegra sem lesões por pressão (LPP) em calcâneos ou sacro. Pulsos periféricos amplos. Sem edema de membros inferiores.'
+        ].join('\n')
+      },
+      obstetrico: {
+        titulo: 'Obstétrico / Consulta de Pré-Natal',
+        sistemaBadge: 'Obstétrico / Pré-Natal',
+        texto: [
+          '[Exame Físico Obstétrico / Pré-Natal]:',
+          '• Ectoscopia: BEG, LOTE, corada, hidratada, anictérica, acianótica, afebril, eupnéica em ar ambiente. PA: 110/70 mmHg.',
+          '• Mamas: Simétricas, mamilos protusos, sem nódulos ou áreas inflamatórias, colostro fisiológico à expressão.',
+          '• Altura Uterina (AU): Compatível com a idade gestacional (entre percentis 10 e 90 da curva de CLAP).',
+          '• Manobras de Leopold: Situação longitudinal, dorso à esquerda, apresentação cefálica.',
+          '• Ausculta Cardiofetal: Batimentos cardiofetais (BCF) presentes, rítmicos, 140 bpm, sem desacelerações auscultatórias.',
+          '• Dinâmica Uterina (DU): Tônus uterino normal, ausência de contrações uterinas dolorosas em 10 minutos.',
+          '• Extremidades: Sem edema de membros inferiores ou edema maleolar fisiológico leve vespertino. Pulsos pediosos cheios.'
+        ].join('\n')
+      },
+      cardiovascular: {
+        titulo: 'Cardiovascular & HAS Direcionado',
+        sistemaBadge: 'Cardiovascular / HAS',
+        texto: [
+          '[Exame Cardiovascular Direcionado]:',
+          '• Ectoscopia: BEG, LOTE, corado, hidratado, sem turgência jugular patológica a 45°.',
+          '• Sinais Vitais: PA em MSD: 124/80 mmHg | PA em MSE: 122/78 mmHg. FC: 70 bpm (rítmico).',
+          '• Precórdio: Ictus palpável no 5º EIC na linha hemiclavicular esquerda, 1-2 polpas digitais, sem impulsividade. Ausência de frêmitos.',
+          '• Ausculta: Ritmo cardíaco regular em 2 tempos (RCR 2T), bulhas normofonéticas (BNF), B2 fisiológica sem desdobramento patológico, sem B3 ou B4. Sem sopros sistólicos ou diastólicos em nenhum dos 4 focos.',
+          '• Vasos e Pulsos: Carótidas simétricas e sem sopros. Pulsos radiais, femorais, poplíteos, tibiais posteriores e pediosos cheios, simétricos (2+/2+). Sem sopros em artérias renais.',
+          '• Perfusão e Periferia: TEC < 2 segundos. Ausência de edema de membros inferiores (sinal do cacifo negativo). Panturrilhas livres sem dor ou empastamento.'
+        ].join('\n')
+      },
+      respiratorio: {
+        titulo: 'Respiratório & Vias Aéreas Direcionado',
+        sistemaBadge: 'Respiratório & Pneumologia',
+        texto: [
+          '[Exame Respiratório e Vias Aéreas Direcionado]:',
+          '• Ectoscopia: Eupneico em ar ambiente (FR 15 irpm), sem esforço respiratório, sem tiragem intercostal ou uso de musculatura acessória. Fácies atípica, sem cianose perioral. SpO2: 98%.',
+          '• Vias Aéreas Superiores: Mucosa nasal rósea sem coriza purulenta. Oroscopia com palato, úvula e amígdalas sem hiperemia, sem exsudatos purulentos ou úlceras.',
+          '• Inspeção e Palpação: Tórax simétrico, expansibilidade torácica ampla e simétrica em ápices e bases. Frêmito tóraco-vocal (FTV) palpável e simétrico.',
+          '• Percussão: Som claro pulmonar simétrico em todos os campos torácicos.',
+          '• Ausculta Pulmonar: Murmúrio vesicular universalmente audível (MVUA) sem ruídos adventícios (sem sibilos, estertores crepitantes, roncos ou atrito pleural).'
+        ].join('\n')
+      },
+      abdome: {
+        titulo: 'Gastrointestinal & Abdome Completo',
+        sistemaBadge: 'Gastrointestinal & Abdome',
+        texto: [
+          '[Exame Físico Abdominal Completo]:',
+          '• Inspeção: Abdome plano, simétrico, sem cicatrizes cirúrgicas ou circulação colateral visível. Sem equimoses periumbilicais ou em flancos.',
+          '• Ausculta: Ruídos hidroaéreos (RHA) presentes e normoativos nos 4 quadrantes (12/min). Sem sopros arteriais em aorta abdominal ou renais.',
+          '• Percussão: Timpanismo normal preservado. Espaço de Traube livre. Macicez hepática em torno de 10 cm na LHC. Sem macicez móvel.',
+          '• Palpação: Flácido, depressível, indolor à palpação superficial e profunda em todas as regiões. Sem rigidez involuntária.',
+          '• Manobras Especiais: Blumberg NEGATIVO (descompressão brusca indolor em todo o abdome). Murphy NEGATIVO (ponto cístico livre). Giordano NEGATIVO bilateralmente (punho-percussão lombar indolor). Rovsing negativo.',
+          '• Visceromegalias: Fígado e baço não palpáveis ao rebordo costal. Sem massas ou plastrões palpáveis.'
+        ].join('\n')
+      },
+      neurologico: {
+        titulo: 'Neurológico Completo (Glasgow, Pares Cranianos, Força, Reflexos)',
+        sistemaBadge: 'Neurológico Completo',
+        texto: [
+          '[Exame Neurológico Completo]:',
+          '• Consciência: Glasgow 15 (O4 V5 M6). Lúcido e plenamente orientado autopsiquicamente e alopsiquicamente. Fala fluente sem afasias ou disartria.',
+          '• Sinais Meníngeos: Rigidez de nuca ausente. Sinais de Kernig e Brudzinski negativos bilateralmente.',
+          '• Pares Cranianos (I a XII): Pupilas isocóricas e fotorreagentes direta e consensualmente. Movimentos oculares extrínsecos preservados sem nistagmo ou diplopia. Mímica facial simétrica. Sensibilidade facial e reflexo corneano preservados. Úvula centrada, deglutição normal. Elevação de ombros e rotação cervical grau 5/5 simétricas.',
+          '• Força e Tônus: Tônus normal nos 4 membros. Força motora grau 5/5 pela escala MRC proximal e distalmente em membros superiores e inferiores. Mingazzini mantido sem quedas.',
+          '• Reflexos: Bicipital, tricipital, patelar e aquileu vivos e simétricos (2+/4+). Sinal de Babinski AUSENTE bilateralmente (reflexo plantar em flexão).',
+          '• Sensibilidade: Tátil, dolorosa e proprioceptiva preservadas e simétricas.',
+          '• Coordenação e Marcha: Provas índex-nariz e calcanhar-joelho métricas e sem dismetria. Romberg negativo. Marcha habitual e em tandem estáveis e coordenadas.'
+        ].join('\n')
+      },
+      vascular: {
+        titulo: 'Vascular Periférico & Risco TVP',
+        sistemaBadge: 'Vascular Periférico & TVP',
+        texto: [
+          '[Exame Vascular Periférico Direcionado]:',
+          '• Inspeção MMII: Pele com trofismo e coloração preservados bilateralmente, sem lesões tróficas ulceradas, palidez ou dermatite ocre. Sem cordões varicosos tensos ou tromboflebite superficial.',
+          '• Pulsos: Femorais, poplíteos, tibiais posteriores e pediosos presentes, amplos (2+/2+) e simétricos bilateralmente.',
+          '• Perfusão: Extremidades aquecidas sem gradiente térmico distal. Tempo de enchimento capilar (TEC) < 2 segundos.',
+          '• Sistema Venoso / Pesquisa de TVP: Sem edema de membros inferiores (cacifo negativo). Panturrilhas livres, simétricas à biometria comparativa e sem empastamento. Sinais de Homans e Bancroft/Moses negativos bilateralmente.'
+        ].join('\n')
+      },
+      ortopedico: {
+        titulo: 'Coluna & Osteomuscular Direcionado',
+        sistemaBadge: 'Coluna & Osteomuscular',
+        texto: [
+          '[Exame Osteomuscular e Coluna Lombar]:',
+          '• Postura e Marcha: Marcha independente e coordenada sem claudicação antálgica. Capacidade preservada de caminhar na ponta dos pés (S1) e calcanhares (L4/L5). Alinhamento pélvico e escapular simétrico.',
+          '• Coluna Lombar: Curvaturas fisiológicas preservadas sem escoliose. Palpação de processos espinhosos indolor. Sem contraturas graves em paravertebrais.',
+          '• Amplitude: Flexão, extensão e lateralização livres com amplitude preservada.',
+          '• Manobras Radiculares: Teste de Lasègue NEGATIVO bilateralmente até 70° (sem dor irradiada abaixo do joelho). Testes de Bragard e Patrick-FABERE negativos.',
+          '• Neurológico Segmentar: Força motora 5/5 em L4, L5 e S1 bilateralmente. Reflexos patelar e aquileu presentes e simétricos (2+/4+). Sensibilidade tátil preservada em dermátomos lombares e sacrais.'
+        ].join('\n')
+      },
+      saude_mental: {
+        titulo: 'Saúde Mental & Exame Psíquico Básico',
+        sistemaBadge: 'Saúde Mental / Psíquico',
+        texto: [
+          '[Exame do Estado Mental / Psíquico Básico]:',
+          '• Apresentação: Asseio e autocuidado preservados, atitude colaborativa e receptiva, contato visual adequado.',
+          '• Consciência e Orientação: Nível de consciência vígil. Plenamente orientado no tempo, espaço e autopsiquicamente.',
+          '• Atenção e Memória: Normotenaz e normovigil. Memórias remota, recente e de fixação preservadas.',
+          '• Sensopercepção: Sem alterações senso-perceptivas (sem alucinações auditivas, visuais ou táteis).',
+          '• Pensamento: Curso com velocidade e fluxo normais. Estrutura lógica, coerente e concatenada. Conteúdo sem ideias delirantes ou ideações de autoextermínio.',
+          '• Humor e Afeto: Humor eutímico, afeto modulado e congruente com as circunstâncias relatadas.',
+          '• Volição e Psicomotricidade: Psicomotricidade normal, sem agitação ou lentificação. Vontade preservada.',
+          '• Juízo Crítico: Juízo de realidade preservado, insight e crítica preservados sobre a própria saúde.'
+        ].join('\n')
+      }
+    };
+
+    let modeloEfAtivoChave = 'padrao_completo';
+
+    function abrirModalExameFisicoNormal(tipoInicial) {
+      hapticFeedback('medium');
+      const chave = tipoInicial && MODELOS_EF_COMPLETOS[tipoInicial] ? tipoInicial : 'padrao_completo';
+      modeloEfAtivoChave = chave;
+
+      const sel = document.getElementById('ef-select-modelo');
+      if (sel) sel.value = chave;
+
+      atualizarViewModeloEf(chave);
+
+      const modal = document.getElementById('modal-exame-fisico-normal');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fecharModalExameFisicoNormal() {
+      hapticFeedback('light');
+      const modal = document.getElementById('modal-exame-fisico-normal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function selecionarModeloEfModal(chave) {
+      hapticFeedback('light');
+      modeloEfAtivoChave = chave;
+      atualizarViewModeloEf(chave);
+    }
+
+    function atualizarViewModeloEf(chave) {
+      const mod = MODELOS_EF_COMPLETOS[chave] || MODELOS_EF_COMPLETOS.padrao_completo;
+      const editor = document.getElementById('ef-normal-editor-texto');
+      const badge = document.getElementById('ef-badge-sistema');
+      const contador = document.getElementById('ef-editor-contador');
+
+      if (editor) {
+        editor.value = mod.texto;
+        if (contador) contador.textContent = `${editor.value.length} caracteres`;
+      }
+      if (badge) {
+        badge.textContent = mod.sistemaBadge || 'Segmentar';
+      }
+    }
+
+    function restaurarModeloEfAtual() {
+      hapticFeedback('light');
+      atualizarViewModeloEf(modeloEfAtivoChave);
+      copiarToast('Modelo original restaurado!');
+    }
+
+    function inserirEfNormalNoInput() {
+      hapticFeedback('medium');
+      const editor = document.getElementById('ef-normal-editor-texto');
+      const texto = editor?.value?.trim() || MODELOS_EF_COMPLETOS[modeloEfAtivoChave]?.texto;
+      if (!texto) {
+        copiarToast('Nenhum texto de exame físico disponível.');
+        return;
+      }
+
+      const input = document.getElementById('input-conversa-texto');
+      if (input) {
+        const valAtual = input.value.trim();
+        input.value = valAtual ? valAtual + '\n\n' + texto : texto;
+        input.focus();
+        input.scrollTop = input.scrollHeight;
+      }
+
+      fecharModalExameFisicoNormal();
+      copiarToast('Exame físico inserido no campo de mensagem!');
+    }
+
+    function copiarEfNormalClipboard() {
+      hapticFeedback('light');
+      const editor = document.getElementById('ef-normal-editor-texto');
+      const texto = editor?.value?.trim() || MODELOS_EF_COMPLETOS[modeloEfAtivoChave]?.texto;
+      if (!texto) {
+        copiarToast('Nenhum exame físico para copiar.');
+        return;
+      }
+      copiarTextoClipboard(texto, 'Exame físico copiado para PEP!');
+    }
+
+    async function enviarEfNormalDiretoSOAP() {
+      const editor = document.getElementById('ef-normal-editor-texto');
+      const texto = editor?.value?.trim() || MODELOS_EF_COMPLETOS[modeloEfAtivoChave]?.texto;
+      if (!texto) {
+        copiarToast('Nenhum exame físico para enviar.');
+        return;
+      }
+      fecharModalExameFisicoNormal();
+      await executarAcaoConversa('ef_normal', { textoEf: texto });
+    }
+
+    function inserirEfNormalRapidoDireto() {
+      hapticFeedback('medium');
+      const texto = MODELOS_EF_COMPLETOS.padrao_completo.texto;
+      const input = document.getElementById('input-conversa-texto');
+      if (input) {
+        const valAtual = input.value.trim();
+        input.value = valAtual ? valAtual + '\n\n' + texto : texto;
+        input.focus();
+        input.scrollTop = input.scrollHeight;
+      }
+      copiarToast('Exame físico normal padrão inserido!');
     }
 
     // =========================================================================
@@ -4896,6 +5767,265 @@
       }
     }
 
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // FUNÇÕES: GINECOLOGIA AMBULATORIAL DE CONSULTÓRIO
+    // ═══════════════════════════════════════════════════════════════════════
+
+    let cacheCondutaGineco = '';
+
+    function abrirModalGinecologiaAmbulatorial() {
+      hapticFeedback('medium');
+      const modal = document.getElementById('modal-ginecologia-ambulatorial');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fecharModalGinecologiaAmbulatorial() {
+      hapticFeedback('light');
+      const modal = document.getElementById('modal-ginecologia-ambulatorial');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function alternarSecaoGineco(idSec, btnEl) {
+      hapticFeedback('light');
+      document.querySelectorAll('.gin-sec-pane').forEach(el => el.classList.add('hidden'));
+      const sec = document.getElementById(idSec);
+      if (sec) sec.classList.remove('hidden');
+
+      document.querySelectorAll('.gin-pill-btn').forEach(btn => {
+        btn.className = 'gin-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition text-[10.5px] font-bold whitespace-nowrap';
+      });
+      if (btnEl) {
+        btnEl.className = 'gin-pill-btn px-2.5 py-1 rounded-lg bg-fuchsia-500/25 text-fuchsia-200 border border-fuchsia-500/40 shadow-sm transition text-[10.5px] font-bold whitespace-nowrap';
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function avaliarColoUterinoModal() {
+      hapticFeedback('medium');
+      const idade = parseInt(document.getElementById('gin-input-colo-idade')?.value || '30', 10);
+      const citologia = document.getElementById('gin-input-colo-citologia')?.value || 'rotina';
+      const negativos = parseInt(document.getElementById('gin-input-colo-negativos')?.value || '0', 10);
+      const imuno = document.getElementById('gin-input-colo-imuno')?.checked || false;
+      const histerec = document.getElementById('gin-input-colo-histerec')?.checked || false;
+      const persist = document.getElementById('gin-input-colo-persist')?.checked || false;
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitRastreioColoUterino', [{
+          idade: idade,
+          resultadoCitologia: citologia,
+          examesAnterioresNegativos: negativos,
+          imunossuprimida: imuno,
+          histerectomizadaTotal: histerec,
+          ascUsOuLsilPrevio: persist
+        }]);
+
+        if (resp) {
+          let texto = '🔬 RASTREIO DE COLO UTERINO (INCA/MS)\n';
+          texto += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+          texto += '• Idade: ' + resp.idade + ' anos\n';
+          texto += '• Citologia: ' + resp.citologia + '\n';
+          texto += '• Classificação: ' + resp.classificacao + '\n';
+          texto += '• Local: ' + resp.localAtendimento + '\n';
+          if (resp.prazoRecomendado) texto += '• Prazo: ' + resp.prazoRecomendado + '\n';
+          texto += '\n📋 CONDUTAS:\n';
+          (resp.condutas || []).forEach(c => { texto += '  • ' + c + '\n'; });
+          if (resp.alertas && resp.alertas.length > 0) {
+            texto += '\n⚠️ ALERTAS:\n';
+            resp.alertas.forEach(a => { texto += '  ' + a + '\n'; });
+          }
+          cacheCondutaGineco = texto;
+          const box = document.getElementById('gin-box-resultado-colo');
+          const pre = document.getElementById('gin-pre-resultado-colo');
+          if (box) box.classList.remove('hidden');
+          if (pre) pre.textContent = texto;
+          copiarToast('Conduta de colo uterino gerada!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function avaliarSuaModal() {
+      hapticFeedback('medium');
+      const idade = parseInt(document.getElementById('gin-input-sua-idade')?.value || '32', 10);
+      const bhcg = document.getElementById('gin-input-sua-bhcg')?.value || 'nao_realizado';
+      const pas = parseInt(document.getElementById('gin-input-sua-pas')?.value || '120', 10);
+      const fc = parseInt(document.getElementById('gin-input-sua-fc')?.value || '78', 10);
+      const intensidade = document.getElementById('gin-input-sua-intensidade')?.value || 'moderada';
+      const menopausa = document.getElementById('gin-input-sua-menopausa')?.checked || false;
+      const contraindicacao = document.getElementById('gin-input-sua-contraindicacao')?.checked || false;
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitSangramentoUterinoAnormal', [{
+          idade: idade,
+          betaHcg: bhcg,
+          pas: pas,
+          fc: fc,
+          intensidade: intensidade,
+          posMenopausa: menopausa,
+          contraindicacaoEstrogenio: contraindicacao
+        }]);
+
+        if (resp) {
+          let texto = '🩸 SANGRAMENTO UTERINO ANORMAL (FIGO/PALM-COEIN)\n';
+          texto += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+          texto += '• Idade: ' + resp.idade + ' | Intensidade: ' + (resp.intensidade || '').toUpperCase() + '\n';
+          texto += '• Índice de Choque: ' + resp.indiceChoque + (resp.choqueInstavel ? ' 🚨 INSTÁVEL' : ' ✅ Estável') + '\n';
+          if (resp.alertas && resp.alertas.length > 0) {
+            texto += '\n⚠️ ALERTAS:\n';
+            resp.alertas.forEach(a => { texto += '  ' + a + '\n'; });
+          }
+          if (resp.condutasEmergencia && resp.condutasEmergencia.length > 0) {
+            texto += '\n🚨 CONDUTAS DE EMERGÊNCIA:\n';
+            resp.condutasEmergencia.forEach(c => { texto += '  • ' + c + '\n'; });
+          }
+          if (resp.prescricoesSugeridas && resp.prescricoesSugeridas.length > 0) {
+            texto += '\n💊 FARMACOTERAPIA HEMOSTÁTICA:\n';
+            resp.prescricoesSugeridas.forEach(p => {
+              texto += '  💊 ' + p.farmaco + ' (' + p.linha + ')\n';
+              texto += '     ' + p.posologia + '\n';
+            });
+          }
+          if (resp.condutasAmbulatoriais && resp.condutasAmbulatoriais.length > 0) {
+            texto += '\n📋 PLANEJAMENTO AMBULATORIAL:\n';
+            resp.condutasAmbulatoriais.forEach(c => { texto += '  • ' + c + '\n'; });
+          }
+          cacheCondutaGineco = texto;
+          const box = document.getElementById('gin-box-resultado-sua');
+          const pre = document.getElementById('gin-pre-resultado-sua');
+          if (box) box.classList.remove('hidden');
+          if (pre) pre.textContent = texto;
+          copiarToast('Avaliação de SUA concluída!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function avaliarAnticoncepcaoModal() {
+      hapticFeedback('medium');
+      const idade = parseInt(document.getElementById('gin-input-anti-idade')?.value || '28', 10);
+      const enxaqueca = document.getElementById('gin-input-anti-enxaqueca')?.value || 'nenhuma';
+      const tev = document.getElementById('gin-input-anti-tev')?.checked || false;
+      const has = document.getElementById('gin-input-anti-has')?.checked || false;
+      const tabagismo = document.getElementById('gin-input-anti-tabagismo')?.checked || false;
+      const lactacao = document.getElementById('gin-input-anti-lactacao')?.checked || false;
+      const mama = document.getElementById('gin-input-anti-mama')?.checked || false;
+      const diabetes = document.getElementById('gin-input-anti-diabetes')?.checked || false;
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitElegibilidadeAnticoncepcao', [{
+          idade: idade,
+          enxaqueca: enxaqueca,
+          historicoTev: tev,
+          has: has ? 'grave_descontrolada' : 'normotensa',
+          tabagismo: tabagismo,
+          lactacao: lactacao,
+          semanasPosParto: lactacao ? 3 : 52,
+          cancerMama: mama ? 'atual' : 'nenhum',
+          diabetes: diabetes ? 'com_vasculopatia_ou_mais_20anos' : 'nao'
+        }]);
+
+        if (resp) {
+          let texto = '🛡️ CRITÉRIOS DE ELEGIBILIDADE DE ANTICONCEPÇÃO (OMS)\n';
+          texto += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+          texto += '• ' + (resp.resumoIndicacao || '') + '\n';
+          if (resp.metodosBloqueadosCat4 && resp.metodosBloqueadosCat4.length > 0) {
+            texto += '\n⛔ CONTRAINDICADOS (Categoria 4 OMS):\n';
+            resp.metodosBloqueadosCat4.forEach(m => {
+              texto += '  ✗ ' + m.nome + '\n';
+              (m.justificativas || []).forEach(j => { texto += '    → ' + j.motivo + '\n'; });
+            });
+          }
+          if (resp.metodosEvitarCat3 && resp.metodosEvitarCat3.length > 0) {
+            texto += '\n⚠️ NÃO RECOMENDADOS (Categoria 3 OMS):\n';
+            resp.metodosEvitarCat3.forEach(m => { texto += '  ⚠ ' + m.nome + '\n'; });
+          }
+          if (resp.metodosElegiveisCat1 && resp.metodosElegiveisCat1.length > 0) {
+            texto += '\n✅ ELEGÍVEIS (Categoria 1 OMS - Uso Irrestrito):\n';
+            resp.metodosElegiveisCat1.forEach(m => { texto += '  ✓ ' + m.nome + '\n'; });
+          }
+          if (resp.metodosAceitaveisCat2 && resp.metodosAceitaveisCat2.length > 0) {
+            texto += '\n🟡 ACEITÁVEIS (Categoria 2 OMS):\n';
+            resp.metodosAceitaveisCat2.forEach(m => { texto += '  ○ ' + m.nome + '\n'; });
+          }
+          cacheCondutaGineco = texto;
+          const box = document.getElementById('gin-box-resultado-anti');
+          const pre = document.getElementById('gin-pre-resultado-anti');
+          if (box) box.classList.remove('hidden');
+          if (pre) pre.textContent = texto;
+          copiarToast('Elegibilidade de anticoncepção avaliada!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function avaliarLeucorreiaModal() {
+      hapticFeedback('medium');
+      const sintoma = document.getElementById('gin-input-leu-sintoma')?.value || '';
+      const aspecto = document.getElementById('gin-input-leu-aspecto')?.value || '';
+      const phVal = document.getElementById('gin-input-leu-ph')?.value;
+      const whiff = document.getElementById('gin-input-leu-whiff')?.value || 'nao_realizado';
+      const micro = document.getElementById('gin-input-leu-micro')?.value || '';
+      const gestante = document.getElementById('gin-input-leu-gestante')?.checked || false;
+      const recorrente = document.getElementById('gin-input-leu-recorrente')?.checked || false;
+
+      try {
+        const params = {
+          sintomaPredominante: sintoma,
+          aspectoCorrimento: aspecto,
+          whiffTest: whiff,
+          microscopia: micro,
+          gestante: gestante,
+          recorrente: recorrente
+        };
+        if (phVal && !isNaN(parseFloat(phVal))) params.phVaginal = parseFloat(phVal);
+
+        const resp = await chamarApiCockpitRpc('cockpitInfeccaoVulvovaginal', [params]);
+
+        if (resp) {
+          let texto = '🦠 SÍNDROMES INFECCIOSAS VULVOVAGINAIS (PCDT/MS)\n';
+          texto += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+          texto += '• Diagnóstico: ' + (resp.diagnosticoDescricao || resp.diagnostico) + '\n';
+          if (resp.alertas && resp.alertas.length > 0) {
+            texto += '\n⚠️ ALERTAS:\n';
+            resp.alertas.forEach(a => { texto += '  ' + a + '\n'; });
+          }
+          if (resp.prescricoes && resp.prescricoes.length > 0) {
+            texto += '\n💊 PRESCRIÇÃO FARMACOLÓGICA (REMUME/MS):\n';
+            resp.prescricoes.forEach(p => {
+              texto += '  💊 ' + p.farmaco + ' (' + p.tipo + ')\n';
+              texto += '     ' + p.posologia + '\n';
+            });
+          }
+          if (resp.condutas && resp.condutas.length > 0) {
+            texto += '\n📋 ORIENTAÇÕES & SEGUIMENTO:\n';
+            resp.condutas.forEach(c => { texto += '  • ' + c + '\n'; });
+          }
+          cacheCondutaGineco = texto;
+          const box = document.getElementById('gin-box-resultado-leucorreia');
+          const pre = document.getElementById('gin-pre-resultado-leucorreia');
+          if (box) box.classList.remove('hidden');
+          if (pre) pre.textContent = texto;
+          copiarToast('Diagnóstico e prescrição gerados!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    function copiarCondutaGinecoParaPep() {
+      hapticFeedback('medium');
+      if (cacheCondutaGineco) {
+        copiarTextoClipboard(cacheCondutaGineco, 'Conduta de Ginecologia copiada para o PEP!');
+      } else {
+        copiarToast('Nenhuma conduta gerada ainda. Avalie primeiro.');
+      }
+    }
+
     // =========================================================================
     // 5.0 SÍNTESE DE TODOS OS CASOS DO DIA (SOAP CONSOLIDADO & ROUND)
     // =========================================================================
@@ -5688,6 +6818,359 @@
       }
     }
 
+    // ═════════════════════════════════════════════════════════════════════════
+    // PRECEPTOR IA · VOZ EM TEMPO REAL (GEMINI-3.8-LIVE / WEBSOCKET FULL-DUPLEX)
+    // ═════════════════════════════════════════════════════════════════════════
+    let liveWs = null;
+    let liveConectado = false;
+    let liveInputAudioCtx = null;
+    let liveOutputAudioCtx = null;
+    let liveMicStream = null;
+    let liveMicProcessor = null;
+    let liveScheduledTime = 0;
+    let liveActiveSources = [];
+    let liveMudo = false;
+    let historicoTranscricaoLive = [];
+
+    function abrirModalPreceptorLive() {
+      hapticFeedback('medium');
+      const modal = document.getElementById('modal-preceptor-live');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fecharModalPreceptorLive() {
+      hapticFeedback('light');
+      if (liveConectado) {
+        desconectarLivePreceptor();
+      }
+      const modal = document.getElementById('modal-preceptor-live');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function setLiveStatus(texto, estado = 'idle') {
+      const badge = document.getElementById('live-status-badge');
+      const dot = document.getElementById('live-status-dot');
+      const statusText = document.getElementById('live-status-text');
+      const pulseRing = document.getElementById('live-pulse-ring');
+      const avatar = document.getElementById('live-avatar');
+      if (!badge || !statusText) return;
+
+      statusText.textContent = texto;
+
+      if (dot) {
+        dot.className = 'h-2 w-2 rounded-full ' + (
+          estado === 'connected' ? 'bg-emerald-400 animate-pulse' :
+          estado === 'speaking' ? 'bg-teal-300 animate-ping' :
+          estado === 'listening' ? 'bg-amber-400 animate-pulse' :
+          estado === 'connecting' ? 'bg-amber-400' : 'bg-slate-500'
+        );
+      }
+
+      if (pulseRing) {
+        if (estado === 'speaking') {
+          pulseRing.className = 'absolute inset-0 rounded-full border-2 border-teal-400 animate-ping opacity-60';
+        } else if (estado === 'listening') {
+          pulseRing.className = 'absolute inset-0 rounded-full border-2 border-amber-400 animate-pulse opacity-40';
+        } else if (estado === 'connected') {
+          pulseRing.className = 'absolute inset-0 rounded-full border-2 border-emerald-500/40 scale-105';
+        } else {
+          pulseRing.className = 'absolute inset-0 rounded-full border-2 border-slate-700/20 scale-100';
+        }
+      }
+
+      if (avatar) {
+        if (estado === 'speaking') {
+          avatar.className = 'h-14 w-14 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white shadow-xl shadow-teal-950/80 scale-105 transition-transform';
+        } else {
+          avatar.className = 'h-14 w-14 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-950/60 scale-100 transition-transform';
+        }
+      }
+    }
+
+    async function alternarSessaoLivePreceptor() {
+      if (liveConectado) {
+        desconectarLivePreceptor();
+      } else {
+        await conectarLivePreceptor();
+      }
+    }
+
+    async function conectarLivePreceptor() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        copiarToast('Microfone indisponível neste navegador.');
+        return;
+      }
+
+      setLiveStatus('Conectando ao Gemini 3.8 Live...', 'connecting');
+      const btnIniciar = document.getElementById('btn-iniciar-live');
+      const btnIniciarLabel = document.getElementById('btn-iniciar-live-label');
+      const btnMutar = document.getElementById('btn-mutar-live');
+      if (btnIniciarLabel) btnIniciarLabel.textContent = 'Conectando...';
+
+      try {
+        // Obter stream de microfone 16kHz
+        liveMicStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: 1,
+            sampleRate: 16000,
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+
+        // Configurar URL do WebSocket
+        let wsUrl;
+        if (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io')) {
+          const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          wsUrl = `${proto}//${window.location.host}/live`;
+        } else {
+          wsUrl = 'wss://ultra-rotina-backend.onrender.com/live';
+        }
+
+        liveWs = new WebSocket(wsUrl);
+
+        liveWs.onopen = () => {
+          liveConectado = true;
+          setLiveStatus('🟢 Conectado no Fone (gemini-3.8-live)', 'connected');
+          hapticFeedback('success');
+
+          if (btnIniciar) {
+            btnIniciar.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+            btnIniciar.classList.add('bg-rose-600', 'hover:bg-rose-500');
+          }
+          if (btnIniciarLabel) btnIniciarLabel.textContent = 'Encerrar Sessão Live';
+          if (btnMutar) btnMutar.classList.remove('hidden');
+
+          // Enviar caso clínico atual como contexto prévio se houver
+          if (cockpitDados && cockpitDados.soap) {
+            const contextoResumo = `[Contexto do Paciente em Atendimento no Cockpit]:\n${cockpitDados.soap.substring(0, 1000)}`;
+            liveWs.send(JSON.stringify({ text: contextoResumo }));
+          }
+
+          iniciarCapturaAudioLive();
+        };
+
+        liveWs.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            if (msg.type === 'ready') {
+              setLiveStatus('🎙️ Ouvindo você... (fale agora)', 'listening');
+            } else if (msg.type === 'audio' && msg.audio) {
+              setLiveStatus('🔊 Preceptor Falando (Voz Fenrir)...', 'speaking');
+              tocarChunkAudioLive(msg.audio);
+            } else if (msg.type === 'transcript') {
+              adicionarItemTranscricaoLive(msg.role || 'model', msg.text);
+            } else if (msg.type === 'interrupted') {
+              // Barge-in: o médico falou e interrompeu a fala do Preceptor
+              pararReproducaoAudioLive();
+              setLiveStatus('🎙️ Ouvindo você...', 'listening');
+            } else if (msg.type === 'turnComplete') {
+              setLiveStatus('🎙️ Ouvindo você...', 'listening');
+            } else if (msg.type === 'error') {
+              copiarToast(msg.error || 'Erro na sessão Live');
+              setLiveStatus('⚠️ ' + (msg.error || 'Erro'), 'idle');
+            }
+          } catch (eMsg) {
+            console.warn('[Live Parse Msg]:', eMsg);
+          }
+        };
+
+        liveWs.onerror = (e) => {
+          console.error('[Live Ws Error]:', e);
+          copiarToast('Erro de conexão com o Preceptor Live.');
+          desconectarLivePreceptor();
+        };
+
+        liveWs.onclose = () => {
+          desconectarLivePreceptor();
+        };
+
+      } catch (err) {
+        console.error('Falha ao iniciar Live:', err);
+        copiarToast('Não foi possível acessar o microfone ou conectar: ' + err.message);
+        desconectarLivePreceptor();
+      }
+    }
+
+    function iniciarCapturaAudioLive() {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      liveInputAudioCtx = new AudioCtx({ sampleRate: 16000 });
+      liveOutputAudioCtx = new AudioCtx({ sampleRate: 24000 });
+      liveScheduledTime = 0;
+
+      const source = liveInputAudioCtx.createMediaStreamSource(liveMicStream);
+      liveMicProcessor = liveInputAudioCtx.createScriptProcessor(2048, 1, 1);
+      source.connect(liveMicProcessor);
+      liveMicProcessor.connect(liveInputAudioCtx.destination);
+
+      liveMicProcessor.onaudioprocess = (e) => {
+        if (!liveConectado || liveMudo || !liveWs || liveWs.readyState !== WebSocket.OPEN) return;
+        const float32 = e.inputBuffer.getChannelData(0);
+
+        // VAD básico no cliente: só transmite se houver energia sonora para economizar banda
+        let soma = 0;
+        for (let i = 0; i < float32.length; i++) soma += float32[i] * float32[i];
+        const rms = Math.sqrt(soma / float32.length);
+        if (rms < 0.006) return; // Silêncio de fundo descartado
+
+        // Converte Float32 para Int16 Little-Endian
+        const int16 = new Int16Array(float32.length);
+        for (let i = 0; i < float32.length; i++) {
+          const s = Math.max(-1, Math.min(1, float32[i]));
+          int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+        }
+
+        const uint8 = new Uint8Array(int16.buffer);
+        let binary = '';
+        for (let i = 0; i < uint8.length; i++) {
+          binary += String.fromCharCode(uint8[i]);
+        }
+        const base64 = btoa(binary);
+        liveWs.send(JSON.stringify({ audio: base64 }));
+      };
+    }
+
+    function tocarChunkAudioLive(base64Audio) {
+      if (!liveOutputAudioCtx) return;
+      try {
+        const binary = atob(base64Audio);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        const int16 = new Int16Array(bytes.buffer);
+        const float32 = new Float32Array(int16.length);
+        for (let i = 0; i < int16.length; i++) {
+          float32[i] = int16[i] / (int16[i] < 0 ? 0x8000 : 0x7FFF);
+        }
+
+        const buffer = liveOutputAudioCtx.createBuffer(1, float32.length, 24000);
+        buffer.copyToChannel(float32, 0);
+
+        const source = liveOutputAudioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(liveOutputAudioCtx.destination);
+
+        const now = liveOutputAudioCtx.currentTime;
+        if (liveScheduledTime < now) liveScheduledTime = now + 0.02;
+
+        source.start(liveScheduledTime);
+        liveScheduledTime += buffer.duration;
+        liveActiveSources.push(source);
+
+        source.onended = () => {
+          liveActiveSources = liveActiveSources.filter(s => s !== source);
+          if (liveActiveSources.length === 0) {
+            setLiveStatus('🎙️ Ouvindo você...', 'listening');
+          }
+        };
+      } catch (ePlay) {
+        console.warn('[Audio Playback Error]:', ePlay);
+      }
+    }
+
+    function pararReproducaoAudioLive() {
+      liveActiveSources.forEach(s => {
+        try { s.stop(); } catch (_) {}
+      });
+      liveActiveSources = [];
+      liveScheduledTime = 0;
+    }
+
+    function desconectarLivePreceptor() {
+      liveConectado = false;
+      pararReproducaoAudioLive();
+
+      if (liveMicProcessor) {
+        try { liveMicProcessor.disconnect(); } catch (_) {}
+        liveMicProcessor = null;
+      }
+      if (liveMicStream) {
+        liveMicStream.getTracks().forEach(t => t.stop());
+        liveMicStream = null;
+      }
+      if (liveInputAudioCtx) {
+        try { liveInputAudioCtx.close(); } catch (_) {}
+        liveInputAudioCtx = null;
+      }
+      if (liveOutputAudioCtx) {
+        try { liveOutputAudioCtx.close(); } catch (_) {}
+        liveOutputAudioCtx = null;
+      }
+      if (liveWs) {
+        try { liveWs.close(); } catch (_) {}
+        liveWs = null;
+      }
+
+      setLiveStatus('Pronto para conectar ao vivo', 'idle');
+      const btnIniciar = document.getElementById('btn-iniciar-live');
+      const btnIniciarLabel = document.getElementById('btn-iniciar-live-label');
+      const btnMutar = document.getElementById('btn-mutar-live');
+
+      if (btnIniciar) {
+        btnIniciar.classList.remove('bg-rose-600', 'hover:bg-rose-500');
+        btnIniciar.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+      }
+      if (btnIniciarLabel) btnIniciarLabel.textContent = 'Conectar Preceptor Live';
+      if (btnMutar) btnMutar.classList.add('hidden');
+    }
+
+    function toggleMuteLivePreceptor() {
+      liveMudo = !liveMudo;
+      hapticFeedback('light');
+      const label = document.getElementById('label-btn-mutar-live');
+      const icone = document.getElementById('icone-btn-mutar-live');
+      if (label) label.textContent = liveMudo ? 'Desmutar' : 'Mudo';
+      if (icone) {
+        icone.setAttribute('data-lucide', liveMudo ? 'mic' : 'mic-off');
+        if (window.lucide) lucide.createIcons();
+      }
+      copiarToast(liveMudo ? 'Microfone mutado no Preceptor' : 'Microfone ativo');
+    }
+
+    function adicionarItemTranscricaoLive(papel, texto) {
+      const container = document.getElementById('live-transcricao-container');
+      if (!container || !texto) return;
+
+      historicoTranscricaoLive.push({ papel, texto, hora: new Date() });
+
+      const itemEl = document.createElement('div');
+      itemEl.className = papel === 'model'
+        ? 'p-2 rounded-lg bg-purple-950/40 border border-purple-800/40 text-purple-200'
+        : 'p-2 rounded-lg bg-slate-800/60 border border-slate-700/60 text-slate-200';
+
+      const tag = papel === 'model' ? '🎧 Preceptor FMRP-USP:' : '👨‍⚕️ Wagner:';
+      itemEl.innerHTML = `<span class="font-bold text-[10px] block text-emerald-400">${tag}</span><p class="mt-0.5">${escapeHtml(texto)}</p>`;
+      container.appendChild(itemEl);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function limparTranscricaoLive() {
+      historicoTranscricaoLive = [];
+      const container = document.getElementById('live-transcricao-container');
+      if (container) {
+        container.innerHTML = '<p class="text-slate-500 italic text-center py-4">Transcrição limpa. Fale no microfone para continuar a discussão socrática...</p>';
+      }
+    }
+
+    function copiarTranscricaoLiveParaSOAP() {
+      if (historicoTranscricaoLive.length === 0) {
+        copiarToast('Nenhuma discussão registrada ainda.');
+        return;
+      }
+      const resumoDiscussao = historicoTranscricaoLive.map(t =>
+        (t.papel === 'model' ? '[Preceptor]: ' : '[Dr. Wagner]: ') + t.texto
+      ).join('\n');
+
+      const campoEntrada = document.getElementById('input-conversa-texto');
+      if (campoEntrada) {
+        campoEntrada.value = (campoEntrada.value ? campoEntrada.value + '\n\n' : '') +
+          `[Discussão Socrática Preceptor Live]:\n${resumoDiscussao}`;
+      }
+      copiarToast('Discussão copiada para o campo de atendimento!');
+      fecharModalPreceptorLive();
+    }
+
     function limparCamposSOAP() {
       document.getElementById('resposta-preceptor-box').classList.add('hidden');
       carregarLeitos();
@@ -5745,7 +7228,7 @@
 
     let conversaOcupada = false;
 
-    async function executarAcaoConversa(acao) {
+    async function executarAcaoConversa(acao, extraParams) {
       if (conversaOcupada) return;
       hapticFeedback('medium');
       conversaOcupada = true;
@@ -5764,11 +7247,13 @@
         'novo': 'Reiniciando prontuário e limpando caso anterior...'
       };
 
-      adicionarMensagemFeed('usuario', rotulos[acao] || acao);
+      const labelUsuario = (extraParams && extraParams.label) || rotulos[acao] || acao;
+      adicionarMensagemFeed('usuario', labelUsuario);
       setConversaLoading(true, statusMsgs[acao] || 'Processando com IA...');
 
       try {
-        const res = await cockpitRpc('cockpitConversar', { acao: acao });
+        const payload = Object.assign({ acao: acao }, extraParams || {});
+        const res = await cockpitRpc('cockpitConversar', payload);
         if (res.resposta) {
           adicionarMensagemFeed('ia', res.resposta);
         }
@@ -5842,6 +7327,42 @@
     let gravadorSegundos = 0;
     let gravandoAudio = false;
 
+    function pcmToWavBlob(pcm, sampleRate) {
+      const numChannels = 1;
+      const bytesPerSample = 2;
+      const blockAlign = numChannels * bytesPerSample;
+      const byteRate = sampleRate * blockAlign;
+      const dataSize = pcm.length * bytesPerSample;
+      const buffer = new ArrayBuffer(44 + dataSize);
+      const view = new DataView(buffer);
+
+      function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
+      }
+
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + dataSize, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true); // PCM
+      view.setUint16(22, numChannels, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, byteRate, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, 16, true);
+      writeString(view, 36, 'data');
+      view.setUint32(40, dataSize, true);
+
+      let offset = 44;
+      for (let i = 0; i < pcm.length; i++, offset += 2) {
+        let s = Math.max(-1, Math.min(1, pcm[i]));
+        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      }
+
+      return new Blob([buffer], { type: 'audio/wav' });
+    }
+
     async function alternarGravacaoAudio() {
       if (gravandoAudio) {
         pararGravacaoAudio();
@@ -5858,14 +7379,24 @@
       }
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: 1,
+            sampleRate: 16000,
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
         audioChunks = [];
 
-        let opcoes = {};
-        if (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/webm')) {
-          opcoes = { mimeType: 'audio/webm' };
+        let opcoes = { audioBitsPerSecond: 16000 };
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+          opcoes.mimeType = 'audio/webm;codecs=opus';
+        } else if (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/webm')) {
+          opcoes.mimeType = 'audio/webm';
         } else if (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/mp4')) {
-          opcoes = { mimeType: 'audio/mp4' };
+          opcoes.mimeType = 'audio/mp4';
         }
 
         mediaRecorder = new MediaRecorder(stream, opcoes);
@@ -5876,20 +7407,74 @@
           }
         };
 
-        mediaRecorder.onstop = () => {
+        mediaRecorder.onstop = async () => {
           stream.getTracks().forEach(track => track.stop());
 
           if (audioChunks.length === 0) return;
-          const mimeFinal = mediaRecorder.mimeType || 'audio/webm';
-          const audioBlob = new Blob(audioChunks, { type: mimeFinal });
+          let mimeFinal = mediaRecorder.mimeType || 'audio/webm';
+          let audioBlob = new Blob(audioChunks, { type: mimeFinal });
           audioChunks = [];
 
-          adicionarMensagemFeed('audio', 'Áudio gravado (' + gravadorSegundos + 's) · Enviando para transcrição e análise...');
+          let vadReducaoPct = 0;
+          let audioBlobFinal = audioBlob;
+
+          // VAD & Silence Trimming (remover silêncios mortos no início e fim do áudio antes do upload)
+          try {
+            const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtxClass) {
+              const audioCtx = new AudioCtxClass({ sampleRate: 16000 });
+              const arrayBuf = await audioBlob.arrayBuffer();
+              const decoded = await audioCtx.decodeAudioData(arrayBuf);
+              const pcm = decoded.getChannelData(0);
+              const sr = decoded.sampleRate || 16000;
+              const janela = Math.floor(sr * 0.05); // 50ms
+
+              // 1. Detecção do início da fala (RMS > 0.012 com margem de segurança de 150ms)
+              let inicioFisio = 0;
+              for (let i = 0; i < pcm.length - janela; i += janela) {
+                let soma = 0;
+                for (let j = 0; j < janela; j++) soma += pcm[i + j] * pcm[i + j];
+                if (Math.sqrt(soma / janela) > 0.012) {
+                  inicioFisio = Math.max(0, i - Math.floor(sr * 0.15));
+                  break;
+                }
+              }
+
+              // 2. Detecção do fim da fala (RMS > 0.012 com margem de segurança de 250ms)
+              let fimFisio = pcm.length;
+              for (let i = pcm.length - janela; i > inicioFisio; i -= janela) {
+                let soma = 0;
+                for (let j = 0; j < janela; j++) soma += pcm[i + j] * pcm[i + j];
+                if (Math.sqrt(soma / janela) > 0.012) {
+                  fimFisio = Math.min(pcm.length, i + janela + Math.floor(sr * 0.25));
+                  break;
+                }
+              }
+              audioCtx.close();
+
+              const amostrasCortadas = inicioFisio + (pcm.length - fimFisio);
+              // Se há silêncio relevante (> 300ms) removível
+              if (amostrasCortadas > sr * 0.3 && fimFisio > inicioFisio) {
+                const pcmTrimmed = pcm.subarray(inicioFisio, fimFisio);
+                const trimmedWav = pcmToWavBlob(pcmTrimmed, sr);
+                vadReducaoPct = Math.round((amostrasCortadas / pcm.length) * 100);
+                audioBlobFinal = trimmedWav;
+                mimeFinal = 'audio/wav';
+              }
+            }
+          } catch (eVad) {
+            console.warn('[VAD Client Fallback]:', eVad);
+          }
+
+          const kbTamanho = (audioBlobFinal.size / 1024).toFixed(1);
+          const msgVoz = 'Áudio otimizado (16kHz · ' + kbTamanho + ' KB · ' + gravadorSegundos + 's' +
+            (vadReducaoPct > 0 ? ' · ' + vadReducaoPct + '% silêncio removido' : '') + ') · Enviando...';
+          adicionarMensagemFeed('audio', msgVoz);
           setConversaLoading(true, 'Transcrevendo e raciocinando caso com IA...');
           conversaOcupada = true;
 
           const reader = new FileReader();
-          reader.readAsDataURL(audioBlob);
+          reader.readAsDataURL(audioBlobFinal);
           reader.onloadend = async () => {
             try {
               const base64Data = String(reader.result).split(',')[1];
@@ -6042,7 +7627,7 @@
       } else if (tg?.close) {
         tg.close();
       } else {
-        window.open('https://t.me/ultrarotina_bot', '_blank');
+        copiarToast('Canal oficial do Telegram: @ultrarotina_bot');
       }
     }
 
@@ -9710,6 +11295,17 @@
       } else {
         copiarToast('Esta é a primeira aula do curso.');
       }
+    }
+
+    // Registro do PWA Service Worker (Cache-First 0ms Offline para plantão)
+    if ('serviceWorker' in navigator && (window.location.protocol.startsWith('http') || window.location.protocol.startsWith('https'))) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then((reg) => {
+          console.log('[PWA] Service Worker ativo em modo Cache-First:', reg.scope);
+        }).catch((err) => {
+          console.warn('[PWA] Service Worker offline não pôde ser registrado:', err.message);
+        });
+      });
     }
 
   </script>
