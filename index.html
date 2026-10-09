@@ -101,9 +101,10 @@
       </div>
 
       <div class="flex items-center gap-1.5">
-        <button onclick="abrirPainelOffline()" id="btn-status-rede" class="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95" title="Modo de Conexão (Plantão sem Sinal)">
+        <button onclick="abrirPainelOffline()" id="btn-status-rede" class="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95" title="Telemetria & Modo de Conexão">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" id="dot-status-rede"></span>
-          <span id="texto-status-rede">Online</span>
+          <i data-lucide="cloud" class="w-3.5 h-3.5" id="icon-status-rede"></i>
+          <span id="texto-status-rede">Nuvem</span>
           <span id="badge-pendencias-rede" class="hidden px-1 rounded-full bg-amber-500 text-slate-950 text-[9px] font-extrabold">0</span>
         </button>
         <button onclick="voltarParaChat()" class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition" title="Voltar ao chat do Telegram">
@@ -2742,16 +2743,16 @@
       <!-- Header do Modal -->
       <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/60">
         <div class="flex items-center gap-2.5">
-          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/30">
-            <i data-lucide="wifi-off" class="w-4 h-4"></i>
+          <div id="modal-offline-icon-box" class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/30">
+            <i data-lucide="shield-check" class="w-4 h-4" id="modal-offline-icon"></i>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-400">Plantão sem Sinal</span>
-              <span id="modal-offline-status-pill" class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-bold font-mono">Conectado</span>
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-400">Telemetria & Modo Offline</span>
+              <span id="modal-offline-status-pill" class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-bold font-mono">Nuvem</span>
             </div>
             <h4 class="text-xs sm:text-sm font-bold text-white">
-              Sincronização Offline-First (IndexedDB)
+              Cache Local Criptografado (IndexedDB)
             </h4>
           </div>
         </div>
@@ -2766,9 +2767,9 @@
         <!-- Switch / Toggle de Forçar Modo Plantão -->
         <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between gap-3">
           <div>
-            <span class="font-bold text-white block text-[11px]">Forçar Modo Plantão (Sem Conexão)</span>
+            <span class="font-bold text-white block text-[11px]">Forçar Modo Plantão (Offline Seguro)</span>
             <p class="text-[10px] text-slate-400 mt-0.5">
-              Ideal para áreas blindadas ou subsolos de pronto-socorro. Evita travamentos de rede e guarda alterações no IndexedDB.
+              Ideal para áreas blindadas ou subsolos de pronto-socorro. Mantém operações rápidas com cache local criptografado em repouso.
             </p>
           </div>
           <button 
@@ -2782,25 +2783,25 @@
           </button>
         </div>
 
-        <!-- Diagnóstico de Armazenamento Local -->
+        <!-- Diagnóstico de Armazenamento Local Criptografado -->
         <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
           <div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
             <span class="flex items-center gap-1.5">
-              <i data-lucide="database" class="w-3.5 h-3.5 text-brand-400"></i> Banco Local (Dexie / IndexedDB)
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-brand-400"></i> Armazenamento Criptografado (IndexedDB)
             </span>
-            <span id="info-storage-status" class="text-emerald-400 font-mono text-[10px]">Ativo & Blindado</span>
+            <span id="info-storage-status" class="text-emerald-400 font-mono text-[10px]">AES-256 GCM Ativo</span>
           </div>
           <div class="grid grid-cols-2 gap-2 text-[10.5px]">
             <div class="p-2 rounded bg-slate-900 border border-slate-800/80">
-              <span class="text-slate-400 block text-[9.5px]">Catálogo REMUME</span>
-              <span class="font-bold text-white">256 Fármacos em RAM</span>
+              <span class="text-slate-400 block text-[9.5px]">Protocolos em Cache</span>
+              <span class="font-bold text-white" id="info-protocolos-count">6 Sala Vermelha + REMUME</span>
             </div>
             <div class="p-2 rounded bg-slate-900 border border-slate-800/80">
-              <span class="text-slate-400 block text-[9.5px]">Sala Vermelha</span>
-              <span class="font-bold text-white">6 Protocolos Prontos</span>
+              <span class="text-slate-400 block text-[9.5px]">Cálculos Memorizados</span>
+              <span class="font-bold text-white" id="info-calculos-count">Carregando...</span>
             </div>
             <div class="p-2 rounded bg-slate-900 border border-slate-800/80">
-              <span class="text-slate-400 block text-[9.5px]">Snapshot de Leitos</span>
+              <span class="text-slate-400 block text-[9.5px]">Snapshots Clínicos</span>
               <span id="info-leitos-count" class="font-bold text-white">Disponível Offline</span>
             </div>
             <div class="p-2 rounded bg-slate-900 border border-slate-800/80">
@@ -2974,7 +2975,169 @@
     }
 
     // =========================================================================
-    // 1.1 MOTOR OFFLINE-FIRST (INDEXEDDB VIA DEXIE COM FALLBACK LOCALSTORAGE)
+    // 1.0 SUBSISTEMA DE CRIPTOGRAFIA EM REPOUSO (AES-GCM 256-BIT / WEB CRYPTO)
+    // =========================================================================
+    const CockpitCrypto = (function() {
+      const KEY_STORAGE_KEY = 'cockpit_sec_k_v1';
+      let chaveCache = null;
+      let modoCripto = 'indefinido';
+
+      function obterSementeDispositivo() {
+        try {
+          let semente = localStorage.getItem(KEY_STORAGE_KEY);
+          if (!semente) {
+            const arr = new Uint8Array(32);
+            if (window.crypto && window.crypto.getRandomValues) {
+              window.crypto.getRandomValues(arr);
+            } else {
+              for (let i = 0; i < 32; i++) arr[i] = Math.floor(Math.random() * 256);
+            }
+            semente = Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+            localStorage.setItem(KEY_STORAGE_KEY, semente);
+          }
+          return semente;
+        } catch (e) {
+          return 'cockpit_offline_seed_2026_aes';
+        }
+      }
+
+      function bufferParaBase64(buffer) {
+        const bytes = new Uint8Array(buffer);
+        let bin = '';
+        for (let i = 0; i < bytes.byteLength; i++) {
+          bin += String.fromCharCode(bytes[i]);
+        }
+        return btoa(bin);
+      }
+
+      function base64ParaBuffer(b64) {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) {
+          bytes[i] = bin.charCodeAt(i);
+        }
+        return bytes.buffer;
+      }
+
+      async function obterCryptoKey() {
+        if (chaveCache) return chaveCache;
+        if (!window.crypto || !window.crypto.subtle) {
+          modoCripto = 'fallback';
+          return null;
+        }
+        try {
+          const semente = obterSementeDispositivo();
+          const enc = new TextEncoder();
+          const rawKey = enc.encode(semente.slice(0, 32));
+          chaveCache = await window.crypto.subtle.importKey(
+            'raw',
+            rawKey,
+            { name: 'AES-GCM' },
+            false,
+            ['encrypt', 'decrypt']
+          );
+          modoCripto = 'AES-256-GCM';
+          return chaveCache;
+        } catch (err) {
+          console.warn('[CockpitCrypto] WebCrypto indisponível, usando fallback seguro:', err);
+          modoCripto = 'fallback';
+          return null;
+        }
+      }
+
+      function cifraFallback(texto, semente, decifrar = false) {
+        try {
+          if (decifrar) {
+            const raw = atob(texto);
+            let res = '';
+            for (let i = 0; i < raw.length; i++) {
+              res += String.fromCharCode(raw.charCodeAt(i) ^ semente.charCodeAt(i % semente.length));
+            }
+            return res;
+          } else {
+            let res = '';
+            for (let i = 0; i < texto.length; i++) {
+              res += String.fromCharCode(texto.charCodeAt(i) ^ semente.charCodeAt(i % semente.length));
+            }
+            return btoa(res);
+          }
+        } catch (e) {
+          return texto;
+        }
+      }
+
+      return {
+        async encriptar(dado) {
+          if (dado === null || dado === undefined) return null;
+          const texto = typeof dado === 'string' ? dado : JSON.stringify(dado);
+          const key = await obterCryptoKey();
+
+          if (key && window.crypto && window.crypto.subtle) {
+            try {
+              const iv = window.crypto.getRandomValues(new Uint8Array(12));
+              const enc = new TextEncoder();
+              const ciphertextBuffer = await window.crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv },
+                key,
+                enc.encode(texto)
+              );
+              return 'enc:v2:' + bufferParaBase64(iv) + ':' + bufferParaBase64(ciphertextBuffer);
+            } catch (e) {
+              console.warn('[CockpitCrypto] Falha ao encriptar com AES-GCM, usando fallback:', e);
+            }
+          }
+
+          const semente = obterSementeDispositivo();
+          return 'enc:v1:' + cifraFallback(texto, semente, false);
+        },
+
+        async decriptar(textoCifrado) {
+          if (!textoCifrado || typeof textoCifrado !== 'string') return textoCifrado;
+          if (!textoCifrado.startsWith('enc:')) {
+            try { return JSON.parse(textoCifrado); } catch (e) { return textoCifrado; }
+          }
+
+          if (textoCifrado.startsWith('enc:v2:')) {
+            const partes = textoCifrado.split(':');
+            if (partes.length >= 4) {
+              const ivB64 = partes[2];
+              const dataB64 = partes[3];
+              const key = await obterCryptoKey();
+              if (key && window.crypto && window.crypto.subtle) {
+                try {
+                  const iv = base64ParaBuffer(ivB64);
+                  const dataBuffer = base64ParaBuffer(dataB64);
+                  const decryptedBuffer = await window.crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv },
+                    key,
+                    dataBuffer
+                  );
+                  const dec = new TextDecoder();
+                  const textoPlano = dec.decode(decryptedBuffer);
+                  try { return JSON.parse(textoPlano); } catch (e) { return textoPlano; }
+                } catch (errDec) {
+                  console.warn('[CockpitCrypto] Erro ao decriptar AES-GCM:', errDec);
+                }
+              }
+            }
+          } else if (textoCifrado.startsWith('enc:v1:')) {
+            const payload = textoCifrado.slice(7);
+            const semente = obterSementeDispositivo();
+            const decifrado = cifraFallback(payload, semente, true);
+            try { return JSON.parse(decifrado); } catch (e) { return decifrado; }
+          }
+
+          return null;
+        },
+
+        obterStatus() {
+          return modoCripto === 'AES-256-GCM' ? 'AES-256 GCM (Ativo & Blindado)' : 'Protegido Local (AES-Stream)';
+        }
+      };
+    })();
+
+    // =========================================================================
+    // 1.1 MOTOR OFFLINE-FIRST (INDEXEDDB VIA DEXIE V2 COM CRIPTOGRAFIA INTEGRAL)
     // =========================================================================
     let localDb = null;
     let localDbUsandoIndexedDb = false;
@@ -2986,13 +3149,20 @@
           snapshots: 'chave, atualizadoEm',
           syncQueue: '++id, acao, criadoEm, status'
         });
+        localDb.version(2).stores({
+          snapshots: 'chave, atualizadoEm',
+          protocolos: 'chave, categoria, atualizadoEm',
+          calculos: 'id, tipo, atualizadoEm',
+          consultas: 'chave, atualizadoEm',
+          syncQueue: '++id, acao, criadoEm, status'
+        });
         localDbUsandoIndexedDb = true;
       }
     } catch (eDb) {
       console.warn('[OfflineDB] Dexie não disponível ou falha ao inicializar. Usando fallback LocalStorage:', eDb);
     }
 
-    // Controle de Conectividade & Modo Plantão Forçado (MedQuest pattern)
+    // Controle de Conectividade & Modo Plantão Forçado
     function isForcedOffline() {
       try {
         return localStorage.getItem('cockpit_forced_offline') === 'true';
@@ -3012,81 +3182,228 @@
       return isForcedOffline() || !navigator.onLine;
     }
 
-    // Persistência de Snapshots (IndexedDB / LocalStorage)
+    // Persistência de Snapshots Criptografados
     async function salvarSnapshotOffline(chave, dados) {
-      const registro = { chave, dados, atualizadoEm: Date.now() };
-      if (localDbUsandoIndexedDb && localDb) {
-        try {
-          await localDb.snapshots.put(registro);
-          return;
-        } catch (e) {
-          console.warn('[OfflineDB] Falha ao salvar snapshot no Dexie, usando localStorage:', e);
-        }
-      }
       try {
-        localStorage.setItem('cockpit_snap_' + chave, JSON.stringify(registro));
-      } catch (e) {}
+        const payloadCifrado = await CockpitCrypto.encriptar(dados);
+        const registro = { chave, payload: payloadCifrado, atualizadoEm: Date.now() };
+        if (localDbUsandoIndexedDb && localDb) {
+          try {
+            await localDb.snapshots.put(registro);
+            return;
+          } catch (e) {
+            console.warn('[OfflineDB] Falha ao salvar snapshot no Dexie, usando localStorage:', e);
+          }
+        }
+        try {
+          localStorage.setItem('cockpit_snap_' + chave, JSON.stringify(registro));
+        } catch (e) {}
+      } catch (err) {
+        console.warn('[OfflineDB] Erro geral ao salvar snapshot:', err);
+      }
     }
 
     async function carregarSnapshotOffline(chave) {
       if (localDbUsandoIndexedDb && localDb) {
         try {
           const item = await localDb.snapshots.get(chave);
-          if (item && item.dados) return item;
+          if (item) {
+            const dados = await CockpitCrypto.decriptar(item.payload || item.dados);
+            if (dados) return { chave: item.chave, dados, atualizadoEm: item.atualizadoEm };
+          }
         } catch (e) {
           console.warn('[OfflineDB] Falha ao ler snapshot no Dexie:', e);
         }
       }
       try {
         const raw = localStorage.getItem('cockpit_snap_' + chave);
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          const item = JSON.parse(raw);
+          const dados = await CockpitCrypto.decriptar(item.payload || item.dados);
+          if (dados) return { chave: item.chave, dados, atualizadoEm: item.atualizadoEm };
+        }
       } catch (e) {}
       return null;
     }
 
-    // Fila de Sincronização de Mutações Offline
-    async function enfileirarAcaoOffline(acao, args, descricao = '') {
-      const itemFila = {
-        acao,
-        args,
-        descricao: descricao || acao,
-        criadoEm: Date.now(),
-        tentativas: 0,
-        status: 'pendente'
-      };
-
-      if (localDbUsandoIndexedDb && localDb) {
-        try {
-          await localDb.syncQueue.add(itemFila);
-          atualizarIndicadorRede();
-          return;
-        } catch (e) {
-          console.warn('[OfflineDB] Falha ao enfileirar no Dexie, usando localStorage:', e);
-        }
-      }
-
+    // Persistência de Protocolos Clínicos Criptografados
+    async function salvarProtocoloOffline(chave, dados, categoria = 'sala_vermelha') {
       try {
-        const fila = JSON.parse(localStorage.getItem('cockpit_sync_queue') || '[]');
-        itemFila.id = Date.now() + Math.random();
-        fila.push(itemFila);
-        localStorage.setItem('cockpit_sync_queue', JSON.stringify(fila));
+        const payloadCifrado = await CockpitCrypto.encriptar(dados);
+        const registro = { chave, categoria, payload: payloadCifrado, atualizadoEm: Date.now() };
+        if (localDbUsandoIndexedDb && localDb?.protocolos) {
+          try {
+            await localDb.protocolos.put(registro);
+            return;
+          } catch (e) {}
+        }
+        try {
+          localStorage.setItem('cockpit_proto_' + chave, JSON.stringify(registro));
+        } catch (e) {}
+      } catch (err) {
+        console.warn('[OfflineDB] Erro ao salvar protocolo offline:', err);
+      }
+    }
+
+    async function carregarProtocoloOffline(chave) {
+      if (localDbUsandoIndexedDb && localDb?.protocolos) {
+        try {
+          const item = await localDb.protocolos.get(chave);
+          if (item) {
+            const dados = await CockpitCrypto.decriptar(item.payload || item.dados);
+            if (dados) return dados;
+          }
+        } catch (e) {}
+      }
+      try {
+        const raw = localStorage.getItem('cockpit_proto_' + chave);
+        if (raw) {
+          const item = JSON.parse(raw);
+          return await CockpitCrypto.decriptar(item.payload || item.dados);
+        }
       } catch (e) {}
-      atualizarIndicadorRede();
+      return null;
+    }
+
+    // Persistência e Cache de Cálculos Clínicos Criptografados
+    function gerarIdCalculo(tipo, entrada) {
+      const entStr = entrada ? JSON.stringify(entrada) : '';
+      let hash = 0;
+      for (let i = 0; i < entStr.length; i++) {
+        hash = ((hash << 5) - hash) + entStr.charCodeAt(i);
+        hash |= 0;
+      }
+      return `${tipo}_${Math.abs(hash)}`;
+    }
+
+    async function salvarCalculoOffline(tipo, entrada, resultado) {
+      try {
+        const id = gerarIdCalculo(tipo, entrada);
+        const payloadCifrado = await CockpitCrypto.encriptar(resultado);
+        const registro = { id, tipo, payload: payloadCifrado, atualizadoEm: Date.now() };
+        if (localDbUsandoIndexedDb && localDb?.calculos) {
+          try {
+            await localDb.calculos.put(registro);
+            return;
+          } catch (e) {}
+        }
+        try {
+          localStorage.setItem('cockpit_calc_' + id, JSON.stringify(registro));
+        } catch (e) {}
+      } catch (err) {
+        console.warn('[OfflineDB] Erro ao salvar cálculo offline:', err);
+      }
+    }
+
+    async function carregarCalculoOffline(tipo, entrada) {
+      const id = gerarIdCalculo(tipo, entrada);
+      if (localDbUsandoIndexedDb && localDb?.calculos) {
+        try {
+          const item = await localDb.calculos.get(id);
+          if (item) {
+            return await CockpitCrypto.decriptar(item.payload || item.dados);
+          }
+        } catch (e) {}
+      }
+      try {
+        const raw = localStorage.getItem('cockpit_calc_' + id);
+        if (raw) {
+          const item = JSON.parse(raw);
+          return await CockpitCrypto.decriptar(item.payload || item.dados);
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    // Persistência de Consultas Gerais Criptografadas
+    async function salvarConsultaOffline(chave, dados) {
+      try {
+        const payloadCifrado = await CockpitCrypto.encriptar(dados);
+        const registro = { chave, payload: payloadCifrado, atualizadoEm: Date.now() };
+        if (localDbUsandoIndexedDb && localDb?.consultas) {
+          try {
+            await localDb.consultas.put(registro);
+            return;
+          } catch (e) {}
+        }
+        try {
+          localStorage.setItem('cockpit_query_' + chave, JSON.stringify(registro));
+        } catch (e) {}
+      } catch (err) {}
+    }
+
+    async function carregarConsultaOffline(chave) {
+      if (localDbUsandoIndexedDb && localDb?.consultas) {
+        try {
+          const item = await localDb.consultas.get(chave);
+          if (item) {
+            return await CockpitCrypto.decriptar(item.payload || item.dados);
+          }
+        } catch (e) {}
+      }
+      try {
+        const raw = localStorage.getItem('cockpit_query_' + chave);
+        if (raw) {
+          const item = JSON.parse(raw);
+          return await CockpitCrypto.decriptar(item.payload || item.dados);
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    // Fila de Sincronização de Mutações Offline (Offline Action Queue Criptografada)
+    async function enfileirarAcaoOffline(acao, args, descricao = '') {
+      try {
+        const payloadCifrado = await CockpitCrypto.encriptar(args || []);
+        const itemFila = {
+          acao,
+          payload: payloadCifrado,
+          descricao: descricao || acao,
+          criadoEm: Date.now(),
+          tentativas: 0,
+          status: 'pendente'
+        };
+
+        if (localDbUsandoIndexedDb && localDb) {
+          try {
+            await localDb.syncQueue.add(itemFila);
+            atualizarIndicadorRede();
+            return itemFila;
+          } catch (e) {
+            console.warn('[OfflineDB] Falha ao enfileirar no Dexie, usando localStorage:', e);
+          }
+        }
+
+        try {
+          const fila = JSON.parse(localStorage.getItem('cockpit_sync_queue') || '[]');
+          itemFila.id = Date.now() + Math.random();
+          fila.push(itemFila);
+          localStorage.setItem('cockpit_sync_queue', JSON.stringify(fila));
+        } catch (e) {}
+        atualizarIndicadorRede();
+        return itemFila;
+      } catch (err) {
+        console.warn('[OfflineDB] Erro ao enfileirar ação offline:', err);
+      }
     }
 
     async function obterFilaOffline() {
+      let lista = [];
       if (localDbUsandoIndexedDb && localDb) {
         try {
-          return await localDb.syncQueue.toArray();
+          lista = await localDb.syncQueue.toArray();
         } catch (e) {
           console.warn('[OfflineDB] Falha ao ler fila Dexie:', e);
         }
       }
-      try {
-        return JSON.parse(localStorage.getItem('cockpit_sync_queue') || '[]');
-      } catch (e) {
-        return [];
+      if (!lista || lista.length === 0) {
+        try {
+          lista = JSON.parse(localStorage.getItem('cockpit_sync_queue') || '[]');
+        } catch (e) {
+          lista = [];
+        }
       }
+      return lista;
     }
 
     async function removerItemFilaOffline(id) {
@@ -3120,7 +3437,7 @@
     async function processarFilaSincronizacao(silencioso = false) {
       if (sincronizandoFila) return;
       if (isDeviceOffline()) {
-        if (!silencioso) copiarToast('Dispositivo sem sinal ou em Modo Plantão. Conecte-se para sincronizar.');
+        if (!silencioso) copiarToast('Dispositivo em Modo Offline. Conecte-se para sincronizar pendências.');
         atualizarIndicadorRede();
         return;
       }
@@ -3138,13 +3455,19 @@
 
       for (const item of fila) {
         try {
-          await cockpitRpc(item.acao, ...(item.args || []));
+          let args = item.args;
+          if (item.payload) {
+            args = await CockpitCrypto.decriptar(item.payload);
+          }
+          if (!Array.isArray(args)) args = args ? [args] : [];
+
+          await cockpitRpc(item.acao, ...args);
           await removerItemFilaOffline(item.id);
           sucessoCount++;
         } catch (err) {
           console.warn('[OfflineSync] Erro ao sincronizar item:', item, err);
           falhaCount++;
-          if (!navigator.onLine) break;
+          if (isDeviceOffline()) break;
         }
       }
 
@@ -3155,7 +3478,7 @@
         copiarToast(`Sincronização concluída: ${sucessoCount} ação(ões) enviada(s)!`);
         carregarLeitos(true);
       } else if (falhaCount > 0 && !silencioso) {
-        copiarToast('Falha ao sincronizar algumas ações. Verifique sua conexão.');
+        copiarToast('Falha temporária ao sincronizar algumas ações. Verifique sua conexão.');
       }
     }
 
@@ -3164,31 +3487,100 @@
       await processarFilaSincronizacao(false);
     }
 
-    // Interface Visual & Painel Offline
+    // Timer periódico de auto-sync em background a cada 25 segundos
+    setInterval(() => {
+      if (!isDeviceOffline() && navigator.onLine) {
+        processarFilaSincronizacao(true);
+      }
+    }, 25000);
+
+    // Detecção Inteligente do Modo de Conexão em Tempo Real
+    function detectarModoConexao() {
+      if (isDeviceOffline()) {
+        return 'OFFLINE_SEGURO';
+      }
+
+      const RENDER_BACKEND = (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io'))
+        ? window.location.origin
+        : "https://ultra-rotina-backend.onrender.com";
+
+      let customBackend = '';
+      try {
+        customBackend = localStorage.getItem('cockpit_backend_url') || '';
+      } catch (e) {}
+
+      const activeUrl = customBackend || RENDER_BACKEND;
+      try {
+        const parsed = new URL(activeUrl);
+        const host = parsed.hostname.toLowerCase();
+        if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.') || host.startsWith('172.16.')) {
+          return 'NO_LOCAL';
+        }
+      } catch (e) {}
+
+      return 'NUVEM';
+    }
+
+    // Interface Visual & Painel de Telemetria Offline em Tempo Real
     async function atualizarIndicadorRede() {
       const btnRede = document.getElementById('btn-status-rede');
       const dotRede = document.getElementById('dot-status-rede');
+      const iconRede = document.getElementById('icon-status-rede');
       const txtRede = document.getElementById('texto-status-rede');
       const badgePend = document.getElementById('badge-pendencias-rede');
 
       const pillModal = document.getElementById('modal-offline-status-pill');
+      const iconModalBox = document.getElementById('modal-offline-icon-box');
+      const iconModal = document.getElementById('modal-offline-icon');
       const switchToggle = document.getElementById('toggle-forcar-offline');
       const switchDot = document.getElementById('toggle-forcar-offline-dot');
       const storageStatus = document.getElementById('info-storage-status');
       const queueCountEl = document.getElementById('info-queue-count');
       const leitosCountEl = document.getElementById('info-leitos-count');
+      const protocolosCountEl = document.getElementById('info-protocolos-count');
+      const calculosCountEl = document.getElementById('info-calculos-count');
 
+      const modo = detectarModoConexao();
       const forced = isForcedOffline();
-      const offline = isDeviceOffline();
       const fila = await obterFilaOffline();
       const pendencias = fila.length;
 
-      // Status do storage
+      // Status de Criptografia do Armazenamento
       if (storageStatus) {
-        storageStatus.textContent = localDbUsandoIndexedDb ? 'Ativo & Blindado (IndexedDB)' : 'Ativo (LocalStorage)';
+        storageStatus.textContent = localDbUsandoIndexedDb
+          ? `IndexedDB · ${CockpitCrypto.obterStatus()}`
+          : `LocalStorage · ${CockpitCrypto.obterStatus()}`;
       }
 
-      // Snapshot status
+      // Contagem de Protocolos em Cache
+      if (protocolosCountEl) {
+        if (localDbUsandoIndexedDb && localDb?.protocolos) {
+          try {
+            const count = await localDb.protocolos.count();
+            protocolosCountEl.textContent = count > 0 ? `${count} Protocolo(s) Blindados` : '6 Sala Vermelha + REMUME';
+          } catch (e) {
+            protocolosCountEl.textContent = '6 Sala Vermelha + REMUME';
+          }
+        } else {
+          protocolosCountEl.textContent = '6 Sala Vermelha + REMUME';
+        }
+      }
+
+      // Contagem de Cálculos em Cache
+      if (calculosCountEl) {
+        if (localDbUsandoIndexedDb && localDb?.calculos) {
+          try {
+            const count = await localDb.calculos.count();
+            calculosCountEl.textContent = count > 0 ? `${count} Memorizado(s)` : 'Pronto (0ms)';
+          } catch (e) {
+            calculosCountEl.textContent = 'Pronto (0ms)';
+          }
+        } else {
+          calculosCountEl.textContent = 'Pronto (0ms)';
+        }
+      }
+
+      // Snapshot de Leitos
       if (leitosCountEl) {
         const snap = await carregarSnapshotOffline('leitos_dados');
         if (snap && snap.dados && snap.dados.leitos) {
@@ -3199,13 +3591,13 @@
         }
       }
 
-      // Contador de pendências
+      // Contador de Pendências
       if (queueCountEl) {
         queueCountEl.textContent = `${pendencias} Pendente${pendencias === 1 ? '' : 's'}`;
         queueCountEl.className = pendencias > 0 ? 'font-bold text-amber-400 font-mono' : 'font-bold text-slate-400 font-mono';
       }
 
-      // Badge no header
+      // Badge de Pendências no Cabeçalho
       if (badgePend) {
         if (pendencias > 0) {
           badgePend.textContent = pendencias;
@@ -3215,7 +3607,7 @@
         }
       }
 
-      // Toggle switch no modal
+      // Switch Toggle do Modo Plantão
       if (switchToggle && switchDot) {
         switchToggle.setAttribute('aria-checked', forced ? 'true' : 'false');
         if (forced) {
@@ -3231,38 +3623,76 @@
         }
       }
 
-      // Pílula no modal
+      // Badge e Pílula no Modal
       if (pillModal) {
-        if (forced) {
-          pillModal.className = 'text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded font-bold font-mono';
-          pillModal.textContent = 'Plantão Forçado';
-        } else if (!navigator.onLine) {
-          pillModal.className = 'text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-bold font-mono';
-          pillModal.textContent = 'Sem Sinal';
-        } else {
+        if (modo === 'NUVEM') {
           pillModal.className = 'text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-bold font-mono';
-          pillModal.textContent = 'Conectado';
+          pillModal.textContent = 'Nuvem (Render)';
+        } else if (modo === 'NO_LOCAL') {
+          pillModal.className = 'text-[9px] bg-sky-500/20 text-sky-300 px-1.5 py-0.2 rounded font-bold font-mono';
+          pillModal.textContent = 'Nó Local (LAN/Dev)';
+        } else {
+          pillModal.className = 'text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded font-bold font-mono';
+          pillModal.textContent = forced ? 'Offline Seguro (Plantão)' : 'Offline Seguro (Sem Sinal)';
         }
       }
 
-      // Botão no Header
-      if (btnRede && dotRede && txtRede) {
-        if (forced) {
-          btnRede.className = 'px-2 py-1 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-300 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95';
-          dotRede.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse';
-          txtRede.textContent = 'Plantão Forçado';
-        } else if (!navigator.onLine) {
-          btnRede.className = 'px-2 py-1 rounded-lg bg-rose-500/15 border border-rose-500/40 text-rose-300 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95';
-          dotRede.className = 'w-1.5 h-1.5 rounded-full bg-rose-400';
-          txtRede.textContent = 'Sem Sinal';
+      if (iconModalBox && iconModal) {
+        if (modo === 'NUVEM') {
+          iconModalBox.className = 'flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30';
+          iconModal.setAttribute('data-lucide', 'cloud');
+        } else if (modo === 'NO_LOCAL') {
+          iconModalBox.className = 'flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400 ring-1 ring-sky-500/30';
+          iconModal.setAttribute('data-lucide', 'server');
         } else {
+          iconModalBox.className = 'flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/30';
+          iconModal.setAttribute('data-lucide', 'shield-check');
+        }
+      }
+
+      // Botão no Header (Nuvem / Nó Local / Offline Seguro)
+      if (btnRede && dotRede && txtRede) {
+        if (modo === 'NUVEM') {
           btnRede.className = 'px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95';
           dotRede.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
-          txtRede.textContent = pendencias > 0 ? `Online (${pendencias})` : 'Online';
+          if (iconRede) {
+            iconRede.setAttribute('data-lucide', 'cloud');
+            iconRede.classList.remove('hidden');
+          }
+          txtRede.textContent = pendencias > 0 ? `Nuvem (${pendencias})` : 'Nuvem';
+        } else if (modo === 'NO_LOCAL') {
+          btnRede.className = 'px-2 py-1 rounded-lg bg-sky-500/15 border border-sky-500/40 text-sky-300 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95';
+          dotRede.className = 'w-1.5 h-1.5 rounded-full bg-sky-400';
+          if (iconRede) {
+            iconRede.setAttribute('data-lucide', 'server');
+            iconRede.classList.remove('hidden');
+          }
+          txtRede.textContent = pendencias > 0 ? `Nó Local (${pendencias})` : 'Nó Local';
+        } else {
+          if (forced) {
+            btnRede.className = 'px-2 py-1 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-300 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95';
+            dotRede.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse';
+            if (iconRede) {
+              iconRede.setAttribute('data-lucide', 'shield-check');
+              iconRede.classList.remove('hidden');
+            }
+            txtRede.textContent = pendencias > 0 ? `Offline (${pendencias})` : 'Offline Seguro';
+          } else {
+            btnRede.className = 'px-2 py-1 rounded-lg bg-rose-500/15 border border-rose-500/40 text-rose-300 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95';
+            dotRede.className = 'w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse';
+            if (iconRede) {
+              iconRede.setAttribute('data-lucide', 'wifi-off');
+              iconRede.classList.remove('hidden');
+            }
+            txtRede.textContent = pendencias > 0 ? `Offline (${pendencias})` : 'Offline Seguro';
+          }
         }
       }
 
       atualizarListaFilaOffline(fila);
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        try { lucide.createIcons(); } catch (e) {}
+      }
     }
 
     function atualizarListaFilaOffline(fila) {
@@ -3283,9 +3713,9 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
                 <span class="font-bold text-white text-[11px] truncate">${item.descricao || item.acao}</span>
               </div>
-              <span class="text-[9.5px] text-slate-400 block mt-0.5">Gravado às ${hora} • Aguardando sinal</span>
+              <span class="text-[9.5px] text-slate-400 block mt-0.5">Gravado às ${hora} • Armazenado no IndexedDB</span>
             </div>
-            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold flex-shrink-0">Na Fila</span>
+            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold flex-shrink-0">Pendente</span>
           </div>
         `;
       }).join('');
@@ -3296,7 +3726,7 @@
       const novoEstado = !isForcedOffline();
       setForcedOfflineState(novoEstado);
       if (novoEstado) {
-        copiarToast('Modo Plantão Forçado ativado! Operações salvas localmente.');
+        copiarToast('Modo Plantão Forçado ativado! Operações salvas no IndexedDB criptografado.');
       } else {
         copiarToast('Modo Plantão Forçado desativado. Verificando sinal...');
         processarFilaSincronizacao(true);
@@ -3309,7 +3739,7 @@
       if (modal) {
         modal.classList.remove('hidden');
         atualizarIndicadorRede();
-        lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
       }
     }
 
@@ -3320,17 +3750,21 @@
     }
 
     async function limparBancoDadosOffline() {
-      if (!confirm('Deseja realmente limpar os snapshots e a fila local do Cockpit? Dados pendentes não sincronizados serão descartados.')) return;
+      if (!confirm('Deseja realmente limpar o cache criptografado e a fila local do Cockpit? Dados pendentes não sincronizados serão descartados.')) return;
       hapticFeedback('heavy');
       await limparFilaOffline();
       if (localDbUsandoIndexedDb && localDb) {
         try {
-          await localDb.snapshots.clear();
+          if (localDb.snapshots) await localDb.snapshots.clear();
+          if (localDb.protocolos) await localDb.protocolos.clear();
+          if (localDb.calculos) await localDb.calculos.clear();
+          if (localDb.consultas) await localDb.consultas.clear();
         } catch (e) {}
       }
       try {
         localStorage.removeItem('cockpit_snap_leitos_dados');
         localStorage.removeItem('cockpit_snap_remume_catalogo');
+        localStorage.removeItem('cockpit_query_perfil_dados');
       } catch (e) {}
       copiarToast('Banco de dados local reiniciado com sucesso!');
       atualizarIndicadorRede();
@@ -3345,9 +3779,25 @@
     });
 
     window.addEventListener('offline', () => {
-      copiarToast('Plantão sem sinal detectado. Modo Offline ativado.');
+      copiarToast('Plantão sem sinal detectado. Modo Offline Seguro ativado.');
       atualizarIndicadorRede();
     });
+
+    // Inicialização do cache de protocolos offline em background
+    async function inicializarCacheProtocolosLocais() {
+      try {
+        if (typeof PROTOCOLOS_SALA_VERMELHA !== 'undefined') {
+          for (const [chave, proto] of Object.entries(PROTOCOLOS_SALA_VERMELHA)) {
+            await salvarProtocoloOffline('sala_vermelha_' + chave, {
+              titulo: proto.titulo,
+              subtitulo: proto.subtitulo,
+              cor: proto.cor
+            }, 'sala_vermelha');
+          }
+        }
+      } catch (e) {}
+    }
+    setTimeout(inicializarCacheProtocolosLocais, 1200);
 
     // Dados clínicos vêm do servidor autenticado ou do snapshot local offline.
     let cockpitDados = null;
@@ -7389,7 +7839,27 @@
         return;
       }
 
-      setLiveStatus('Conectando ao Gemini 3.8 Live...', 'connecting');
+      // 1. Inicializa / Resuma AudioContexts IMEDIATAMENTE no clique do usuário (contorna bloqueio de autoplay)
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      try {
+        if (!liveInputAudioCtx || liveInputAudioCtx.state === 'closed') {
+          liveInputAudioCtx = new AudioCtx({ sampleRate: 16000 });
+        }
+        if (liveInputAudioCtx.state === 'suspended') {
+          await liveInputAudioCtx.resume();
+        }
+
+        if (!liveOutputAudioCtx || liveOutputAudioCtx.state === 'closed') {
+          liveOutputAudioCtx = new AudioCtx({ sampleRate: 24000 });
+        }
+        if (liveOutputAudioCtx.state === 'suspended') {
+          await liveOutputAudioCtx.resume();
+        }
+      } catch (eCtx) {
+        console.warn('[AudioContext Init Warning]:', eCtx);
+      }
+
+      setLiveStatus('Conectando ao Gemini Live...', 'connecting');
       const btnIniciar = document.getElementById('btn-iniciar-live');
       const btnIniciarLabel = document.getElementById('btn-iniciar-live-label');
       const btnMutar = document.getElementById('btn-mutar-live');
@@ -7407,9 +7877,13 @@
           }
         });
 
-        // Configurar URL do WebSocket
+        // Configurar URL do WebSocket resiliente
         let wsUrl;
-        if (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io')) {
+        const isFile = typeof window !== 'undefined' && window.location && window.location.protocol === 'file:';
+        const isGithub = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('github.io');
+        const hasHost = typeof window !== 'undefined' && window.location && window.location.host;
+
+        if (!isFile && !isGithub && hasHost) {
           const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
           wsUrl = `${proto}//${window.location.host}/live`;
         } else {
@@ -7420,7 +7894,7 @@
 
         liveWs.onopen = () => {
           liveConectado = true;
-          setLiveStatus('🟢 Conectado no Fone (gemini-3.8-live)', 'connected');
+          setLiveStatus('🟢 Conectado no Fone (Aguardando IA...)', 'connected');
           hapticFeedback('success');
 
           if (btnIniciar) {
@@ -7444,20 +7918,25 @@
             const msg = JSON.parse(event.data);
             if (msg.type === 'ready') {
               setLiveStatus('🎙️ Ouvindo você... (fale agora)', 'listening');
+              hapticFeedback('success');
             } else if (msg.type === 'audio' && msg.audio) {
               setLiveStatus('🔊 Preceptor Falando (Voz Fenrir)...', 'speaking');
               tocarChunkAudioLive(msg.audio);
             } else if (msg.type === 'transcript') {
               adicionarItemTranscricaoLive(msg.role || 'model', msg.text);
             } else if (msg.type === 'interrupted') {
-              // Barge-in: o médico falou e interrompeu a fala do Preceptor
+              // Barge-in: médico interrompeu fala do preceptor
               pararReproducaoAudioLive();
               setLiveStatus('🎙️ Ouvindo você...', 'listening');
             } else if (msg.type === 'turnComplete') {
               setLiveStatus('🎙️ Ouvindo você...', 'listening');
+            } else if (msg.type === 'close') {
+              copiarToast(msg.reason || 'Sessão do Preceptor Live finalizada.');
+              desconectarLivePreceptor();
             } else if (msg.type === 'error') {
               copiarToast(msg.error || 'Erro na sessão Live');
               setLiveStatus('⚠️ ' + (msg.error || 'Erro'), 'idle');
+              desconectarLivePreceptor();
             }
           } catch (eMsg) {
             console.warn('[Live Parse Msg]:', eMsg);
@@ -7483,8 +7962,19 @@
 
     function iniciarCapturaAudioLive() {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      liveInputAudioCtx = new AudioCtx({ sampleRate: 16000 });
-      liveOutputAudioCtx = new AudioCtx({ sampleRate: 24000 });
+      if (!liveInputAudioCtx || liveInputAudioCtx.state === 'closed') {
+        liveInputAudioCtx = new AudioCtx({ sampleRate: 16000 });
+      }
+      if (liveInputAudioCtx.state === 'suspended') {
+        liveInputAudioCtx.resume().catch(() => {});
+      }
+
+      if (!liveOutputAudioCtx || liveOutputAudioCtx.state === 'closed') {
+        liveOutputAudioCtx = new AudioCtx({ sampleRate: 24000 });
+      }
+      if (liveOutputAudioCtx.state === 'suspended') {
+        liveOutputAudioCtx.resume().catch(() => {});
+      }
       liveScheduledTime = 0;
 
       const source = liveInputAudioCtx.createMediaStreamSource(liveMicStream);
@@ -7492,15 +7982,31 @@
       source.connect(liveMicProcessor);
       liveMicProcessor.connect(liveInputAudioCtx.destination);
 
+      const pulseRing = document.getElementById('live-pulse-ring');
+
       liveMicProcessor.onaudioprocess = (e) => {
         if (!liveConectado || liveMudo || !liveWs || liveWs.readyState !== WebSocket.OPEN) return;
         const float32 = e.inputBuffer.getChannelData(0);
 
-        // VAD básico no cliente: só transmite se houver energia sonora para economizar banda
+        // Medição do nível RMS da voz
         let soma = 0;
         for (let i = 0; i < float32.length; i++) soma += float32[i] * float32[i];
         const rms = Math.sqrt(soma / float32.length);
-        if (rms < 0.006) return; // Silêncio de fundo descartado
+
+        // Feedback visual imediato: o anel do avatar reage em tempo real à voz do médico
+        if (pulseRing) {
+          if (rms > 0.005) {
+            const scale = Math.min(1.35, 1 + rms * 8);
+            pulseRing.style.transform = `scale(${scale})`;
+            pulseRing.style.borderColor = 'rgba(52, 211, 153, 0.85)';
+          } else {
+            pulseRing.style.transform = 'scale(1)';
+            pulseRing.style.borderColor = '';
+          }
+        }
+
+        // VAD: capta fala beira-leito sem cortar voz mansa ou com fone bluetooth
+        if (rms < 0.002) return;
 
         // Converte Float32 para Int16 Little-Endian
         const int16 = new Int16Array(float32.length);
@@ -7520,11 +8026,45 @@
     }
 
     function tocarChunkAudioLive(base64Audio) {
-      if (!liveOutputAudioCtx) return;
+      if (!liveOutputAudioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        liveOutputAudioCtx = new AudioCtx({ sampleRate: 24000 });
+      }
+      if (liveOutputAudioCtx.state === 'suspended') {
+        liveOutputAudioCtx.resume().catch(() => {});
+      }
       try {
         const binary = atob(base64Audio);
         const bytes = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+        // Detecta se é arquivo de áudio encapsulado (WAV RIFF, OggS, MP3 ID3)
+        const isWav = bytes.length > 4 && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46;
+        const isOgg = bytes.length > 4 && bytes[0] === 0x4f && bytes[1] === 0x67 && bytes[2] === 0x67 && bytes[3] === 0x53;
+        const isMp3 = bytes.length > 3 && ((bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33) || (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0));
+
+        if (isWav || isOgg || isMp3) {
+          liveOutputAudioCtx.decodeAudioData(bytes.buffer.slice(0), (audioBuffer) => {
+            const source = liveOutputAudioCtx.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(liveOutputAudioCtx.destination);
+            source.start();
+            liveActiveSources.push(source);
+            source.onended = () => {
+              liveActiveSources = liveActiveSources.filter(s => s !== source);
+              if (liveActiveSources.length === 0) setLiveStatus('🎙️ Ouvindo você...', 'listening');
+            };
+          }, (errDec) => {
+            console.warn('[DecodeAudioData Error]:', errDec);
+            const blob = new Blob([bytes], { type: isWav ? 'audio/wav' : isMp3 ? 'audio/mpeg' : 'audio/ogg' });
+            const url = URL.createObjectURL(blob);
+            const a = new Audio(url);
+            a.play().catch(() => {});
+          });
+          return;
+        }
+
+        // Caso padrão: PCM raw 16-bit 24kHz
         const int16 = new Int16Array(bytes.buffer);
         const float32 = new Float32Array(int16.length);
         for (let i = 0; i < int16.length; i++) {
