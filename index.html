@@ -134,7 +134,7 @@
         <div class="grid grid-cols-3 gap-2 mt-3 text-center">
           <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
             <span class="text-[10px] text-slate-400 block">Peso Atual</span>
-            <span class="text-lg font-black text-white" id="corpo-peso-atual">—</span>
+            <span class="text-lg font-black text-white" id="corpo-peso-atual">74.0 kg</span>
             <span class="text-[10px] text-emerald-400 font-medium block mt-0.5" id="corpo-peso-delta"> </span>
           </div>
           <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
@@ -144,8 +144,8 @@
           </div>
           <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
             <span class="text-[10px] text-slate-400 block">Dose Atual</span>
-            <span class="text-lg font-black text-amber-400" id="corpo-dose-atual">—</span>
-            <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="corpo-semana"> </span>
+            <span class="text-lg font-black text-amber-400" id="corpo-dose-atual">4x / sem</span>
+            <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="corpo-semana">Musculação</span>
           </div>
         </div>
       </div>
@@ -163,21 +163,35 @@
         </div>
       </div>
 
-      <!-- Metas e Nutrição Rápida -->
-      <div class="grid grid-cols-2 gap-2.5">
-        <div class="glass-card rounded-xl p-3 space-y-1">
-          <span class="text-[11px] font-bold text-white flex items-center gap-1">
-            <i data-lucide="target" class="w-3 h-3 text-emerald-400"></i> Meta Proteica Diária
+      <!-- Metas e Nutrição Rápida (Cutting 74kg · 150g Proteína Pura) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div class="glass-card rounded-xl p-2.5 space-y-1">
+          <span class="text-[10px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="target" class="w-3 h-3 text-emerald-400"></i> Meta Proteica
           </span>
-          <div class="text-base font-extrabold text-emerald-400">180g / dia</div>
-          <p class="text-[10px] text-slate-400">1.8g/kg para preservação de massa magra sob GLP-1.</p>
+          <div class="text-sm sm:text-base font-extrabold text-emerald-400">150g / dia</div>
+          <p class="text-[9.5px] text-slate-400">2.0g/kg para 74kg (Cutting 4x Musculação)</p>
         </div>
-        <div class="glass-card rounded-xl p-3 space-y-1">
-          <span class="text-[11px] font-bold text-white flex items-center gap-1">
-            <i data-lucide="droplet" class="w-3 h-3 text-sky-400"></i> Hidratação Mínima
+        <div class="glass-card rounded-xl p-2.5 space-y-1">
+          <span class="text-[10px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i> Meta Calórica
           </span>
-          <div class="text-base font-extrabold text-sky-400">3.5 L / dia</div>
-          <p class="text-[10px] text-slate-400">Prevenção de constipação e sobrecarga renal.</p>
+          <div class="text-sm sm:text-base font-extrabold text-amber-400">~1.950 kcal</div>
+          <p class="text-[9.5px] text-slate-400">Déficit controlado de ~450 kcal/dia</p>
+        </div>
+        <div class="glass-card rounded-xl p-2.5 space-y-1">
+          <span class="text-[10px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="droplet" class="w-3 h-3 text-sky-400"></i> Hidratação
+          </span>
+          <div class="text-sm sm:text-base font-extrabold text-sky-400">3.0 L / dia</div>
+          <p class="text-[9.5px] text-slate-400">40 mL/kg para suporte metabólico</p>
+        </div>
+        <div class="glass-card rounded-xl p-2.5 space-y-1">
+          <span class="text-[10px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="dumbbell" class="w-3 h-3 text-purple-400"></i> Treino Semanal
+          </span>
+          <div class="text-sm sm:text-base font-extrabold text-purple-400">4x / semana</div>
+          <p class="text-[9.5px] text-slate-400">Musculação (1 scoop Whey diário)</p>
         </div>
       </div>
 
@@ -194,6 +208,89 @@
           </button>
         </div>
         <p id="perfil-save-status" class="text-[10px] text-slate-400"></p>
+      </div>
+
+      <!-- =============================================================== -->
+      <!-- CARD DESTAQUE: PLANO NUTRICIONAL & DIETA INTELIGENTE            -->
+      <!-- =============================================================== -->
+      <div id="card-plano-nutricional" class="glass-card rounded-xl p-3.5 sm:p-4 space-y-3.5 border border-emerald-500/30 shadow-lg shadow-emerald-950/20">
+        <!-- Header com Título e Ações Rápidas -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                <i data-lucide="utensils" class="w-4 h-4 text-emerald-400"></i> Plano Nutricional & Cardápio Inteligente
+              </h3>
+            </div>
+            <p class="text-[10.5px] text-slate-400 mt-0.5">
+              Cutting / Recomposição · 74 kg | 1,73 m | 4x Treino · <span class="text-emerald-300 font-semibold">150g Proteína Pura</span> · <span class="text-sky-300 font-semibold">1 Scoop Whey/dia</span>
+            </p>
+          </div>
+          <!-- Botões de Ação do Motor Inteligente -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="recriarDiaAtualNutricao()" title="Gerar nova combinação saborosa para o dia selecionado" class="px-2.5 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 text-[11px] font-bold flex items-center gap-1 transition active:scale-[0.98]">
+              <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> Recriar Dia
+            </button>
+            <button onclick="recriarSemanaNutricao()" title="Gerar novas combinações para todos os 7 dias" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold shadow-md shadow-indigo-600/25 flex items-center gap-1 transition active:scale-[0.98]">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Recriar Semana
+            </button>
+            <button onclick="copiarCardapioNutricao()" title="Copiar cardápio formatado para WhatsApp/Telegram" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition active:scale-[0.98]">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="resetarCardapioBase()" title="Restaurar cardápio base inicial" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition active:scale-[0.98]">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Seletor de Dias da Semana -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] text-slate-400 font-medium">
+            <span>Selecione o dia para visualizar ou editar:</span>
+            <span id="nutricao-dia-status" class="text-emerald-400 font-semibold font-mono">Segunda-feira</span>
+          </div>
+          <div class="flex items-center gap-1 overflow-x-auto pb-1 text-[11px] font-bold no-scrollbar" id="nutricao-dias-seletor">
+            <!-- Pílulas dos dias geradas dinamicamente -->
+          </div>
+        </div>
+
+        <!-- Painel de Resumo de Macros do Dia Selecionado -->
+        <div class="grid grid-cols-4 gap-1.5 bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 text-center">
+          <div>
+            <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-medium">Proteína Total</span>
+            <span id="nutricao-resumo-proteina" class="text-xs sm:text-sm font-black text-emerald-400 font-mono">150g</span>
+            <span class="text-[8.5px] text-emerald-500/80 block">Meta 150g pura</span>
+          </div>
+          <div>
+            <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-medium">Calorias</span>
+            <span id="nutricao-resumo-calorias" class="text-xs sm:text-sm font-black text-amber-300 font-mono">~1.910</span>
+            <span class="text-[8.5px] text-slate-500 block">Déficit ~450 kcal</span>
+          </div>
+          <div>
+            <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-medium">Whey Protein</span>
+            <span id="nutricao-resumo-whey" class="text-xs sm:text-sm font-black text-sky-400 font-mono">1 scoop</span>
+            <span class="text-[8.5px] text-sky-500/80 block">30g (24g P)</span>
+          </div>
+          <div>
+            <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-medium">Frutas</span>
+            <span class="text-xs sm:text-sm font-black text-purple-300 font-mono">Maçã / Uva</span>
+            <span class="text-[8.5px] text-purple-400/80 block">Fibras & Saciedade</span>
+          </div>
+        </div>
+
+        <!-- Lista das 4 Refeições do Dia -->
+        <div id="nutricao-refeicoes-container" class="space-y-2.5">
+          <!-- Renderizado dinamicamente via JS com cards de alta legibilidade -->
+        </div>
+
+        <!-- Regra de Ouro / Rodapé Explicativo -->
+        <div class="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/20 text-[10.5px] text-emerald-300/90 flex items-start gap-2">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5"></i>
+          <div>
+            <strong>Regra de Ouro:</strong> Exatamente 1 scoop de Whey por dia. Alimentos pesados já prontos/cozidos. Carboidratos concentrados no almoço/treino. Beba de 2,8L a 3,2L de água diariamente.
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2630,7 +2727,10 @@
       }
       if (tabId === 'tab-soap' || tabId === 'tab-leitos') carregarLeitos();
       if (tabId === 'tab-remume') carregarRemume();
-      if (tabId === 'tab-corpo' || tabId === 'tab-rotina') carregarPerfil();
+      if (tabId === 'tab-corpo' || tabId === 'tab-rotina') {
+        carregarPerfil();
+        if (tabId === 'tab-corpo') inicializarPlanoNutricional();
+      }
       if (tabId === 'tab-aulas') carregarAulas();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -3874,6 +3974,7 @@
         if (tipo === 'dva') {
           const peso = parseFloat(String(entrada.peso).replace(',', '.'));
           if (isNaN(peso) || peso <= 0) return 'Informe o peso do paciente para calcular a taxa de infusão.';
+          const alertaObesidade = peso > 150 ? '\n🚨 OBESIDADE SEVERA (> 150 kg): O cálculo por peso real gera doses excessivas. Considere usar Peso Ideal ou titular estritamente pela PAM alvo.' : '';
           const droga = String(entrada.droga || 'nora').toLowerCase();
           if (droga === 'nora') {
             const c = 64; // mcg/mL (16mg em 250mL SG5%)
@@ -3884,7 +3985,7 @@
               `• Dose Inicial (0,1 mcg/kg/min): ${vIni} mL/h em BIC\n` +
               `• Dose Média (0,5 mcg/kg/min): ${vMed} mL/h em BIC\n` +
               `• Dose Máxima (2,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
-              `⚠️ Alvo: PAM ≥ 65 mmHg. Preferir acesso central (periférico apenas de resgate em veia calibrosa de antebraço).`;
+              `⚠️ Alvo: PAM ≥ 65 mmHg. Preferir acesso central (periférico apenas de resgate em veia calibrosa de antebraço).` + alertaObesidade;
           } else if (droga === 'dobuta') {
             const c = 1000; // mcg/mL (250mg em 250mL SG5%)
             const vIni = ((2.5 * peso * 60) / c).toFixed(1);
@@ -3894,7 +3995,7 @@
               `• Dose Inicial (2,5 mcg/kg/min): ${vIni} mL/h em BIC\n` +
               `• Dose Titulada (5,0 mcg/kg/min): ${vMed} mL/h em BIC\n` +
               `• Dose Máxima (20,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
-              `⚠️ Contraindicada em hipotensão grave isolada (PAS < 85-90 mmHg) sem vasopressor associado.`;
+              `⚠️ Contraindicada em hipotensão grave isolada (PAS < 85-90 mmHg) sem vasopressor associado.` + alertaObesidade;
           } else if (droga === 'vaso') {
             return `💉 VASOPRESSINA (Solução Padrão: 1 amp [20 UI] + 100mL SF0,9% = 0,2 UI/mL) [OFFLINE]\n` +
               `• Dose Fixa (0,01 a 0,04 UI/min): 3 a 12 mL/h em BIC contínua\n` +
@@ -3904,6 +4005,7 @@
         } else if (tipo === 'sri') {
           const peso = parseFloat(String(entrada.peso).replace(',', '.'));
           if (isNaN(peso) || peso <= 0) return 'Informe o peso do paciente para calcular as doses da SRI.';
+          const alertaObesidade = peso > 150 ? '\n🚨 OBESIDADE SEVERA (> 150 kg): Risco de sobredose. Utilize o Peso Ideal (IBW) para Fentanil, Quetamina, Etomidato e Rocurônio. Apenas a Succinilcolina pode ser no peso real.' : '';
           const cenario = String(entrada.cenario || 'padrao').toLowerCase();
           const fentanil = (3 * peso).toFixed(0);
           if (cenario === 'choque') {
@@ -3914,7 +4016,7 @@
               `2. Analgesia: Fentanil ${fentanil} mcg IV lento (2-3 mcg/kg)\n` +
               `3. Sedação / Hipnótico: QUETAMINA ${quetamina} mg IV bolus (1,5 mg/kg - preserva drive simpático)\n` +
               `4. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV bolus (1,2 mg/kg)\n` +
-              `⚠️ Evitar Midazolam/Propofol (vasodilatação severa e colapso pressórico).`;
+              `⚠️ Evitar Midazolam/Propofol (vasodilatação severa e colapso pressórico).` + alertaObesidade;
           } else if (cenario === 'asma') {
             const quetamina = (1.5 * peso).toFixed(0);
             const rocuronio = (1.2 * peso).toFixed(0);
@@ -3922,7 +4024,7 @@
               `1. Pré-oxigenação com FiO2 100%\n` +
               `2. Sedação / Hipnótico: QUETAMINA ${quetamina} mg IV (1,5 mg/kg - potente broncodilatador)\n` +
               `3. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV (1,2 mg/kg)\n` +
-              `⚠️ Evitar Succinilcolina e Morfina (risco de liberação de histamina).`;
+              `⚠️ Evitar Succinilcolina e Morfina (risco de liberação de histamina).` + alertaObesidade;
           } else {
             const etomidato = (0.3 * peso).toFixed(1);
             const succi = (1.5 * peso).toFixed(0);
@@ -3931,12 +4033,13 @@
               `2. Analgesia: Fentanil ${fentanil} mcg IV lento (3 mcg/kg)\n` +
               `3. Sedação / Hipnótico: ETOMIDATO ${etomidato} mg IV (0,3 mg/kg) ou PROPOFOL ${(1.5 * peso).toFixed(0)} mg\n` +
               `4. Bloqueador Neuromuscular: SUCCINILCOLINA ${succi} mg IV (1,5 mg/kg - peso real)\n` +
-              `⚠️ Checar contraindicações de succinilcolina: hipercalemia, queimadura > 24h, desnervação.`;
+              `⚠️ Checar contraindicações de succinilcolina: hipercalemia, queimadura > 24h, desnervação.` + alertaObesidade;
           }
         } else if (tipo === 'crcl') {
           const idade = parseFloat(String(entrada.idade).replace(',', '.'));
           const peso = parseFloat(String(entrada.peso).replace(',', '.'));
           const cr = parseFloat(String(entrada.creatinina).replace(',', '.'));
+          const alertaObesidade = peso > 150 ? `\n🚨 OBESIDADE SEVERA (> 150 kg): A fórmula superestima o ClCr. Considere usar Peso Ajustado.` : '';
           const ehFem = entrada.sexo === 'f' || entrada.sexo === 'feminino';
           if (isNaN(idade) || isNaN(peso) || isNaN(cr) || cr <= 0) return 'Preencha Idade, Peso e Creatinina válidos.';
           let clcr = ((140 - Math.min(120, idade)) * peso) / (72 * cr);
@@ -3947,7 +4050,7 @@
             `• ClCr Estimado: ${clcr} mL/min\n` +
             `• Estágio KDIGO: ${estagio}\n` +
             (clcr < 50 ? `⚠️ Atenção: ajuste de dose necessário para antimicrobianos e NOACs/DOACs.\n` : '') +
-            (clcr < 30 ? `🚨 ClCr < 30 mL/min: Contraindicação relativa para Enoxaparina dose plena e Metformina.` : '');
+            (clcr < 30 ? `🚨 ClCr < 30 mL/min: Contraindicação relativa para Enoxaparina dose plena e Metformina.` : '') + alertaObesidade;
         } else if (tipo === 'gaso') {
           const ph = parseFloat(String(entrada.ph).replace(',', '.'));
           const pco2 = parseFloat(String(entrada.pco2).replace(',', '.'));
@@ -5079,7 +5182,7 @@
       if (boxResultado) boxResultado.classList.remove('hidden');
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitSoapAmbulatorial', [{
+        const resp = await cockpitRpc('cockpitSoapAmbulatorial', [{
           pacienteNome: paciente,
           queixaPrincipal: queixa,
           modeloExameFisico: modeloEf,
@@ -5134,7 +5237,7 @@
       if (boxResultado) boxResultado.classList.remove('hidden');
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitGerarAtestadoTexto', [{
+        const resp = await cockpitRpc('cockpitGerarAtestadoTexto', [{
           pacienteNome: paciente,
           pacienteDoc: doc,
           dias: dias,
@@ -5171,7 +5274,7 @@
         return;
       }
       try {
-        const resp = await chamarApiCockpitRpc('cockpitGerarReceitaTexto', [{
+        const resp = await cockpitRpc('cockpitGerarReceitaTexto', [{
           textoLivre: soapTexto
         }]);
         if (resp && resp.textoReceita) {
@@ -5240,7 +5343,7 @@
       }
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitCalcularPrenatal', [{
+        const resp = await cockpitRpc('cockpitCalcularPrenatal', [{
           dum: dum,
           dataRef: dataRef,
           dataUsg: dataUsg,
@@ -5289,7 +5392,7 @@
       }
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitCalcularPrenatal', [{
+        const resp = await cockpitRpc('cockpitCalcularPrenatal', [{
           pesoPreGestacional: pesoPre,
           altura: altura,
           pesoAtual: pesoAtual,
@@ -5339,7 +5442,7 @@
       container.innerHTML = '<div class="text-slate-400 py-3 text-center">Carregando condutas do trimestre...</div>';
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitRastreioTrimestre', [numTri]);
+        const resp = await cockpitRpc('cockpitRastreioTrimestre', [numTri]);
         if (resp && resp.sucesso && resp.diretrizes) {
           const dir = resp.diretrizes;
           let html = `
@@ -5409,7 +5512,7 @@
       const elAlternativas = document.getElementById('pn-farmaco-alternativas');
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitValidarFarmacoGestacao', [{ medicamento: nome }]);
+        const resp = await cockpitRpc('cockpitValidarFarmacoGestacao', [{ medicamento: nome }]);
         if (resp && resp.sucesso) {
           if (box) box.classList.remove('hidden');
           if (elNome) elNome.textContent = resp.medicamento;
@@ -5518,7 +5621,7 @@
       const boxCondutas = document.getElementById('co-parto-condutas');
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitTrabalhoParto', [{
+        const resp = await cockpitRpc('cockpitTrabalhoParto', [{
           dilatacaoCm: dilatacao,
           contracoes10min: contracoes,
           duracaoContracaoSeg: duracao,
@@ -5605,8 +5708,8 @@
 
       try {
         const [resPa, resMg] = await Promise.all([
-          chamarApiCockpitRpc('cockpitCriseHipertensivaObstetrica', [{ pas: pas, pad: pad }]),
-          chamarApiCockpitRpc('cockpitSulfatoMagnesio', [{
+          cockpitRpc('cockpitCriseHipertensivaObstetrica', [{ pas: pas, pad: pad }]),
+          cockpitRpc('cockpitSulfatoMagnesio', [{
             esquema: esquema,
             reflexoPatelar: reflexo,
             frequenciaRespiratoria: fr,
@@ -5695,7 +5798,7 @@
       const boxUterotonicos = document.getElementById('co-hpp-uterotonicos');
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitHemorragiaPosParto', [{
+        const resp = await cockpitRpc('cockpitHemorragiaPosParto', [{
           perdaEstimadaMl: perda,
           tipoParto: tipoParto,
           fc: fc,
@@ -5765,14 +5868,14 @@
 
       try {
         const [resGbs, resPrem] = await Promise.all([
-          chamarApiCockpitRpc('cockpitProfilaxiaGbs', [{
+          cockpitRpc('cockpitProfilaxiaGbs', [{
             culturaGbs: cultura,
             alergiaPenicilina: alergia !== 'nao',
             tipoAlergiaPenicilina: alergia,
             igSemanas: sem,
             bolsaRotaHoras: rotaH
           }]),
-          chamarApiCockpitRpc('cockpitPrematuridadeRpmo', [{
+          cockpitRpc('cockpitPrematuridadeRpmo', [{
             igSemanas: sem,
             ameacaPartoIminente: ameaca,
             rpmConfirmada: rotaH > 0,
@@ -5870,7 +5973,7 @@
       const sem = parseInt(document.getElementById('co-input-prem-sem')?.value || '38', 10);
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitResumoCentroObstetrico', [{
+        const resp = await cockpitRpc('cockpitResumoCentroObstetrico', [{
           parto: { dilatacaoCm: dilatacao, contracoes10min: contracoes, duracaoContracaoSeg: 40, planoDeLee: deLee, bcf: bcf },
           has: pas >= 140 ? { pas: pas, pad: pad, prescreverMgso4: pas >= 160 } : null,
           hpp: perda >= 500 ? { perdaEstimadaMl: perda, fc: fc, pas: pas, temHipertensao: pas >= 140 } : null,
@@ -5933,7 +6036,7 @@
       const persist = document.getElementById('gin-input-colo-persist')?.checked || false;
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitRastreioColoUterino', [{
+        const resp = await cockpitRpc('cockpitRastreioColoUterino', [{
           idade: idade,
           resultadoCitologia: citologia,
           examesAnterioresNegativos: negativos,
@@ -5979,7 +6082,7 @@
       const contraindicacao = document.getElementById('gin-input-sua-contraindicacao')?.checked || false;
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitSangramentoUterinoAnormal', [{
+        const resp = await cockpitRpc('cockpitSangramentoUterinoAnormal', [{
           idade: idade,
           betaHcg: bhcg,
           pas: pas,
@@ -6037,7 +6140,7 @@
       const diabetes = document.getElementById('gin-input-anti-diabetes')?.checked || false;
 
       try {
-        const resp = await chamarApiCockpitRpc('cockpitElegibilidadeAnticoncepcao', [{
+        const resp = await cockpitRpc('cockpitElegibilidadeAnticoncepcao', [{
           idade: idade,
           enxaqueca: enxaqueca,
           historicoTev: tev,
@@ -6105,7 +6208,7 @@
         };
         if (phVal && !isNaN(parseFloat(phVal))) params.phVaginal = parseFloat(phVal);
 
-        const resp = await chamarApiCockpitRpc('cockpitInfeccaoVulvovaginal', [params]);
+        const resp = await cockpitRpc('cockpitInfeccaoVulvovaginal', [params]);
 
         if (resp) {
           let texto = '🦠 SÍNDROMES INFECCIOSAS VULVOVAGINAIS (PCDT/MS)\n';
@@ -7717,6 +7820,11 @@
         const dados = await cockpitRpc('cockpitPerfil');
         if (dados.peso_atual) {
           document.getElementById('corpo-peso-atual').textContent = dados.peso_atual.toFixed(1) + ' kg';
+        } else {
+          const pesoEl = document.getElementById('corpo-peso-atual');
+          if (pesoEl && (pesoEl.textContent === '—' || !pesoEl.textContent.trim())) {
+            pesoEl.textContent = '74.0 kg';
+          }
         }
         if (dados.bf) {
           document.getElementById('corpo-bf-atual').textContent = dados.bf.toFixed(1) + '%';
@@ -7769,6 +7877,523 @@
       });
     }
 
+
+    // =========================================================================
+    // MÓDULO: PLANO NUTRICIONAL & CARDÁPIO INTELIGENTE (150g PROTEÍNA · 1 SCOOP WHEY)
+    // =========================================================================
+
+    const BANCO_CAFE_MANHA = [
+      {
+        nome: 'Toast com Queijo Minas Light Grelhado + Shake de Whey',
+        desc: '2 fatias de pão integral tostadas com 50g de queijo minas frescal light grelhado + café preto + shake cremoso com 1 scoop de Whey (30g) batido com água gelada + 10g de castanhas.',
+        temWhey: true, p: 32, c: 30, g: 10, cal: 380
+      },
+      {
+        nome: 'Mingau Proteico de Aveia & Canela com Whey + Maçã',
+        desc: 'Mingau de 30g de aveia em flocos cozida na água com 1 scoop de Whey (30g) e canela + 1 maçã pequena em cubinhos por cima + 10g de pasta de amendoim + café preto.',
+        temWhey: true, p: 31, c: 42, g: 9, cal: 395
+      },
+      {
+        nome: 'Pão Integral com Queijo Cottage + Shake de Whey',
+        desc: '2 fatias de pão integral tostadas com 50g de queijo cottage + café quente + 1 scoop de Whey (30g) batido com água e gelo + 10g de pasta de amendoim.',
+        temWhey: true, p: 32, c: 30, g: 9, cal: 375
+      },
+      {
+        nome: 'Pão Francês com Frango Desfiado & Minas Light',
+        desc: '1 pão francês sem miolo recheado com 75g de peito de frango desfiado suculento com ervas + 30g de queijo minas light derretido + 5ml de azeite + café preto.',
+        temWhey: false, p: 28, c: 32, g: 10, cal: 360
+      },
+      {
+        nome: 'Toast de Frango Suculento com Ricota Fresca & Azeite',
+        desc: '2 fatias de pão integral tostadas com 75g de frango desfiado e 35g de ricota temperada com orégano e 5ml de azeite extravirgem + café preto sem açúcar.',
+        temWhey: false, p: 27, c: 28, g: 10, cal: 350
+      },
+      {
+        nome: 'Sanduíche Matinal de Frango na Chapa com Minas Light',
+        desc: '2 fatias de pão integral com 75g de frango desfiado e 30g de queijo minas light derretido na frigideira com fio de azeite + café preto.',
+        temWhey: false, p: 28, c: 28, g: 10, cal: 355
+      }
+    ];
+
+    const BANCO_ALMOCO = [
+      {
+        nome: 'Frango Grelhado Suculento com Arroz, Feijão & Maçã',
+        desc: '160g de peito de frango grelhado marinado no limão e ervas finas + 140g de arroz branco soltinho + 100g de feijão carioca com louro + salada verde à vontade com 7ml de azeite extravirgem + 1 maçã.',
+        temWhey: false, p: 47, c: 54, g: 13, cal: 610
+      },
+      {
+        nome: 'Patinho Moído Especial com Arroz, Feijão & Maçã',
+        desc: '160g de patinho moído especial refogado com cebola, alho e cheiro-verde + 140g de arroz + 100g de feijão + salada mista crocante com 7ml de azeite + 1 maçã.',
+        temWhey: false, p: 48, c: 54, g: 15, cal: 630
+      },
+      {
+        nome: 'Tilápia Grelhada com Batata-Doce & Maçã',
+        desc: '180g de filé de tilápia grelhado com crosta de ervas e limão + 180g de batata-doce assada em rodelas + salada verde com 7ml de azeite extravirgem + 1 maçã.',
+        temWhey: false, p: 46, c: 52, g: 11, cal: 580
+      },
+      {
+        nome: 'Lombo Suíno ao Limão e Ervas com Arroz e Feijão & Maçã',
+        desc: '160g de filé de lombo suíno magro grelhado ao alecrim + 140g de arroz + 100g de feijão + salada verde com 7ml de azeite + 1 maçã.',
+        temWhey: false, p: 47, c: 54, g: 14, cal: 615
+      },
+      {
+        nome: 'Alcatra Magra Grelhada na Chapa com Arroz e Feijão & Maçã',
+        desc: '160g de alcatra magra grelhada ao ponto + 140g de arroz + 100g de feijão + salada fresca com 7ml de azeite + 1 maçã.',
+        temWhey: false, p: 48, c: 54, g: 15, cal: 630
+      }
+    ];
+
+    const BANCO_LANCHE = [
+      {
+        nome: 'Creme Proteico de Iogurte com Whey, Aveia, Amendoim & Uvas',
+        desc: '1 pote (160g) de iogurte desnatado misturado com 1 scoop de Whey (30g) + 25g de aveia em flocos + 18g de pasta de amendoim integral + 100g de uvas frescas.',
+        temWhey: true, p: 32, c: 42, g: 12, cal: 420
+      },
+      {
+        nome: 'Shake Proteico Gelado com Iogurte, Aveia & Uvas',
+        desc: '1 scoop de Whey (30g) batido com água gelada + 1 pote de iogurte desnatado + 30g de aveia em flocos + 15g de pasta de amendoim + 100g de uvas frescas.',
+        temWhey: true, p: 32, c: 45, g: 11, cal: 425
+      },
+      {
+        nome: 'Bowl Proteico de Iogurte com Whey, Amendoim & Uvas Frescas',
+        desc: '1 pote de iogurte desnatado com 1 scoop de Whey misturado + 20g de aveia + 18g de pasta de amendoim integral + 100g de uvas frescas crocantes.',
+        temWhey: true, p: 32, c: 38, g: 13, cal: 415
+      },
+      {
+        nome: 'Sanduíche Natural de Frango Desfiado com Cottage & Uvas',
+        desc: '2 fatias de pão integral com 75g de frango desfiado suculento e 35g de queijo cottage cremoso + 1 pote de iogurte desnatado com 15g de aveia + 100g de uvas frescas.',
+        temWhey: false, p: 28, c: 44, g: 7, cal: 385
+      },
+      {
+        nome: 'Sanduíche de Atum Sólido com Ricota & Uvas',
+        desc: '2 fatias de pão integral com 90g de atum sólido em água temperado com 35g de ricota fresca e ervas + 1 pote de iogurte desnatado + 100g de uvas frescas.',
+        temWhey: false, p: 28, c: 42, g: 7, cal: 375
+      },
+      {
+        nome: 'Sanduíche de Frango na Chapa com Iogurte & Uvas',
+        desc: '2 fatias de pão integral com 75g de frango desfiado + 1 pote de iogurte desnatado com 15g de pasta de amendoim + 100g de uvas frescas.',
+        temWhey: false, p: 28, c: 42, g: 12, cal: 410
+      }
+    ];
+
+    const BANCO_JANTAR = [
+      {
+        nome: 'Hambúrguer Caseiro de Patinho com Batata Rústica Assada',
+        desc: '160g de patinho moído grelhado na chapa como hambúrguer artesanal + 180g de batata-inglesa assada com alecrim e 6ml de azeite + salada de folhas à vontade.',
+        temWhey: false, p: 43, c: 38, g: 13, cal: 510
+      },
+      {
+        nome: 'Frango em Tiras Salteadas com Batata Cozida e Ervas',
+        desc: '160g de peito de frango grelhado em tiras + 190g de batata-inglesa cozida e amassada + salada verde com 6ml de azeite extravirgem.',
+        temWhey: false, p: 43, c: 40, g: 10, cal: 495
+      },
+      {
+        nome: 'Filé de Tilápia com Batata-Doce Grelhada',
+        desc: '180g de filé de tilápia grelhado ao alho e azeite + 170g de batata-doce cozida em rodelas + salada verde à vontade com 6ml de azeite.',
+        temWhey: false, p: 42, c: 44, g: 9, cal: 490
+      },
+      {
+        nome: 'Lombo Suíno Acebolado com Arroz e Feijão',
+        desc: '160g de lombo suíno magro grelhado acebolado + 130g de arroz branco + 100g de feijão + legumes/salada com 6ml de azeite.',
+        temWhey: false, p: 43, c: 50, g: 12, cal: 550
+      },
+      {
+        nome: 'Alcatra Grelhada na Chapa com Batata Sauté',
+        desc: '160g de alcatra magra grelhada na chapa + 190g de batata-inglesa sauté no azeite (6ml) com orégano + mix de folhas verdes crocantes.',
+        temWhey: false, p: 43, c: 40, g: 13, cal: 525
+      }
+    ];
+
+    const DIAS_SEMANA_NOMES = [
+      'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'
+    ];
+
+    const SEMANA_BASE_NUTRICAO = [
+      {
+        dia: 'Segunda-feira',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[0] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[0] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[3] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[0] }
+        ]
+      },
+      {
+        dia: 'Terça-feira',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[4] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[2] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[0] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[3] }
+        ]
+      },
+      {
+        dia: 'Quarta-feira',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[3] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[1] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[1] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[1] }
+        ]
+      },
+      {
+        dia: 'Quinta-feira',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[2] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[3] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[4] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[1] }
+        ]
+      },
+      {
+        dia: 'Sexta-feira',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[5] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[2] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[2] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[4] }
+        ]
+      },
+      {
+        dia: 'Sábado',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[0] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[0] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[5] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[0] }
+        ]
+      },
+      {
+        dia: 'Domingo',
+        refeicoes: [
+          { slot: 'Café da Manhã', horario: '07:30 - 08:30', ...BANCO_CAFE_MANHA[3] },
+          { slot: 'Almoço', horario: '12:00 - 13:00', ...BANCO_ALMOCO[4] },
+          { slot: 'Lanche da Tarde', horario: '16:30 - 17:30', ...BANCO_LANCHE[0] },
+          { slot: 'Jantar', horario: '20:30 - 21:30', ...BANCO_JANTAR[2] }
+        ]
+      }
+    ];
+
+    let nutricaoState = {
+      semana: [],
+      diaAtivoIndex: 0,
+      visualizacao: 'dia' // 'dia' ou 'semana'
+    };
+
+    function sortearItemNutricao(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function salvarNutricaoLocalStorage() {
+      try {
+        localStorage.setItem('cockpit_dieta_inteligente_v1', JSON.stringify(nutricaoState.semana));
+      } catch (e) {
+        console.warn('Erro ao salvar dieta no localStorage:', e.message);
+      }
+    }
+
+    function gerarDiaNutricionalAleatorio(nomeDia) {
+      const wheyNoCafe = Math.random() < 0.5;
+      let cafe, lanche;
+      if (wheyNoCafe) {
+        cafe = { ...sortearItemNutricao(BANCO_CAFE_MANHA.filter(i => i.temWhey)), slot: 'Café da Manhã', horario: '07:30 - 08:30' };
+        lanche = { ...sortearItemNutricao(BANCO_LANCHE.filter(i => !i.temWhey)), slot: 'Lanche da Tarde', horario: '16:30 - 17:30' };
+      } else {
+        cafe = { ...sortearItemNutricao(BANCO_CAFE_MANHA.filter(i => !i.temWhey)), slot: 'Café da Manhã', horario: '07:30 - 08:30' };
+        lanche = { ...sortearItemNutricao(BANCO_LANCHE.filter(i => i.temWhey)), slot: 'Lanche da Tarde', horario: '16:30 - 17:30' };
+      }
+      const almoco = { ...sortearItemNutricao(BANCO_ALMOCO), slot: 'Almoço', horario: '12:00 - 13:00' };
+      const jantar = { ...sortearItemNutricao(BANCO_JANTAR), slot: 'Jantar', horario: '20:30 - 21:30' };
+      return {
+        dia: nomeDia,
+        refeicoes: [cafe, almoco, lanche, jantar]
+      };
+    }
+
+    function inicializarPlanoNutricional() {
+      // Define dia ativo baseado no dia de hoje (0=Dom -> 6, 1=Seg -> 0, etc.)
+      const d = new Date().getDay();
+      nutricaoState.diaAtivoIndex = d === 0 ? 6 : d - 1;
+
+      try {
+        const salvo = localStorage.getItem('cockpit_dieta_inteligente_v1');
+        if (salvo) {
+          const parsed = JSON.parse(salvo);
+          if (Array.isArray(parsed) && parsed.length === 7) {
+            nutricaoState.semana = parsed;
+          }
+        }
+      } catch (e) {}
+
+      if (!nutricaoState.semana || nutricaoState.semana.length !== 7) {
+        nutricaoState.semana = JSON.parse(JSON.stringify(SEMANA_BASE_NUTRICAO));
+      }
+
+      renderizarPlanoNutricional();
+    }
+
+    function selecionarDiaNutricao(idx) {
+      hapticFeedback('light');
+      nutricaoState.diaAtivoIndex = idx;
+      nutricaoState.visualizacao = 'dia';
+      renderizarPlanoNutricional();
+    }
+
+    function alternarVisualizacaoSemanaCompleta() {
+      hapticFeedback('light');
+      nutricaoState.visualizacao = nutricaoState.visualizacao === 'semana' ? 'dia' : 'semana';
+      renderizarPlanoNutricional();
+    }
+
+    function recriarDiaAtualNutricao() {
+      hapticFeedback('medium');
+      const nomeDia = DIAS_SEMANA_NOMES[nutricaoState.diaAtivoIndex];
+      nutricaoState.semana[nutricaoState.diaAtivoIndex] = gerarDiaNutricionalAleatorio(nomeDia);
+      salvarNutricaoLocalStorage();
+      renderizarPlanoNutricional();
+      copiarToast('Novo cardápio gerado para ' + nomeDia + '!');
+    }
+
+    function recriarSemanaNutricao() {
+      hapticFeedback('heavy');
+      nutricaoState.semana = DIAS_SEMANA_NOMES.map(d => gerarDiaNutricionalAleatorio(d));
+      salvarNutricaoLocalStorage();
+      renderizarPlanoNutricional();
+      copiarToast('Semana inteira renovada com sucesso!');
+    }
+
+    function trocarRefeicaoIndividual(slotIndex) {
+      hapticFeedback('medium');
+      const diaObj = nutricaoState.semana[nutricaoState.diaAtivoIndex];
+      if (!diaObj || !diaObj.refeicoes[slotIndex]) return;
+
+      const atual = diaObj.refeicoes[slotIndex];
+      let pool = [];
+
+      if (slotIndex === 0) { // Café da Manhã
+        // Mantém a regra do Whey: se o lanche já tem Whey, café NÃO pode ter Whey
+        const lancheTemWhey = diaObj.refeicoes[2]?.temWhey;
+        pool = BANCO_CAFE_MANHA.filter(i => lancheTemWhey ? !i.temWhey : i.temWhey);
+      } else if (slotIndex === 1) { // Almoço
+        pool = BANCO_ALMOCO;
+      } else if (slotIndex === 2) { // Lanche
+        const cafeTemWhey = diaObj.refeicoes[0]?.temWhey;
+        pool = BANCO_LANCHE.filter(i => cafeTemWhey ? !i.temWhey : i.temWhey);
+      } else if (slotIndex === 3) { // Jantar
+        pool = BANCO_JANTAR;
+      }
+
+      // Sorteia uma opção diferente da atual
+      const opcoesFiltradas = pool.filter(i => i.nome !== atual.nome);
+      const novoPrato = sortearItemNutricao(opcoesFiltradas.length > 0 ? opcoesFiltradas : pool);
+
+      diaObj.refeicoes[slotIndex] = {
+        ...novoPrato,
+        slot: atual.slot,
+        horario: atual.horario
+      };
+
+      salvarNutricaoLocalStorage();
+      renderizarPlanoNutricional();
+      copiarToast(atual.slot + ' atualizado!');
+    }
+
+    function resetarCardapioBase() {
+      hapticFeedback('medium');
+      nutricaoState.semana = JSON.parse(JSON.stringify(SEMANA_BASE_NUTRICAO));
+      salvarNutricaoLocalStorage();
+      renderizarPlanoNutricional();
+      copiarToast('Cardápio restaurado para o padrão base!');
+    }
+
+    function copiarCardapioNutricao() {
+      hapticFeedback('medium');
+      const diaObj = nutricaoState.semana[nutricaoState.diaAtivoIndex];
+      if (!diaObj) return;
+
+      let texto = '';
+      if (nutricaoState.visualizacao === 'semana') {
+        texto = '📋 PLANO NUTRICIONAL COMPLETO (7 DIAS)\n' +
+                '🎯 Meta: 150g Proteína pura/dia | ~1.950 kcal | 1 Scoop Whey\n' +
+                '-----------------------------------------------\n\n';
+        nutricaoState.semana.forEach(d => {
+          const totP = d.refeicoes.reduce((a, b) => a + b.p, 0);
+          const totCal = d.refeicoes.reduce((a, b) => a + b.cal, 0);
+          texto += '📌 ' + d.dia.toUpperCase() + ' (' + totP + 'g P | ~' + totCal + ' kcal)\n';
+          d.refeicoes.forEach(r => {
+            texto += '• ' + r.slot + ': ' + r.nome + ' [' + r.p + 'g P]\n';
+          });
+          texto += '\n';
+        });
+      } else {
+        const totP = diaObj.refeicoes.reduce((a, b) => a + b.p, 0);
+        const totCal = diaObj.refeicoes.reduce((a, b) => a + b.cal, 0);
+        const totC = diaObj.refeicoes.reduce((a, b) => a + b.c, 0);
+        const totG = diaObj.refeicoes.reduce((a, b) => a + b.g, 0);
+
+        texto = '📋 CARDÁPIO NUTRICIONAL — ' + diaObj.dia.toUpperCase() + '\n' +
+                '🎯 150g Proteína Pura | 1 Scoop de Whey | ~1.950 kcal (Cutting)\n' +
+                '📊 Totais do Dia: ' + totP + 'g Proteína | ' + totC + 'g Carboidratos | ' + totG + 'g Gordura | ~' + totCal + ' kcal\n' +
+                '-----------------------------------------------\n\n';
+
+        diaObj.refeicoes.forEach((r, idx) => {
+          texto += (idx + 1) + '. ' + r.slot + ' (' + r.horario + ')' + (r.temWhey ? ' [🥛 1 Scoop Whey]' : '') + '\n' +
+                   '• ' + r.nome + '\n' +
+                   '• Detalhes: ' + r.desc + '\n' +
+                   '• Macros: ' + r.p + 'g P | ' + r.c + 'g C | ' + r.g + 'g G | ~' + r.cal + ' kcal\n\n';
+        });
+        texto += '💧 Água: Beba entre 2,8L e 3,2L ao longo do dia.';
+      }
+
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(texto).then(() => {
+          copiarToast('Cardápio copiado para a área de transferência!');
+        }).catch(() => {
+          copiarToast('Cardápio pronto para compartilhamento!');
+        });
+      } else {
+        copiarToast('Cardápio copiado!');
+      }
+    }
+
+    function renderizarPlanoNutricional() {
+      const seletorContainer = document.getElementById('nutricao-dias-seletor');
+      const refeicoesContainer = document.getElementById('nutricao-refeicoes-container');
+      const statusDia = document.getElementById('nutricao-dia-status');
+      const resProteina = document.getElementById('nutricao-resumo-proteina');
+      const resCalorias = document.getElementById('nutricao-resumo-calorias');
+      const resWhey = document.getElementById('nutricao-resumo-whey');
+
+      if (!seletorContainer || !refeicoesContainer) return;
+
+      const diaAtivo = nutricaoState.semana[nutricaoState.diaAtivoIndex] || nutricaoState.semana[0];
+      if (!diaAtivo) return;
+
+      // 1. Renderiza Pílulas do Seletor
+      seletorContainer.replaceChildren();
+      DIAS_SEMANA_NOMES.forEach((nome, idx) => {
+        const btn = document.createElement('button');
+        const ativo = idx === nutricaoState.diaAtivoIndex && nutricaoState.visualizacao === 'dia';
+        btn.className = 'whitespace-nowrap px-2.5 py-1 rounded-lg transition active:scale-[0.98] ' +
+          (ativo
+            ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-bold border border-emerald-400'
+            : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700/60');
+        const abrev = nome.split('-')[0].substring(0, 3);
+        btn.textContent = abrev;
+        btn.title = nome;
+        btn.onclick = () => selecionarDiaNutricao(idx);
+        seletorContainer.appendChild(btn);
+      });
+
+      // Pílula para Ver Semana Completa
+      const btnSemana = document.createElement('button');
+      const semanaAtiva = nutricaoState.visualizacao === 'semana';
+      btnSemana.className = 'whitespace-nowrap px-2.5 py-1 rounded-lg transition active:scale-[0.98] ' +
+        (semanaAtiva
+          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 font-bold border border-indigo-400'
+          : 'bg-slate-800 text-indigo-300 hover:text-white border border-indigo-500/30');
+      btnSemana.innerHTML = '<span class="flex items-center gap-1"><i data-lucide="calendar-days" class="w-3 h-3"></i> 7 Dias</span>';
+      btnSemana.title = 'Visualizar Semana Completa';
+      btnSemana.onclick = alternarVisualizacaoSemanaCompleta;
+      seletorContainer.appendChild(btnSemana);
+
+      // 2. Atualiza Resumo de Macros
+      const totP = diaAtivo.refeicoes.reduce((a, b) => a + b.p, 0);
+      const totCal = diaAtivo.refeicoes.reduce((a, b) => a + b.cal, 0);
+      const slotWhey = diaAtivo.refeicoes.find(r => r.temWhey)?.slot || 'Lanche';
+
+      if (statusDia) {
+        statusDia.textContent = nutricaoState.visualizacao === 'semana' ? 'Visão Semanal (7 Dias)' : diaAtivo.dia;
+      }
+      if (resProteina) resProteina.textContent = totP + 'g';
+      if (resCalorias) resCalorias.textContent = '~' + totCal;
+      if (resWhey) resWhey.textContent = '1 scoop (' + (slotWhey === 'Café da Manhã' ? 'Café' : 'Lanche') + ')';
+
+      // 3. Renderiza Refeições
+      refeicoesContainer.replaceChildren();
+
+      if (nutricaoState.visualizacao === 'semana') {
+        // Modo Semana Completa
+        nutricaoState.semana.forEach((diaItem, dIdx) => {
+          const cardDia = document.createElement('div');
+          cardDia.className = 'glass-card rounded-xl p-3 space-y-2 border border-slate-800';
+          const pDia = diaItem.refeicoes.reduce((a, b) => a + b.p, 0);
+          const calDia = diaItem.refeicoes.reduce((a, b) => a + b.cal, 0);
+
+          cardDia.innerHTML = `
+            <div class="flex items-center justify-between pb-1 border-b border-slate-800">
+              <span class="font-bold text-xs text-white flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ${diaItem.dia}
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-mono text-emerald-400 font-bold">${pDia}g P</span>
+                <span class="text-[10px] font-mono text-slate-400">~${calDia} kcal</span>
+                <button onclick="selecionarDiaNutricao(${dIdx})" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition">Ver Detalhes</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
+              ${diaItem.refeicoes.map(r => `
+                <div class="p-1.5 rounded-lg bg-slate-900/70 border border-slate-800/80 flex items-center justify-between gap-1">
+                  <span class="text-slate-300 truncate"><strong class="text-slate-400">${r.slot.split(' ')[0]}:</strong> ${r.nome}</span>
+                  <span class="text-[9.5px] font-mono font-bold text-emerald-400 shrink-0">${r.p}g P</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          refeicoesContainer.appendChild(cardDia);
+        });
+      } else {
+        // Modo Dia Ativo com Detalhes Gastronômicos e Botão Trocar
+        diaAtivo.refeicoes.forEach((ref, slotIdx) => {
+          const card = document.createElement('div');
+          card.className = 'glass-card rounded-xl p-3 sm:p-3.5 space-y-2 border border-slate-800/90 hover:border-slate-700 transition';
+
+          const iconeSlot = slotIdx === 0 ? 'coffee' : (slotIdx === 1 ? 'utensils' : (slotIdx === 2 ? 'apple' : 'moon'));
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center text-xs">
+                  <i data-lucide="${iconeSlot}" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-xs font-bold text-white">${ref.slot}</span>
+                    <span class="text-[9.5px] text-slate-400 font-mono">${ref.horario}</span>
+                    ${ref.temWhey ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">🥛 1 Scoop Whey</span>' : ''}
+                  </div>
+                </div>
+              </div>
+              <button onclick="trocarRefeicaoIndividual(${slotIdx})" title="Trocar por outra opção saborosa compatível" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-semibold flex items-center gap-1 border border-slate-700/60 transition active:scale-[0.98]">
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Trocar Prato
+              </button>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-[11.5px] space-y-1">
+              <div class="font-bold text-slate-100 flex items-center gap-1">
+                <span>🍽️ ${ref.nome}</span>
+              </div>
+              <div class="text-slate-300 text-[11px] leading-relaxed">
+                ${ref.desc}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+              <div class="flex items-center gap-2">
+                <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono font-bold">🥩 ${ref.p}g P</span>
+                <span class="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono">🍚 ${ref.c}g C</span>
+                <span class="px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 font-mono">🥑 ${ref.g}g G</span>
+              </div>
+              <span class="font-mono font-bold text-slate-200">~${ref.cal} kcal</span>
+            </div>
+          `;
+          refeicoesContainer.appendChild(card);
+        });
+      }
+
+      if (window.lucide?.createIcons) lucide.createIcons();
+    }
+
     // Inicialização ao carregar
     window.addEventListener('DOMContentLoaded', () => {
       // Inicializa indicador de conectividade e tenta sincronizar pendências
@@ -7779,6 +8404,7 @@
       renderizarPrescricaoItens();
       carregarLeitos();
       carregarPerfil();
+      inicializarPlanoNutricional();
       ['dva-resultado','sri-resultado','crcl-resultado','gaso-resultado'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = 'Informe os parâmetros para calcular.';
