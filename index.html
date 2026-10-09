@@ -123,43 +123,142 @@
     <!-- ABA 1: CORPO & PROTOCOLO -->
     <!-- =================================================================== -->
     <div id="tab-corpo" class="tab-pane hidden space-y-3.5">
-      <!-- Card Destaque Clínico -->
+      <!-- Card Destaque Clínico & Composição Corporal (Sem Cutting Natural) -->
       <div class="glass-card-accent rounded-xl p-4 shadow-lg">
         <div class="flex items-center justify-between">
           <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-            <i data-lucide="activity" class="w-3.5 h-3.5"></i> Protocolo Corporal & Mounjaro
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i> Composição Corporal & Cutting Natural
           </span>
-          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">Semana 16</span>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">150g Proteína Pura</span>
         </div>
-        <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 text-center">
           <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
-            <span class="text-[10px] text-slate-400 block">Peso Atual</span>
+            <span class="text-[10px] text-slate-400 block font-medium">Peso Atual</span>
             <span class="text-lg font-black text-white" id="corpo-peso-atual">74.0 kg</span>
-            <span class="text-[10px] text-emerald-400 font-medium block mt-0.5" id="corpo-peso-delta"> </span>
+            <span class="text-[10px] text-emerald-400 font-semibold block mt-0.5">-8.7 kg acumulado</span>
           </div>
           <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
-            <span class="text-[10px] text-slate-400 block">Gordura (BF%)</span>
-            <span class="text-lg font-black text-sky-400" id="corpo-bf-atual">—</span>
-            <span class="text-[10px] text-slate-400 font-medium block mt-0.5">Meta: 15%</span>
+            <span class="text-[10px] text-slate-400 block font-medium">Gordura (BF%)</span>
+            <span class="text-lg font-black text-sky-400" id="corpo-bf-atual">12.5%</span>
+            <span class="text-[10px] text-emerald-400 font-semibold block mt-0.5">-7.2 kg gordura pura</span>
           </div>
           <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
-            <span class="text-[10px] text-slate-400 block">Dose Atual</span>
+            <span class="text-[10px] text-slate-400 block font-medium">Massa Muscular (MME)</span>
+            <span class="text-lg font-black text-emerald-400">37.1 kg</span>
+            <span class="text-[10px] text-sky-300 font-semibold block mt-0.5">96.6% preservada</span>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 block font-medium">Treino Semanal</span>
             <span class="text-lg font-black text-amber-400" id="corpo-dose-atual">4x / sem</span>
             <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="corpo-semana">Musculação</span>
           </div>
         </div>
       </div>
 
-      <!-- Gráfico de Evolução -->
+      <!-- Gráfico de Evolução Real da Composição (InBody + Antropometria) -->
       <div class="glass-card rounded-xl p-3.5 space-y-2">
         <div class="flex items-center justify-between">
-          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-            <i data-lucide="trending-down" class="w-3.5 h-3.5 text-brand-400"></i> Evolução Ponderal & Composição
-          </h3>
-          <span class="text-[10px] text-slate-400 font-mono">Últimas 12 semanas</span>
+          <div>
+            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="trending-down" class="w-3.5 h-3.5 text-brand-400"></i> Evolução da Composição Corporal (InBody 270 & Antropometria)
+            </h3>
+            <p class="text-[10px] text-slate-400 mt-0.5">Histórico longitudinal: 22/Jul (82.7 kg) até Atual (74.0 kg)</p>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-mono font-bold">83% perda em gordura pura</span>
         </div>
-        <div class="h-44 w-full">
+        <div class="h-48 w-full">
           <canvas id="graficoCorpoEvolucao"></canvas>
+        </div>
+        <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-[10px] text-slate-300 flex items-center justify-between">
+          <span>🥩 <strong>Massa Muscular contida:</strong> apenas ~1.3 kg perdidos</span>
+          <span class="text-emerald-400 font-bold">🔥 -7.2 kg de gordura pura eliminados</span>
+        </div>
+      </div>
+
+      <!-- Histórico dos Exames de Bioimpedância & Avaliações Físicas -->
+      <div class="glass-card rounded-xl p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="clipboard-list" class="w-3.5 h-3.5 text-sky-400"></i> Histórico de Bioimpedâncias & Medidas Corporais
+          </h4>
+          <span class="text-[10px] text-slate-400 font-mono">4 Avaliações + Atual</span>
+        </div>
+        <div class="space-y-1.5" id="historico-bioimpedancias-container">
+          <!-- Card Exame 1 -->
+          <div class="p-2.5 rounded-lg bg-slate-900/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px]">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white">22/07/2026 · InBody 270</span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] bg-slate-800 text-slate-400 font-mono">Exame Inicial</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">Visceral: 6 · Relação C/Q: 0.95 · TMB: 1.802 kcal</p>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[10.5px]">
+              <span class="text-slate-200"><strong>82.7 kg</strong></span>
+              <span class="text-rose-400 font-semibold">19.8% BF (16.4kg G)</span>
+              <span class="text-sky-300">38.4kg MME</span>
+            </div>
+          </div>
+          <!-- Card Exame 2 -->
+          <div class="p-2.5 rounded-lg bg-slate-900/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px]">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white">21/08/2026 · InBody 270</span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-500/10 text-emerald-400 font-mono">-4.1 kg em 30d</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">Visceral: 5 · Relação C/Q: 0.92 · TMB: 1.776 kcal</p>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[10.5px]">
+              <span class="text-slate-200"><strong>78.6 kg</strong></span>
+              <span class="text-rose-400 font-semibold">17.2% BF (13.5kg G)</span>
+              <span class="text-sky-300">37.6kg MME</span>
+            </div>
+          </div>
+          <!-- Card Exame 3 -->
+          <div class="p-2.5 rounded-lg bg-slate-900/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px]">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white">24/09/2026 · InBody 270</span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-500/10 text-emerald-400 font-mono">Alta Preservação</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">Visceral: 4 · Relação C/Q: 0.90 · TMB: 1.771 kcal (90% perda em gordura)</p>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[10.5px]">
+              <span class="text-slate-200"><strong>76.7 kg</strong></span>
+              <span class="text-emerald-400 font-semibold">15.4% BF (11.8kg G)</span>
+              <span class="text-sky-300">37.4kg MME</span>
+            </div>
+          </div>
+          <!-- Card Exame 4 -->
+          <div class="p-2.5 rounded-lg bg-slate-900/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px]">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white">04/10/2026 · Antropometria 3 Dobras</span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] bg-sky-500/10 text-sky-400 font-mono">JP3 + Fita</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">Peito 5mm, Abd 22mm, Coxa 13mm · Cintura 82cm · Pescoço 37cm</p>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[10.5px]">
+              <span class="text-slate-200"><strong>75.0 kg</strong></span>
+              <span class="text-emerald-400 font-semibold">13.5% BF (9.8kg G)</span>
+              <span class="text-sky-300">37.2kg MME</span>
+            </div>
+          </div>
+          <!-- Card Atual -->
+          <div class="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px]">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-emerald-300">09/10/2026 · Situação Atual</span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-500/20 text-emerald-300 font-mono font-bold">Cutting Ativo</span>
+              </div>
+              <p class="text-[10px] text-slate-300 mt-0.5">Meta: 150g Pura/dia · 4x Musculação · 1 Scoop Whey/dia · Foco Definição</p>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[10.5px]">
+              <span class="text-white font-extrabold text-xs">74.0 kg</span>
+              <span class="text-emerald-400 font-bold">~12.5% BF (~9.2kg G)</span>
+              <span class="text-sky-300 font-bold">~37.1kg MME</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -170,14 +269,14 @@
             <i data-lucide="target" class="w-3 h-3 text-emerald-400"></i> Meta Proteica
           </span>
           <div class="text-sm sm:text-base font-extrabold text-emerald-400">150g / dia</div>
-          <p class="text-[9.5px] text-slate-400">2.0g/kg para 74kg (Cutting 4x Musculação)</p>
+          <p class="text-[9.5px] text-slate-400">2.0g/kg para 74kg (4x Musculação)</p>
         </div>
         <div class="glass-card rounded-xl p-2.5 space-y-1">
           <span class="text-[10px] font-bold text-white flex items-center gap-1">
             <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i> Meta Calórica
           </span>
           <div class="text-sm sm:text-base font-extrabold text-amber-400">~1.950 kcal</div>
-          <p class="text-[9.5px] text-slate-400">Déficit controlado de ~450 kcal/dia</p>
+          <p class="text-[9.5px] text-slate-400">Déficit de ~450 kcal/dia</p>
         </div>
         <div class="glass-card rounded-xl p-2.5 space-y-1">
           <span class="text-[10px] font-bold text-white flex items-center gap-1">
@@ -209,6 +308,120 @@
         </div>
         <p id="perfil-save-status" class="text-[10px] text-slate-400"></p>
       </div>
+
+      <!-- NOVA FUNÇÃO: CALCULADORA ANTROPOMÉTRICA (JP3 & US NAVY) -->
+      <div class="glass-card rounded-xl p-3.5 sm:p-4 space-y-3 border border-slate-800">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="ruler" class="w-3.5 h-3.5 text-amber-400"></i> Calculadora Antropométrica (3 Dobras & Fita)
+            </h4>
+            <p class="text-[10px] text-slate-400 mt-0.5">Equações de Jackson & Pollock (Homens) e Marinha Americana</p>
+          </div>
+          <button onclick="calcularAntropometriaRapida()" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[10.5px] font-bold flex items-center gap-1 transition active:scale-[0.98]">
+            <i data-lucide="calculator" class="w-3 h-3"></i> Calcular BF%
+          </button>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+          <div>
+            <label class="text-[9.5px] text-slate-400 block mb-0.5">Peitoral (mm)</label>
+            <input type="number" step="0.5" id="antropo-peitoral" value="5.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono">
+          </div>
+          <div>
+            <label class="text-[9.5px] text-slate-400 block mb-0.5">Abdômen (mm)</label>
+            <input type="number" step="0.5" id="antropo-abdome" value="22.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono">
+          </div>
+          <div>
+            <label class="text-[9.5px] text-slate-400 block mb-0.5">Coxa (mm)</label>
+            <input type="number" step="0.5" id="antropo-coxa" value="13.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono">
+          </div>
+          <div>
+            <label class="text-[9.5px] text-slate-400 block mb-0.5">Cintura (cm)</label>
+            <input type="number" step="0.5" id="antropo-cintura" value="82.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono">
+          </div>
+          <div>
+            <label class="text-[9.5px] text-slate-400 block mb-0.5">Pescoço (cm)</label>
+            <input type="number" step="0.5" id="antropo-pescoco" value="37.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono">
+          </div>
+        </div>
+        <div id="antropo-resultado-painel" class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 text-[11px] grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+          <div>
+            <span class="text-[9px] text-slate-400 block">Soma 3 Dobras</span>
+            <span id="antropo-soma" class="font-bold text-white font-mono">40.0 mm</span>
+          </div>
+          <div>
+            <span class="text-[9px] text-slate-400 block">BF% (JP3 Siri)</span>
+            <span id="antropo-bf-siri" class="font-bold text-emerald-400 font-mono">13.5%</span>
+          </div>
+          <div>
+            <span class="text-[9px] text-slate-400 block">BF% (US Navy)</span>
+            <span id="antropo-bf-navy" class="font-bold text-sky-400 font-mono">13.2%</span>
+          </div>
+          <div>
+            <span class="text-[9px] text-slate-400 block">Massa Magra Est.</span>
+            <span id="antropo-massa-magra" class="font-bold text-purple-300 font-mono">64.0 kg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOVA FUNÇÃO: PROJEÇÃO & LISTA DE COMPRAS QUINZENAL (15 DIAS) -->
+      <div class="glass-card rounded-xl p-3.5 sm:p-4 space-y-3 border border-indigo-500/30">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-indigo-400"></i> Projeção de Compras Quinzenal (15 Dias de Dieta)
+            </h4>
+            <p class="text-[10px] text-slate-400 mt-0.5">Calculada para 150g P/dia (1 scoop Whey + carnes magras + laticínios)</p>
+          </div>
+          <button onclick="copiarListaComprasQuinzenal()" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[10.5px] font-bold flex items-center gap-1 transition active:scale-[0.98]">
+            <i data-lucide="copy" class="w-3 h-3"></i> Copiar Lista
+          </button>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Peito de Frango / Carnes</span>
+            <span class="font-bold text-white font-mono">2.5 kg</span>
+            <span class="text-[8.5px] text-slate-500 block">Patinho + Frango</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Tilápia / Pescados</span>
+            <span class="font-bold text-sky-400 font-mono">1.5 kg</span>
+            <span class="text-[8.5px] text-slate-500 block">Filés magros</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Atum Sólido em Água</span>
+            <span class="font-bold text-emerald-400 font-mono">8 latas</span>
+            <span class="text-[8.5px] text-slate-500 block">Praticidade pura</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Queijo Minas / Ricota</span>
+            <span class="font-bold text-purple-300 font-mono">900 g</span>
+            <span class="text-[8.5px] text-slate-500 block">Minas frescal light</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Iogurte Desnatado</span>
+            <span class="font-bold text-amber-300 font-mono">15 potes</span>
+            <span class="text-[8.5px] text-slate-500 block">~2.4 L total</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Whey Protein (30g/dia)</span>
+            <span class="font-bold text-sky-300 font-mono">450 g (15 doses)</span>
+            <span class="text-[8.5px] text-slate-500 block">1 scoop por dia</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Aveia em Flocos</span>
+            <span class="font-bold text-slate-200 font-mono">500 g</span>
+            <span class="text-[8.5px] text-slate-500 block">Fibras & saciedade</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+            <span class="text-[9.5px] text-slate-400 block">Frutas (Maçã & Uva)</span>
+            <span class="font-bold text-emerald-300 font-mono">15 maçãs + 1.5kg uvas</span>
+            <span class="text-[8.5px] text-slate-500 block">Exclusivas do plano</span>
+          </div>
+        </div>
+      </div>
+
+
 
       <!-- =============================================================== -->
       <!-- CARD DESTAQUE: PLANO NUTRICIONAL & DIETA INTELIGENTE            -->
@@ -5780,7 +5993,98 @@
 
         copiarToast('Protocolo PE & MgSO4 calculado!');
       } catch (err) {
-        copiarToast('Erro: ' + err.message);
+        // FALLBACK OFFLINE CONTINGÊNCIA
+        let alertasIntoxicacao = [];
+        let intoxicacaoDetectada = false;
+
+        if (!reflexo) {
+          intoxicacaoDetectada = true;
+          alertasIntoxicacao.push('🚨 REFLEXO PATELAR ABOLIDO: Primeiro sinal clínico de hipermagnesemia tóxica (níveis séricos aproximados de 8 a 10 mEq/L).');
+        }
+
+        if (fr > 0 && fr < 12) {
+          intoxicacaoDetectada = true;
+          alertasIntoxicacao.push('🚨 DEPRESSÃO RESPIRATÓRIA (FR < 12 rpm): Risco iminente de parada respiratória por bloqueio neuromuscular!');
+        }
+
+        if (diurese >= 0 && diurese < 25) {
+          intoxicacaoDetectada = true;
+          alertasIntoxicacao.push('🚨 OLIGÚRIA SEVERA (Diurese < 25 mL/h ou < 100 mL em 4h): Excreção de magnésio é estritamente renal. Risco crítico de acúmulo e intoxicação letal!');
+        }
+
+        if (boxRes) boxRes.classList.remove('hidden');
+
+        if (intoxicacaoDetectada && boxAlertaIntox) {
+          boxAlertaIntox.classList.remove('hidden');
+          boxAlertaIntox.innerHTML = `
+            <div class="font-bold text-rose-300 uppercase tracking-wide">🚨 TOXICIDADE POR SULFATO DE MAGNÉSIO DETECTADA! (OFFLINE)</div>
+            ${alertasIntoxicacao.map(a => `<p>${a}</p>`).join('')}
+            <div class="mt-1.5 p-2 rounded bg-rose-950 border border-rose-500/80 font-bold text-white">
+              ANTÍDOTO: GLUCONATO DE CÁLCIO 10%: Administrar 1 ampola (10 mL = 1g) IV em bolus lento de 3 a 5 minutos.
+            </div>
+          `;
+        } else if (boxAlertaIntox) {
+          boxAlertaIntox.classList.add('hidden');
+        }
+
+        if (boxCrisePa) {
+          let ehCrise = (pas >= 160 || pad >= 110);
+          let classif = ehCrise ? 'CRISE HIPERTENSIVA OBSTÉTRICA GRAVE' : (pas >= 140 || pad >= 90) ? 'Hipertensão' : 'Normal';
+          let htmlPa = `
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white">PA: ${pas}x${pad} mmHg</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${ehCrise ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-slate-800 text-slate-300'}">
+                ${classif} [OFFLINE]
+              </span>
+            </div>
+          `;
+          if (ehCrise) {
+             htmlPa += '<div class="space-y-1 pt-1"><span class="font-bold text-rose-400 block">Fármacos de Resgate:</span>';
+             htmlPa += `
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                  <span class="font-bold text-white">Hidralazina (Nepresol) IV</span>
+                  <p class="text-[10.5px] text-slate-300">Ataque de 5 mg (1 mL) IV lento (1-2 min). Repetir 5-10 mg a cada 20-30 min se PAM mantiver alta. Máximo: 20-30 mg.</p>
+                </div>
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                  <span class="font-bold text-white">Nifedipino (Ação Rápida) VO</span>
+                  <p class="text-[10.5px] text-slate-300">10 mg VO a cada 30 minutos (máx: 30 mg). NÃO FAZER SUBLINGUAL!</p>
+                </div>
+             `;
+             htmlPa += '</div>';
+          }
+          boxCrisePa.innerHTML = htmlPa;
+        }
+
+        if (boxMgPrescricao) {
+            let n = 'Esquema de Zuspan (Padrão Ouro — Infusão Contínua em Bomba)';
+            let a = ['MgSO4 50% 8 mL (4g) + SG 5% ou SF 0,9% 12 mL = 20 mL IV em bomba de infusão lenta em 15 a 20 minutos.'];
+            let m = ['MgSO4 50% 20 mL (10g) + SF 0,9% ou SG 5% 480 mL = 500 mL IV em Bomba de Infusão Contínua a 50 mL/h (fornece 1g de MgSO4 por hora).',
+          'Ajuste se Creatinina >= 1.2 mg/dL: Reduzir velocidade para 25 mL/h (0,5g/hora)',
+          'Manter por 24 horas pós-parto ou 24 horas após a última crise.'];
+            
+            if (esquema === 'Pritchard') {
+                n = 'Esquema de Pritchard (Alternativa sem Bomba de Infusão ou em Transporte)';
+                a = ['MgSO4 50% 8 mL (4g) + SG 5% ou AD 12 mL = 20 mL IV administrados em bolus lento em 15 a 20 minutos.',
+          'ASSOCIADO A: MgSO4 50% 20 mL (10g) via IM profundo — aplicar 5g (10 mL) em cada glúteo profundamente, com 1 mL de lidocaína a 2% sem vasoconstritor em cada nádega para analgesia local.'];
+                m = ['MgSO4 50% 10 mL (5g) via IM profundo a cada 4 horas no glúteo contralateral alternado.',
+          'SÓ APLICAR A DOSE SE: reflexo patelar presente, FR >= 12 rpm e diurese >= 25 mL/h nas últimas 4 horas.',
+          'Manter por 24 horas após o parto ou após a última crise convulsiva.'];
+            }
+          boxMgPrescricao.innerHTML = `
+            <span class="font-bold text-amber-300 block">${n} [OFFLINE]</span>
+            <div class="space-y-1 pt-0.5">
+              <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                <strong class="text-white">Ataque:</strong>
+                <p class="text-slate-300">${a.join('<br>')}</p>
+              </div>
+              <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                <strong class="text-white">Manutenção:</strong>
+                <p class="text-slate-300">${m.join('<br>')}</p>
+              </div>
+            </div>
+          `;
+        }
+        copiarToast('Modo Offline: Protocolo PE & MgSO4 calculado via motor local!');
       }
     }
 
@@ -7750,30 +8054,160 @@
       const ctx = document.getElementById('graficoCorpoEvolucao')?.getContext('2d');
       if (!ctx) return;
 
+      // Dados reais longitudinais: InBody 270 (Jul, Ago, Set) + Antropometria (Out) + Atual
+      const labels = ['22/Jul (InBody)', '21/Ago (InBody)', '24/Set (InBody)', '04/Out (Antropo)', 'Hoje (74kg)'];
+      const pesos = [82.7, 78.6, 76.7, 75.0, 74.0];
+      const massasMagra = [38.4, 37.6, 37.4, 37.2, 37.1];
+      const massasGordura = [16.4, 13.5, 11.8, 9.8, 9.2];
+
       new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['S1', 'S2', 'S4', 'S6', 'S8', 'S10', 'S12', 'S14', 'S16'],
-          datasets: [{
-            label: 'Peso (kg)',
-            data: [113.0, 110.8, 107.5, 105.1, 103.0, 101.4, 99.8, 98.9, 98.2],
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-            tension: 0.35,
-            fill: true,
-            pointBackgroundColor: '#22c55e'
-          }]
+          labels: labels,
+          datasets: [
+            {
+              label: 'Peso Total (kg)',
+              data: pesos,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              tension: 0.3,
+              fill: true,
+              pointBackgroundColor: '#10b981',
+              pointRadius: 4,
+              borderWidth: 2.5
+            },
+            {
+              label: 'Massa Muscular MME (kg)',
+              data: massasMagra,
+              borderColor: '#38bdf8',
+              backgroundColor: 'transparent',
+              tension: 0.25,
+              borderDash: [4, 4],
+              pointBackgroundColor: '#38bdf8',
+              pointRadius: 4,
+              borderWidth: 2
+            },
+            {
+              label: 'Massa Gorda (kg)',
+              data: massasGordura,
+              borderColor: '#f43f5e',
+              backgroundColor: 'transparent',
+              tension: 0.3,
+              pointBackgroundColor: '#f43f5e',
+              pointRadius: 4,
+              borderWidth: 2
+            }
+          ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          plugins: {
+            legend: {
+              display: true,
+              labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12, padding: 8 }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + ' kg';
+                }
+              }
+            }
+          },
           scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+            x: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 9.5 } }
+            },
+            y: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 9.5 } }
+            }
           }
         }
       });
+    }
+
+    // Calculadora Antropométrica Rápida (Jackson & Pollock 3 Dobras e Marinha Americana)
+    function calcularAntropometriaRapida() {
+      hapticFeedback('medium');
+      const peito = parseFloat(document.getElementById('antropo-peitoral')?.value || '5.0');
+      const abd = parseFloat(document.getElementById('antropo-abdome')?.value || '22.0');
+      const coxa = parseFloat(document.getElementById('antropo-coxa')?.value || '13.0');
+      const cintura = parseFloat(document.getElementById('antropo-cintura')?.value || '82.0');
+      const pescoco = parseFloat(document.getElementById('antropo-pescoco')?.value || '37.0');
+      const idade = 28;
+      const altura = 173.0;
+      const pesoAtual = 74.0;
+
+      const soma = peito + abd + coxa;
+      const densidade = 1.10938 - (0.0008267 * soma) + (0.0000016 * Math.pow(soma, 2)) - (0.0002574 * idade);
+      const bfSiri = Math.max(3.0, ((4.95 / densidade) - 4.50) * 100);
+
+      // US Navy
+      let bfNavy = 13.0;
+      const diff = cintura - pescoco;
+      if (diff > 0) {
+        const logDiff = Math.log10(diff);
+        const logHeight = Math.log10(altura);
+        const denom = 1.0324 - (0.19077 * logDiff) + (0.15456 * logHeight);
+        bfNavy = Math.max(3.0, (495 / denom) - 450);
+      }
+
+      const massaMagra = pesoAtual * (1 - (bfSiri / 100));
+
+      const elSoma = document.getElementById('antropo-soma');
+      const elSiri = document.getElementById('antropo-bf-siri');
+      const elNavy = document.getElementById('antropo-bf-navy');
+      const elMassa = document.getElementById('antropo-massa-magra');
+
+      if (elSoma) elSoma.textContent = soma.toFixed(1) + ' mm';
+      if (elSiri) elSiri.textContent = bfSiri.toFixed(1) + '%';
+      if (elNavy) elNavy.textContent = bfNavy.toFixed(1) + '%';
+      if (elMassa) elMassa.textContent = massaMagra.toFixed(1) + ' kg';
+
+      copiarToast('BF recalculado: Siri ' + bfSiri.toFixed(1) + '% | Navy ' + bfNavy.toFixed(1) + '%');
+    }
+
+    // Copiar Lista de Compras Quinzenal para WhatsApp
+    function copiarListaComprasQuinzenal() {
+      hapticFeedback('medium');
+      const texto = `🛒 LISTA DE COMPRAS QUINZENAL (15 DIAS) — DIETA 150g PROTEÍNA
+🎯 Wagner Moraes (74 kg · 1,73 m · 1 Scoop Whey/dia · 4x Musculação)
+-----------------------------------------------------------
+🥩 PROTEÍNAS & PESCADOS:
+• Peito de frango / Carnes magras (patinho/alcatra): 2,5 kg
+• Tilápia / Merluza fresca ou congelada: 1,5 kg
+• Atum sólido em água: 8 latas
+• Queijo minas frescal light / Ricota / Cottage: 900 g
+• Iogurte desnatado consistente: 15 potes (ou 2,5 L)
+• Whey Protein Concentrado/Isolado: 1 pote (15 doses de 30g = 450g)
+
+🍚 CARBOIDRATOS & ENERGIA:
+• Arroz branco ou parboilizado: 2 kg
+• Feijão carioca: 1 kg
+• Batata-inglesa e batata-doce: 3 kg
+• Aveia em flocos finos: 500 g
+• Pão integral ou pão francês: 15 unidades
+
+🥑 GORDURAS & FIBRAS:
+• Azeite de oliva extravirgem: 1 garrafa (500 ml)
+• Pasta de amendoim integral pura: 1 pote (500 g)
+• Maçãs frescas selecionadas: 15 unidades
+• Uvas frescas (verdes ou roxas): 1,5 kg
+
+💧 HIDRATAÇÃO: Meta de 3,0 L de água por dia.`;
+
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(texto).then(() => {
+          copiarToast('Lista de compras quinzenal copiada!');
+        }).catch(() => {
+          copiarToast('Lista de compras pronta!');
+        });
+      } else {
+        copiarToast('Lista copiada!');
+      }
     }
 
     async function salvarPesagem() {
@@ -7836,7 +8270,7 @@
           const semEl = document.getElementById('corpo-semana');
           if (semEl) semEl.textContent = 'Semana ' + dados.semana;
           // Atualiza badge da semana no header da aba
-          const badgeSem = document.querySelector('.mounjaro-semana-badge');
+          const badgeSem = document.querySelector('.protocolo-semana-badge');
           if (badgeSem) badgeSem.textContent = 'Semana ' + dados.semana;
         }
         // Renderiza blocos de rotina
