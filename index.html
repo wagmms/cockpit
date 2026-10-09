@@ -706,9 +706,10 @@
           </span>
           <span class="text-[9px] bg-rose-500/30 text-rose-200 px-1.5 py-0.5 rounded font-mono font-bold tracking-tight">HC-UE</span>
         </button>
-        <div class="grid grid-cols-3 sm:grid-cols-9 gap-1 text-center text-[9.5px] font-bold">
+        <div class="grid grid-cols-5 sm:grid-cols-10 gap-1 text-center text-[9px] font-bold">
           <button onclick="abrirSubCalc('calc-dva', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">DVA</button>
           <button onclick="abrirSubCalc('calc-sri', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">SRI / IOT</button>
+          <button onclick="abrirSubCalc('calc-asma', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-teal-300">🫁 Asma</button>
           <button onclick="abrirSubCalc('calc-heart', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-rose-300">🫀 HEART</button>
           <button onclick="abrirSubCalc('calc-pediatria', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-amber-300">👶 Pediátrico</button>
           <button onclick="abrirSubCalc('calc-crcl', this)" class="subcalc-btn py-2 px-0.5 rounded-lg bg-slate-800 text-slate-400">Clearance</button>
@@ -775,8 +776,6 @@
           <button onclick="selecionarProtocoloUsp('tv', this)" id="proto-btn-tv" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">⚡ TV Instável (Clínica)</button>
           <button onclick="selecionarProtocoloUsp('trauma', this)" id="proto-btn-trauma" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🚨 Politrauma & FAST (Cirurgia)</button>
           <button onclick="selecionarProtocoloUsp('anaf', this)" id="proto-btn-anaf" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">💉 Anafilaxia (Pediatria)</button>
-          <button onclick="selecionarProtocoloUsp('dengue', this)" id="proto-btn-dengue" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">🦟 Dengue C/D (MS 2024)</button>
-          <button onclick="selecionarProtocoloUsp('has', this)" id="proto-btn-has" class="proto-btn whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">❤️ Crise HAS (SBC)</button>
         </div>
 
         <!-- Ajuste de Peso Opcional para Doses Automáticas -->
@@ -888,6 +887,112 @@
         <button id="btn-copiar-sri" onclick="copiarSriPEP()" class="hidden w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition">
           <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Conduta de SRI para o Prontuário
         </button>
+      </div>
+
+      <!-- Subcalc: Crise Asmática Grave & Broncoespasmo (GINA / SBPT) -->
+      <div id="calc-asma" class="subcalc-pane hidden glass-card rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-teal-400 flex items-center gap-1.5">
+            <i data-lucide="wind" class="w-3.5 h-3.5"></i> Crise Asmática Grave &amp; Broncoespasmo
+          </h4>
+          <span class="text-[9px] bg-teal-500/20 text-teal-300 border border-teal-500/40 px-2 py-0.5 rounded-full font-bold font-mono">GINA · SBPT</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Estratificação rápida de gravidade, doses da 1ª hora (Salbutamol, Ipratrópio, Corticoide e MgSO4), alerta de parada iminente e normocapnia.</p>
+
+        <!-- Chips de Cenários Rápidos do Plantão (1 toque) -->
+        <div class="space-y-1">
+          <div class="text-[10px] text-slate-400 font-medium">Cenários rápidos de plantão (1 toque):</div>
+          <div class="flex flex-wrap gap-1">
+            <button type="button" onclick="definirPresetAsma('frases_completas', 95, 20, 90, 'sibilos_expiratorios', 70, 30, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 text-[10px] font-semibold border border-emerald-500/30 transition">🟢 Leve / Moderada</button>
+            <button type="button" onclick="definirPresetAsma('palavras_isoladas', 89, 34, 128, 'sibilos_difusos', 70, 32, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 text-[10px] font-semibold border border-amber-500/30 transition">🟡 Grave (SpO2 &lt; 92%)</button>
+            <button type="button" onclick="definirPresetAsma('incapaz', 82, 38, 135, 'torax_silencioso', 70, 35, true, true, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 text-[10px] font-semibold border border-rose-500/30 transition">🔴 Parada Iminente / Tórax Silencioso</button>
+            <button type="button" onclick="definirPresetAsma('palavras_isoladas', 90, 42, 140, 'sibilos_difusos', 15, 4, false, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 text-[10px] font-semibold border border-sky-500/30 transition">👶 Pediátrico 15 kg</button>
+            <button type="button" onclick="definirPresetAsma('palavras_isoladas', 88, 32, 120, 'sibilos_difusos', 70, 28, true, false, false)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 text-[10px] font-semibold border border-purple-500/30 transition">⚡ Refratário 1h (MgSO4 2g)</button>
+          </div>
+        </div>
+
+        <!-- Inputs Estruturados da Asma -->
+        <div class="space-y-2 text-xs">
+          <!-- 1. Fala e Ausculta -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">1. Fala / Dispneia:</label>
+              <select id="asma-fala" onchange="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+                <option value="frases_completas">Frases completas (Leve)</option>
+                <option value="palavras_isoladas" selected>Palavras isoladas (Grave)</option>
+                <option value="incapaz">Incapaz de falar (Ameaça à vida)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">2. Ausculta Respiratória:</label>
+              <select id="asma-ausculta" onchange="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white">
+                <option value="sibilos_expiratorios">Sibilos expiratórios isolados</option>
+                <option value="sibilos_difusos" selected>Sibilos difusos (insp e exp)</option>
+                <option value="torax_silencioso">🚨 Tórax Silencioso (Parada Iminente)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. Sinais Vitais: SpO2, FR, FC -->
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">SpO₂ (%):</label>
+              <input type="number" id="asma-spo2" value="89" min="40" max="100" oninput="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">FR (irpm):</label>
+              <input type="number" id="asma-fr" value="32" min="8" max="70" oninput="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">FC (bpm):</label>
+              <input type="number" id="asma-fc" value="122" min="30" max="220" oninput="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center font-mono">
+            </div>
+          </div>
+
+          <!-- 3. Peso e Idade -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">Peso (kg):</label>
+              <input type="number" step="0.5" id="asma-peso" value="70" oninput="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-semibold">Idade (anos):</label>
+              <input type="number" id="asma-idade" value="30" min="1" max="110" oninput="calcularAsmaCockpit()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-white text-center font-mono">
+            </div>
+          </div>
+
+          <!-- 4. Salvaguardas & Parâmetros Críticos -->
+          <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 space-y-1.5">
+            <div class="text-[11px] font-semibold text-slate-300">Salvaguardas &amp; Sinais Sentinela:</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 text-[11px]">
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="asma-refratario" onchange="calcularAsmaCockpit()" class="rounded border-slate-700 bg-slate-900 text-teal-500">
+                <span>Refratário após 1ª hora (SABA)</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="asma-normocapnia" onchange="calcularAsmaCockpit()" class="rounded border-slate-700 bg-slate-900 text-rose-500">
+                <span>Gasometria: PaCO₂ &gt;= 42 mmHg</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300">
+                <input type="checkbox" id="asma-gestante" onchange="calcularAsmaCockpit()" class="rounded border-slate-700 bg-slate-900 text-amber-500">
+                <span>Gestante (Alvo SpO₂ 94-98%)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono whitespace-pre-wrap leading-relaxed" id="asma-resultado">
+          <!-- Resultado dinâmico -->
+        </div>
+
+        <div class="flex gap-2">
+          <button id="btn-copiar-asma" onclick="copiarAsmaPEP()" class="hidden flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs flex items-center justify-center gap-1.5 border border-emerald-500/30 transition shadow-sm active:scale-[0.99]">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Conduta da Asma para Prontuário
+          </button>
+          <button type="button" onclick="limparAsma()" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs font-semibold border border-slate-700 transition">
+            Limpar
+          </button>
+        </div>
       </div>
 
       <!-- Subcalc 3: Clearance Cr -->
@@ -1599,6 +1704,9 @@
             </button>
             <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-sri');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
               <i data-lucide="shield-alert" class="w-3 h-3"></i> Intubação (SRI)
+            </button>
+            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-asma');" class="px-2.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold hover:bg-teal-500/30 flex items-center gap-1 transition">
+              <i data-lucide="wind" class="w-3 h-3"></i> Crise Asmática &amp; GINA
             </button>
             <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-atb');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="shield-plus" class="w-3 h-3"></i> Ajuste ATB
@@ -3589,6 +3697,16 @@
       }
     }
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     // =========================================================================
     // 1.0 SUBSISTEMA DE CRIPTOGRAFIA EM REPOUSO (AES-GCM 256-BIT / WEB CRYPTO)
     // =========================================================================
@@ -5273,6 +5391,7 @@
         const mapa = {
           'dva-resultado': 'btn-copiar-dva',
           'sri-resultado': 'btn-copiar-sri',
+          'asma-resultado': 'btn-copiar-asma',
           'crcl-resultado': 'btn-copiar-crcl',
           'gaso-resultado': 'btn-copiar-gaso',
           'atb-resultado': 'btn-copiar-atb',
@@ -6033,6 +6152,123 @@
           }
 
           saida += `\nℹ️ MONITORIZAÇÃO:\n• ECG seriado (a cada 15-30 min se dor contínua), curva de troponina ultrassensível (0h/1h ou 0h/2h) e monitorização multiparamétrica.`;
+
+          return saida;
+        } else if (tipo === 'asma' || tipo === 'broncoespasmo' || tipo === 'crise_asmatica') {
+          const fala = String(entrada.fala || 'palavras_isoladas').toLowerCase();
+          const ausculta = String(entrada.ausculta || 'sibilos_difusos').toLowerCase();
+          const spo2 = Number(entrada.spo2) || 92;
+          const fr = Number(entrada.fr) || 26;
+          const fc = Number(entrada.fc) || 110;
+          const peso = Number(entrada.peso || entrada.pesoKg) || 70;
+          const idade = Number(entrada.idade) || 30;
+          const ehPediatrico = idade < 12 || peso < 35;
+          const refratario1h = Boolean(entrada.refratario_1h || entrada.refratario);
+          const normocapnia = Boolean(entrada.gasometriaNormocapnia || entrada.normocapnia);
+          const gestante = Boolean(entrada.gestante);
+
+          let nivel = "LEVE_MODERADA";
+          let titulo = "CRISE ASMÁTICA LEVE A MODERADA";
+          let recomendacao = "Iniciar SABA 4-10 jatos com espaçador a cada 20 min na 1ª hora + Corticoide sistêmico oral precoce.";
+          let alertas = [];
+
+          if (ausculta === 'torax_silencioso' || fala === 'incapaz' || normocapnia) {
+            nivel = "PARADA_IMINENTE";
+            titulo = "AMEAÇA À VIDA / PARADA IMINENTE (ESTADO DE MAL ASMÁTICO)";
+            recomendacao = "EMERGÊNCIA MÉDICA IMEDIATA: Sala Vermelha. Oxigênio sob máscara com reservatório, SABA + Ipratrópio contínuo/frequente, Corticoide IV imediato, Sulfato de Magnésio 2g IV em 20 min. Preparar sequência rápida de intubação com Ketamina se exaustão respiratória.";
+            if (ausculta === 'torax_silencioso') {
+              alertas.push("🚨 TÓRAX SILENCIOSO: Ausência de murmúrio vesicular por broncoespasmo crítico e fluxo aéreo quase nulo.");
+            }
+            if (normocapnia) {
+              alertas.push("🚨 NORMOCAPNIA / HIPERCAPNIA PARADOXAL (PaCO₂ >= 42 mmHg): Na crise asmática, a hiperventilação obriga hipocapnia (< 35 mmHg). PaCO₂ normal ou elevada indica exaustão diafragmática e parada respiratória iminente!");
+            }
+            if (fala === 'incapaz') {
+              alertas.push("🚨 FALA INCAPAZ: Exaustão respiratória grave com incapacidade de articular palavras.");
+            }
+          } else if (fala === 'palavras_isoladas' || spo2 < 92 || fr > 30 || fc > 120) {
+            nivel = "GRAVE";
+            titulo = "CRISE ASMÁTICA GRAVE";
+            recomendacao = "Atendimento prioritário em leito monitorizado. SABA + Brometo de Ipratrópio a cada 20 min na 1ª hora, Corticoide sistêmico imediato, Oxigênio com alvo de SpO2 93-95%. Preparar Sulfato de Magnésio 2g IV se refratário após 1ª hora.";
+            if (spo2 < 92) alertas.push(`Dessaturação em ar ambiente (SpO2 ${spo2}% < 92%).`);
+            if (fr > 30) alertas.push(`Taquipneia acentuada (FR ${fr} irpm > 30).`);
+            if (fc > 120) alertas.push(`Taquicardia severa (FC ${fc} bpm > 120).`);
+          }
+
+          // Oxigênio
+          const alvoSpo2 = (gestante || ehPediatrico) ? "94% a 98%" : "93% a 95%";
+          const dispO2 = nivel === 'PARADA_IMINENTE' ? "Máscara com reservatório não reinalante 10-15 L/min" : "Cânula nasal de O2 1 a 3 L/min ou Máscara de Venturi";
+
+          // SABA
+          let sabaTxt = "";
+          let sabaNeb = "";
+          if (ehPediatrico) {
+            const jatosPed = idade < 6 ? "4 a 6 jatos" : "6 a 10 jatos";
+            const gtsSalb = Math.min(20, Math.max(5, Math.round(peso * 0.75)));
+            sabaTxt = `Spray MDI com espaçador e máscara: ${jatosPed} a cada 20 min na 1ª hora (ciclos aos 0, 20 e 40 min).`;
+            sabaNeb = `Nebulização: Salbutamol gotas (5 mg/mL) ${gtsSalb} gotas em 3 mL de SF 0.9% sob fluxo de O2 a 6-8 L/min a cada 20 min.`;
+          } else {
+            sabaTxt = "Spray MDI com espaçador: 4 a 10 jatos (1 jato por vez com apneia de 10s) a cada 20 min na 1ª hora (3 ciclos: aos 0, 20 e 40 min).";
+            sabaNeb = "Nebulização intermitente: Salbutamol gotas (5 mg/mL) 10 a 20 gotas (2.5 a 5.0 mg) em 3 a 4 mL de SF 0.9% a cada 20 min na 1ª hora.";
+          }
+
+          // SAMA
+          const indicarIpra = (nivel === 'GRAVE' || nivel === 'PARADA_IMINENTE' || refratario1h);
+          let ipraTxt = "";
+          if (indicarIpra) {
+            const doseIpra = ehPediatrico ? (peso < 20 ? "20 gotas (0.25 mg)" : "40 gotas (0.50 mg)") : "40 gotas (0.5 mg = 2.0 mL)";
+            ipraTxt = `• Brometo de Ipratrópio (SAMA): Nebulização ${doseIpra} associadas ao Salbutamol a cada 20 min nas primeiras 3 doses (1ª hora). Spray alternativo: 4 a 8 jatos com espaçador.\n`;
+          }
+
+          // Corticoide
+          let cortOral = "";
+          let cortIv = "";
+          if (ehPediatrico) {
+            const dosePredPed = Math.min(50, Math.max(10, Math.round(peso * 1.5)));
+            cortOral = `Prednisolona oral (3 mg/mL): ${dosePredPed} mg (${(dosePredPed / 3).toFixed(1)} mL) VO 1x/dia pela manhã por 3 a 5 dias.`;
+            cortIv = `Hidrocortisona 4 a 5 mg/kg IV de 6/6h (máx 200 mg/dose) OU Metilprednisolona 1 mg/kg IV 12/12h.`;
+          } else {
+            cortOral = "Prednisona ou Prednisolona 40 a 50 mg VO em dose única diária pela manhã por 5 a 7 dias (sem necessidade de desmame).";
+            cortIv = "Hidrocortisona 200 mg IV em bolus imediato, seguido de 100 mg IV 6/6h; OU Metilprednisolona 40 a 60 mg IV 6-12h.";
+          }
+
+          // Sulfato de Magnésio
+          let mgso4Txt = "";
+          if (nivel === 'PARADA_IMINENTE' || nivel === 'GRAVE' || refratario1h) {
+            if (ehPediatrico) {
+              const doseMgPed = Math.min(2000, Math.round(peso * 50));
+              mgso4Txt = `\n⚡ SULFATO DE MAGNÉSIO IV (INDICAÇÃO MANDATÓRIA):\n• Dose Pediátrica: ${doseMgPed} mg (solução a 50%: ${(doseMgPed/500).toFixed(1)} mL) em 100 mL de SF 0.9% infundidos em 20 minutos sob monitorização.\n`;
+            } else {
+              mgso4Txt = `\n⚡ SULFATO DE MAGNÉSIO 2G IV (INDICAÇÃO MANDATÓRIA):\n• Dose: 2,0 g IV (Solução 50%: 4 mL | Solução 10%: 20 mL)\n• Diluição: Diluir em 100 mL de SF 0.9% ou SG 5%\n• Tempo de Infusão: Infundir em 20 minutos em bomba de infusão ou gotejamento rigoroso sob monitorização de PA e reflexo patelar.\n`;
+            }
+          }
+
+          // SRI
+          let sriTxt = "";
+          if (nivel === 'PARADA_IMINENTE' || nivel === 'GRAVE') {
+            sriTxt = `\n🫁 MANEJO VENTILATÓRIO & IOT PROTETORA:\n• Indução de Escolha: Ketamina 1.5 a 2.0 mg/kg IV (broncodilatador simpaticomimético de escolha) + Succinilcolina 1.5 mg/kg ou Rocurônio 1.2 mg/kg\n• Parâmetros do Respirador: Modo VCV, Vt protetor 5-6 mL/kg PBW, FR baixa 10-12 irpm, Relação I:E de 1:3 a 1:5, PEEP baixa 0-5 cmH2O, Hipercapnia permissiva (PaCO2 50-70 com pH >= 7.20)\n• ALERTA SENTINELA PÓS-IOT: Se colapso hemodinâmico súbito pós-intubação, DESCONECTAR IMEDIATAMENTE do ventilador e comprimir o tórax manualmente para esvaziar auto-PEEP extrema!\n`;
+          }
+
+          let saida = `🫁 MANEJO DA CRISE ASMÁTICA & BRONCOESPASMO (GINA / SBPT) [OFFLINE]\n\n` +
+            `🔴 CLASSIFICAÇÃO & CONDUTA IMEDIATA:\n` +
+            `• Gravidade: ${titulo}\n` +
+            `• Conduta: ${recomendacao}\n\n` +
+            `🟡 BRONCODILATAÇÃO DA 1ª HORA (SABA + SAMA):\n` +
+            `• Oxigenoterapia: Alvo SpO2 ${alvoSpo2} (${dispO2})\n` +
+            `• Salbutamol (SABA): ${sabaTxt}\n` +
+            `• Nebulização Alternativa: ${sabaNeb}\n` +
+            ipraTxt + '\n' +
+            `💉 CORTICOTERAPIA SISTÊMICA PRECOCE (1ª HORA):\n` +
+            `• Via Oral: ${cortOral}\n` +
+            `• Via Intravenosa: ${cortIv}\n` +
+            mgso4Txt +
+            sriTxt +
+            `\n⚠️ BLOQUEIOS SENTINELA & CONTRAINDICAÇÕES:\n` +
+            `• CONTRAINDICAÇÃO FORMAL: NUNCA prescrever sedativos, ansiolíticos (Benzodiazepínicos) ou opioides na crise asmática sem via aérea avançada intubada (risco de parada cardiorrespiratória por abolição do drive ventilatório)!\n` +
+            `• CONTRAINDICAÇÃO DE ATB DE ROTINA: Não prescrever antibióticos empiricamente. Mais de 80% das crises são virais ou alérgicas.\n` +
+            `• CONTRAINDICAÇÃO DE MUCOLÍTICOS: Fluidificantes e mucolíticos inalatórios pioram o broncoespasmo reflexo na crise aguda.\n\n` +
+            `ℹ️ CRITÉRIOS DE ALTA & PRESCRIÇÃO AMBULATORIAL:\n` +
+            `• Critérios de Alta: Sintomas resolvidos, ausência de musculatura acessória, SpO2 > 94% em ar ambiente por 1-2h pós-SABA.\n` +
+            `• Prescrição de Alta: Corticoide oral (Prednisona 40-50 mg/dia por 5-7 dias) + CI de manutenção (Budesonida 200-400 mcg 12/12h) + SABA de resgate com espaçador + Retorno em 2-7 dias.`;
 
           return saida;
         }
@@ -6966,112 +7202,6 @@
               return 'Manter sob monitorização contínua em leito de emergência por 6 a 12 horas pelo risco de reação bifásica (recrudescimento dos sintomas sem nova exposição). Orientar receita e treinamento para caneta autoinjetora de adrenalina (EpiPen).';
             },
             racional: 'Aproximadamente 5% a 20% dos pacientes com anafilaxia apresentam recaída grave horas após a resolução inicial do episódio.'
-          }
-        ]
-      },
-      dengue: {
-        id: 'dengue',
-        grandeArea: 'Clínica Médica',
-        titulo: 'Dengue Grave / Sinais de Alarme (C e D)',
-        subtitulo: 'Protocolo Ministério da Saúde 2024 · Arboviroses',
-        icone: 'alert-triangle',
-        badge: 'MS 2024',
-        cenario: 'Paciente com dengue suspeita ou confirmada apresentando sinais de alarme (Grupo C: dor abdominal intensa, vômitos, lipotimia) ou choque/sangramento grave (Grupo D).',
-        metas: [
-          'Meta volêmica Grupo C: SF 0,9% 10 mL/kg/h nas primeiras 2h; reavaliar Ht e diurese.',
-          'Meta de choque Grupo D: SF 0,9% 20 mL/kg em 20 minutos (repetir até 3 vezes se necessário).',
-          'Alvo de estabilização: PAM ≥ 65 mmHg, diurese ≥ 1 mL/kg/h e hematócrito em queda ou estabilizado.'
-        ],
-        errosCriticos: [
-          'NUNCA prescrever AINEs ou AAS (risco severo de hemorragia e choque).',
-          'NUNCA liberar paciente Grupo C ou D para domicílio: internação obrigatória.',
-          'NUNCA esquecer de dosar hematócrito seriado a cada 2 horas no choque.'
-        ],
-        itens: [
-          {
-            id: 'dengue_expansao_c',
-            categoria: 'Ressuscitação Volêmica Grupo C',
-            prioridade: 'Imediato (Fase Rápida)',
-            titulo: 'Fase de Expansão Leito de Observação (10 mL/kg/h)',
-            obterPrescricao: (peso) => {
-              const p = peso || 70;
-              const vol = Math.round(p * 10);
-              return `Soro Fisiológico 0,9% IV: ${vol} mL/h nas primeiras 2 horas. Reavaliar Ht e sinais vitais após término.`;
-            },
-            racional: 'Combate o extravasamento plasmático precoce antes da instalação do choque irreversível.'
-          },
-          {
-            id: 'dengue_choque_d',
-            categoria: 'Choque Hipovolêmico Grupo D',
-            prioridade: 'Emergência Sala Vermelha',
-            titulo: 'Bólus de Ressuscitação Rápida (20 mL/kg em 20 min)',
-            obterPrescricao: (peso) => {
-              const p = peso || 70;
-              const vol = Math.round(p * 20);
-              return `Soro Fisiológico 0,9% IV em bólus pressurizado: ${vol} mL em 20 minutos. Pode repetir até 3 vezes.`;
-            },
-            racional: 'Restaura a pré-carga e a perfusão orgânica na vigência de colapso circulatório.'
-          },
-          {
-            id: 'dengue_sintomaticos',
-            categoria: 'Sintomáticos & Notificação',
-            prioridade: 'Mandatório',
-            titulo: 'Analgesia Segura e Notificação Imediata SINAN',
-            obterPrescricao: () => {
-              return 'Dipirona 1g IV a cada 6 horas se dor ou febre (evitar AINEs e AAS). Notificação compulsória imediata (24h) ao SINAN.';
-            },
-            racional: 'Alívio seguro da dor sem interferir na hemostasia ou aumentar risco de sangramento gastrointestinal.'
-          }
-        ]
-      },
-      has: {
-        id: 'has',
-        grandeArea: 'Clínica Médica',
-        titulo: 'Crise Hipertensiva vs Pseudocrise',
-        subtitulo: 'Diretrizes SBC 2024 / AHA · Sala Vermelha',
-        icone: 'heart',
-        badge: 'SBC 2024',
-        cenario: 'Elevação aguda da PA (≥ 180×120 mmHg) com ou sem lesão aguda de órgão-alvo (EAP, Encefalopatia, Dissecção de Aorta, SCA, AVC).',
-        metas: [
-          'Emergência Hipertensiva Geral: Redução de 20-25% da PAM na 1ª hora na Sala Vermelha/UTI.',
-          'Dissecção de Aorta: PAS < 120 mmHg e FC < 60 bpm em 20 minutos com Betabloqueador + Nitroprussiato.',
-          'Urgência/Pseudocrise: Redução gradual em 24 a 48h com medicações orais. Evitar queda brusca.'
-        ],
-        errosCriticos: [
-          'NUNCA prescrever Nifedipino sublingual/ação rápida (risco de AVC e IAM por queda abrupta e taquicardia reflexa).',
-          'NUNCA usar vasodilatador isolado (Nitroprussiato) na Dissecção Aórtica sem prévio betabloqueio (aumenta o cisalhamento dP/dt).',
-          'NUNCA normalizar abruptamente a PA na Urgência Hipertensiva assintomática.'
-        ],
-        itens: [
-          {
-            id: 'has_emergencia_nipride',
-            categoria: 'Emergência Hipertensiva',
-            prioridade: 'BIC Contínua',
-            titulo: 'Nitroprussiato de Sódio IV Titulado em Bomba',
-            obterPrescricao: (peso) => {
-              return 'Nitroprussiato de Sódio 50 mg em 250 mL SG 5% (proteger da luz): iniciar a 0.3 a 0.5 mcg/kg/min em BIC, titulando a cada 5 min visando queda de 20-25% da PAM na 1ª hora.';
-            },
-            racional: 'Vasodilatador arterial e venoso potente de início imediato e meia-vida ultracurta para titulação precisa.'
-          },
-          {
-            id: 'has_disseccao_esmolol',
-            categoria: 'Dissecção Aórtica',
-            prioridade: 'Primeiro Passo Obrigatório',
-            titulo: 'Betabloqueador IV (Esmolol / Metoprolol) ANTES de Vasodilatador',
-            obterPrescricao: () => {
-              return 'Metoprolol 5 mg IV a cada 5 min (máx 15 mg) ou Esmolol em BIC até FC < 60 bpm. Meta: PAS < 120 e FC < 60 em 20 min.';
-            },
-            racional: 'Reduz a força de ejeção ventricular (dP/dt) prevenindo a propagação ou rotura da falsa luz aórtica.'
-          },
-          {
-            id: 'has_urgencia_oral',
-            categoria: 'Urgência / Pseudocrise',
-            prioridade: 'Via Oral',
-            titulo: 'Manejo Oral Gradual: Captopril ou Clonidina',
-            obterPrescricao: () => {
-              return 'Se Pseudocrise: repouso 30 min + analgesia. Se Urgência persistente: Captopril 25 mg VO (ou Clonidina 0.100 mg VO). Alta com ajuste ambulatorial para 24-48h.';
-            },
-            racional: 'Evita isquemia de órgãos vitais acostumados à autorreguração pressórica elevada crônica.'
           }
         ]
       }
@@ -10156,19 +10286,29 @@
     let preceptorPendente = false;
     async function provocarPreceptorSocratico() {
       if (preceptorPendente) return;
-      if (!cockpitDados?.revision) {
-        copiarToast('Atualize o atendimento primeiro.');
+      const inputEl = document.getElementById('conversa-input');
+      const inputTxt = inputEl?.value?.trim();
+
+      if (!cockpitDados?.revision && !inputTxt) {
+        copiarToast('Digite um caso clínico ou selecione um atendimento.');
         return;
       }
       preceptorPendente = true;
-      const revision = cockpitDados.revision;
+      const revision = cockpitDados?.revision;
       const box = document.getElementById('resposta-preceptor-box');
       const txt = document.getElementById('resposta-preceptor-texto');
       box.classList.remove('hidden');
-      txt.textContent = 'Preparando pergunta sobre o atendimento atual…';
+      txt.textContent = 'Preparando provocação socrática do preceptor…';
       try {
-        const resposta = await cockpitRpc('cockpitPreceptor', revision);
-        txt.textContent = cockpitDados?.revision === revision ? resposta : 'O atendimento mudou. Atualize o painel.';
+        let resposta = '';
+        if (revision) {
+          resposta = await cockpitRpc('cockpitPreceptor', revision);
+          txt.textContent = cockpitDados?.revision === revision ? resposta : 'O atendimento mudou. Atualize o painel.';
+        } else {
+          const res = await cockpitRpc('cockpitConversar', { acao: 'preceptor', texto: inputTxt });
+          resposta = res?.resposta || 'Qual conduta imediata você preconiza?';
+          txt.textContent = resposta;
+        }
       } catch (e) {
         txt.textContent = e.message;
       } finally {
@@ -10334,6 +10474,9 @@
           iniciarCapturaAudioLive();
         };
 
+        let audioTocadoNesteTurno = false;
+        let ultimoTextoModelo = '';
+
         liveWs.onmessage = (event) => {
           try {
             const msg = JSON.parse(event.data);
@@ -10341,16 +10484,27 @@
               setLiveStatus('🎙️ Ouvindo você... (fale agora)', 'listening');
               hapticFeedback('success');
             } else if (msg.type === 'audio' && msg.audio) {
+              audioTocadoNesteTurno = true;
               setLiveStatus('🔊 Preceptor Falando (Voz Fenrir)...', 'speaking');
               tocarChunkAudioLive(msg.audio);
             } else if (msg.type === 'transcript') {
+              if (msg.role === 'model') {
+                ultimoTextoModelo = msg.text;
+                audioTocadoNesteTurno = false;
+              }
               adicionarItemTranscricaoLive(msg.role || 'model', msg.text);
             } else if (msg.type === 'interrupted') {
               // Barge-in: médico interrompeu fala do preceptor
               pararReproducaoAudioLive();
+              if (window.speechSynthesis) window.speechSynthesis.cancel();
               setLiveStatus('🎙️ Ouvindo você...', 'listening');
             } else if (msg.type === 'turnComplete') {
-              setLiveStatus('🎙️ Ouvindo você...', 'listening');
+              if (!audioTocadoNesteTurno && ultimoTextoModelo) {
+                falarTextoPreceptorFallback(ultimoTextoModelo);
+                ultimoTextoModelo = '';
+              } else {
+                setLiveStatus('🎙️ Ouvindo você...', 'listening');
+              }
             } else if (msg.type === 'close') {
               copiarToast(msg.reason || 'Sessão do Preceptor Live finalizada.');
               desconectarLivePreceptor();
@@ -10444,6 +10598,26 @@
         const base64 = btoa(binary);
         liveWs.send(JSON.stringify({ audio: base64 }));
       };
+    }
+
+    function falarTextoPreceptorFallback(texto) {
+      if (!texto || typeof window === 'undefined' || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(texto);
+        utter.lang = 'pt-BR';
+        utter.rate = 1.05;
+        utter.pitch = 1.0;
+        const voices = window.speechSynthesis.getVoices();
+        const ptVoice = voices.find(v => v.lang === 'pt-BR' || (v.lang && v.lang.startsWith('pt')));
+        if (ptVoice) utter.voice = ptVoice;
+        utter.onstart = () => setLiveStatus('🔊 Preceptor Falando (Voz Sintetizada)...', 'speaking');
+        utter.onend = () => setLiveStatus('🎙️ Ouvindo você...', 'listening');
+        utter.onerror = () => setLiveStatus('🎙️ Ouvindo você...', 'listening');
+        window.speechSynthesis.speak(utter);
+      } catch (eSpeech) {
+        console.warn('[SpeechSynthesis Fallback Warning]:', eSpeech);
+      }
     }
 
     function tocarChunkAudioLive(base64Audio) {
