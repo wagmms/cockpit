@@ -752,6 +752,21 @@
             <button onclick="abrirModalSinteseDiaSOAP()" class="px-2.5 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold hover:bg-indigo-500/30 flex items-center gap-1 transition">
               <i data-lucide="layers" class="w-3 h-3"></i> Síntese do Dia (SOAP)
             </button>
+            <button onclick="abrirModalAmbulatorioSOAP()" class="px-2.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold hover:bg-teal-500/30 flex items-center gap-1 transition">
+              <i data-lucide="clipboard-check" class="w-3 h-3"></i> SOAP Ambulatorial
+            </button>
+            <button onclick="abrirModalAtestadoCFM()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
+              <i data-lucide="file-text" class="w-3 h-3"></i> Atestado CFM
+            </button>
+            <button onclick="abrirModalPrenatal()" class="px-2.5 py-1.5 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 text-[11px] font-semibold hover:bg-pink-500/30 flex items-center gap-1 transition">
+              <i data-lucide="baby" class="w-3 h-3"></i> Pré-Natal & DPP
+            </button>
+            <button onclick="abrirModalCentroObstetrico()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+              <i data-lucide="activity" class="w-3 h-3"></i> Sala de Parto & HPP
+            </button>
+            <button onclick="copiarReceitaLimpaPEP()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
+              <i data-lucide="receipt" class="w-3 h-3"></i> Receita PEP
+            </button>
             <button onclick="navegarAba('tab-remume', 'Prescrição & REMUME')" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="clipboard-list" class="w-3 h-3"></i> Prescrição Rápida
             </button>
@@ -1145,6 +1160,747 @@
             <span>Copiar Todos os SOAPs</span>
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: SOAP AMBULATORIAL ÁGIL (ATENÇÃO PRIMÁRIA & UBS)            -->
+  <!-- ================================================================= -->
+  <div id="modal-ambulatorio-soap" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl border border-teal-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/70">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-500/20 text-teal-400 ring-1 ring-teal-500/30">
+            <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-teal-400">Consulta Rápida</span>
+              <span class="text-[9px] bg-teal-500/20 text-teal-300 px-1.5 py-0.2 rounded font-bold">APS & UBS</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white">
+              SOAP Ambulatorial Ágil · Prontuário de Consultório
+            </h4>
+          </div>
+        </div>
+        <button onclick="fecharModalAmbulatorioSOAP()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Conteúdo com Scroll -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs font-sans">
+        <!-- Campos Rápidos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Paciente</label>
+            <input id="amb-input-paciente" type="text" placeholder="Nome do paciente..." class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-teal-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Modelo de Exame Físico</label>
+            <select id="amb-select-modelo-ef" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-teal-500 focus:outline-none">
+              <option value="checkup_geral">Check-up Geral / Consulta Básica</option>
+              <option value="has_rotina">Hipertensão Arterial (HAS)</option>
+              <option value="dm_rotina">Diabetes Mellitus & Exame dos Pés</option>
+              <option value="respiratorio_ivas">Vias Aéreas & IVAS / Tosse</option>
+              <option value="dispepsia_gastro">Gastrointestinal / Dispepsia / DRGE</option>
+              <option value="lombalgia_postural">Coluna Lombar & Lasègue Negativo</option>
+              <option value="cefaleia_neuro">Neurológico & Cefaleia</option>
+              <option value="saude_mental">Saúde Mental / Exame Psíquico</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Queixa Principal & HDA Rápida</label>
+          <textarea id="amb-input-queixa" rows="2" placeholder="Ex: Paciente hipertenso há 5 anos para renovação de receita e ajuste pressórico. Assintomático..." class="w-full rounded-lg bg-slate-950 border border-slate-800 p-2 text-slate-100 text-xs focus:border-teal-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div>
+            <label class="block text-[10px] text-slate-400 mb-0.5">PA (mmHg)</label>
+            <input id="amb-sv-pa" type="text" placeholder="128/82" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-400 mb-0.5">Glicemia (mg/dL)</label>
+            <input id="amb-sv-glicemia" type="text" placeholder="112" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-400 mb-0.5">FC (bpm)</label>
+            <input id="amb-sv-fc" type="text" placeholder="74" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-400 mb-0.5">Peso (kg)</label>
+            <input id="amb-sv-peso" type="text" placeholder="72" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <button onclick="gerarSOAPAmbulatorialModal()" class="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-teal-950 transition">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Gerar SOAP Ambulatorial</span>
+          </button>
+          <span class="text-[10px] text-slate-400">Classificação SBC/SBD + REMUME</span>
+        </div>
+
+        <!-- Visualizador do SOAP Gerado -->
+        <div id="amb-box-resultado" class="hidden space-y-2 pt-2 border-t border-slate-800">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Prontuário Estruturado (PEP)</span>
+            <button onclick="copiarSOAPAmbulatorialGerado()" class="px-2 py-1 rounded bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 font-semibold text-[10px] flex items-center gap-1 transition">
+              <i data-lucide="copy" class="w-3 h-3"></i> Copiar Prontuário
+            </button>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 max-h-60 overflow-y-auto">
+            <pre id="amb-texto-resultado" class="whitespace-pre-wrap break-words text-xs text-slate-200 font-mono"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-end gap-2">
+        <button onclick="fecharModalAmbulatorioSOAP()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: ATESTADO MÉDICO LEGAL (RESOLUÇÃO CFM 1.658/2002)           -->
+  <!-- ================================================================= -->
+  <div id="modal-atestado-cfm" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-xl max-h-[88vh] flex flex-col rounded-2xl border border-amber-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/70">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/30">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-400">Documento Médico-Legal</span>
+              <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded font-bold">Resolução CFM 1.658</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white">
+              Atestado Médico · Pronto para PEP e Impressão
+            </h4>
+          </div>
+        </div>
+        <button onclick="fecharModalAtestadoCFM()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Conteúdo do Formulário -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs font-sans">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Nome do Paciente</label>
+            <input id="atestado-input-paciente" type="text" placeholder="Nome completo..." class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-amber-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Documento / CPF (opcional)</label>
+            <input id="atestado-input-doc" type="text" placeholder="RG ou CPF..." class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-amber-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Dias de Afastamento</label>
+            <select id="atestado-select-dias" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-amber-500 focus:outline-none">
+              <option value="1">1 (um) dia</option>
+              <option value="2">2 (dois) dias</option>
+              <option value="3" selected>3 (três) dias</option>
+              <option value="5">5 (cinco) dias</option>
+              <option value="7">7 (sete) dias</option>
+              <option value="10">10 (dez) dias</option>
+              <option value="14">14 (quatorze) dias</option>
+              <option value="15">15 (quinze) dias</option>
+              <option value="30">30 (trinta) dias</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Diagnóstico / CID-10</label>
+            <input id="atestado-input-motivo" type="text" placeholder="Ex: M54.5 Lombalgia / J00 Resfriado..." class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-amber-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 flex items-start gap-2">
+          <input type="checkbox" id="atestado-check-cid" class="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-0" />
+          <label for="atestado-check-cid" class="text-[11px] text-slate-300 leading-snug cursor-pointer">
+            <strong>Incluir CID-10:</strong> O paciente solicitou e autorizou expressamente a declaração do diagnóstico codificado (Art. 5º da Resolução CFM nº 1.658/2002).
+          </label>
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <button onclick="gerarAtestadoModal()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-amber-950 transition">
+            <i data-lucide="file-check" class="w-3.5 h-3.5"></i>
+            <span>Gerar Atestado CFM</span>
+          </button>
+        </div>
+
+        <!-- Área de Pré-Visualização -->
+        <div id="atestado-box-resultado" class="hidden space-y-2 pt-2 border-t border-slate-800">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Texto Pronto para PEP</span>
+            <button onclick="copiarAtestadoGerado()" class="px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold text-[10px] flex items-center gap-1 transition">
+              <i data-lucide="copy" class="w-3 h-3"></i> Copiar Atestado
+            </button>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 max-h-56 overflow-y-auto">
+            <pre id="atestado-texto-resultado" class="whitespace-pre-wrap break-words text-xs text-slate-200 font-mono"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-end gap-2">
+        <button onclick="fecharModalAtestadoCFM()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: PAINEL E CALCULADORA DE PRÉ-NATAL (OBSTETRÍCIA AMBULATORIAL)-->
+  <!-- ================================================================= -->
+  <div id="modal-prenatal" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl border border-pink-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/70">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-pink-500/20 text-pink-400 ring-1 ring-pink-500/30">
+            <i data-lucide="baby" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-pink-400">Obstetrícia Ambulatorial</span>
+              <span class="text-[9px] bg-pink-500/20 text-pink-300 px-1.5 py-0.2 rounded font-bold">FEBRASGO & MS</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white">
+              Painel de Pré-Natal · IG, DPP, Rastreio & Farmacologia
+            </h4>
+          </div>
+        </div>
+        <button onclick="fecharModalPrenatal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Navegação Interna em Pills -->
+      <div class="flex items-center gap-1.5 px-4 pt-2.5 pb-1 border-b border-slate-800/80 bg-slate-950/40 overflow-x-auto no-scrollbar text-[11px] font-bold">
+        <button onclick="alternarSecaoPrenatal('sec-pn-ig', this)" id="btn-pn-ig" class="pn-pill-btn px-2.5 py-1 rounded-lg bg-pink-500/25 text-pink-200 border border-pink-500/40 shadow-sm transition">
+          🤰 IG & DPP (Naegele/USG)
+        </button>
+        <button onclick="alternarSecaoPrenatal('sec-pn-peso', this)" id="btn-pn-peso" class="pn-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          ⚖️ Ganho de Peso (IOM)
+        </button>
+        <button onclick="alternarSecaoPrenatal('sec-pn-rastreio', this)" id="btn-pn-rastreio" class="pn-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          📋 Rastreio Trimestral
+        </button>
+        <button onclick="alternarSecaoPrenatal('sec-pn-farmaco', this)" id="btn-pn-farmaco" class="pn-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          💊 Risco Farmacológico
+        </button>
+      </div>
+
+      <!-- Conteúdo com Scroll -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs font-sans">
+        
+        <!-- SEÇÃO 1: IG E DPP (NAEGELE & CONCORDÂNCIA FEBRASGO) -->
+        <div id="sec-pn-ig" class="pn-sec-pane space-y-3">
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-400 flex items-center gap-1">
+              <i data-lucide="calendar" class="w-3 h-3"></i> Parâmetros Cronológicos
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">DUM (Data da Última Menstruação):</label>
+                <input type="text" id="pn-input-dum" placeholder="Ex: 10/05/2026" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Data da Consulta / Referência:</label>
+                <input type="text" id="pn-input-ref" placeholder="Deixe vazio para Hoje" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-400 flex items-center gap-1">
+              <i data-lucide="activity" class="w-3 h-3"></i> 1º Ultrassom Precoce (Confronto Cronológico FEBRASGO)
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Data do USG:</label>
+                <input type="text" id="pn-input-usg-data" placeholder="Ex: 05/07/2026" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">IG no USG (sem / dias):</label>
+                <div class="flex gap-1">
+                  <input type="number" id="pn-input-usg-sem" placeholder="Sem" min="4" max="42" class="w-1/2 bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+                  <input type="number" id="pn-input-usg-dias" placeholder="Dias" min="0" max="6" class="w-1/2 bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Ou CCN medido (mm):</label>
+                <input type="number" id="pn-input-usg-ccn" placeholder="Ex: 18 mm" step="0.1" class="w-full bg-slate-900 border border-slate-700 focus:border-pink-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="calcularCronologiaPrenatalModal()" class="px-3.5 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-pink-950 transition">
+              <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+              <span>Calcular IG & DPP Definitiva</span>
+            </button>
+          </div>
+
+          <!-- Box de Resultado da Cronologia -->
+          <div id="pn-box-resultado-ig" class="hidden p-3 rounded-xl bg-slate-950 border border-pink-500/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="pn-res-badge-metodo" class="text-[10px] bg-pink-500/20 text-pink-300 border border-pink-500/30 px-2 py-0.5 rounded-full font-bold"></span>
+              <span id="pn-res-dias-parto" class="text-[10px] text-slate-400 font-mono"></span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-center pt-1">
+              <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-[10px] text-slate-400 block">Idade Gestacional Atual</span>
+                <span id="pn-res-ig-atual" class="text-sm font-bold text-white"></span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-[10px] text-slate-400 block">Data Provável do Parto (DPP)</span>
+                <span id="pn-res-dpp" class="text-sm font-bold text-pink-400"></span>
+              </div>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80 text-[11px] text-slate-300" id="pn-res-justificativa"></div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO 2: GANHO DE PESO (IOM / MINISTÉRIO DA SAÚDE) -->
+        <div id="sec-pn-peso" class="pn-sec-pane hidden space-y-3">
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1">
+              <i data-lucide="scale" class="w-3 h-3"></i> Dados Antropométricos Maternos
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Peso Pré-Gestacional (kg):</label>
+                <input type="number" id="pn-input-peso-pre" placeholder="Ex: 58.0" step="0.1" class="w-full bg-slate-900 border border-slate-700 focus:border-teal-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Altura (m ou cm):</label>
+                <input type="number" id="pn-input-altura" placeholder="Ex: 1.62" step="0.01" class="w-full bg-slate-900 border border-slate-700 focus:border-teal-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[10.5px] font-semibold text-slate-300 mb-1">Peso Atual na Consulta (kg):</label>
+                <input type="number" id="pn-input-peso-atual" placeholder="Ex: 63.5" step="0.1" class="w-full bg-slate-900 border border-slate-700 focus:border-teal-500 rounded-lg p-2 text-xs text-white outline-none">
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="calcularGanhoPesoModal()" class="px-3.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-teal-950 transition">
+              <i data-lucide="scale" class="w-3.5 h-3.5"></i>
+              <span>Avaliar Ganho Ponderal (IOM)</span>
+            </button>
+          </div>
+
+          <!-- Box de Resultado do Peso -->
+          <div id="pn-box-resultado-peso" class="hidden p-3 rounded-xl bg-slate-950 border border-teal-500/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="pn-peso-cat-imc" class="text-[10px] bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2 py-0.5 rounded-full font-bold"></span>
+              <span id="pn-peso-status-badge" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-center pt-1">
+              <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-[10px] text-slate-400 block">IMC Prévio & Faixa Total</span>
+                <span id="pn-peso-imc-val" class="text-xs font-bold text-white block"></span>
+                <span id="pn-peso-ganho-total" class="text-[10.5px] text-teal-400 font-semibold block"></span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-[10px] text-slate-400 block">Ganho Realizado vs Esperado</span>
+                <span id="pn-peso-realizado-val" class="text-xs font-bold text-white block"></span>
+                <span id="pn-peso-esperado-val" class="text-[10.5px] text-slate-400 block"></span>
+              </div>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80 text-[11px] text-slate-300" id="pn-peso-alerta-clinico"></div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO 3: RASTREIO POR TRIMESTRE (FEBRASGO & MS) -->
+        <div id="sec-pn-rastreio" class="pn-sec-pane hidden space-y-3">
+          <div class="flex items-center gap-1.5 pb-1">
+            <button onclick="carregarTrimestrePainel(1, this)" class="btn-tri-tab px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold text-[10.5px]">1º Trimestre (até 13s6d)</button>
+            <button onclick="carregarTrimestrePainel(2, this)" class="btn-tri-tab px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-bold text-[10.5px]">2º Trimestre (14-27s6d)</button>
+            <button onclick="carregarTrimestrePainel(3, this)" class="btn-tri-tab px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-bold text-[10.5px]">3º Trimestre (>=28s)</button>
+          </div>
+
+          <div id="pn-conteudo-trimestre" class="space-y-2 p-3 rounded-xl bg-slate-950 border border-slate-800">
+            <!-- Preenchido dinamicamente via JS -->
+          </div>
+        </div>
+
+        <!-- SEÇÃO 4: VALIDADOR FARMACOLÓGICO NA GESTAÇÃO & LACTAÇÃO -->
+        <div id="sec-pn-farmaco" class="pn-sec-pane hidden space-y-3">
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1">
+              <i data-lucide="shield-alert" class="w-3 h-3"></i> Validador de Risco Farmacológico & Teratogênese
+            </span>
+            <div class="flex gap-2">
+              <input type="text" id="pn-input-busca-farmaco" placeholder="Digite o fármaco (ex: Enalapril, Paracetamol, Ibuprofeno, Metildopa)..." class="flex-1 bg-slate-900 border border-slate-700 focus:border-rose-500 rounded-lg p-2 text-xs text-white outline-none">
+              <button onclick="auditarFarmacoModal()" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-1 transition shadow-md shadow-rose-950">
+                <i data-lucide="search" class="w-3.5 h-3.5"></i> Auditar
+              </button>
+            </div>
+            <!-- Atalhos Rápidos de Fármacos Críticos -->
+            <div class="flex flex-wrap gap-1 pt-1 text-[10px]">
+              <span class="text-slate-500 self-center">Testar:</span>
+              <button onclick="preencherEChecarFarmaco('Enalapril')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Enalapril</button>
+              <button onclick="preencherEChecarFarmaco('Sinvastatina')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Sinvastatina</button>
+              <button onclick="preencherEChecarFarmaco('Ibuprofeno')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Ibuprofeno</button>
+              <button onclick="preencherEChecarFarmaco('Metildopa')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Metildopa</button>
+              <button onclick="preencherEChecarFarmaco('Paracetamol')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Paracetamol</button>
+              <button onclick="preencherEChecarFarmaco('Fosfomicina')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Fosfomicina</button>
+            </div>
+          </div>
+
+          <!-- Card de Parecer Farmacológico -->
+          <div id="pn-box-resultado-farmaco" class="hidden p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span id="pn-farmaco-nome" class="text-sm font-bold text-white block"></span>
+                <span id="pn-farmaco-classe" class="text-[10px] text-slate-400"></span>
+              </div>
+              <span id="pn-farmaco-seg-badge" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold"></span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1 text-[11px]" id="pn-farmaco-alertas"></div>
+            <div class="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/30 space-y-1 text-[11px]" id="pn-farmaco-alternativas"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
+        <button onclick="copiarResumoPrenatalParaPep()" class="px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-md shadow-pink-950 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copiar Resumo para PEP</span>
+        </button>
+        <button onclick="fecharModalPrenatal()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: CENTRO OBSTÉTRICO & SALA DE PARTO (EMERGÊNCIAS OBSTÉTRICAS)-->
+  <!-- ================================================================= -->
+  <div id="modal-centro-obstetrico" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl border border-rose-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal -->
+      <div class="flex items-center justify-between border-b border-slate-800 p-3.5 bg-slate-950/70">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 ring-1 ring-rose-500/30">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-rose-400">Emergências & Sala de Parto</span>
+              <span class="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-bold font-mono">FEBRASGO / ACOG</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white">
+              Centro Obstétrico & Protocolos Críticos
+            </h4>
+          </div>
+        </div>
+
+        <button onclick="fecharModalCentroObstetrico()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Navegação Interna por Abas (Segmented Control) -->
+      <div class="flex items-center gap-1.5 px-3.5 py-2 border-b border-slate-800/80 bg-slate-950/40 overflow-x-auto no-scrollbar text-xs">
+        <button id="co-tab-parto" onclick="alternarSecaoCentroObstetrico('co-sec-parto', this)" class="co-pill-btn px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-200 border border-rose-500/40 shadow-sm transition">
+          <i data-lucide="clock" class="w-3 h-3 inline mr-1"></i> Parto & Bishop
+        </button>
+        <button id="co-tab-preeclampsia" onclick="alternarSecaoCentroObstetrico('co-sec-preeclampsia', this)" class="co-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          <i data-lucide="alert-triangle" class="w-3 h-3 inline mr-1"></i> PE & MgSO4
+        </button>
+        <button id="co-tab-hpp" onclick="alternarSecaoCentroObstetrico('co-sec-hpp', this)" class="co-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          <i data-lucide="droplet" class="w-3 h-3 inline mr-1"></i> HPP (4 Ts)
+        </button>
+        <button id="co-tab-gbs-prem" onclick="alternarSecaoCentroObstetrico('co-sec-gbs-prem', this)" class="co-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+          <i data-lucide="shield-alert" class="w-3 h-3 inline mr-1"></i> GBS & Prematuro
+        </button>
+      </div>
+
+      <!-- Conteúdo do Modal (Scrollável) -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+        <!-- 1. ABA: TRABALHO DE PARTO & BISHOP -->
+        <div id="co-sec-parto" class="co-sec-pane space-y-3">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Dilatação (cm)</label>
+              <input type="number" id="co-input-dilatacao" min="0" max="10" step="1" placeholder="Ex: 5" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Contrações / 10 min</label>
+              <input type="number" id="co-input-contracoes" min="0" max="10" step="1" placeholder="Ex: 3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Duração Contração (s)</label>
+              <input type="number" id="co-input-duracao" min="0" max="120" step="5" placeholder="Ex: 40" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Plano de De Lee (-5 a +5)</label>
+              <select id="co-input-de-lee" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="-3">-3 (Móvel / Alto)</option>
+                <option value="-2">-2</option>
+                <option value="-1">-1</option>
+                <option value="0" selected>0 (Insinuado / Espinhas Isquiáticas)</option>
+                <option value="1">+1 (Descida)</option>
+                <option value="2">+2</option>
+                <option value="3">+3 (Assoalho Pélvico)</option>
+                <option value="4">+4 (Desprendimento)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">BCF (bpm)</label>
+              <input type="number" id="co-input-bcf" min="60" max="220" placeholder="Ex: 140" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Bolsa e Líquido</label>
+              <select id="co-input-bolsa" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="integra_claro">Bolsa Íntegra</option>
+                <option value="rota_claro">Rota - Líquido Claro</option>
+                <option value="rota_meconio">Rota - Mecônio Fluido</option>
+                <option value="rota_meconio_espesso">Rota - Mecônio Espesso</option>
+                <option value="rota_fetido">Rota - Fétido (Corioamnionite)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Parâmetros de Bishop Adicionais -->
+          <div class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800 space-y-1.5">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Parâmetros do Índice de Bishop:</span>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[9.5px] text-slate-500">Apagamento (%)</label>
+                <select id="co-input-apagamento" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-white text-[11px]">
+                  <option value="20">0-30% (0 pts)</option>
+                  <option value="50">40-50% (1 pt)</option>
+                  <option value="70">60-70% (2 pts)</option>
+                  <option value="80">>80% (3 pts)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[9.5px] text-slate-500">Consistência</label>
+                <select id="co-input-consistencia" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-white text-[11px]">
+                  <option value="rigido">Rígido (0 pts)</option>
+                  <option value="medio">Médio (1 pt)</option>
+                  <option value="amolecido">Amolecido (2 pts)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[9.5px] text-slate-500">Posição do Colo</label>
+                <select id="co-input-posicao" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-white text-[11px]">
+                  <option value="posterior">Posterior (0 pts)</option>
+                  <option value="medio">Intermediário (1 pt)</option>
+                  <option value="anterior">Anterior (2 pts)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="avaliarTrabalhoPartoModal()" class="w-full py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-rose-950 transition">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Avaliar Dinâmica de Parto & Bishop
+          </button>
+
+          <!-- Resultados do Parto -->
+          <div id="co-box-resultado-parto" class="hidden p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="co-parto-fase-badge" class="text-xs px-2.5 py-0.5 rounded-full font-bold"></span>
+              <span id="co-parto-delee-badge" class="text-[10px] text-slate-300 font-mono"></span>
+            </div>
+            <p id="co-parto-delee-desc" class="text-[11px] text-slate-300"></p>
+            <div id="co-parto-bcf-alerta" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-[11px]"></div>
+            <div id="co-parto-bishop-res" class="p-2 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-[11px] space-y-1"></div>
+            <div id="co-parto-condutas" class="p-2 rounded-lg bg-slate-900 text-[11px] space-y-0.5"></div>
+          </div>
+        </div>
+
+        <!-- 2. ABA: PRÉ-ECLÂMPSIA & MGSO4 -->
+        <div id="co-sec-preeclampsia" class="co-sec-pane hidden space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Pressão Sistólica (PAS mmHg)</label>
+              <input type="number" id="co-input-pas" placeholder="Ex: 170" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Pressão Diastólica (PAD mmHg)</label>
+              <input type="number" id="co-input-pad" placeholder="Ex: 115" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Esquema Sulfato de Magnésio</label>
+              <select id="co-input-esquema-mg" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="Zuspan">Zuspan (Padrão Ouro — IV em Bomba)</option>
+                <option value="Pritchard">Pritchard (IV + IM Glúteo / Transporte)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Reflexo Patelar</label>
+              <select id="co-input-reflexo" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="presente">Presente (Normal)</option>
+                <option value="abolido">Abolido / Ausente (🚨 Toxicidade)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Freq. Respiratória (rpm)</label>
+              <input type="number" id="co-input-fr" placeholder="Ex: 16" value="16" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Diurese (mL/hora)</label>
+              <input type="number" id="co-input-diurese" placeholder="Ex: 35" value="35" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+          </div>
+
+          <button onclick="calcularPreeclampsiaMgso4Modal()" class="w-full py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-amber-950 transition">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Manejar Crise Hipertensiva & Prescrever MgSO4
+          </button>
+
+          <!-- Resultados PE & MgSO4 -->
+          <div id="co-box-resultado-pe" class="hidden p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+            <div id="co-pe-alerta-intoxicacao" class="hidden p-2.5 rounded-lg bg-rose-950/80 border border-rose-500 text-rose-200 text-[11px] space-y-1"></div>
+            <div id="co-pe-crise-pa" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1.5"></div>
+            <div id="co-pe-mgso4-prescricao" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1.5"></div>
+            <div class="p-2 rounded-lg bg-rose-950/30 border border-rose-500/30 text-[10.5px] text-rose-300">
+              <strong>Antídoto pronto beira-leito:</strong> Gluconato de Cálcio 10% 10 mL IV lento se intoxicação por magnésio. Bloqueio estrito de IECAs e BRAs na gravidez.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. ABA: HEMORRAGIA PÓS-PARTO (HPP - 4 Ts) -->
+        <div id="co-sec-hpp" class="co-sec-pane hidden space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Perda Estimada (mL)</label>
+              <input type="number" id="co-input-perda-ml" placeholder="Ex: 800" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Tipo de Parto</label>
+              <select id="co-input-tipo-parto" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="vaginal">Vaginal (Corte >= 500 mL)</option>
+                <option value="cesariana">Cesariana (Corte >= 1000 mL)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">FC Materna (bpm)</label>
+              <input type="number" id="co-input-fc" placeholder="Ex: 110" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">PAS (mmHg)</label>
+              <input type="number" id="co-input-pas-hpp" placeholder="Ex: 90" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Histórico de Hipertensão / PE?</label>
+              <select id="co-input-tem-has" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="nao">Não (Normotensa)</option>
+                <option value="sim">Sim (Hipertensa / Pré-Eclâmpsia)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Tempo Desde o Parto (min)</label>
+              <input type="number" id="co-input-tempo-parto" placeholder="Ex: 30" value="30" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+          </div>
+
+          <button onclick="avaliarHppModal()" class="w-full py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-red-950 transition">
+            <i data-lucide="droplet" class="w-3.5 h-3.5"></i> Protocolo de Hemorragia Pós-Parto (4 Ts)
+          </button>
+
+          <!-- Resultados HPP -->
+          <div id="co-box-resultado-hpp" class="hidden p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+            <div id="co-hpp-choque-badge" class="p-2.5 rounded-lg text-[11px] font-bold"></div>
+            <div id="co-hpp-uterotonicos" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-2"></div>
+            <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-[10.5px] space-y-1">
+              <span class="font-bold text-slate-300 block">Etiologia (Regra dos 4 Ts):</span>
+              <p class="text-slate-400"><strong>Tônus (70%):</strong> Massagem uterina bimanual de Hamilton.</p>
+              <p class="text-slate-400"><strong>Trauma (20%):</strong> Revisão de colo e canal de parto sob valvas.</p>
+              <p class="text-slate-400"><strong>Tecido (10%):</strong> Revisão de restos placentários e AMIU.</p>
+              <p class="text-slate-400"><strong>Trombina (1%):</strong> Coagulopatia, CIVD e plasma/crioprecipitado.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. ABA: SEPSE GBS & PREMATURIDADE/RPMO -->
+        <div id="co-sec-gbs-prem" class="co-sec-pane hidden space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Cultura de Rastreio GBS</label>
+              <select id="co-input-gbs-cultura" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="desconhecida">Desconhecida / Não realizada</option>
+                <option value="positiva">Positiva (35-37 semanas)</option>
+                <option value="negativa">Negativa</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Alergia à Penicilina</label>
+              <select id="co-input-gbs-alergia" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="nao">Não alérgica</option>
+                <option value="leve">Leve (Exantema sem anafilaxia)</option>
+                <option value="anafilaxia">Grave / Anafilaxia / Angioedema</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Idade Gestacional (Semanas)</label>
+              <input type="number" id="co-input-prem-sem" placeholder="Ex: 30" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Bolsa Rota (Horas)</label>
+              <input type="number" id="co-input-gbs-rota-h" placeholder="Ex: 19" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Ameaça de Parto Iminente?</label>
+              <select id="co-input-prem-ameaca" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="sim">Sim (Trabalho de parto prematuro)</option>
+                <option value="nao">Não</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-0.5">Sinais de Corioamnionite?</label>
+              <select id="co-input-prem-corio" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white text-xs focus:border-rose-500">
+                <option value="nao">Não</option>
+                <option value="sim">Sim (Febre / Líquido fétido / Taqui fetal)</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="avaliarGbsPrematuridadeModal()" class="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-purple-950 transition">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Protocolo de Sepse GBS & Prematuridade
+          </button>
+
+          <!-- Resultados GBS & Prematuridade -->
+          <div id="co-box-resultado-gbs" class="hidden p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+            <div id="co-res-gbs" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1"></div>
+            <div id="co-res-prematuridade" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
+        <button onclick="copiarCondutaCoParaPep()" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-md shadow-rose-950 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copiar Conduta CO para PEP</span>
+        </button>
+        <button onclick="fecharModalCentroObstetrico()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
+          Fechar
+        </button>
       </div>
     </div>
   </div>
@@ -3294,6 +4050,850 @@
         return;
       }
       copiarTextoClipboard(cockpitDados.soap, 'SOAP integral copiado!');
+    }
+
+    // =========================================================================
+    // MÓDULO SOAP AMBULATORIAL ÁGIL & ATESTADOS CFM (FRONTEND)
+    // =========================================================================
+    let cacheSoapAmbulatorialGerado = '';
+    let cacheAtestadoCfmGerado = '';
+
+    function abrirModalAmbulatorioSOAP() {
+      hapticFeedback('medium');
+      const modal = document.getElementById('modal-ambulatorio-soap');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fecharModalAmbulatorioSOAP() {
+      hapticFeedback('light');
+      const modal = document.getElementById('modal-ambulatorio-soap');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function gerarSOAPAmbulatorialModal() {
+      hapticFeedback('medium');
+      const paciente = document.getElementById('amb-input-paciente')?.value?.trim() || 'Ao Portador';
+      const modeloEf = document.getElementById('amb-select-modelo-ef')?.value || 'checkup_geral';
+      const queixa = document.getElementById('amb-input-queixa')?.value?.trim() || 'Consulta de rotina ambulatorial';
+      const pa = document.getElementById('amb-sv-pa')?.value?.trim() || '120/80';
+      const glicemia = document.getElementById('amb-sv-glicemia')?.value?.trim() || '';
+      const fc = document.getElementById('amb-sv-fc')?.value?.trim() || '72';
+      const peso = document.getElementById('amb-sv-peso')?.value?.trim() || '';
+
+      const boxResultado = document.getElementById('amb-box-resultado');
+      const preResultado = document.getElementById('amb-texto-resultado');
+      if (preResultado) preResultado.textContent = 'Processando diretrizes clínicas e gerando SOAP estruturado...';
+      if (boxResultado) boxResultado.classList.remove('hidden');
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitSoapAmbulatorial', [{
+          pacienteNome: paciente,
+          queixaPrincipal: queixa,
+          modeloExameFisico: modeloEf,
+          sinaisVitais: { pa, glicemia, fc, peso }
+        }]);
+
+        if (resp && resp.soap && resp.soap.textoProntuario) {
+          cacheSoapAmbulatorialGerado = resp.soap.textoProntuario;
+          if (preResultado) preResultado.textContent = cacheSoapAmbulatorialGerado;
+          copiarToast('SOAP Ambulatorial gerado com sucesso!');
+        } else {
+          throw new Error(resp?.erro || 'Resposta inválida do servidor');
+        }
+      } catch (err) {
+        if (preResultado) preResultado.textContent = 'Erro ao gerar SOAP: ' + err.message;
+        copiarToast('Falha ao conectar com o backend.');
+      }
+    }
+
+    function copiarSOAPAmbulatorialGerado() {
+      if (!cacheSoapAmbulatorialGerado) {
+        copiarToast('Gere o SOAP primeiro.');
+        return;
+      }
+      copiarTextoClipboard(cacheSoapAmbulatorialGerado, 'SOAP Ambulatorial copiado para o PEP!');
+    }
+
+    function abrirModalAtestadoCFM() {
+      hapticFeedback('medium');
+      const modal = document.getElementById('modal-atestado-cfm');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fecharModalAtestadoCFM() {
+      hapticFeedback('light');
+      const modal = document.getElementById('modal-atestado-cfm');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function gerarAtestadoModal() {
+      hapticFeedback('medium');
+      const paciente = document.getElementById('atestado-input-paciente')?.value?.trim() || 'Ao Portador';
+      const doc = document.getElementById('atestado-input-doc')?.value?.trim() || '';
+      const dias = parseInt(document.getElementById('atestado-select-dias')?.value || '1', 10);
+      const motivo = document.getElementById('atestado-input-motivo')?.value?.trim() || '';
+      const incluirCid = !!document.getElementById('atestado-check-cid')?.checked;
+
+      const boxResultado = document.getElementById('atestado-box-resultado');
+      const preResultado = document.getElementById('atestado-texto-resultado');
+      if (preResultado) preResultado.textContent = 'Gerando atestado médico oficial...';
+      if (boxResultado) boxResultado.classList.remove('hidden');
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitGerarAtestadoTexto', [{
+          pacienteNome: paciente,
+          pacienteDoc: doc,
+          dias: dias,
+          cid: motivo,
+          incluirCid: incluirCid
+        }]);
+
+        if (resp && resp.textoAtestado) {
+          cacheAtestadoCfmGerado = resp.textoAtestado;
+          if (preResultado) preResultado.textContent = cacheAtestadoCfmGerado;
+          copiarToast('Atestado CFM gerado!');
+        } else {
+          throw new Error(resp?.erro || 'Resposta inválida do servidor');
+        }
+      } catch (err) {
+        if (preResultado) preResultado.textContent = 'Erro ao gerar atestado: ' + err.message;
+        copiarToast('Falha ao conectar com o backend.');
+      }
+    }
+
+    function copiarAtestadoGerado() {
+      if (!cacheAtestadoCfmGerado) {
+        copiarToast('Gere o atestado primeiro.');
+        return;
+      }
+      copiarTextoClipboard(cacheAtestadoCfmGerado, 'Atestado médico CFM copiado!');
+    }
+
+    async function copiarReceitaLimpaPEP() {
+      hapticFeedback('light');
+      const soapTexto = cockpitDados?.soap || '';
+      if (!soapTexto) {
+        copiarToast('Nenhuma prescrição no caso ativo. Crie ou dite a prescrição primeiro.');
+        return;
+      }
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitGerarReceitaTexto', [{
+          textoLivre: soapTexto
+        }]);
+        if (resp && resp.textoReceita) {
+          copiarTextoClipboard(resp.textoReceita, 'Receita limpa copiada para o PEP!');
+        } else {
+          copiarTextoClipboard(soapTexto, 'Prescrição copiada para o PEP!');
+        }
+      } catch (e) {
+        copiarTextoClipboard(soapTexto, 'Prescrição copiada para o PEP!');
+      }
+    }
+
+    // =========================================================================
+    // 4.9 MODAL E CALCULADORA DE PRÉ-NATAL (OBSTETRÍCIA AMBULATORIAL)
+    // =========================================================================
+    let cacheResumoPrenatalGerado = '';
+
+    function abrirModalPrenatal() {
+      hapticFeedback('medium');
+      const modal = document.getElementById('modal-prenatal');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+      carregarTrimestrePainel(1);
+    }
+
+    function fecharModalPrenatal() {
+      hapticFeedback('light');
+      const modal = document.getElementById('modal-prenatal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function alternarSecaoPrenatal(idSec, btnEl) {
+      hapticFeedback('light');
+      document.querySelectorAll('.pn-sec-pane').forEach(el => el.classList.add('hidden'));
+      const sec = document.getElementById(idSec);
+      if (sec) sec.classList.remove('hidden');
+
+      document.querySelectorAll('.pn-pill-btn').forEach(btn => {
+        btn.className = 'pn-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition';
+      });
+      if (btnEl) {
+        btnEl.className = 'pn-pill-btn px-2.5 py-1 rounded-lg bg-pink-500/25 text-pink-200 border border-pink-500/40 shadow-sm transition';
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function calcularCronologiaPrenatalModal() {
+      hapticFeedback('medium');
+      const dum = document.getElementById('pn-input-dum')?.value?.trim();
+      const dataRef = document.getElementById('pn-input-ref')?.value?.trim();
+      const dataUsg = document.getElementById('pn-input-usg-data')?.value?.trim();
+      const semUsg = document.getElementById('pn-input-usg-sem')?.value?.trim();
+      const diasUsg = document.getElementById('pn-input-usg-dias')?.value?.trim();
+      const ccn = document.getElementById('pn-input-usg-ccn')?.value?.trim();
+
+      const boxRes = document.getElementById('pn-box-resultado-ig');
+      const badgeMetodo = document.getElementById('pn-res-badge-metodo');
+      const elDiasParto = document.getElementById('pn-res-dias-parto');
+      const elIgAtual = document.getElementById('pn-res-ig-atual');
+      const elDpp = document.getElementById('pn-res-dpp');
+      const elJustificativa = document.getElementById('pn-res-justificativa');
+
+      if (!dum && !dataUsg) {
+        copiarToast('Informe a DUM ou dados do 1º Ultrassom.');
+        return;
+      }
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitCalcularPrenatal', [{
+          dum: dum,
+          dataRef: dataRef,
+          dataUsg: dataUsg,
+          semanasUsg: semUsg,
+          diasUsg: diasUsg,
+          ccnMm: ccn
+        }]);
+
+        if (resp && resp.sucesso && resp.cronologia) {
+          const cron = resp.cronologia;
+          cacheResumoPrenatalGerado = resp.textoFormatado;
+          if (boxRes) boxRes.classList.remove('hidden');
+          if (badgeMetodo) badgeMetodo.textContent = cron.concordante ? '✓ ' + cron.metodoTexto : '⚠️ ' + cron.metodoTexto;
+          if (elDiasParto) elDiasParto.textContent = `Faltam ${cron.diasAteParto} dias`;
+          if (elIgAtual) elIgAtual.textContent = cron.igAtual.textoFormatado;
+          if (elDpp) elDpp.textContent = cron.dpp;
+          if (elJustificativa) elJustificativa.textContent = cron.justificativaClinica;
+          copiarToast('Cronologia calculada!');
+        } else {
+          throw new Error(resp?.erro || 'Falha no cálculo cronológico.');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function calcularGanhoPesoModal() {
+      hapticFeedback('medium');
+      const pesoPre = parseFloat(document.getElementById('pn-input-peso-pre')?.value || '');
+      const altura = parseFloat(document.getElementById('pn-input-altura')?.value || '');
+      const pesoAtual = parseFloat(document.getElementById('pn-input-peso-atual')?.value || '');
+      const semInput = parseInt(document.getElementById('pn-input-usg-sem')?.value || '20', 10);
+
+      const boxRes = document.getElementById('pn-box-resultado-peso');
+      const catImc = document.getElementById('pn-peso-cat-imc');
+      const statusBadge = document.getElementById('pn-peso-status-badge');
+      const imcVal = document.getElementById('pn-peso-imc-val');
+      const ganhoTotal = document.getElementById('pn-peso-ganho-total');
+      const realizadoVal = document.getElementById('pn-peso-realizado-val');
+      const esperadoVal = document.getElementById('pn-peso-esperado-val');
+      const alertaEl = document.getElementById('pn-peso-alerta-clinico');
+
+      if (!pesoPre || !altura) {
+        copiarToast('Informe peso pré-gestacional e altura.');
+        return;
+      }
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitCalcularPrenatal', [{
+          pesoPreGestacional: pesoPre,
+          altura: altura,
+          pesoAtual: pesoAtual,
+          semanasUsg: semInput,
+          dataUsg: '01/01/2026' // placeholder para passar no validador
+        }]);
+
+        if (resp && resp.ganhoPeso && resp.ganhoPeso.sucesso) {
+          const gp = resp.ganhoPeso;
+          if (boxRes) boxRes.classList.remove('hidden');
+          if (catImc) catImc.textContent = `${gp.categoriaImc} (${gp.faixaImc})`;
+          if (statusBadge) {
+            if (gp.statusPonderal === 'GANHO_ADEQUADO') {
+              statusBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+              statusBadge.textContent = 'Ganho Adequado';
+            } else if (gp.statusPonderal === 'GANHO_EXCESSIVO') {
+              statusBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+              statusBadge.textContent = 'Ganho Excessivo';
+            } else {
+              statusBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+              statusBadge.textContent = 'Ganho Insuficiente';
+            }
+          }
+          if (imcVal) imcVal.textContent = `IMC: ${gp.imcPreGestacional} kg/m²`;
+          if (ganhoTotal) ganhoTotal.textContent = `Recomendado: ${gp.ganhoTotalRecomendadoMin} a ${gp.ganhoTotalRecomendadoMax} kg`;
+          if (realizadoVal) realizadoVal.textContent = gp.pesoAtual ? `Ganho atual: ${gp.ganhoRealizadoKg >= 0 ? '+' : ''}${gp.ganhoRealizadoKg} kg` : 'Informe peso atual';
+          if (esperadoVal) esperadoVal.textContent = gp.pesoAtual ? `Esperado: ${gp.ganhoEsperadoMinKg} a ${gp.ganhoEsperadoMaxKg} kg` : '';
+          if (alertaEl) alertaEl.textContent = gp.alertaClinico || 'Acompanhamento nutricional regular.';
+          copiarToast('Avaliação nutricional concluída!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function carregarTrimestrePainel(numTri, btnEl) {
+      const container = document.getElementById('pn-conteudo-trimestre');
+      if (!container) return;
+
+      document.querySelectorAll('.btn-tri-tab').forEach(b => {
+        b.className = 'btn-tri-tab px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-bold text-[10.5px]';
+      });
+      if (btnEl) {
+        btnEl.className = 'btn-tri-tab px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold text-[10.5px]';
+      }
+
+      container.innerHTML = '<div class="text-slate-400 py-3 text-center">Carregando condutas do trimestre...</div>';
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitRastreioTrimestre', [numTri]);
+        if (resp && resp.sucesso && resp.diretrizes) {
+          const dir = resp.diretrizes;
+          let html = `
+            <div class="border-b border-slate-800 pb-2">
+              <span class="text-xs font-bold text-indigo-300">${dir.trimestre}</span>
+              <p class="text-[10px] text-slate-400">${dir.foco}</p>
+            </div>
+            <div class="space-y-1.5 pt-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300">Exames e Rastreios Obrigatórios:</span>
+          `;
+          dir.examesObrigatorios.forEach(ex => {
+            html += `
+              <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 space-y-0.5">
+                <span class="font-bold text-white text-[11px]">${ex.exame}</span>
+                <p class="text-[10.5px] text-slate-300">${ex.conduta}</p>
+              </div>
+            `;
+          });
+          html += '</div>';
+
+          if (dir.suplementacoes) {
+            html += '<div class="pt-2 border-t border-slate-800/80 space-y-1"><span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Suplementações:</span>';
+            dir.suplementacoes.forEach(s => {
+              html += `<div class="text-[10.5px] text-slate-300">• ${s}</div>`;
+            });
+            html += '</div>';
+          }
+
+          if (dir.profilaxiaPreEclampsia) {
+            html += `
+              <div class="pt-2 border-t border-slate-800/80 space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">🚨 Profilaxia de Pré-Eclâmpsia (Alto Risco):</span>
+                <p class="text-[10.5px] text-slate-300"><strong>Critérios:</strong> ${dir.profilaxiaPreEclampsia.indicacao}</p>
+                <p class="text-[10.5px] text-amber-300"><strong>Prescrição:</strong> ${dir.profilaxiaPreEclampsia.esquemaRecomendado}</p>
+              </div>
+            `;
+          }
+
+          if (dir.vacinacaoGestante) {
+            html += '<div class="pt-2 border-t border-slate-800/80 space-y-1"><span class="text-[10px] font-bold uppercase tracking-wider text-sky-400">💉 Vacinação:</span>';
+            dir.vacinacaoGestante.forEach(v => {
+              html += `<div class="text-[10.5px] text-slate-300">• ${v}</div>`;
+            });
+            html += '</div>';
+          }
+
+          container.innerHTML = html;
+        }
+      } catch (e) {
+        container.innerHTML = '<div class="text-rose-400 text-center py-2">Erro ao carregar diretrizes.</div>';
+      }
+    }
+
+    async function auditarFarmacoModal() {
+      hapticFeedback('medium');
+      const nome = document.getElementById('pn-input-busca-farmaco')?.value?.trim();
+      if (!nome) {
+        copiarToast('Digite o nome do medicamento.');
+        return;
+      }
+
+      const box = document.getElementById('pn-box-resultado-farmaco');
+      const elNome = document.getElementById('pn-farmaco-nome');
+      const elClasse = document.getElementById('pn-farmaco-classe');
+      const elBadge = document.getElementById('pn-farmaco-seg-badge');
+      const elAlertas = document.getElementById('pn-farmaco-alertas');
+      const elAlternativas = document.getElementById('pn-farmaco-alternativas');
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitValidarFarmacoGestacao', [{ medicamento: nome }]);
+        if (resp && resp.sucesso) {
+          if (box) box.classList.remove('hidden');
+          if (elNome) elNome.textContent = resp.medicamento;
+          if (elClasse) elClasse.textContent = `${resp.classe} · Categoria FDA: ${resp.categoriaFda}`;
+          if (elBadge) {
+            if (resp.segurancaGestacao === 'CONTRAINDICADO') {
+              elBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
+              elBadge.textContent = '⛔ CONTRAINDICADO';
+            } else if (resp.segurancaGestacao === 'CAUTELA' || resp.segurancaGestacao === 'EVITAR') {
+              elBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40';
+              elBadge.textContent = '⚠️ ' + resp.segurancaGestacao;
+            } else {
+              elBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+              elBadge.textContent = '✅ SEGURO';
+            }
+          }
+          if (elAlertas) {
+            elAlertas.innerHTML = resp.alertas.map(a => `<p class="text-slate-200">${a}</p>`).join('');
+          }
+          if (elAlternativas) {
+            elAlternativas.innerHTML = `<span class="font-bold text-emerald-400 block">Alternativas Seguras:</span><p class="text-slate-300">${resp.alternativasRecomendadas.join('; ')}</p>`;
+          }
+          copiarToast(`Auditoria: ${resp.medicamento}`);
+        } else {
+          copiarToast(resp?.mensagem || 'Medicamento não localizado.');
+        }
+      } catch (e) {
+        copiarToast('Erro: ' + e.message);
+      }
+    }
+
+    function preencherEChecarFarmaco(nome) {
+      const input = document.getElementById('pn-input-busca-farmaco');
+      if (input) input.value = nome;
+      auditarFarmacoModal();
+    }
+
+    function copiarResumoPrenatalParaPep() {
+      if (!cacheResumoPrenatalGerado) {
+        // Se ainda não gerou, gera com os campos preenchidos
+        calcularCronologiaPrenatalModal().then(() => {
+          if (cacheResumoPrenatalGerado) {
+            copiarTextoClipboard(cacheResumoPrenatalGerado, 'Resumo de Pré-Natal copiado para o PEP!');
+          }
+        });
+        return;
+      }
+      copiarTextoClipboard(cacheResumoPrenatalGerado, 'Resumo de Pré-Natal copiado para o PEP!');
+    }
+
+    // =========================================================================
+    // 4.10 MODAL E PROTOCOLOS DE CENTRO OBSTÉTRICO & SALA DE PARTO
+    // =========================================================================
+    let cacheResumoCoGerado = '';
+
+    function abrirModalCentroObstetrico() {
+      hapticFeedback('medium');
+      const modal = document.getElementById('modal-centro-obstetrico');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fecharModalCentroObstetrico() {
+      hapticFeedback('light');
+      const modal = document.getElementById('modal-centro-obstetrico');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function alternarSecaoCentroObstetrico(idSec, btnEl) {
+      hapticFeedback('light');
+      document.querySelectorAll('.co-sec-pane').forEach(el => el.classList.add('hidden'));
+      const sec = document.getElementById(idSec);
+      if (sec) sec.classList.remove('hidden');
+
+      document.querySelectorAll('.co-pill-btn').forEach(btn => {
+        btn.className = 'co-pill-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition';
+      });
+      if (btnEl) {
+        btnEl.className = 'co-pill-btn px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-200 border border-rose-500/40 shadow-sm transition';
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function avaliarTrabalhoPartoModal() {
+      hapticFeedback('medium');
+      const dilatacao = parseInt(document.getElementById('co-input-dilatacao')?.value || '0', 10);
+      const contracoes = parseInt(document.getElementById('co-input-contracoes')?.value || '0', 10);
+      const duracao = parseInt(document.getElementById('co-input-duracao')?.value || '0', 10);
+      const deLee = parseInt(document.getElementById('co-input-de-lee')?.value || '0', 10);
+      const bcf = parseInt(document.getElementById('co-input-bcf')?.value || '0', 10);
+      const bolsaSelect = document.getElementById('co-input-bolsa')?.value || 'integra_claro';
+      const apagamento = parseInt(document.getElementById('co-input-apagamento')?.value || '50', 10);
+      const consistencia = document.getElementById('co-input-consistencia')?.value || 'medio';
+      const posicao = document.getElementById('co-input-posicao')?.value || 'medio';
+
+      const partsBolsa = bolsaSelect.split('_');
+      const bolsa = partsBolsa[0];
+      const liquido = partsBolsa.slice(1).join('_');
+
+      const boxRes = document.getElementById('co-box-resultado-parto');
+      const badgeFase = document.getElementById('co-parto-fase-badge');
+      const badgeDeLee = document.getElementById('co-parto-delee-badge');
+      const descDeLee = document.getElementById('co-parto-delee-desc');
+      const boxBcf = document.getElementById('co-parto-bcf-alerta');
+      const boxBishop = document.getElementById('co-parto-bishop-res');
+      const boxCondutas = document.getElementById('co-parto-condutas');
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitTrabalhoParto', [{
+          dilatacaoCm: dilatacao,
+          contracoes10min: contracoes,
+          duracaoContracaoSeg: duracao,
+          planoDeLee: deLee,
+          bcf: bcf,
+          bolsa: bolsa,
+          liquidoAmniotico: liquido,
+          apagamentoPct: apagamento,
+          consistenciaColo: consistencia,
+          posicaoColo: posicao
+        }]);
+
+        if (resp) {
+          if (boxRes) boxRes.classList.remove('hidden');
+
+          if (badgeFase) {
+            if (resp.fase === 'PERIODO_EXPULSIVO') {
+              badgeFase.className = 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40';
+            } else if (resp.fase === 'FASE_ATIVA') {
+              badgeFase.className = 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+            } else {
+              badgeFase.className = 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-slate-800 text-slate-300 border border-slate-700';
+            }
+            badgeFase.textContent = resp.faseDescricao;
+          }
+
+          if (badgeDeLee) {
+            badgeDeLee.textContent = resp.insinuado ? '✅ Feto Insinuado' : '⏳ Apresentação Alta';
+          }
+          if (descDeLee) {
+            descDeLee.textContent = resp.deLeeInfo;
+          }
+
+          if (boxBcf) {
+            if (resp.bcfAlerta) {
+              boxBcf.className = 'p-2 rounded-lg bg-rose-950/60 border border-rose-500/60 text-[11px] text-rose-200 font-bold';
+              boxBcf.textContent = resp.bcfAlerta;
+            } else if (resp.bcf) {
+              boxBcf.className = 'p-2 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-emerald-300';
+              boxBcf.textContent = `BCF: ${resp.bcf} bpm (Frequência Cardíaca Fetal Fisiológica)`;
+            } else {
+              boxBcf.className = 'hidden';
+            }
+          }
+
+          if (boxBishop && resp.bishop) {
+            boxBishop.innerHTML = `
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white">Índice de Bishop: ${resp.bishop.pontos} pontos</span>
+                <span class="text-[10px] px-2 py-0.2 rounded-full font-bold ${resp.bishop.favoravel ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">
+                  ${resp.bishop.favoravel ? 'Favorável (>=9)' : 'Desfavorável (<=5)'}
+                </span>
+              </div>
+              <p class="text-[10.5px] text-slate-300 mt-1">${resp.bishop.interpretacao}</p>
+              <p class="text-[10.5px] text-indigo-300 font-semibold mt-0.5"><strong>Conduta:</strong> ${resp.bishop.condutaInducao}</p>
+            `;
+          }
+
+          if (boxCondutas && resp.condutaFase) {
+            boxCondutas.innerHTML = '<span class="font-bold text-slate-300 block mb-1">Recomendações Clínicas:</span>' +
+              resp.condutaFase.map(c => `<p class="text-slate-400">• ${c}</p>`).join('');
+          }
+
+          copiarToast('Avaliação de parto concluída!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function calcularPreeclampsiaMgso4Modal() {
+      hapticFeedback('medium');
+      const pas = parseInt(document.getElementById('co-input-pas')?.value || '0', 10);
+      const pad = parseInt(document.getElementById('co-input-pad')?.value || '0', 10);
+      const esquema = document.getElementById('co-input-esquema-mg')?.value || 'Zuspan';
+      const reflexo = document.getElementById('co-input-reflexo')?.value === 'presente';
+      const fr = parseInt(document.getElementById('co-input-fr')?.value || '16', 10);
+      const diurese = parseInt(document.getElementById('co-input-diurese')?.value || '35', 10);
+
+      const boxRes = document.getElementById('co-box-resultado-pe');
+      const boxAlertaIntox = document.getElementById('co-pe-alerta-intoxicacao');
+      const boxCrisePa = document.getElementById('co-pe-crise-pa');
+      const boxMgPrescricao = document.getElementById('co-pe-mgso4-prescricao');
+
+      try {
+        const [resPa, resMg] = await Promise.all([
+          chamarApiCockpitRpc('cockpitCriseHipertensivaObstetrica', [{ pas: pas, pad: pad }]),
+          chamarApiCockpitRpc('cockpitSulfatoMagnesio', [{
+            esquema: esquema,
+            reflexoPatelar: reflexo,
+            frequenciaRespiratoria: fr,
+            diureseMlHora: diurese
+          }])
+        ]);
+
+        if (boxRes) boxRes.classList.remove('hidden');
+
+        // Intoxicação por MgSO4
+        if (resMg && resMg.intoxicacaoDetectada) {
+          if (boxAlertaIntox) {
+            boxAlertaIntox.classList.remove('hidden');
+            boxAlertaIntox.innerHTML = `
+              <div class="font-bold text-rose-300 uppercase tracking-wide">🚨 TOXICIDADE POR SULFATO DE MAGNÉSIO DETECTADA!</div>
+              ${resMg.alertasIntoxicacao.map(a => `<p>${a}</p>`).join('')}
+              <div class="mt-1.5 p-2 rounded bg-rose-950 border border-rose-500/80 font-bold text-white">
+                ANTÍDOTO: ${resMg.condutaIntoxicacao.antidoto}
+              </div>
+            `;
+          }
+        } else if (boxAlertaIntox) {
+          boxAlertaIntox.classList.add('hidden');
+        }
+
+        // Crise Hipertensiva
+        if (boxCrisePa && resPa) {
+          let htmlPa = `
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white">PA: ${resPa.pas}x${resPa.pad} mmHg</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${resPa.ehCrise ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-slate-800 text-slate-300'}">
+                ${resPa.classificacao}
+              </span>
+            </div>
+          `;
+          if (resPa.ehCrise) {
+            htmlPa += '<div class="space-y-1 pt-1"><span class="font-bold text-rose-400 block">Fármacos de Resgate:</span>';
+            resPa.medicacoes.forEach(m => {
+              htmlPa += `
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                  <span class="font-bold text-white">${m.farmaco}</span>
+                  <p class="text-[10.5px] text-slate-300">${m.posologia}</p>
+                </div>
+              `;
+            });
+            htmlPa += '</div>';
+          }
+          boxCrisePa.innerHTML = htmlPa;
+        }
+
+        // Prescrição de MgSO4
+        if (boxMgPrescricao && resMg && resMg.prescricao) {
+          const p = resMg.prescricao;
+          boxMgPrescricao.innerHTML = `
+            <span class="font-bold text-amber-300 block">${p.nome}</span>
+            <div class="space-y-1 pt-0.5">
+              <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                <strong class="text-white">Ataque:</strong>
+                <p class="text-slate-300">${p.ataque.join('<br>')}</p>
+              </div>
+              <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                <strong class="text-white">Manutenção:</strong>
+                <p class="text-slate-300">${p.manutencao.join('<br>')}</p>
+              </div>
+            </div>
+          `;
+        }
+
+        copiarToast('Protocolo PE & MgSO4 calculado!');
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function avaliarHppModal() {
+      hapticFeedback('medium');
+      const perda = parseInt(document.getElementById('co-input-perda-ml')?.value || '500', 10);
+      const tipoParto = document.getElementById('co-input-tipo-parto')?.value || 'vaginal';
+      const fc = parseInt(document.getElementById('co-input-fc')?.value || '100', 10);
+      const pas = parseInt(document.getElementById('co-input-pas-hpp')?.value || '90', 10);
+      const temHas = document.getElementById('co-input-tem-has')?.value === 'sim';
+      const tempoParto = parseInt(document.getElementById('co-input-tempo-parto')?.value || '30', 10);
+
+      const boxRes = document.getElementById('co-box-resultado-hpp');
+      const badgeChoque = document.getElementById('co-hpp-choque-badge');
+      const boxUterotonicos = document.getElementById('co-hpp-uterotonicos');
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitHemorragiaPosParto', [{
+          perdaEstimadaMl: perda,
+          tipoParto: tipoParto,
+          fc: fc,
+          pas: pas,
+          temHipertensao: temHas,
+          tempoDesdePartoMin: tempoParto
+        }]);
+
+        if (resp) {
+          if (boxRes) boxRes.classList.remove('hidden');
+
+          if (badgeChoque) {
+            if (resp.gravidadeChoque === 'CHOQUE_GRAVE') {
+              badgeChoque.className = 'p-2.5 rounded-lg bg-rose-950 border border-rose-500 text-rose-200 text-[11px] font-bold space-y-0.5';
+              badgeChoque.innerHTML = `<div>⛔ ÍNDICE DE CHOQUE: ${resp.indiceChoque} (CHOQUE GRAVE)</div><p class="text-[10px] text-rose-300 font-normal">${resp.alertaChoque}</p>`;
+            } else if (resp.gravidadeChoque === 'CHOQUE_MODERADO') {
+              badgeChoque.className = 'p-2.5 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 text-[11px] font-bold space-y-0.5';
+              badgeChoque.innerHTML = `<div>⚠️ ÍNDICE DE CHOQUE: ${resp.indiceChoque} (ALERTA HEMORRÁGICO)</div><p class="text-[10px] text-amber-300 font-normal">${resp.alertaChoque}</p>`;
+            } else {
+              badgeChoque.className = 'p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold';
+              badgeChoque.textContent = `Índice de Choque: ${resp.indiceChoque || 'Normal'} (Estável)`;
+            }
+          }
+
+          if (boxUterotonicos && resp.sequenciaUterotonica) {
+            let htmlUt = '<span class="font-bold text-white block mb-1">Sequenciamento Uterotônico Escalonado:</span>';
+            resp.sequenciaUterotonica.forEach(u => {
+              if (u.bloqueado) {
+                htmlUt += `
+                  <div class="p-2 rounded-lg bg-rose-950/70 border border-rose-500/60">
+                    <span class="font-bold text-rose-300 block">${u.farmaco}</span>
+                    <p class="text-[10px] text-rose-200">${u.motivoBloqueio}</p>
+                  </div>
+                `;
+              } else {
+                htmlUt += `
+                  <div class="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                    <span class="font-bold text-emerald-400 block">Etapa ${u.etapa}: ${u.farmaco}</span>
+                    <p class="text-[10.5px] text-slate-300"><strong>Dose:</strong> ${u.dose}</p>
+                    ${u.nota ? `<p class="text-[10px] text-slate-400 mt-0.5">${u.nota}</p>` : ''}
+                  </div>
+                `;
+              }
+            });
+            boxUterotonicos.innerHTML = htmlUt;
+          }
+
+          copiarToast('Protocolo de HPP gerado!');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function avaliarGbsPrematuridadeModal() {
+      hapticFeedback('medium');
+      const cultura = document.getElementById('co-input-gbs-cultura')?.value || 'desconhecida';
+      const alergia = document.getElementById('co-input-gbs-alergia')?.value || 'nao';
+      const sem = parseInt(document.getElementById('co-input-prem-sem')?.value || '30', 10);
+      const rotaH = parseInt(document.getElementById('co-input-gbs-rota-h')?.value || '0', 10);
+      const ameaca = document.getElementById('co-input-prem-ameaca')?.value === 'sim';
+      const corio = document.getElementById('co-input-prem-corio')?.value === 'sim';
+
+      const boxRes = document.getElementById('co-box-resultado-gbs');
+      const boxGbs = document.getElementById('co-res-gbs');
+      const boxPrem = document.getElementById('co-res-prematuridade');
+
+      try {
+        const [resGbs, resPrem] = await Promise.all([
+          chamarApiCockpitRpc('cockpitProfilaxiaGbs', [{
+            culturaGbs: cultura,
+            alergiaPenicilina: alergia !== 'nao',
+            tipoAlergiaPenicilina: alergia,
+            igSemanas: sem,
+            bolsaRotaHoras: rotaH
+          }]),
+          chamarApiCockpitRpc('cockpitPrematuridadeRpmo', [{
+            igSemanas: sem,
+            ameacaPartoIminente: ameaca,
+            rpmConfirmada: rotaH > 0,
+            sinaisCorioamnionite: corio
+          }])
+        ]);
+
+        if (boxRes) boxRes.classList.remove('hidden');
+
+        // GBS
+        if (boxGbs && resGbs) {
+          if (resGbs.indicada) {
+            const op = resGbs.esquemaRecomendado?.opcaoPrincipal;
+            boxGbs.innerHTML = `
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-purple-300">Profilaxia GBS INDICADA</span>
+                <span class="text-[10px] px-2 py-0.2 rounded-full font-bold bg-purple-500/20 text-purple-300">Ativa</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">• ${resGbs.motivosIndicacao?.join('; ')}</p>
+              ${op ? `
+                <div class="mt-1.5 p-2 rounded bg-slate-950 border border-slate-800">
+                  <span class="font-bold text-white">${op.farmaco}</span>
+                  <p class="text-[10.5px] text-slate-300">Ataque: ${op.doseAtaque} | Manutenção: ${op.doseManutencao}</p>
+                </div>
+              ` : ''}
+            `;
+          } else {
+            boxGbs.innerHTML = `<span class="text-slate-400 block">${resGbs.motivo}</span>`;
+          }
+        }
+
+        // Prematuridade
+        if (boxPrem && resPrem) {
+          if (resPrem.corioamnioniteDetectada) {
+            boxPrem.innerHTML = `
+              <div class="p-2 rounded bg-rose-950 border border-rose-500 font-bold text-rose-200">
+                ${resPrem.alertaCritico}
+              </div>
+            `;
+          } else {
+            let htmlPrem = `<span class="font-bold text-white block mb-1">Condutas na Prematuridade (IG ${resPrem.igSemanas} sem):</span>`;
+            if (resPrem.corticoterapia?.indicada) {
+              htmlPrem += `
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                  <strong class="text-teal-300">Corticoterapia Pulmonar:</strong>
+                  <p class="text-slate-300">${resPrem.corticoterapia.esquemaPrimeiraLinha.farmaco} — ${resPrem.corticoterapia.esquemaPrimeiraLinha.dose}</p>
+                </div>
+              `;
+            }
+            if (resPrem.neuroprotecao?.indicada) {
+              htmlPrem += `
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800 mt-1">
+                  <strong class="text-indigo-300">Neuroproteção Fetal com MgSO4:</strong>
+                  <p class="text-slate-300">Indicada formalmente para fetos &lt; 32 semanas e parto iminente nas próximas 24h.</p>
+                </div>
+              `;
+            }
+            if (resPrem.tocolise?.indicada) {
+              htmlPrem += `
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800 mt-1">
+                  <strong class="text-amber-300">Tocólise por até 48h:</strong>
+                  <p class="text-slate-300">${resPrem.tocolise.primeiraEscolha.farmaco} (${resPrem.tocolise.primeiraEscolha.ataque})</p>
+                </div>
+              `;
+            }
+            if (resPrem.latenciaRpmo?.indicada) {
+              htmlPrem += `
+                <div class="p-1.5 rounded bg-slate-950 border border-slate-800 mt-1">
+                  <strong class="text-sky-300">Latência RPMO:</strong>
+                  <p class="text-slate-300">${resPrem.latenciaRpmo.fase1_primeiras48h.join(' + ')}</p>
+                </div>
+              `;
+            }
+            boxPrem.innerHTML = htmlPrem;
+          }
+        }
+
+        copiarToast('Protocolo GBS e Prematuridade concluído!');
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
+    }
+
+    async function copiarCondutaCoParaPep() {
+      hapticFeedback('medium');
+      const dilatacao = parseInt(document.getElementById('co-input-dilatacao')?.value || '5', 10);
+      const contracoes = parseInt(document.getElementById('co-input-contracoes')?.value || '3', 10);
+      const deLee = parseInt(document.getElementById('co-input-de-lee')?.value || '0', 10);
+      const bcf = parseInt(document.getElementById('co-input-bcf')?.value || '140', 10);
+      const pas = parseInt(document.getElementById('co-input-pas')?.value || '120', 10);
+      const pad = parseInt(document.getElementById('co-input-pad')?.value || '80', 10);
+      const perda = parseInt(document.getElementById('co-input-perda-ml')?.value || '500', 10);
+      const fc = parseInt(document.getElementById('co-input-fc')?.value || '85', 10);
+      const cultura = document.getElementById('co-input-gbs-cultura')?.value || 'desconhecida';
+      const sem = parseInt(document.getElementById('co-input-prem-sem')?.value || '38', 10);
+
+      try {
+        const resp = await chamarApiCockpitRpc('cockpitResumoCentroObstetrico', [{
+          parto: { dilatacaoCm: dilatacao, contracoes10min: contracoes, duracaoContracaoSeg: 40, planoDeLee: deLee, bcf: bcf },
+          has: pas >= 140 ? { pas: pas, pad: pad, prescreverMgso4: pas >= 160 } : null,
+          hpp: perda >= 500 ? { perdaEstimadaMl: perda, fc: fc, pas: pas, temHipertensao: pas >= 140 } : null,
+          gbs: { culturaGbs: cultura, igSemanas: sem },
+          prematuridade: sem < 37 ? { igSemanas: sem, ameacaPartoIminente: true } : null
+        }]);
+
+        if (resp && resp.sucesso && resp.textoFormatado) {
+          copiarTextoClipboard(resp.textoFormatado, 'Conduta de Centro Obstétrico copiada para o PEP!');
+        } else {
+          copiarToast('Falha ao gerar relatório CO.');
+        }
+      } catch (err) {
+        copiarToast('Erro: ' + err.message);
+      }
     }
 
     // =========================================================================
