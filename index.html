@@ -3855,8 +3855,129 @@
           // Aproveita o texto integral do bot, sem inserir HTML remoto no documento.
           const doc = new DOMParser().parseFromString(resposta.textoFormatado || '', 'text/html');
           resultado.textContent = doc.body.textContent || 'Não foi possível obter o resultado. Confira os parâmetros.';
-        } catch(e) {if (pedidosCalc[tipo] === pedido) resultado.textContent = e.message;}
+        } catch(e) {
+          if (pedidosCalc[tipo] === pedido) {
+            const resLocal = calcularOfflineLocal(tipo, entrada);
+            if (resLocal) {
+              resultado.textContent = resLocal;
+            } else {
+              resultado.textContent = e.message;
+            }
+          }
+        }
       }, 350);
+    }
+
+    function calcularOfflineLocal(tipo, entrada) {
+      if (!entrada) return null;
+      try {
+        if (tipo === 'dva') {
+          const peso = parseFloat(String(entrada.peso).replace(',', '.'));
+          if (isNaN(peso) || peso <= 0) return 'Informe o peso do paciente para calcular a taxa de infusão.';
+          const droga = String(entrada.droga || 'nora').toLowerCase();
+          if (droga === 'nora') {
+            const c = 64; // mcg/mL (16mg em 250mL SG5%)
+            const vIni = ((0.1 * peso * 60) / c).toFixed(1);
+            const vMed = ((0.5 * peso * 60) / c).toFixed(1);
+            const vMax = ((2.0 * peso * 60) / c).toFixed(1);
+            return `💉 NORADRENALINA (Solução Padrão: 4 amp [16mg] + 234mL SG5% = 64 mcg/mL) [OFFLINE]\n` +
+              `• Dose Inicial (0,1 mcg/kg/min): ${vIni} mL/h em BIC\n` +
+              `• Dose Média (0,5 mcg/kg/min): ${vMed} mL/h em BIC\n` +
+              `• Dose Máxima (2,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
+              `⚠️ Alvo: PAM ≥ 65 mmHg. Preferir acesso central (periférico apenas de resgate em veia calibrosa de antebraço).`;
+          } else if (droga === 'dobuta') {
+            const c = 1000; // mcg/mL (250mg em 250mL SG5%)
+            const vIni = ((2.5 * peso * 60) / c).toFixed(1);
+            const vMed = ((5.0 * peso * 60) / c).toFixed(1);
+            const vMax = ((20.0 * peso * 60) / c).toFixed(1);
+            return `💉 DOBUTAMINA (Solução Padrão: 1 amp [250mg] + 230mL SG5% = 1.000 mcg/mL) [OFFLINE]\n` +
+              `• Dose Inicial (2,5 mcg/kg/min): ${vIni} mL/h em BIC\n` +
+              `• Dose Titulada (5,0 mcg/kg/min): ${vMed} mL/h em BIC\n` +
+              `• Dose Máxima (20,0 mcg/kg/min): ${vMax} mL/h em BIC\n` +
+              `⚠️ Contraindicada em hipotensão grave isolada (PAS < 85-90 mmHg) sem vasopressor associado.`;
+          } else if (droga === 'vaso') {
+            return `💉 VASOPRESSINA (Solução Padrão: 1 amp [20 UI] + 100mL SF0,9% = 0,2 UI/mL) [OFFLINE]\n` +
+              `• Dose Fixa (0,01 a 0,04 UI/min): 3 a 12 mL/h em BIC contínua\n` +
+              `• Dose de Escolha: 0,03 UI/min (9 mL/h em BIC)\n` +
+              `⚠️ Droga de 2ª linha poupadora de noradrenalina no choque séptico refratário. Não titular.`;
+          }
+        } else if (tipo === 'sri') {
+          const peso = parseFloat(String(entrada.peso).replace(',', '.'));
+          if (isNaN(peso) || peso <= 0) return 'Informe o peso do paciente para calcular as doses da SRI.';
+          const cenario = String(entrada.cenario || 'padrao').toLowerCase();
+          const fentanil = (3 * peso).toFixed(0);
+          if (cenario === 'choque') {
+            const quetamina = (1.5 * peso).toFixed(0);
+            const rocuronio = (1.2 * peso).toFixed(0);
+            return `🚨 SRI · CENÁRIO CHOQUE / INSTABILIDADE HEMODINÂMICA [OFFLINE]\n` +
+              `1. Pré-oxigenação: O2 100% 3-5 min\n` +
+              `2. Analgesia: Fentanil ${fentanil} mcg IV lento (2-3 mcg/kg)\n` +
+              `3. Sedação / Hipnótico: QUETAMINA ${quetamina} mg IV bolus (1,5 mg/kg - preserva drive simpático)\n` +
+              `4. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV bolus (1,2 mg/kg)\n` +
+              `⚠️ Evitar Midazolam/Propofol (vasodilatação severa e colapso pressórico).`;
+          } else if (cenario === 'asma') {
+            const quetamina = (1.5 * peso).toFixed(0);
+            const rocuronio = (1.2 * peso).toFixed(0);
+            return `🚨 SRI · CENÁRIO BRONCOESPASMO SEVERO / ASMA [OFFLINE]\n` +
+              `1. Pré-oxigenação com FiO2 100%\n` +
+              `2. Sedação / Hipnótico: QUETAMINA ${quetamina} mg IV (1,5 mg/kg - potente broncodilatador)\n` +
+              `3. Bloqueador Neuromuscular: ROCURÔNIO ${rocuronio} mg IV (1,2 mg/kg)\n` +
+              `⚠️ Evitar Succinilcolina e Morfina (risco de liberação de histamina).`;
+          } else {
+            const etomidato = (0.3 * peso).toFixed(1);
+            const succi = (1.5 * peso).toFixed(0);
+            return `🚨 SRI · CENÁRIO PADRÃO / HEMODINÂMICA ESTÁVEL [OFFLINE]\n` +
+              `1. Pré-oxigenação: O2 a 100% por 3 minutos\n` +
+              `2. Analgesia: Fentanil ${fentanil} mcg IV lento (3 mcg/kg)\n` +
+              `3. Sedação / Hipnótico: ETOMIDATO ${etomidato} mg IV (0,3 mg/kg) ou PROPOFOL ${(1.5 * peso).toFixed(0)} mg\n` +
+              `4. Bloqueador Neuromuscular: SUCCINILCOLINA ${succi} mg IV (1,5 mg/kg - peso real)\n` +
+              `⚠️ Checar contraindicações de succinilcolina: hipercalemia, queimadura > 24h, desnervação.`;
+          }
+        } else if (tipo === 'crcl') {
+          const idade = parseFloat(String(entrada.idade).replace(',', '.'));
+          const peso = parseFloat(String(entrada.peso).replace(',', '.'));
+          const cr = parseFloat(String(entrada.creatinina).replace(',', '.'));
+          const ehFem = entrada.sexo === 'f' || entrada.sexo === 'feminino';
+          if (isNaN(idade) || isNaN(peso) || isNaN(cr) || cr <= 0) return 'Preencha Idade, Peso e Creatinina válidos.';
+          let clcr = ((140 - Math.min(120, idade)) * peso) / (72 * cr);
+          if (ehFem) clcr *= 0.85;
+          clcr = Math.round(clcr * 10) / 10;
+          let estagio = clcr >= 90 ? 'G1 (Normal/Elevado)' : clcr >= 60 ? 'G2 (Levemente diminuído)' : clcr >= 45 ? 'G3a (Leve a moderado)' : clcr >= 30 ? 'G3b (Moderado a grave)' : clcr >= 15 ? 'G4 (Severamente diminuído)' : 'G5 (Falência renal / diálise)';
+          return `📊 CLEARANCE DE CREATININA (Cockcroft-Gault) [OFFLINE]\n` +
+            `• ClCr Estimado: ${clcr} mL/min\n` +
+            `• Estágio KDIGO: ${estagio}\n` +
+            (clcr < 50 ? `⚠️ Atenção: ajuste de dose necessário para antimicrobianos e NOACs/DOACs.\n` : '') +
+            (clcr < 30 ? `🚨 ClCr < 30 mL/min: Contraindicação relativa para Enoxaparina dose plena e Metformina.` : '');
+        } else if (tipo === 'gaso') {
+          const ph = parseFloat(String(entrada.ph).replace(',', '.'));
+          const pco2 = parseFloat(String(entrada.pco2).replace(',', '.'));
+          const hco3 = parseFloat(String(entrada.hco3).replace(',', '.'));
+          if (isNaN(ph) || isNaN(pco2) || isNaN(hco3)) return 'Preencha pH, pCO2 e HCO3 válidos.';
+          let dist = [];
+          if (ph < 7.35) dist.push('ACIDEMIA (pH < 7,35)');
+          else if (ph > 7.45) dist.push('ALCALEMIA (pH > 7,45)');
+          else dist.push('pH NORMAL (7,35 - 7,45)');
+
+          if (hco3 < 22) {
+            const pco2Esp = 1.5 * hco3 + 8;
+            const min = (pco2Esp - 2).toFixed(1);
+            const max = (pco2Esp + 2).toFixed(1);
+            let comp = `pCO2 esperado (Winter): ${min} a ${max} mmHg.`;
+            if (pco2 > pco2Esp + 2) comp += `\n🚨 pCO2 medido (${pco2}) > esperado: ACIDOSE RESPIRATÓRIA ASSOCIADA (distúrbio misto).`;
+            else if (pco2 < pco2Esp - 2) comp += `\n⚠️ pCO2 medido (${pco2}) < esperado: ALCALOSE RESPIRATÓRIA ASSOCIADA.`;
+            else comp += `\n✅ Compensação respiratória adequada.`;
+            return `🩸 GASOMETRIA ARTERIAL [OFFLINE]\n• ${dist.join(' / ')}\n• Acidose Metabólica primária (HCO3 ${hco3} mEq/L)\n• ${comp}`;
+          } else if (hco3 > 26) {
+            const pco2Esp = 0.7 * hco3 + 21;
+            return `🩸 GASOMETRIA ARTERIAL [OFFLINE]\n• ${dist.join(' / ')}\n• Alcalose Metabólica primária (HCO3 ${hco3} mEq/L)\n• pCO2 esperado: ${(pco2Esp - 2).toFixed(1)} a ${(pco2Esp + 2).toFixed(1)} mmHg.`;
+          } else {
+            return `🩸 GASOMETRIA ARTERIAL [OFFLINE]\n• ${dist.join(' / ')}\n• Componente metabólico (HCO3: ${hco3} mEq/L)\n• Componente respiratório (pCO2: ${pco2} mmHg)`;
+          }
+        }
+      } catch (e) {
+        return 'Erro ao calcular: ' + e.message;
+      }
+      return null;
     }
     const valorCalc = id => document.getElementById(id)?.value ?? '';
     function calcularDVA() {
