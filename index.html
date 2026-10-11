@@ -8119,29 +8119,39 @@
             if (k > 8.0) {
               grav = 'Extrema / Risco Iminente de PCR em Assistolia ou FV';
               alertaCard = '🚨 ALERTA VERMELHO MÁXIMO (K+ > 8.0 mEq/L): Risco iminente de PCR. Gluconato de Cálcio 10% IV IMEDIATO e acionamento urgente de Nefrologia para Hemodiálise!';
-              condutas.push('🚨 EMERGÊNCIA ZERO: Gluconato de Cálcio 10% 20 mL IV em 3 min imediatamente. Repetir em 5-10 min se ritmo não normalizar.');
+              condutas.push('🚨 EMERGÊNCIA ZERO: Gluconato de Cálcio 10% (10-20mL em 100mL SG 5% em 5 min) IV imediato (ou 20 mL em 3 min se colapso). Repetir em 5-10 min se ritmo não normalizar.');
               condutas.push('HEMODIÁLISE DE URGÊNCIA: Acionar imediatamente nefrologia e UTI para cateter de diálise.');
             } else if (k >= 6.5 || ecg) {
               grav = 'Grave / Urgência Médica';
-              condutas.push('ESTABILIZAÇÃO DA MEMBRANA: Gluconato de Cálcio 10% 10 a 20 mL IV lento (3-5 min). Repetir se ECG não melhorar em 5-10 min.');
+              condutas.push('ESTABILIZAÇÃO DA MEMBRANA: Gluconato de Cálcio 10% (10-20mL em 100mL SG 5% em 5 min) IV lento. Repetir se ECG não melhorar em 5-10 min.');
             } else if (k >= 5.5) {
               grav = 'Moderada';
             }
 
             if (k > 5.5) {
-              condutas.push('REDISTRIBUIÇÃO: Glicoinsulina (Solução Polarizante) 10 UI Regular + 100 mL SG 50% IV em 20-30 min. Queda esperada: 0.5-1.2 mEq/L.');
+              condutas.push('REDISTRIBUIÇÃO: Glicoinsulina (Solução Polarizante): SG 50% 50mL + 10 UI Regular em 20 min IV (ou 100 mL SG 50% se glicemia < 250 mg/dL). Queda esperada: 0,5 a 1,2 mEq/L. ⚠️ Alerta de HGT horária por 4-6h pelo alto risco de hipoglicemia tardia.');
               condutas.push('REDISTRIBUIÇÃO: Salbutamol 10-20 mg (20-40 gotas) em nebulização com 3-5 mL SF 0,9% em 10-15 min.');
             }
             if (k > 5.0) {
               condutas.push('ELIMINAÇÃO: Furosemida 40-80 mg IV bolus (se função renal e volemia permitirem).');
-              condutas.push('ELIMINAÇÃO: Resina de troca de potássio (Sorcal) 15-30g VO ou retal.');
+              condutas.push('ELIMINAÇÃO: Resina de troca de potássio (Sorcal) 15-30g VO ou retal a cada 6-8h.');
             }
+
+            const prescricaoPEP = [
+              (k >= 6.5 || ecg || k > 8.0) ? '1. Gluconato de Cálcio 10% 10 a 20 mL + SG 5% 100 mL IV em 5 min.' : null,
+              (k > 5.5) ? '2. Insulina Regular 10 UI + SG 50% 50 mL IV em 20 min.' : null,
+              (k > 5.5) ? '3. HGT (Glicemia Capilar) de 1/1h por 4 a 6 horas (alerta hipoglicemia).' : null,
+              (k > 5.0) ? '4. Furosemida 40 a 80 mg IV bolus.' : null,
+              (k > 5.0) ? '5. Sorcal 30g VO em 100 mL de água potável 8/8h.' : null,
+              '6. Monitorização cardíaca contínua em ECG + Repetir K+ sérico em 2 horas.'
+            ].filter(Boolean).join('\n');
 
             return `⚡ MANEJO EMERGENCIAL DE HIPERCALEMIA (SBC / KDIGO) [OFFLINE]\n\n` +
               `🔴 ESTRATIFICAÇÃO & GRAVIDADE:\n• Potássio Sérico: ${k} mEq/L\n• Classificação: ${grav}\n\n` +
               `🟡 CONDUTAS ESCALONADAS:\n` + condutas.map(c => `• ${c}`).join('\n') + '\n\n' +
               (alertaCard ? `⚠️ ALERTA CARDÍACO:\n• ${alertaCard}\n\n` : '') +
-              `ℹ️ MONITORIZAÇÃO:\n• Monitorização cardíaca contínua e repetir dosagem de K+ em 2 horas.`;
+              `ℹ️ MONITORIZAÇÃO:\n• Monitorização cardíaca contínua e repetir dosagem de K+ em 2 horas.\n\n` +
+              `📋 PRESCRIÇÃO SUGERIDA (PEP):\n${prescricaoPEP}`;
           } else if (modo === 'hipernatremia') {
             const na = parseFloat(String(entrada.naAtual || 0).replace(',', '.'));
             if (isNaN(na) || na <= 0) return 'Informe o valor do Sódio (Na+) sérico.';
