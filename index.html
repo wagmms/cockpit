@@ -2309,7 +2309,7 @@
   <!-- BARRA DE NAVEGAÇÃO INFERIOR TÁTIL (BOTTOM NAV NATIVO MOBILE) -->
   <!-- =================================================================== -->
   <nav class="fixed bottom-0 inset-x-0 bg-surface-900/95 backdrop-blur border-t border-slate-800/90 z-50 safe-bottom-nav">
-    <div class="grid grid-cols-7 h-14 max-w-3xl mx-auto px-0.5">
+    <div id="cockpit-nav-grid" class="grid grid-cols-7 h-14 max-w-3xl mx-auto px-0.5">
       <button onclick="navegarAba('tab-soap', 'SOAP & Copiloto')" class="nav-btn flex flex-col items-center justify-center text-brand-400 transition" data-tab="tab-soap">
         <i data-lucide="sparkles" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         <span class="text-[8.5px] sm:text-[9px] font-semibold mt-0.5">SOAP</span>
@@ -4244,6 +4244,63 @@
       try { localStorage.setItem('cockpit_session', sessaoAtiva); } catch (e) {}
     }
 
+    // Detecção e isolamento de privacidade de Convidado (RBAC)
+    let isGuestFromUrl = false;
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get('guest') === '1' || sp.get('guest') === 'true') {
+        isGuestFromUrl = true;
+        try { localStorage.setItem('cockpit_is_guest', '1'); } catch (eG) {}
+      } else if (sp.get('guest') === '0' || sp.get('guest') === 'false') {
+        try { localStorage.setItem('cockpit_is_guest', '0'); } catch (eG) {}
+      }
+    } catch (eUrlGuest) {}
+
+    function ehConvidadoCockpit() {
+      try {
+        const sp = new URLSearchParams(window.location.search);
+        if (sp.get('guest') === '1' || sp.get('guest') === 'true') return true;
+        if (sp.get('guest') === '0' || sp.get('guest') === 'false') return false;
+      } catch (e) {}
+      try {
+        if (localStorage.getItem('cockpit_is_guest') === '1') return true;
+      } catch (e) {}
+      try {
+        const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+        if (tgUserId && String(tgUserId) !== '1771571035') return true;
+      } catch (e) {}
+      return false;
+    }
+
+    function aplicarRestricoesConvidado() {
+      if (!ehConvidadoCockpit()) return;
+      const navGrid = document.getElementById('cockpit-nav-grid') || document.querySelector('nav .grid');
+      if (navGrid) {
+        navGrid.classList.remove('grid-cols-7');
+        navGrid.classList.add('grid-cols-5');
+      }
+      const btnRotina = document.querySelector('button[data-tab="tab-rotina"]');
+      if (btnRotina) {
+        btnRotina.classList.add('hidden');
+        btnRotina.style.display = 'none';
+      }
+      const btnCorpo = document.querySelector('button[data-tab="tab-corpo"]');
+      if (btnCorpo) {
+        btnCorpo.classList.add('hidden');
+        btnCorpo.style.display = 'none';
+      }
+      const painelRotina = document.getElementById('tab-rotina');
+      if (painelRotina) {
+        painelRotina.classList.add('hidden');
+        painelRotina.style.display = 'none';
+      }
+      const painelCorpo = document.getElementById('tab-corpo');
+      if (painelCorpo) {
+        painelCorpo.classList.add('hidden');
+        painelCorpo.style.display = 'none';
+      }
+    }
+
     function expandirTelaCheia() {
       if (!window.Telegram?.WebApp) return;
       const t = window.Telegram.WebApp;
@@ -4307,6 +4364,10 @@
 
     // 2. Navegação de Abas
     function navegarAba(tabId, subtitulo) {
+      if (ehConvidadoCockpit() && (tabId === 'tab-rotina' || tabId === 'tab-corpo')) {
+        tabId = 'tab-soap';
+        subtitulo = 'SOAP & Copiloto';
+      }
       hapticFeedback('light');
       fecharTodosModais();
       document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
@@ -4335,10 +4396,12 @@
         renderizarHistoricoCalculos();
       }
       if (tabId === 'tab-corpo' || tabId === 'tab-rotina') {
-        carregarPerfil();
-        if (tabId === 'tab-corpo') {
-          inicializarPlanoNutricional();
-          inicializarGraficoCorpo();
+        if (!ehConvidadoCockpit()) {
+          carregarPerfil();
+          if (tabId === 'tab-corpo') {
+            inicializarPlanoNutricional();
+            inicializarGraficoCorpo();
+          }
         }
       }
       if (tabId === 'tab-aulas') carregarAulas();
@@ -14697,6 +14760,10 @@
     }
 
     async function salvarPesagem() {
+      if (ehConvidadoCockpit()) {
+        copiarToast('Função restrita ao titular.');
+        return;
+      }
       const pesoEl = document.getElementById('input-novo-peso');
       const bfEl = document.getElementById('input-novo-bf');
       const statusEl = document.getElementById('perfil-save-status');
@@ -14766,6 +14833,7 @@
 
     // Carrega dados dinâmicos da aba Perfil com suporte a cache criptografado
     async function carregarPerfil() {
+      if (ehConvidadoCockpit()) return;
       if (isDeviceOffline()) {
         try {
           const dadosCache = await carregarConsultaOffline('perfil_dados');
@@ -15464,6 +15532,12 @@
 
     // Inicialização ao carregar
     window.addEventListener('DOMContentLoaded', () => {
+      // Se for convidado, aplica imediatamente restrições visuais e de isolamento de abas
+      if (ehConvidadoCockpit()) {
+        aplicarRestricoesConvidado();
+        navegarAba('tab-soap', 'SOAP & Copiloto');
+      }
+
       // Inicializa indicador de conectividade e tenta sincronizar pendências
       atualizarIndicadorRede();
       processarFilaSincronizacao(true);
@@ -15471,7 +15545,9 @@
       // Carrega dados clínicos e perfil ao iniciar (abas ocultas carregam sob demanda)
       renderizarPrescricaoItens();
       carregarLeitos();
-      carregarPerfil();
+      if (!ehConvidadoCockpit()) {
+        carregarPerfil();
+      }
       configurarTecladosCalculadoras();
       configurarTecladosModaisAmbulatorioESbar();
       renderizarHistoricoCalculos();
