@@ -21,7 +21,9 @@ const PRECACHE_ASSETS = [
   'https://cdn.tailwindcss.com',
   'https://unpkg.com/lucide@latest',
   'https://cdn.jsdelivr.net/npm/chart.js',
-  'https://cdn.jsdelivr.net/npm/dexie@4.0.11/dist/dexie.min.js'
+  'https://cdn.jsdelivr.net/npm/dexie@4.0.11/dist/dexie.min.js',
+  './rotina_timeline.js',
+  '/rotina_timeline.js'
 ];
 
 self.addEventListener('install', (event) => {

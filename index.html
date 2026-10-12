@@ -29,6 +29,8 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Dexie.js (IndexedDB moderno) para Modo Plantão sem Sinal -->
   <script defer src="https://cdn.jsdelivr.net/npm/dexie@4.0.11/dist/dexie.min.js"></script>
+  <!-- Módulo Desacoplado: Aba Rotina & Time-Blocking Visual -->
+  <script src="./rotina_timeline.js"></script>
   <!-- Chart.js carregado sob demanda (lazy-loading) na aba Perfil para acelerar FCP em 0ms -->
 
   <script>
@@ -1714,35 +1716,115 @@
     </div>
 
     <!-- =================================================================== -->
-    <!-- ABA 5: ROTINA & ESTUDOS (TURMA J & MEDQUEST) -->
+    <!-- =================================================================== -->
+    <!-- ABA 5: ROTINA VIVA & TIME-BLOCKING CLÍNICO (MEDQUEST + PLANTÃO + BIO) -->
     <!-- =================================================================== -->
     <div id="tab-rotina" class="tab-pane hidden space-y-3.5">
-      <div class="glass-card-accent rounded-xl p-4 space-y-2">
+      <!-- Card Hero de Resumo & Contadores do Dia -->
+      <div class="glass-card-accent rounded-2xl p-4 space-y-3 border border-brand-500/20 bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950">
         <div class="flex items-center justify-between">
-          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-400"></i> Rodízio Internato — Turma J
-          </h3>
-          <span class="text-[10px] bg-brand-500/20 text-brand-300 px-2 py-0.5 rounded-full font-bold">Semana Ativa</span>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center ring-1 ring-brand-500/30">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                Rotina & Time-Blocking
+              </h3>
+              <span class="text-[10px] text-slate-400">Timeline adaptativa sincronizada</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span id="rotina-sync-badge" class="text-[9.5px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Google Calendar
+            </span>
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.renderizar(); else carregarPerfil();"
+              title="Recarregar blocos da rotina"
+              class="p-1 rounded-lg text-slate-400 hover:text-brand-300 hover:bg-brand-500/10 transition"
+            >
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
         </div>
-        <p class="text-[11px] text-slate-300">Prioridades com peso ponderado de rodízio e estudos MedQuest.</p>
+
+        <!-- Indicador de Metas & Conclusão de Blocos do Dia -->
+        <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="text-slate-300 font-medium">Progresso dos Blocos de Hoje</span>
+            <span class="font-mono text-white font-bold">
+              <span id="rotina-contador-concluidos">0</span> / <span id="rotina-contador-total">0</span> concluídos
+            </span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div id="rotina-barra-progresso" class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Botões de Ação Rápida Superior -->
+        <div class="flex items-center gap-2 pt-1">
+          <button
+            type="button"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.ativarModoDescanso();"
+            class="flex-1 py-1.5 px-2.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
+            Modo Descanso
+          </button>
+          <button
+            type="button"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.carregarGradePadrao();"
+            class="py-1.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[11px] font-medium transition flex items-center gap-1.5"
+          >
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-400"></i>
+            Grade Padrão
+          </button>
+        </div>
       </div>
 
-      <!-- Blocos de Rotina Dinâmicos -->
+      <!-- Filtros Rápidos de Categoria -->
+      <div id="rotina-filtros-container" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+        <button
+          type="button"
+          data-filtro="todos"
+          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('todos');"
+          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition whitespace-nowrap"
+        >
+          Todos
+        </button>
+        <button
+          type="button"
+          data-filtro="plantao"
+          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('plantao');"
+          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+        >
+          Plantão / Hospital
+        </button>
+        <button
+          type="button"
+          data-filtro="estudo"
+          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('estudo');"
+          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+        >
+          MedQuest & Anki
+        </button>
+        <button
+          type="button"
+          data-filtro="treino"
+          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('treino');"
+          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+        >
+          Treino & Bio
+        </button>
+      </div>
+
+      <!-- Timeline Dinâmica de Blocos do Dia -->
       <div id="rotina-blocos-container" class="space-y-2 text-xs">
-        <p class="text-slate-400 text-xs">Carregando rotina do dia...</p>
-      </div>
-
-      <!-- Bloco Noturno MedQuest -->
-      <div class="glass-card p-3.5 rounded-xl space-y-2">
-        <div class="flex items-center justify-between">
-          <h4 class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
-            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Bloco de Estudos Noturno (MedQuest)
-          </h4>
-          <span class="text-[10px] text-slate-400 font-mono">20:30 - 22:30</span>
-        </div>
-        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] space-y-1">
-          <div class="text-white font-medium">• Foco: Sangramento de 1º Trimestre e DHEG</div>
-          <div class="text-slate-400">• Meta: 30 questões comentadas + revisão de flashcards Anki</div>
+        <div class="glass-card p-4 rounded-xl text-center space-y-1.5">
+          <div class="text-xs text-slate-300 font-medium">Carregando rotina viva do dia...</div>
+          <div class="text-[10px] text-slate-500">Sincronizando blocos, plantões e metas MedQuest.</div>
         </div>
       </div>
     </div>
@@ -2791,15 +2873,10 @@
         </div>
 
         <div>
-          <label for="amb-input-queixa" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Queixa Principal & HDA Rápida</label>
-          <textarea id="amb-input-queixa" rows="2" placeholder="Ex: Paciente hipertenso há 5 anos para renovação de receita e ajuste pressórico. Assintomático..." autocomplete="off" autocapitalize="sentences" spellcheck="true" class="w-full rounded-lg bg-slate-950 border border-slate-800 p-2 text-slate-100 text-xs focus:border-teal-500 focus:outline-none"></textarea>
-          <div class="flex items-center gap-1 mt-1.5 overflow-x-auto pb-0.5 no-scrollbar">
-            <span class="text-[9px] text-slate-500 font-bold uppercase shrink-0">Atalhos Rápidos:</span>
-            <button type="button" onclick="setSoapQueixaRapida('has')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">HAS Rotina</button>
-            <button type="button" onclick="setSoapQueixaRapida('dm')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">DM2 Rotina</button>
-            <button type="button" onclick="setSoapQueixaRapida('ivas')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">Tosse / Gripe</button>
-            <button type="button" onclick="setSoapQueixaRapida('lombalgia')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">Lombalgia</button>
-            <button type="button" onclick="setSoapQueixaRapida('dispepsia')" class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold border border-slate-700/60">Dispepsia / DRGE</button>
+          <label for="amb-input-queixa" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Queixa Principal & HDA</label>
+          <textarea id="amb-input-queixa" rows="2" placeholder="Descreva a queixa principal, tempo de início, sintomas associados, antecedentes e medicações em uso do paciente..." autocomplete="off" autocapitalize="sentences" spellcheck="true" class="w-full rounded-lg bg-slate-950 border border-slate-800 p-2 text-slate-100 text-xs focus:border-teal-500 focus:outline-none"></textarea>
+          <div class="mt-1 text-[10px] text-slate-400">
+            💡 <strong class="text-slate-300">O que fazer:</strong> Digite o relato clínico do paciente ou dite pelo microfone para estruturar anamnese, hipóteses diagnósticas e plano terapêutico.
           </div>
         </div>
 
@@ -14071,14 +14148,18 @@
     }
 
     function renderizarRotinaBlocos(blocos) {
+      if (window.RotinaTimeline && typeof window.RotinaTimeline.renderizar === 'function') {
+        window.RotinaTimeline.renderizar(blocos);
+        return;
+      }
       const container = document.getElementById('rotina-blocos-container');
       if (!container) return;
       container.replaceChildren();
       if (!blocos || blocos.length === 0) {
-        container.innerHTML = '<p class="text-slate-400 text-xs">Nenhum bloco de rotina definido para hoje.</p>';
+        container.innerHTML = '<div class="glass-card p-4 rounded-xl text-center space-y-1.5"><div class="text-xs text-slate-300 font-medium">✨ Nenhum compromisso agendado para hoje no Google Calendar.</div><div class="text-[10px] text-slate-500">Seus eventos e plantões cadastrados na Agenda Google aparecem automaticamente aqui.</div></div>';
         return;
       }
-      blocos.slice(0, 6).forEach(bloco => {
+      blocos.forEach(bloco => {
         const card = document.createElement('div');
         card.className = 'glass-card p-3 rounded-xl flex items-center justify-between';
         const info = document.createElement('div');
@@ -14088,13 +14169,13 @@
         nome.textContent = String(bloco.nome || bloco.titulo || bloco);
         const det = document.createElement('span');
         det.className = 'text-[10px] text-slate-400';
-        det.textContent = bloco.horario || bloco.descricao || '';
+        det.textContent = (bloco.inicio && bloco.fim) ? (bloco.inicio + ' - ' + bloco.fim) : (bloco.horario || bloco.descricao || '');
         info.append(nome);
         if (det.textContent) info.append(det);
         const badge = document.createElement('span');
         badge.className = 'px-2 py-0.5 rounded text-[10px] font-bold ' +
-          (bloco.ativo ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400');
-        badge.textContent = bloco.ativo ? 'Ativo' : (bloco.status || 'Pendente');
+          (bloco.status === 'concluido' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400');
+        badge.textContent = bloco.status ? (bloco.status.charAt(0).toUpperCase() + bloco.status.slice(1)) : 'Pendente';
         card.append(info, badge);
         container.append(card);
       });
