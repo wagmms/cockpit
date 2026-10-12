@@ -1741,8 +1741,8 @@
             </span>
             <button
               type="button"
-              onclick="if(window.RotinaTimeline) RotinaTimeline.renderizar(); else carregarPerfil();"
-              title="Recarregar blocos da rotina"
+              onclick="if(window.RotinaTimeline && typeof window.RotinaTimeline.sincronizarAgendaGoogle === 'function') RotinaTimeline.sincronizarAgendaGoogle(); else if(window.RotinaTimeline) RotinaTimeline.renderizar(); else carregarPerfil();"
+              title="Sincronizar com Google Calendar (moraes.wagg@gmail.com)"
               class="p-1 rounded-lg text-slate-400 hover:text-brand-300 hover:bg-brand-500/10 transition"
             >
               <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
@@ -1979,9 +1979,14 @@
           <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i> Copiloto Clínico · SOAP & Conversa
           </h3>
-          <button onclick="copiarSOAPProntuario()" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold flex items-center gap-1 transition shadow-md shadow-purple-600/20">
-            <i data-lucide="copy" class="w-3 h-3"></i> Copiar PEP
-          </button>
+          <div class="flex items-center gap-1.5">
+            <button onclick="abrirModalAmbulatorioSOAP()" class="px-2 py-1 rounded-lg bg-teal-500/20 text-teal-300 hover:bg-teal-500/30 text-[10px] font-bold flex items-center gap-1 transition border border-teal-500/30 active:scale-95" title="Abrir Prontuário SOAP Ambulatorial Ágil">
+              <i data-lucide="clipboard-check" class="w-3 h-3"></i> Consultório APS
+            </button>
+            <button onclick="copiarSOAPProntuario()" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold flex items-center gap-1 transition shadow-md shadow-purple-600/20 active:scale-95" title="Copiar SOAP para o prontuário eletrônico">
+              <i data-lucide="copy" class="w-3 h-3"></i> Copiar PEP
+            </button>
+          </div>
         </div>
 
         <p id="cockpit-status" role="status" class="text-xs text-slate-300">Conectando ao atendimento do Telegram…</p>
@@ -1992,73 +1997,83 @@
         </div>
 
         <!-- Chips de Ações Clínicas em 1 Toque -->
-        <div class="space-y-1.5 pt-1">
-          <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Ações Rápidas em 1 Toque</div>
-          <div class="flex flex-wrap gap-1.5">
-            <button onclick="abrirModalSinteseDiaSOAP()" class="px-2.5 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold hover:bg-indigo-500/30 flex items-center gap-1 transition">
+        <div class="space-y-2 pt-1">
+          <div class="flex items-center justify-between flex-wrap gap-1.5">
+            <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Ações Rápidas em 1 Toque</div>
+            <!-- Filtro de Contexto Clínico Anti-Poluição -->
+            <div class="flex items-center gap-0.5 bg-slate-900/90 p-0.5 rounded-lg border border-slate-800 text-[10px]">
+              <button type="button" onclick="filtrarAcoesRapidasSOAP('todos')" id="filtro-acoes-todos" class="btn-filtro-soap px-2 py-0.5 rounded-md font-bold text-white bg-purple-600 transition">Todos</button>
+              <button type="button" onclick="filtrarAcoesRapidasSOAP('amb')" id="filtro-acoes-amb" class="btn-filtro-soap px-2 py-0.5 rounded-md text-slate-400 hover:text-teal-300 transition">Ambulatório</button>
+              <button type="button" onclick="filtrarAcoesRapidasSOAP('emerg')" id="filtro-acoes-emerg" class="btn-filtro-soap px-2 py-0.5 rounded-md text-slate-400 hover:text-rose-300 transition">Emergência</button>
+              <button type="button" onclick="filtrarAcoesRapidasSOAP('materno')" id="filtro-acoes-materno" class="btn-filtro-soap px-2 py-0.5 rounded-md text-slate-400 hover:text-pink-300 transition">Materno</button>
+              <button type="button" onclick="filtrarAcoesRapidasSOAP('pep')" id="filtro-acoes-pep" class="btn-filtro-soap px-2 py-0.5 rounded-md text-slate-400 hover:text-indigo-300 transition">PEP</button>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="container-acoes-rapidas-soap">
+            <button data-soap-cat="amb pep" onclick="abrirModalSinteseDiaSOAP()" class="px-2.5 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold hover:bg-indigo-500/30 flex items-center gap-1 transition">
               <i data-lucide="layers" class="w-3 h-3"></i> Síntese do Dia (SOAP)
             </button>
-            <button onclick="abrirModalAmbulatorioSOAP()" class="px-2.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold hover:bg-teal-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="amb" onclick="abrirModalAmbulatorioSOAP()" class="px-2.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold hover:bg-teal-500/30 flex items-center gap-1 transition">
               <i data-lucide="clipboard-check" class="w-3 h-3"></i> SOAP Ambulatorial
             </button>
-            <button onclick="abrirModalAtestadoCFM()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="amb pep" onclick="abrirModalAtestadoCFM()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
               <i data-lucide="file-text" class="w-3 h-3"></i> Atestado CFM
             </button>
-            <button onclick="abrirModalPrenatal()" class="px-2.5 py-1.5 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 text-[11px] font-semibold hover:bg-pink-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="materno amb" onclick="abrirModalPrenatal()" class="px-2.5 py-1.5 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 text-[11px] font-semibold hover:bg-pink-500/30 flex items-center gap-1 transition">
               <i data-lucide="baby" class="w-3 h-3"></i> Pré-Natal & DPP
             </button>
-            <button onclick="abrirModalCentroObstetrico()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="materno emerg" onclick="abrirModalCentroObstetrico()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="activity" class="w-3 h-3"></i> Sala de Parto & HPP
             </button>
-            <button onclick="abrirModalGinecologiaAmbulatorial()" class="px-2.5 py-1.5 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 text-[11px] font-semibold hover:bg-fuchsia-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="materno amb" onclick="abrirModalGinecologiaAmbulatorial()" class="px-2.5 py-1.5 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 text-[11px] font-semibold hover:bg-fuchsia-500/30 flex items-center gap-1 transition">
               <i data-lucide="flower-2" class="w-3 h-3"></i> Ginecologia &amp; APS
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-pediatria');" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="materno emerg" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-pediatria');" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
               <i data-lucide="baby" class="w-3 h-3"></i> Pediatria &amp; PALS
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-dva');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-dva');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="zap" class="w-3 h-3"></i> DVA &amp; Choque
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-sri');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-sri');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
               <i data-lucide="shield-alert" class="w-3 h-3"></i> Intubação (SRI)
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-asma');" class="px-2.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold hover:bg-teal-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg amb" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-asma');" class="px-2.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold hover:bg-teal-500/30 flex items-center gap-1 transition">
               <i data-lucide="wind" class="w-3 h-3"></i> Crise Asmática &amp; GINA
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-atb');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg amb" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-atb');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="shield-plus" class="w-3 h-3"></i> Ajuste ATB
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-dhe');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-dhe');" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
               <i data-lucide="zap" class="w-3 h-3"></i> DHE &amp; Eletrólitos
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-gaso');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-gaso');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="droplets" class="w-3 h-3"></i> Gasometria &amp; Winter
             </button>
-            <button onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-heart');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="emerg" onclick="navegarAba('tab-calculadoras', 'Emergência & Cálculos'); abrirSubCalc('calc-heart');" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="heart-pulse" class="w-3 h-3"></i> Dor Torácica &amp; HEART
             </button>
-            <button onclick="copiarReceitaLimpaPEP()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="amb pep" onclick="copiarReceitaLimpaPEP()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
               <i data-lucide="receipt" class="w-3 h-3"></i> Receita PEP
             </button>
-            <button onclick="navegarAba('tab-remume', 'Prescrição & REMUME')" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="amb pep" onclick="navegarAba('tab-remume', 'Prescrição & REMUME')" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold hover:bg-rose-500/30 flex items-center gap-1 transition">
               <i data-lucide="clipboard-list" class="w-3 h-3"></i> Prescrição Rápida
             </button>
-            <button onclick="executarAcaoConversa('plano')" class="px-2.5 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-semibold hover:bg-purple-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="pep amb" onclick="executarAcaoConversa('plano')" class="px-2.5 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-semibold hover:bg-purple-500/30 flex items-center gap-1 transition">
               <i data-lucide="file-check" class="w-3 h-3"></i> Fechar Plano
             </button>
-            <button onclick="abrirModalExameFisicoNormal()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition" title="Exame Físico Normal Padrão e Modelos Dirigidos">
+            <button data-soap-cat="amb pep emerg" onclick="abrirModalExameFisicoNormal()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition" title="Exame Físico Normal Padrão e Modelos Dirigidos">
               <i data-lucide="stethoscope" class="w-3 h-3"></i> EF Normal
             </button>
-            <button onclick="executarAcaoConversa('prescricao')" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="amb pep" onclick="executarAcaoConversa('prescricao')" class="px-2.5 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] font-semibold hover:bg-sky-500/30 flex items-center gap-1 transition">
               <i data-lucide="pill" class="w-3 h-3"></i> Prescrição UBS
             </button>
-            <button onclick="provocarPreceptorSocratico()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="pep" onclick="provocarPreceptorSocratico()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold hover:bg-amber-500/30 flex items-center gap-1 transition">
               <i data-lucide="brain" class="w-3 h-3"></i> Preceptor
             </button>
-            <button onclick="abrirModalPreceptorLive()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
+            <button data-soap-cat="pep" onclick="abrirModalPreceptorLive()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1 transition">
               <i data-lucide="headphones" class="w-3 h-3"></i> Preceptor Live
             </button>
-            <button onclick="executarAcaoConversa('novo')" class="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-rose-400 text-[11px] font-semibold flex items-center gap-1 transition" title="Limpar e Iniciar Novo Caso">
+            <button data-soap-cat="pep amb emerg materno" onclick="executarAcaoConversa('novo')" class="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-rose-400 text-[11px] font-semibold flex items-center gap-1 transition" title="Limpar e Iniciar Novo Caso">
               <i data-lucide="trash-2" class="w-3 h-3"></i> Novo Caso
             </button>
           </div>
@@ -2869,34 +2884,132 @@
               <option value="cefaleia_neuro">Neurológico & Cefaleia</option>
               <option value="saude_mental">Saúde Mental / Exame Psíquico</option>
             </select>
+        </div>
+
+        <!-- Diagnóstico / Busca Inteligente de CID-10 e CIAP-2 -->
+        <div class="relative">
+          <div class="flex items-center justify-between mb-1">
+            <label for="amb-input-diagnostico" class="text-[10px] font-bold uppercase text-slate-400">
+              Diagnóstico / CID-10 &amp; CIAP-2 <span class="text-teal-400 font-normal lowercase">(busca inteligente)</span>
+            </label>
+            <span id="amb-cid-badge-selecionado" class="hidden text-[9px] bg-teal-500/20 text-teal-300 px-1.5 py-0.2 rounded font-mono font-bold"></span>
+          </div>
+          <div class="relative">
+            <input id="amb-input-diagnostico" type="text" placeholder="Buscar diagnóstico ou código (ex: HAS, DM2, lombalgia, refluxo, E11, I10)..." autocomplete="off" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1.5 text-slate-100 text-xs focus:border-teal-500 focus:outline-none" />
+            <div id="amb-lista-sugestoes-cid" class="hidden absolute left-0 right-0 top-full mt-1 z-30 max-h-48 overflow-y-auto rounded-xl bg-slate-900 border border-teal-500/40 shadow-2xl p-1 text-xs space-y-0.5"></div>
           </div>
         </div>
 
         <div>
-          <label for="amb-input-queixa" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Queixa Principal & HDA</label>
+          <div class="flex items-center justify-between mb-1">
+            <label for="amb-input-queixa" class="text-[10px] font-bold uppercase text-slate-400">Queixa Principal &amp; HDA</label>
+            <button type="button" onclick="alternarGavetaQueixasFrequentes()" id="btn-toggle-queixas-freq" class="px-2 py-0.5 rounded-lg bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/30 text-teal-300 text-[10.5px] font-semibold flex items-center gap-1 transition active:scale-95" aria-expanded="false" aria-controls="gaveta-queixas-frequentes">
+              <i data-lucide="zap" class="w-3 h-3 text-amber-400"></i>
+              <span>Queixas Frequentes</span>
+              <i data-lucide="chevron-down" id="icone-chevron-queixas" class="w-3 h-3 transition-transform duration-200"></i>
+            </button>
+          </div>
+
+          <!-- Gaveta Compacta de Queixas Frequentes da Atenção Primária -->
+          <div id="gaveta-queixas-frequentes" class="hidden animate-in fade-in slide-in-from-top-1 duration-150 p-2.5 rounded-xl bg-slate-950/90 border border-teal-500/30 space-y-1.5 mb-2 shadow-inner">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-teal-400 flex items-center gap-1">
+                <i data-lucide="sparkles" class="w-2.5 h-2.5"></i> Protocolos Clínicos APS (1 Toque)
+              </span>
+              <span class="text-[9px] text-slate-400">Preenche anamnese, exame dirigido e parâmetros</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              <button type="button" onclick="setSoapQueixaRapida('has')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🩺</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">HAS Rotina</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Controle e receita</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('dm')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🩸</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">DM2 &amp; Pés</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Monofilamento 10g</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('ivas')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🫁</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">IVAS / Tosse</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Oroscopia e resfriado</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('lombalgia')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🦴</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">Lombalgia</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Lasègue e mecânica</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('dispepsia')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🥣</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">Dispepsia / DRGE</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Pirose e epigástrio</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('cefaleia')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🧠</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">Cefaleia</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Tensional e alarme</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('saude_mental')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">🌿</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">Saúde Mental</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Ansiedade / Humor</div>
+                </div>
+              </button>
+              <button type="button" onclick="setSoapQueixaRapida('checkup')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-teal-950/60 border border-slate-800 hover:border-teal-500/50 text-left transition flex items-center gap-1.5 active:scale-95 group">
+                <span class="text-sm">📋</span>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-bold text-slate-200 group-hover:text-teal-300 truncate">Check-up Geral</div>
+                  <div class="text-[8.5px] text-slate-400 truncate">Rastreio preventivo</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
           <textarea id="amb-input-queixa" rows="2" placeholder="Descreva a queixa principal, tempo de início, sintomas associados, antecedentes e medicações em uso do paciente..." autocomplete="off" autocapitalize="sentences" spellcheck="true" class="w-full rounded-lg bg-slate-950 border border-slate-800 p-2 text-slate-100 text-xs focus:border-teal-500 focus:outline-none"></textarea>
           <div class="mt-1 text-[10px] text-slate-400">
-            💡 <strong class="text-slate-300">O que fazer:</strong> Digite o relato clínico do paciente ou dite pelo microfone para estruturar anamnese, hipóteses diagnósticas e plano terapêutico.
+            💡 <strong class="text-slate-300">O que fazer:</strong> Digite o relato clínico do paciente ou selecione uma queixa frequente acima para estruturar anamnese, hipóteses diagnósticas e plano terapêutico.
           </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <div>
             <label for="amb-sv-pa" class="block text-[10px] text-slate-400 mb-0.5 font-bold">PA (mmHg)</label>
-            <input id="amb-sv-pa" type="text" placeholder="128/82" inputmode="tel" autocomplete="off" enterkeyhint="next" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+            <input id="amb-sv-pa" type="text" placeholder="128/82" inputmode="tel" autocomplete="off" enterkeyhint="next" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center focus:border-teal-500 focus:outline-none" />
           </div>
           <div>
             <label for="amb-sv-glicemia" class="block text-[10px] text-slate-400 mb-0.5 font-bold">Glicemia (mg/dL)</label>
-            <input id="amb-sv-glicemia" type="text" placeholder="112" inputmode="numeric" autocomplete="off" enterkeyhint="next" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+            <input id="amb-sv-glicemia" type="text" placeholder="112" inputmode="numeric" autocomplete="off" enterkeyhint="next" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center focus:border-teal-500 focus:outline-none" />
           </div>
           <div>
             <label for="amb-sv-fc" class="block text-[10px] text-slate-400 mb-0.5 font-bold">FC (bpm)</label>
-            <input id="amb-sv-fc" type="text" placeholder="74" inputmode="numeric" autocomplete="off" enterkeyhint="next" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+            <input id="amb-sv-fc" type="text" placeholder="74" inputmode="numeric" autocomplete="off" enterkeyhint="next" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center focus:border-teal-500 focus:outline-none" />
           </div>
           <div>
             <label for="amb-sv-peso" class="block text-[10px] text-slate-400 mb-0.5 font-bold">Peso (kg)</label>
-            <input id="amb-sv-peso" type="text" placeholder="72" inputmode="decimal" autocomplete="off" enterkeyhint="done" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center" />
+            <input id="amb-sv-peso" type="text" placeholder="72" inputmode="decimal" autocomplete="off" enterkeyhint="done" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2 py-1 text-slate-100 text-xs text-center focus:border-teal-500 focus:outline-none" />
           </div>
+        </div>
+
+        <!-- Feedback Dinâmico de Sinais Vitais (SBC/SBD) -->
+        <div id="amb-sv-badge" class="hidden p-2 rounded-lg bg-slate-950 border border-slate-800 text-[10.5px] flex items-center justify-between">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span id="amb-sv-badge-icon">🩺</span>
+            <span id="amb-sv-badge-texto" class="text-slate-300 font-medium truncate"></span>
+          </div>
+          <span id="amb-sv-badge-meta" class="text-[9.5px] font-bold shrink-0"></span>
         </div>
 
         <div class="flex items-center justify-between pt-1">
@@ -2913,7 +3026,16 @@
             <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Prontuário Estruturado (PEP)</span>
             <div class="flex items-center flex-wrap gap-1.5">
               <button onclick="copiarPrescricaoAmbulatorialGerada()" id="btn-copiar-prescricao-amb" class="px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-semibold text-[10px] flex items-center gap-1 transition active:scale-[0.97]" title="Copiar somente o bloco de prescrição/plano para o receituário">
-                <i data-lucide="pill" class="w-3 h-3"></i> Copiar Prescrição PEP
+                <i data-lucide="pill" class="w-3 h-3"></i> Copiar Prescrição
+              </button>
+              <button onclick="copiarSOAPAmbulatorialSO()" id="btn-copiar-so-amb" class="px-2 py-1 rounded bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 font-semibold text-[10px] flex items-center gap-1 transition active:scale-[0.97]" title="Copiar somente Subjetivo e Objetivo (Anamnese + Exame Físico)">
+                <i data-lucide="file-text" class="w-3 h-3"></i> Copiar S+O
+              </button>
+              <button onclick="transferirParaAtestadoAmbulatorial()" id="btn-atestado-from-soap" class="px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold text-[10px] flex items-center gap-1 transition active:scale-[0.97]" title="Gerar Atestado CFM a partir deste atendimento">
+                <i data-lucide="file-check" class="w-3 h-3"></i> Gerar Atestado
+              </button>
+              <button onclick="gerarEncaminhamentoSisregModal()" id="btn-sisreg-amb" class="px-2 py-1 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 font-semibold text-[10px] flex items-center gap-1 transition active:scale-[0.97]" title="Gerar e copiar Guia de Regulação SISREG/CROSS">
+                <i data-lucide="send" class="w-3 h-3"></i> Guia SISREG
               </button>
               <button onclick="copiarSOAPAmbulatorialGerado()" id="btn-copiar-soap-amb" class="px-2 py-1 rounded bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 font-semibold text-[10px] flex items-center gap-1 transition active:scale-[0.97]" title="Copiar SOAP integral para a evolução">
                 <i data-lucide="copy" class="w-3 h-3"></i> Copiar SOAP Completo
@@ -2927,7 +3049,11 @@
       </div>
 
       <!-- Rodapé do Modal -->
-      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-end gap-2">
+      <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
+        <button onclick="limparFormularioAmbulatorioSOAP()" class="px-2.5 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-800 text-[10.5px] font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-1">
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+          <span>Novo Paciente</span>
+        </button>
         <button onclick="fecharModalAmbulatorioSOAP()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
           Fechar
         </button>
@@ -10083,11 +10209,51 @@
     }
 
     function copiarSOAPProntuario() {
-      if (!cockpitDados?.soap) {
-        copiarToast('Atualize ou gere o SOAP no chat primeiro.');
+      const texto = (cockpitDados && cockpitDados.soap) || cacheSoapAmbulatorialGerado || (document.getElementById('soap-integral') ? document.getElementById('soap-integral').textContent : '');
+      if (!texto || !texto.trim() || texto.includes('Nenhum prontuário SOAP disponível')) {
+        copiarToast('Atualize ou gere o SOAP no chat ou no Consultório APS primeiro.');
         return;
       }
-      copiarTextoClipboard(cockpitDados.soap, 'SOAP integral copiado!');
+      copiarTextoClipboard(texto.trim(), 'SOAP integral copiado para o PEP!');
+    }
+
+    function filtrarAcoesRapidasSOAP(categoria) {
+      if (typeof hapticFeedback === 'function') hapticFeedback('selection');
+      const botoesFiltro = document.querySelectorAll('.btn-filtro-soap');
+      botoesFiltro.forEach(btn => {
+        btn.classList.remove('bg-purple-600', 'text-white', 'font-bold');
+        btn.classList.add('text-slate-400');
+      });
+      const btnAtivo = document.getElementById('filtro-acoes-' + categoria);
+      if (btnAtivo) {
+        btnAtivo.classList.remove('text-slate-400');
+        btnAtivo.classList.add('bg-purple-600', 'text-white', 'font-bold');
+      }
+      const botoes = document.querySelectorAll('#container-acoes-rapidas-soap [data-soap-cat]');
+      botoes.forEach(btn => {
+        if (categoria === 'todos') {
+          btn.classList.remove('hidden');
+        } else {
+          const cats = (btn.getAttribute('data-soap-cat') || '').split(/\s+/);
+          if (cats.includes(categoria)) {
+            btn.classList.remove('hidden');
+          } else {
+            btn.classList.add('hidden');
+          }
+        }
+      });
+      try {
+        localStorage.setItem('rotina_soap_filtro_acoes', categoria);
+      } catch (e) {}
+    }
+
+    function restaurarFiltroAcoesRapidasSOAP() {
+      try {
+        const salvo = localStorage.getItem('rotina_soap_filtro_acoes');
+        if (salvo && ['todos', 'amb', 'emerg', 'materno', 'pep'].includes(salvo)) {
+          filtrarAcoesRapidasSOAP(salvo);
+        }
+      } catch (e) {}
     }
 
     // =========================================================================
@@ -10375,6 +10541,105 @@
       copiarToast(`CID selecionado: ${cidTexto}`);
     }
 
+    function alternarGavetaQueixasFrequentes() {
+      hapticFeedback('light');
+      const gaveta = document.getElementById('gaveta-queixas-frequentes');
+      const icone = document.getElementById('icone-chevron-queixas');
+      const btn = document.getElementById('btn-toggle-queixas-freq');
+      if (!gaveta) return;
+      const oculta = gaveta.classList.contains('hidden');
+      if (oculta) {
+        gaveta.classList.remove('hidden');
+        if (icone) icone.classList.add('rotate-180');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+        if (window.lucide) lucide.createIcons();
+      } else {
+        gaveta.classList.add('hidden');
+        if (icone) icone.classList.remove('rotate-180');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function atualizarBadgeSinaisVitaisAmbulatorial() {
+      const paInput = document.getElementById('amb-sv-pa');
+      const glicInput = document.getElementById('amb-sv-glicemia');
+      const badge = document.getElementById('amb-sv-badge');
+      const badgeIcon = document.getElementById('amb-sv-badge-icon');
+      const badgeTexto = document.getElementById('amb-sv-badge-texto');
+      const badgeMeta = document.getElementById('amb-sv-badge-meta');
+      if (!badge || !badgeTexto || !badgeMeta) return;
+
+      const pa = paInput ? paInput.value.trim() : '';
+      const glic = glicInput ? glicInput.value.trim() : '';
+
+      if (!pa && !glic) {
+        badge.classList.add('hidden');
+        return;
+      }
+
+      let texto = '';
+      let meta = '';
+      let icone = '🩺';
+
+      if (pa && pa.includes('/')) {
+        const partes = pa.split('/');
+        const pas = parseFloat(partes[0]);
+        const pad = parseFloat(partes[1]);
+        if (!isNaN(pas) && !isNaN(pad)) {
+          if (pas >= 180 || pad >= 120) {
+            texto = `⚠️ Crise Hipertensiva (${pa} mmHg)`;
+            meta = 'Alerta: LOA / Emergência';
+            icone = '🚨';
+          } else if (pas >= 180 || pad >= 110) {
+            texto = `HAS Estágio 3 (${pa} mmHg)`;
+            meta = 'Alvo SBC: < 130/80';
+            icone = '🔴';
+          } else if (pas >= 160 || pad >= 100) {
+            texto = `HAS Estágio 2 (${pa} mmHg)`;
+            meta = 'Alvo SBC: < 130/80';
+            icone = '🟠';
+          } else if (pas >= 140 || pad >= 90) {
+            texto = `HAS Estágio 1 (${pa} mmHg)`;
+            meta = 'Alvo SBC: < 130/80';
+            icone = '🟡';
+          } else if (pas >= 130 || pad >= 85) {
+            texto = `Pré-Hipertensão (${pa} mmHg)`;
+            meta = 'MEV / Dieta DASH';
+            icone = '🔵';
+          } else {
+            texto = `PA Normal/Ótima (${pa} mmHg)`;
+            meta = 'Controle Adequado';
+            icone = '🟢';
+          }
+        }
+      }
+
+      if (glic) {
+        const g = parseFloat(glic.replace(',', '.'));
+        if (!isNaN(g) && g > 0) {
+          const prefixo = texto ? texto + ' | ' : '';
+          if (g >= 200) {
+            texto = prefixo + `Glicemia ${g} mg/dL (Hiperglicemia Severa)`;
+          } else if (g >= 126) {
+            texto = prefixo + `Glicemia ${g} mg/dL (Critério DM Jejum)`;
+          } else if (g >= 100) {
+            texto = prefixo + `Glicemia ${g} mg/dL (Pré-DM)`;
+          } else {
+            texto = prefixo + `Glicemia ${g} mg/dL (Normal)`;
+          }
+        }
+      }
+
+      if (texto) {
+        badgeTexto.textContent = texto;
+        badgeMeta.textContent = meta;
+        if (badgeIcon) badgeIcon.textContent = icone;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
     function setSoapQueixaRapida(tipo) {
       hapticFeedback('light');
       const qInput = document.getElementById('amb-input-queixa');
@@ -10384,7 +10649,7 @@
       const fcInput = document.getElementById('amb-sv-fc');
 
       if (tipo === 'has') {
-        if (qInput) qInput.value = 'Paciente hipertenso em acompanhamento ambulatorial para controle pressórico e renovação de receita médica. Nega dor torácica, dispneia ou cefaleia.';
+        if (qInput) qInput.value = 'Paciente hipertenso em acompanhamento ambulatorial para controle pressórico e renovação de receita médica. Nega dor torácica, dispneia, cefaleia ou síncope. Relata boa adesão ao tratamento.';
         if (efSelect) efSelect.value = 'has_rotina';
         if (paInput && !paInput.value) paInput.value = '130/84';
         if (fcInput && !fcInput.value) fcInput.value = '72';
@@ -10395,7 +10660,7 @@
         if (glicInput && !glicInput.value) glicInput.value = '118';
         if (fcInput && !fcInput.value) fcInput.value = '74';
       } else if (tipo === 'ivas') {
-        if (qInput) qInput.value = 'Paciente com tosse seca, coriza hialina e odinofagia leve há 3 dias. Afebril ao toque, nega dispneia ou dor torácica.';
+        if (qInput) qInput.value = 'Paciente com tosse seca, coriza hialina e odinofagia leve há 3 dias. Afebril ao toque, nega dispneia ou dor torácica ventilatório-dependente.';
         if (efSelect) efSelect.value = 'respiratorio_ivas';
         if (paInput && !paInput.value) paInput.value = '120/80';
         if (fcInput && !fcInput.value) fcInput.value = '76';
@@ -10405,12 +10670,40 @@
         if (paInput && !paInput.value) paInput.value = '120/80';
         if (fcInput && !fcInput.value) fcInput.value = '70';
       } else if (tipo === 'dispepsia') {
-        if (qInput) qInput.value = 'Paciente com queixa de queimação epigástrica e pirose pós-prandial há 2 semanas. Nega perda ponderal, disfagia, vômitos ou melena.';
+        if (qInput) qInput.value = 'Paciente com queixa de queimação epigástrica e pirose pós-prandial há 2 semanas. Nega perda ponderal inexplicada, disfagia, vômitos ou melena.';
         if (efSelect) efSelect.value = 'dispepsia_gastro';
         if (paInput && !paInput.value) paInput.value = '120/80';
         if (fcInput && !fcInput.value) fcInput.value = '72';
+      } else if (tipo === 'cefaleia') {
+        if (qInput) qInput.value = 'Paciente com cefaleia em aperto/pressão bifrontal de intensidade moderada há 4 dias, pior no final da tarde. Nega início súbito em trovoada, febre, náuseas, fotofobia intensa ou déficits focais.';
+        if (efSelect) efSelect.value = 'cefaleia_neuro';
+        if (paInput && !paInput.value) paInput.value = '120/80';
+        if (fcInput && !fcInput.value) fcInput.value = '72';
+      } else if (tipo === 'saude_mental') {
+        if (qInput) qInput.value = 'Paciente relata sintomas de ansiedade, inquietação e insônia inicial há cerca de 1 mês associados a sobrecarga emocional/laboral. Nega ideação suicida, episódios de pânico agudo ou alucinações.';
+        if (efSelect) efSelect.value = 'saude_mental';
+        if (paInput && !paInput.value) paInput.value = '122/80';
+        if (fcInput && !fcInput.value) fcInput.value = '78';
+      } else if (tipo === 'checkup') {
+        if (qInput) qInput.value = 'Paciente comparece para consulta de rotina e avaliação clínica preventiva. Assintomático(a), nega queixas ativas, alergias ou uso de medicações contínuas. Solicita checagem de exames laboratoriais.';
+        if (efSelect) efSelect.value = 'checkup_geral';
+        if (paInput && !paInput.value) paInput.value = '120/80';
+        if (fcInput && !fcInput.value) fcInput.value = '70';
       }
-      copiarToast('Atalho rápido aplicado ao formulário!');
+
+      // Fecha suavemente a gaveta de queixas
+      const gaveta = document.getElementById('gaveta-queixas-frequentes');
+      const icone = document.getElementById('icone-chevron-queixas');
+      const btn = document.getElementById('btn-toggle-queixas-freq');
+      if (gaveta) gaveta.classList.add('hidden');
+      if (icone) icone.classList.remove('rotate-180');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+
+      atualizarBadgeSinaisVitaisAmbulatorial();
+      if (typeof salvarEstadoSoapAmbulatorialLocal === 'function') {
+        salvarEstadoSoapAmbulatorialLocal();
+      }
+      copiarToast('Protocolo clínico rápido aplicado!');
     }
 
     function converterNumeroPorExtensoOffline(num) {
@@ -10655,22 +10948,269 @@
       };
     }
 
+    const CATALOGO_CID_AMBULATORIAL_RAPIDO = [
+      { cid: 'I10', ciap: 'K86', diag: 'Hipertensão Arterial Sistêmica Primária', modelo: 'has_rotina' },
+      { cid: 'E11.9', ciap: 'T90', diag: 'Diabetes Mellitus Tipo 2 sem complicações agudas', modelo: 'dm_rotina' },
+      { cid: 'J06.9', ciap: 'R74', diag: 'Infecção Aguda das Vias Aéreas Superiores (IVAS)', modelo: 'respiratorio_ivas' },
+      { cid: 'M54.5', ciap: 'L03', diag: 'Dor Lombar Baixa / Lombalgia Aguda Mecânica', modelo: 'lombalgia_postural' },
+      { cid: 'K21.9', ciap: 'D84', diag: 'Doença do Refluxo Gastroesofágico (DRGE)', modelo: 'dispepsia_gastro' },
+      { cid: 'K30', ciap: 'D87', diag: 'Dispepsia Funcional / Epigastralgia', modelo: 'dispepsia_gastro' },
+      { cid: 'G44.2', ciap: 'N95', diag: 'Cefaleia Tensional Primária', modelo: 'cefaleia_neuro' },
+      { cid: 'F41.1', ciap: 'P74', diag: 'Transtorno de Ansiedade Generalizada (TAG)', modelo: 'saude_mental' },
+      { cid: 'F32.0', ciap: 'P76', diag: 'Episódio Depressivo Leve a Moderado', modelo: 'saude_mental' },
+      { cid: 'N30.0', ciap: 'U71', diag: 'Cistite Aguda Não Complicada (ITU baixa)', modelo: 'checkup_geral' },
+      { cid: 'J30.4', ciap: 'R97', diag: 'Rinite Alérgica Não Especificada', modelo: 'respiratorio_ivas' },
+      { cid: 'J45.9', ciap: 'R96', diag: 'Asma Brônquica em Acompanhamento', modelo: 'respiratorio_ivas' },
+      { cid: 'Z00.0', ciap: 'A98', diag: 'Exame Médico Geral / Consulta de Rotina', modelo: 'checkup_geral' }
+    ];
+
+    async function buscarDiagnosticosAmbulatorial(termo) {
+      const container = document.getElementById('amb-lista-sugestoes-cid');
+      if (!container) return;
+      termo = (termo || '').trim().toLowerCase();
+      if (termo.length < 2) {
+        container.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+      }
+
+      let resultados = CATALOGO_CID_AMBULATORIAL_RAPIDO.filter(item => {
+        return item.cid.toLowerCase().includes(termo) ||
+               item.ciap.toLowerCase().includes(termo) ||
+               item.diag.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(termo);
+      });
+
+      try {
+        const respRpc = await cockpitRpc('cockpitBuscarCid', [termo]);
+        if (respRpc && respRpc.sucesso && Array.isArray(respRpc.resultados) && respRpc.resultados.length > 0) {
+          respRpc.resultados.slice(0, 6).forEach(r => {
+            if (!resultados.some(item => item.cid === r.cid10)) {
+              resultados.push({
+                cid: r.cid10,
+                ciap: r.ciap2 || '',
+                diag: r.diagnostico,
+                modelo: r.modeloEf || 'checkup_geral'
+              });
+            }
+          });
+        }
+      } catch (e) {}
+
+      if (!resultados.length) {
+        container.innerHTML = '<div class="p-2 text-slate-400 text-center text-[10.5px]">Nenhum diagnóstico encontrado</div>';
+        container.classList.remove('hidden');
+        return;
+      }
+
+      container.innerHTML = resultados.slice(0, 7).map(item => `
+        <button type="button" onclick="selecionarDiagnosticoAmbulatorial('${item.cid}', '${item.ciap}', '${item.diag.replace(/'/g, "\\'")}', '${item.modelo}')" class="w-full text-left p-1.5 rounded-lg hover:bg-slate-800 flex items-center justify-between gap-1.5 transition">
+          <div class="min-w-0">
+            <span class="text-[11px] font-semibold text-slate-100 block truncate">${item.diag}</span>
+            <span class="text-[9.5px] text-slate-400">CIAP-2: ${item.ciap || '—'}</span>
+          </div>
+          <span class="text-[9px] bg-teal-500/20 text-teal-300 font-mono font-bold px-1.5 py-0.5 rounded shrink-0">${item.cid}</span>
+        </button>
+      `).join('');
+      container.classList.remove('hidden');
+    }
+
+    function selecionarDiagnosticoAmbulatorial(cid, ciap, diag, modelo) {
+      hapticFeedback('light');
+      const inputDiag = document.getElementById('amb-input-diagnostico');
+      const badge = document.getElementById('amb-cid-badge-selecionado');
+      const lista = document.getElementById('amb-lista-sugestoes-cid');
+      const selectEf = document.getElementById('amb-select-modelo-ef');
+
+      if (inputDiag) inputDiag.value = `${diag} (${cid})`;
+      if (badge) {
+        badge.textContent = `CID: ${cid} | CIAP: ${ciap}`;
+        badge.classList.remove('hidden');
+      }
+      if (selectEf && modelo && selectEf.value === 'checkup_geral') {
+        selectEf.value = modelo;
+      }
+      if (lista) lista.classList.add('hidden');
+
+      salvarEstadoSoapAmbulatorialLocal();
+      copiarToast(`Diagnóstico ${cid} anexado ao caso!`);
+    }
+
+    function salvarEstadoSoapAmbulatorialLocal() {
+      try {
+        const dados = {
+          paciente: document.getElementById('amb-input-paciente')?.value || '',
+          diagnostico: document.getElementById('amb-input-diagnostico')?.value || '',
+          modeloEf: document.getElementById('amb-select-modelo-ef')?.value || 'checkup_geral',
+          queixa: document.getElementById('amb-input-queixa')?.value || '',
+          pa: document.getElementById('amb-sv-pa')?.value || '',
+          glicemia: document.getElementById('amb-sv-glicemia')?.value || '',
+          fc: document.getElementById('amb-sv-fc')?.value || '',
+          peso: document.getElementById('amb-sv-peso')?.value || '',
+          soapGerado: cacheSoapAmbulatorialGerado || ''
+        };
+        localStorage.setItem('rotina_soap_amb_rascunho', JSON.stringify(dados));
+      } catch (e) {}
+    }
+
+    function restaurarEstadoSoapAmbulatorialLocal() {
+      try {
+        const raw = localStorage.getItem('rotina_soap_amb_rascunho');
+        if (!raw) return;
+        const dados = JSON.parse(raw);
+        if (!dados || typeof dados !== 'object') return;
+
+        const pacienteEl = document.getElementById('amb-input-paciente');
+        const diagEl = document.getElementById('amb-input-diagnostico');
+        const modeloEl = document.getElementById('amb-select-modelo-ef');
+        const queixaEl = document.getElementById('amb-input-queixa');
+        const paEl = document.getElementById('amb-sv-pa');
+        const glicEl = document.getElementById('amb-sv-glicemia');
+        const fcEl = document.getElementById('amb-sv-fc');
+        const pesoEl = document.getElementById('amb-sv-peso');
+
+        if (pacienteEl && dados.paciente && !pacienteEl.value) pacienteEl.value = dados.paciente;
+        if (diagEl && dados.diagnostico && !diagEl.value) {
+          diagEl.value = dados.diagnostico;
+          const match = dados.diagnostico.match(/\(([^)]+)\)$/);
+          const badge = document.getElementById('amb-cid-badge-selecionado');
+          if (badge && match) {
+            badge.textContent = `CID: ${match[1]}`;
+            badge.classList.remove('hidden');
+          }
+        }
+        if (modeloEl && dados.modeloEf) modeloEl.value = dados.modeloEf;
+        if (queixaEl && dados.queixa && !queixaEl.value) queixaEl.value = dados.queixa;
+        if (paEl && dados.pa && !paEl.value) paEl.value = dados.pa;
+        if (glicEl && dados.glicemia && !glicEl.value) glicEl.value = dados.glicemia;
+        if (fcEl && dados.fc && !fcEl.value) fcEl.value = dados.fc;
+        if (pesoEl && dados.peso && !pesoEl.value) pesoEl.value = dados.peso;
+
+        if (dados.soapGerado) {
+          cacheSoapAmbulatorialGerado = dados.soapGerado;
+          const boxResultado = document.getElementById('amb-box-resultado');
+          const preResultado = document.getElementById('amb-texto-resultado');
+          if (boxResultado) boxResultado.classList.remove('hidden');
+          if (preResultado) preResultado.textContent = dados.soapGerado;
+        }
+        atualizarBadgeSinaisVitaisAmbulatorial();
+      } catch (e) {}
+    }
+
+    function limparFormularioAmbulatorioSOAP() {
+      hapticFeedback('light');
+      const pacienteEl = document.getElementById('amb-input-paciente');
+      const diagEl = document.getElementById('amb-input-diagnostico');
+      const badgeCid = document.getElementById('amb-cid-badge-selecionado');
+      const listaCid = document.getElementById('amb-lista-sugestoes-cid');
+      const queixaEl = document.getElementById('amb-input-queixa');
+      const paEl = document.getElementById('amb-sv-pa');
+      const glicEl = document.getElementById('amb-sv-glicemia');
+      const fcEl = document.getElementById('amb-sv-fc');
+      const pesoEl = document.getElementById('amb-sv-peso');
+      const boxResultado = document.getElementById('amb-box-resultado');
+      const preResultado = document.getElementById('amb-texto-resultado');
+      const badge = document.getElementById('amb-sv-badge');
+      const gaveta = document.getElementById('gaveta-queixas-frequentes');
+      const icone = document.getElementById('icone-chevron-queixas');
+
+      if (pacienteEl) pacienteEl.value = '';
+      if (diagEl) diagEl.value = '';
+      if (badgeCid) badgeCid.classList.add('hidden');
+      if (listaCid) listaCid.classList.add('hidden');
+      if (queixaEl) queixaEl.value = '';
+      if (paEl) paEl.value = '';
+      if (glicEl) glicEl.value = '';
+      if (fcEl) fcEl.value = '';
+      if (pesoEl) pesoEl.value = '';
+      if (boxResultado) boxResultado.classList.add('hidden');
+      if (preResultado) preResultado.textContent = '';
+      if (badge) badge.classList.add('hidden');
+      if (gaveta) gaveta.classList.add('hidden');
+      if (icone) icone.classList.remove('rotate-180');
+      cacheSoapAmbulatorialGerado = '';
+
+      try {
+        localStorage.removeItem('rotina_soap_amb_rascunho');
+      } catch (e) {}
+
+      if (pacienteEl) pacienteEl.focus();
+      copiarToast('Formulário limpo para novo paciente!');
+    }
+
     function abrirModalAmbulatorioSOAP() {
       hapticFeedback('medium');
       const modal = document.getElementById('modal-ambulatorio-soap');
       if (modal) modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
+
+      restaurarEstadoSoapAmbulatorialLocal();
+
+      // Configura listeners dinâmicos
+      const paInput = document.getElementById('amb-sv-pa');
+      const glicInput = document.getElementById('amb-sv-glicemia');
+      if (paInput && !paInput.dataset.listenerAtivo) {
+        paInput.addEventListener('input', () => {
+          atualizarBadgeSinaisVitaisAmbulatorial();
+          salvarEstadoSoapAmbulatorialLocal();
+        });
+        paInput.dataset.listenerAtivo = 'true';
+      }
+      if (glicInput && !glicInput.dataset.listenerAtivo) {
+        glicInput.addEventListener('input', () => {
+          atualizarBadgeSinaisVitaisAmbulatorial();
+          salvarEstadoSoapAmbulatorialLocal();
+        });
+        glicInput.dataset.listenerAtivo = 'true';
+      }
+
+      const qInput = document.getElementById('amb-input-queixa');
+      if (qInput && !qInput.dataset.listenerAtivo) {
+        qInput.addEventListener('input', salvarEstadoSoapAmbulatorialLocal);
+        qInput.dataset.listenerAtivo = 'true';
+      }
+
+      const pacInput = document.getElementById('amb-input-paciente');
+      if (pacInput && !pacInput.dataset.listenerAtivo) {
+        pacInput.addEventListener('input', salvarEstadoSoapAmbulatorialLocal);
+        pacInput.dataset.listenerAtivo = 'true';
+      }
+
+      const diagInput = document.getElementById('amb-input-diagnostico');
+      if (diagInput && !diagInput.dataset.listenerAtivo) {
+        let timerBusca = null;
+        diagInput.addEventListener('input', (e) => {
+          clearTimeout(timerBusca);
+          timerBusca = setTimeout(() => {
+            buscarDiagnosticosAmbulatorial(e.target.value);
+            salvarEstadoSoapAmbulatorialLocal();
+          }, 150);
+        });
+        diagInput.dataset.listenerAtivo = 'true';
+      }
+
+      // Fecha dropdown de CID se clicar fora
+      if (!window._ambListenerClickForaCid) {
+        document.addEventListener('click', (e) => {
+          const lista = document.getElementById('amb-lista-sugestoes-cid');
+          const input = document.getElementById('amb-input-diagnostico');
+          if (lista && !lista.contains(e.target) && e.target !== input) {
+            lista.classList.add('hidden');
+          }
+        });
+        window._ambListenerClickForaCid = true;
+      }
+
       setTimeout(() => {
         const input = document.getElementById('amb-input-paciente');
-        if (input) {
+        if (input && !input.value) {
           input.focus();
-          if (typeof input.select === 'function') input.select();
         }
       }, 60);
     }
 
     function fecharModalAmbulatorioSOAP() {
       hapticFeedback('light');
+      salvarEstadoSoapAmbulatorialLocal();
       const modal = document.getElementById('modal-ambulatorio-soap');
       if (modal) modal.classList.add('hidden');
     }
@@ -10680,6 +11220,7 @@
       const paciente = document.getElementById('amb-input-paciente')?.value?.trim() || 'Ao Portador';
       const modeloEf = document.getElementById('amb-select-modelo-ef')?.value || 'checkup_geral';
       const queixa = document.getElementById('amb-input-queixa')?.value?.trim() || 'Consulta de rotina ambulatorial';
+      const diagnostico = document.getElementById('amb-input-diagnostico')?.value?.trim() || '';
       const pa = document.getElementById('amb-sv-pa')?.value?.trim() || '120/80';
       const glicemia = document.getElementById('amb-sv-glicemia')?.value?.trim() || '';
       const fc = document.getElementById('amb-sv-fc')?.value?.trim() || '72';
@@ -10693,6 +11234,7 @@
       const params = {
         pacienteNome: paciente,
         queixaPrincipal: queixa,
+        diagnostico: diagnostico,
         modeloExameFisico: modeloEf,
         sinaisVitais: { pa, glicemia, fc, peso }
       };
@@ -10707,6 +11249,15 @@
       if (resp && resp.soap && resp.soap.textoProntuario) {
         cacheSoapAmbulatorialGerado = resp.soap.textoProntuario;
         if (preResultado) preResultado.textContent = cacheSoapAmbulatorialGerado;
+        const soapIntegralEl = document.getElementById('soap-integral');
+        if (soapIntegralEl) {
+          soapIntegralEl.textContent = cacheSoapAmbulatorialGerado;
+        }
+        const cockpitStatusEl = document.getElementById('cockpit-status');
+        if (cockpitStatusEl) {
+          cockpitStatusEl.textContent = 'SOAP Ambulatorial ativo · Pronto para copiar ao PEP';
+        }
+        salvarEstadoSoapAmbulatorialLocal();
         copiarToast(resp.offline ? 'SOAP gerado localmente (Offline Seguro)!' : 'SOAP Ambulatorial gerado com sucesso!');
       } else {
         if (preResultado) preResultado.textContent = 'Erro ao processar SOAP ambulatorial.';
@@ -10722,6 +11273,16 @@
       copiarTextoClipboard(cacheSoapAmbulatorialGerado, 'SOAP Ambulatorial copiado para o PEP!');
     }
 
+    function copiarSOAPAmbulatorialSO() {
+      if (!cacheSoapAmbulatorialGerado) {
+        copiarToast('Gere o SOAP primeiro.');
+        return;
+      }
+      const match = cacheSoapAmbulatorialGerado.match(/(\[S - SUBJETIVO\][\s\S]*?)(?=\n\[A - AVALIAÇÃO\]|\n={3,}|$)/i);
+      const textoSO = (match && match[1]) ? match[1].trim() : cacheSoapAmbulatorialGerado;
+      copiarTextoClipboard(textoSO, 'Subjetivo e Exame Físico (S+O) copiados!');
+    }
+
     function copiarPrescricaoAmbulatorialGerada() {
       if (!cacheSoapAmbulatorialGerado) {
         copiarToast('Gere o SOAP primeiro.');
@@ -10735,6 +11296,115 @@
         prescricao = cacheSoapAmbulatorialGerado;
       }
       copiarTextoClipboard(prescricao, 'Prescrição ambulatorial copiada para o PEP!');
+    }
+
+    function transferirParaAtestadoAmbulatorial() {
+      hapticFeedback('medium');
+      const paciente = document.getElementById('amb-input-paciente')?.value?.trim() || '';
+      const diagManual = document.getElementById('amb-input-diagnostico')?.value?.trim() || '';
+      const modeloEf = document.getElementById('amb-select-modelo-ef')?.value || 'checkup_geral';
+
+      const mapaCidSugerido = {
+        has_rotina: 'I10 - Hipertensão Arterial Sistêmica',
+        dm_rotina: 'E11.9 - Diabetes Mellitus Tipo 2',
+        respiratorio_ivas: 'J06.9 - Infecção Aguda de Vias Aéreas Superiores',
+        lombalgia_postural: 'M54.5 - Lombalgia Mecânica Aguda',
+        dispepsia_gastro: 'K30 - Dispepsia Funcional / DRGE',
+        cefaleia_neuro: 'G44.2 - Cefaleia Tensional',
+        saude_mental: 'F41.1 - Transtorno de Ansiedade Generalizada',
+        checkup_geral: 'Z00.0 - Exame Médico Geral'
+      };
+      const cidTexto = diagManual || mapaCidSugerido[modeloEf] || '';
+
+      fecharModalAmbulatorioSOAP();
+      abrirModalAtestadoCFM();
+
+      setTimeout(() => {
+        if (paciente) {
+          const atPaciente = document.getElementById('atestado-input-paciente');
+          if (atPaciente) atPaciente.value = paciente;
+        }
+        if (cidTexto) {
+          const atMotivo = document.getElementById('atestado-input-motivo');
+          const atCheck = document.getElementById('atestado-check-cid');
+          if (atMotivo) atMotivo.value = cidTexto;
+          if (atCheck) atCheck.checked = true;
+        }
+        copiarToast('Dados transferidos para o Atestado CFM!');
+      }, 120);
+    }
+
+    async function gerarEncaminhamentoSisregModal() {
+      hapticFeedback('medium');
+      const paciente = document.getElementById('amb-input-paciente')?.value?.trim() || 'Ao Portador';
+      const queixa = document.getElementById('amb-input-queixa')?.value?.trim() || 'Consulta ambulatorial';
+      const diagManual = document.getElementById('amb-input-diagnostico')?.value?.trim() || '';
+      const modeloEf = document.getElementById('amb-select-modelo-ef')?.value || 'checkup_geral';
+      const pa = document.getElementById('amb-sv-pa')?.value?.trim() || '120/80';
+      const dataStr = new Date().toLocaleDateString('pt-BR');
+
+      const mapaEspecialidades = {
+        has_rotina: { esp: 'Cardiologia Ambulatorial', cid: 'I10 - Hipertensão Arterial' },
+        dm_rotina: { esp: 'Endocrinologia / Pé Diabético', cid: 'E11.9 - Diabetes Mellitus' },
+        respiratorio_ivas: { esp: 'Pneumologia / Otorrinolaringologia', cid: 'J06.9 - Afecção respiratória' },
+        lombalgia_postural: { esp: 'Ortopedia / Fisiatria', cid: 'M54.5 - Lombalgia persistente' },
+        dispepsia_gastro: { esp: 'Gastroenterologia', cid: 'K30 - Dispepsia refratária / rastreio EDA' },
+        cefaleia_neuro: { esp: 'Neurologia', cid: 'G44.2 - Cefaleia crônica a esclarecer' },
+        saude_mental: { esp: 'Psiquiatria / CAPS', cid: 'F41.1 - Ansiedade / Humor persistente' },
+        checkup_geral: { esp: 'Clínica Médica Especializada', cid: 'Z00.0 - Avaliação especializada' }
+      };
+
+      const info = mapaEspecialidades[modeloEf] || { esp: 'Clínica Médica', cid: 'Rastreio clínico' };
+      const cidFinal = diagManual || info.cid;
+
+      const params = {
+        pacienteNome: paciente,
+        data: dataStr,
+        especialidade: info.esp,
+        motivo: queixa,
+        cid: cidFinal,
+        hda: 'Paciente com sintomas descritos: ' + queixa + '. PA aferida: ' + pa + ' mmHg.',
+        tratamentos: 'Medidas não farmacológicas e terapias de primeira linha da atenção primária instituídas.',
+        objetivoParecer: 'Avaliação especializada para seguimento e conduta complementar.'
+      };
+
+      let textoSisreg = '';
+      try {
+        const resp = await cockpitRpc('cockpitGerarEncaminhamentoTexto', [params]);
+        if (resp && resp.sucesso && resp.textoEncaminhamento) {
+          textoSisreg = resp.textoEncaminhamento;
+        }
+      } catch (e) {}
+
+      if (!textoSisreg) {
+        const linhas = [
+          '======================================================================',
+          '         GUIA DE ENCAMINHAMENTO / REFERÊNCIA AMBULATORIAL (SISREG)     ',
+          '======================================================================',
+          'Paciente: ' + paciente + ' | Data: ' + dataStr,
+          'Especialidade Solicitada: ' + info.esp.toUpperCase(),
+          'Prioridade Clínica: Regulada / Ambulatorial',
+          'Hipótese Diagnóstica / CID: ' + cidFinal,
+          '----------------------------------------------------------------------',
+          '1. MOTIVO DO ENCAMINHAMENTO:',
+          queixa,
+          '',
+          '2. RESUMO CLÍNICO E EXAME FÍSICO:',
+          'PA aferida: ' + pa + ' mmHg. Exame dirigido: ' + modeloEf.replace(/_/g, ' ') + '.',
+          '',
+          '3. TRATAMENTOS E CONDUTAS NA ATENÇÃO BÁSICA:',
+          'Medidas não farmacológicas e terapias de primeira linha da APS instituídas.',
+          '',
+          '4. OBJETIVO DO PARECER ESPECIALIZADO:',
+          'Avaliação especializada conjunta para seguimento e conduta complementar.',
+          '----------------------------------------------------------------------',
+          'Médico Solicitante: Dr. Wagner Moraes · CRM/SP',
+          '======================================================================'
+        ];
+        textoSisreg = linhas.join('\n');
+      }
+
+      copiarTextoClipboard(textoSisreg, 'Guia de Encaminhamento SISREG copiada para o PEP!');
     }
 
     function abrirModalAtestadoCFM() {
@@ -14805,6 +15475,7 @@
       configurarTecladosCalculadoras();
       configurarTecladosModaisAmbulatorioESbar();
       renderizarHistoricoCalculos();
+      restaurarFiltroAcoesRapidasSOAP();
       ['dva-resultado','sri-resultado','crcl-resultado','gaso-resultado','asma-resultado'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = 'Informe os parâmetros para calcular.';

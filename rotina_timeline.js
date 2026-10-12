@@ -158,22 +158,66 @@
     if (progressoBarra) progressoBarra.style.width = pct + '%';
   }
 
+  function converterHoraEmMinutos(horaStr) {
+    if (!horaStr || typeof horaStr !== 'string') return -1;
+    var partes = horaStr.split(':');
+    if (partes.length < 2) return -1;
+    var h = parseInt(partes[0], 10);
+    var m = parseInt(partes[1], 10);
+    if (isNaN(h) || isNaN(m)) return -1;
+    return h * 60 + m;
+  }
+
+  function formatarMinutosEmHora(minutosTotais) {
+    var minNorm = ((minutosTotais % 1440) + 1440) % 1440;
+    var h = Math.floor(minNorm / 60);
+    var m = minNorm % 60;
+    return ('0' + h).slice(-2) + ':' + ('0' + m).slice(-2);
+  }
+
+  function calcularEstadoTempoBloco(bloco) {
+    var agora = new Date();
+    var minAgora = agora.getHours() * 60 + agora.getMinutes();
+    var minIni = converterHoraEmMinutos(bloco.inicio);
+    var minFim = converterHoraEmMinutos(bloco.fim);
+    if (minIni < 0 || minFim < 0) return { emAndamento: false, rotulo: '' };
+
+    if (minAgora >= minIni && minAgora <= minFim) {
+      var restantes = minFim - minAgora;
+      return {
+        emAndamento: true,
+        rotulo: restantes <= 1 ? 'Terminando agora' : 'Restam ' + restantes + 'm'
+      };
+    }
+    if (minAgora < minIni && (minIni - minAgora) <= 30) {
+      return {
+        emAndamento: false,
+        rotulo: 'Inicia em ' + (minIni - minAgora) + 'm'
+      };
+    }
+    return { emAndamento: false, rotulo: '' };
+  }
+
   function criarCardBloco(bloco) {
     var catCfg = CATEGORIA_CONFIG[bloco.categoria] || CATEGORIA_CONFIG.compromisso;
     var stCfg = STATUS_CONFIG[bloco.status] || STATUS_CONFIG.pendente;
+    var tempoInfo = calcularEstadoTempoBloco(bloco);
+    var ehAtivoAgora = tempoInfo.emAndamento && bloco.status !== 'concluido' && bloco.status !== 'pulado';
 
     var card = document.createElement('div');
     card.id = 'card-' + bloco.id;
     card.className = 'glass-card p-3 rounded-xl transition duration-150 space-y-2 ' +
                      catCfg.borda + ' ' +
-                     (bloco.status === 'ativo' ? 'ring-1 ring-brand-400/50 bg-slate-900/90' : 'bg-slate-900/60');
+                     (ehAtivoAgora
+                       ? 'ring-1 ring-brand-400 bg-slate-900 shadow-md shadow-brand-500/10'
+                       : (bloco.status === 'ativo' ? 'ring-1 ring-brand-400/50 bg-slate-900/90' : 'bg-slate-900/60'));
 
     // Linha 1: Horário, Categoria e Badge de Status
     var topo = document.createElement('div');
     topo.className = 'flex items-center justify-between gap-2';
 
     var faixaHoraria = document.createElement('div');
-    faixaHoraria.className = 'flex items-center gap-2';
+    faixaHoraria.className = 'flex items-center gap-2 flex-wrap';
 
     var horaTexto = document.createElement('span');
     horaTexto.className = 'font-mono text-xs font-bold text-white tracking-wide';
@@ -184,6 +228,18 @@
     catBadge.textContent = catCfg.rotulo;
 
     faixaHoraria.append(horaTexto, catBadge);
+
+    if (ehAtivoAgora) {
+      var liveBadge = document.createElement('span');
+      liveBadge.className = 'text-[9px] px-1.5 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-1 animate-pulse';
+      liveBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> AGORA ' + (tempoInfo.rotulo ? '(' + tempoInfo.rotulo + ')' : '');
+      faixaHoraria.append(liveBadge);
+    } else if (tempoInfo.rotulo && bloco.status === 'pendente') {
+      var proxBadge = document.createElement('span');
+      proxBadge.className = 'text-[8.5px] px-1.5 py-0.5 rounded font-medium bg-slate-800 text-slate-300 border border-slate-700';
+      proxBadge.textContent = tempoInfo.rotulo;
+      faixaHoraria.append(proxBadge);
+    }
 
     var statusBadge = document.createElement('span');
     statusBadge.className = 'text-[9.5px] px-2 py-0.5 rounded-full font-bold ' + stCfg.classe;
@@ -226,8 +282,8 @@
       var btnAdiar = document.createElement('button');
       btnAdiar.type = 'button';
       btnAdiar.className = 'px-2 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition flex items-center gap-1';
-      btnAdiar.innerHTML = '<i data-lucide="clock" class="w-3 h-3"></i> Adiar';
-      btnAdiar.onclick = function() { RotinaTimeline.alterarStatus(bloco.id, 'adiado'); };
+      btnAdiar.innerHTML = '<i data-lucide="clock" class="w-3 h-3"></i> Adiar (+30m)';
+      btnAdiar.onclick = function() { RotinaTimeline.adiarBloco(bloco.id, 30); };
       acoes.append(btnAdiar);
     }
 
@@ -423,9 +479,85 @@
     }
   }
 
+  var QUEUE_KEY = 'rotina_fila_mutacoes_v1';
+
+  function enfileirarMutacaoOffline(blocoId, status, nota) {
+    try {
+      var fila = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+      fila.push({
+        blocoId: blocoId,
+        status: status,
+        nota: nota || '',
+        timestamp: Date.now()
+      });
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(fila));
+      atualizarBadgeSync('Salvo offline (' + fila.length + ' pendente' + (fila.length > 1 ? 's' : '') + ')', false);
+    } catch (_) {}
+  }
+
+  function processarFilaOffline() {
+    if (!navigator.onLine) return;
+    try {
+      var raw = localStorage.getItem(QUEUE_KEY);
+      if (!raw) return;
+      var fila = JSON.parse(raw);
+      if (!Array.isArray(fila) || fila.length === 0) return;
+
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/status';
+      var item = fila[0];
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+      }).then(function(res) {
+        if (res.ok) {
+          var filaAtual = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+          filaAtual.shift();
+          localStorage.setItem(QUEUE_KEY, JSON.stringify(filaAtual));
+          if (filaAtual.length > 0) {
+            processarFilaOffline();
+          } else {
+            atualizarBadgeSync('Sincronizado', true);
+          }
+        }
+      }).catch(function() {});
+    } catch (_) {}
+  }
+
+  function adiarBloco(blocoId, minutos) {
+    var minAdd = minutos || 30;
+    var blocoModificado = null;
+    for (var i = 0; i < estadoAtual.blocos.length; i++) {
+      var b = estadoAtual.blocos[i];
+      if (b.id === blocoId) {
+        var minIni = converterHoraEmMinutos(b.inicio);
+        var minFim = converterHoraEmMinutos(b.fim);
+        if (minIni >= 0) {
+          b.inicio = formatarMinutosEmHora(minIni + minAdd);
+        }
+        if (minFim >= 0) {
+          b.fim = formatarMinutosEmHora(minFim + minAdd);
+        }
+        b.status = 'adiado';
+        b.nota = (b.nota ? b.nota + ' · ' : '') + 'Adiado em ' + minAdd + 'm';
+        blocoModificado = b;
+        break;
+      }
+    }
+    if (blocoModificado) {
+      salvarBlocosLocais(estadoAtual.blocos);
+      renderizar(estadoAtual.blocos);
+      sincronizarStatusComBackend(blocoModificado.id, 'adiado', blocoModificado.nota);
+      if (typeof window.copiarToast === 'function') {
+        window.copiarToast('⏰ Bloco adiado para ' + blocoModificado.inicio + ' - ' + blocoModificado.fim);
+      }
+    }
+  }
+
   function sincronizarStatusComBackend(blocoId, status, nota) {
     if (!navigator.onLine) {
-      atualizarBadgeSync('Salvo offline', false);
+      enfileirarMutacaoOffline(blocoId, status, nota);
       return;
     }
     try {
@@ -437,26 +569,113 @@
       }).then(function(res) {
         if (res.ok) {
           atualizarBadgeSync('Sincronizado', true);
+          processarFilaOffline();
         } else {
-          atualizarBadgeSync('Salvo offline', false);
+          enfileirarMutacaoOffline(blocoId, status, nota);
         }
       }).catch(function() {
-        atualizarBadgeSync('Salvo offline', false);
+        enfileirarMutacaoOffline(blocoId, status, nota);
       });
     } catch (_) {
-      atualizarBadgeSync('Salvo offline', false);
+      enfileirarMutacaoOffline(blocoId, status, nota);
     }
+  }
+
+  function carregarBlocosDoServidor(callback) {
+    if (!navigator.onLine) {
+      if (typeof callback === 'function') callback(null);
+      return;
+    }
+    try {
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/blocos';
+      fetch(endpoint).then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }).then(function(data) {
+        if (data && data.sucesso && Array.isArray(data.blocos) && data.blocos.length > 0) {
+          salvarBlocosLocais(data.blocos);
+          renderizar(data.blocos);
+          atualizarBadgeSync('Google Calendar', true);
+        }
+        processarFilaOffline();
+        if (typeof callback === 'function') callback(data);
+      }).catch(function(err) {
+        console.warn('[RotinaTimeline] Erro ao carregar blocos do servidor:', err);
+        if (typeof callback === 'function') callback(null);
+      });
+    } catch (e) {
+      if (typeof callback === 'function') callback(null);
+    }
+  }
+
+  function sincronizarAgendaGoogle(callback) {
+    atualizarBadgeSync('Sincronizando...', false);
+    if (!navigator.onLine) {
+      atualizarBadgeSync('Offline', false);
+      if (typeof window.copiarToast === 'function') {
+        window.copiarToast('⚠️ Sem conexão para sincronizar com Google Calendar.');
+      }
+      if (typeof callback === 'function') callback(null);
+      return;
+    }
+
+    try {
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/agenda/sync';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      }).then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }).then(function(data) {
+        if (data && data.sucesso && Array.isArray(data.blocos)) {
+          salvarBlocosLocais(data.blocos);
+          renderizar(data.blocos);
+          atualizarBadgeSync('Google Calendar', true);
+          if (typeof window.copiarToast === 'function') {
+            window.copiarToast('📅 Sincronizado com o Google Calendar do Dr. Wagner (' + data.blocos.length + ' blocos)!');
+          }
+        }
+        processarFilaOffline();
+        if (typeof callback === 'function') callback(data);
+      }).catch(function(err) {
+        console.warn('[RotinaTimeline] Falha na sincronização da agenda:', err);
+        atualizarBadgeSync('Salvo offline', false);
+        if (typeof window.copiarToast === 'function') {
+          window.copiarToast('⚠️ Erro ao sincronizar com Google Calendar: ' + err.message);
+        }
+        if (typeof callback === 'function') callback(null);
+      });
+    } catch (e) {
+      atualizarBadgeSync('Salvo offline', false);
+      if (typeof callback === 'function') callback(null);
+    }
+  }
+
+  if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('online', function() {
+      processarFilaOffline();
+      carregarBlocosDoServidor();
+    });
   }
 
   // Exportação Pública do Módulo
   window.RotinaTimeline = {
     renderizar: renderizar,
     alterarStatus: alterarStatus,
+    adiarBloco: adiarBloco,
     ativarModoDescanso: ativarModoDescanso,
     aplicarFiltro: aplicarFiltro,
     carregarGradePadrao: carregarGradePadrao,
     carregarBlocosLocais: carregarBlocosLocais,
     salvarBlocosLocais: salvarBlocosLocais,
+    carregarBlocosDoServidor: carregarBlocosDoServidor,
+    sincronizarAgendaGoogle: sincronizarAgendaGoogle,
+    processarFilaOffline: processarFilaOffline,
+    converterHoraEmMinutos: converterHoraEmMinutos,
+    formatarMinutosEmHora: formatarMinutosEmHora,
+    calcularEstadoTempoBloco: calcularEstadoTempoBloco,
     normalizarBloco: normalizarBloco,
     CATEGORIA_CONFIG: CATEGORIA_CONFIG,
     STATUS_CONFIG: STATUS_CONFIG
