@@ -15,39 +15,39 @@
   var CATEGORIA_CONFIG = {
     plantao: {
       rotulo: 'Plantão / Enfermaria',
-      badgeCor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+      badgeCor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
       icone: 'stethoscope',
-      borda: 'border-l-4 border-l-emerald-500'
+      borda: 'border-l-[3.5px] border-l-emerald-500'
     },
     estudo: {
       rotulo: 'MedQuest & Anki',
-      badgeCor: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
+      badgeCor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
       icone: 'book-open',
-      borda: 'border-l-4 border-l-purple-500'
+      borda: 'border-l-[3.5px] border-l-purple-500'
     },
     treino: {
       rotulo: 'Treino & Bio',
-      badgeCor: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+      badgeCor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
       icone: 'dumbbell',
-      borda: 'border-l-4 border-l-amber-500'
+      borda: 'border-l-[3.5px] border-l-amber-500'
     },
     recuperacao: {
       rotulo: 'Recuperação / Sono',
-      badgeCor: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30',
+      badgeCor: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
       icone: 'moon',
-      borda: 'border-l-4 border-l-indigo-500'
+      borda: 'border-l-[3.5px] border-l-indigo-500'
     },
     lifestyle: {
       rotulo: 'Vida & Lifestyle',
-      badgeCor: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+      badgeCor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
       icone: 'heart',
-      borda: 'border-l-4 border-l-rose-500'
+      borda: 'border-l-[3.5px] border-l-rose-500'
     },
     compromisso: {
       rotulo: 'Compromisso',
-      badgeCor: 'bg-sky-500/10 text-sky-400 border-sky-500/30',
+      badgeCor: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
       icone: 'calendar',
-      borda: 'border-l-4 border-l-sky-500'
+      borda: 'border-l-[3.5px] border-l-sky-500'
     }
   };
 
@@ -59,12 +59,12 @@
     },
     ativo: {
       rotulo: 'Em Andamento',
-      classe: 'bg-sky-500/20 text-sky-300 border border-sky-500/40 ring-1 ring-sky-400/40 animate-pulse',
+      classe: 'bg-sky-500/20 text-sky-300 border border-sky-500/40 ring-1 ring-sky-400/40',
       icone: 'play-circle'
     },
     pendente: {
       rotulo: 'Pendente',
-      classe: 'bg-slate-800 text-slate-400 border border-slate-700',
+      classe: 'bg-slate-800/80 text-slate-300 border border-slate-700/80',
       icone: 'clock'
     },
     adiado: {
@@ -234,14 +234,22 @@
     var stCfg = STATUS_CONFIG[bloco.status] || STATUS_CONFIG.pendente;
     var tempoInfo = calcularEstadoTempoBloco(bloco);
     var ehAtivoAgora = tempoInfo.emAndamento && bloco.status !== 'concluido' && bloco.status !== 'pulado';
+    var ehConcluido = bloco.status === 'concluido';
+    var ehPulado = bloco.status === 'pulado';
 
     var card = document.createElement('div');
     card.id = 'card-' + bloco.id;
-    card.className = 'glass-card p-3 rounded-xl transition duration-150 space-y-2 ' +
+    card.className = 'glass-card p-3.5 rounded-2xl transition duration-150 space-y-2.5 ' +
                      catCfg.borda + ' ' +
                      (ehAtivoAgora
-                       ? 'ring-1 ring-brand-400 bg-slate-900 shadow-md shadow-brand-500/10'
-                       : (bloco.status === 'ativo' ? 'ring-1 ring-brand-400/50 bg-slate-900/90' : 'bg-slate-900/60'));
+                       ? 'ring-1.5 ring-brand-400 bg-slate-900/95 shadow-lg shadow-brand-500/10'
+                       : (ehConcluido
+                           ? 'bg-slate-950/60 border border-slate-800/60 opacity-80'
+                           : (ehPulado
+                               ? 'bg-slate-950/50 border border-slate-800/40 opacity-60'
+                               : (bloco.status === 'ativo'
+                                   ? 'ring-1 ring-brand-400/50 bg-slate-900/90'
+                                   : 'bg-slate-900/70 hover:bg-slate-900/90 border border-slate-800/80'))));
 
     // Linha 1: Horário, Categoria e Badge de Status
     var topo = document.createElement('div');
@@ -250,25 +258,29 @@
     var faixaHoraria = document.createElement('div');
     faixaHoraria.className = 'flex items-center gap-2 flex-wrap';
 
+    var iconeCat = document.createElement('i');
+    iconeCat.setAttribute('data-lucide', catCfg.icone);
+    iconeCat.className = 'w-3.5 h-3.5 ' + (ehAtivoAgora ? 'text-brand-400' : 'text-slate-400');
+
     var horaTexto = document.createElement('span');
-    horaTexto.className = 'font-mono text-xs font-bold text-white tracking-wide';
+    horaTexto.className = 'font-mono text-xs sm:text-[13px] font-bold text-white tracking-tight';
     horaTexto.textContent = bloco.inicio + (bloco.fim ? ' - ' + bloco.fim : '');
 
     var catBadge = document.createElement('span');
-    catBadge.className = 'text-[9px] px-1.5 py-0.5 rounded font-medium border ' + catCfg.badgeCor;
+    catBadge.className = 'text-[9.5px] px-2 py-0.5 rounded-md font-semibold border ' + catCfg.badgeCor;
     catBadge.textContent = catCfg.rotulo;
 
-    faixaHoraria.append(horaTexto, catBadge);
+    faixaHoraria.append(iconeCat, horaTexto, catBadge);
 
     if (ehAtivoAgora) {
       var liveBadge = document.createElement('span');
-      liveBadge.className = 'text-[9px] px-1.5 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-1 animate-pulse';
-      liveBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> AGORA ' + (tempoInfo.rotulo ? '(' + tempoInfo.rotulo + ')' : '');
+      liveBadge.className = 'text-[9.5px] px-2 py-0.5 rounded-md font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-1.5';
+      liveBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span> AGORA' + (tempoInfo.rotulo ? ' · ' + tempoInfo.rotulo : '');
       faixaHoraria.append(liveBadge);
     } else if (tempoInfo.rotulo && bloco.status === 'pendente') {
       var proxBadge = document.createElement('span');
-      proxBadge.className = 'text-[8.5px] px-1.5 py-0.5 rounded font-medium bg-slate-800 text-slate-300 border border-slate-700';
-      proxBadge.textContent = tempoInfo.rotulo;
+      proxBadge.className = 'text-[9px] px-1.5 py-0.5 rounded-md font-medium bg-slate-800/90 text-slate-300 border border-slate-700/80';
+      proxBadge.textContent = '⏱️ ' + tempoInfo.rotulo;
       faixaHoraria.append(proxBadge);
     }
 
@@ -281,30 +293,30 @@
 
     // Linha 2: Título e Notas/Instruções
     var corpo = document.createElement('div');
-    corpo.className = 'space-y-0.5';
+    corpo.className = 'space-y-1';
 
     var tituloEl = document.createElement('h4');
-    tituloEl.className = 'text-xs sm:text-sm font-bold text-white flex items-center gap-1.5';
+    tituloEl.className = 'text-xs sm:text-sm font-bold ' + (ehConcluido ? 'text-slate-300 line-through' : 'text-white') + ' flex items-center gap-1.5';
     tituloEl.textContent = bloco.titulo;
     corpo.append(tituloEl);
 
     if (bloco.nota) {
       var notaEl = document.createElement('p');
-      notaEl.className = 'text-[11px] text-slate-300 font-medium leading-relaxed pl-1 border-l border-slate-700';
+      notaEl.className = 'text-[11px] sm:text-xs text-slate-300/90 font-normal leading-relaxed pl-2 py-1 rounded bg-slate-950/40 border-l-2 border-slate-700/80';
       notaEl.textContent = bloco.nota;
       corpo.append(notaEl);
     }
     card.append(corpo);
 
-    // Linha 3: Barra de Ações Rápidas em 1 Toque
+    // Linha 3: Barra de Ações Rápidas em 1 Toque (Alvos táteis confortáveis ≥ 34px)
     var acoes = document.createElement('div');
-    acoes.className = 'flex items-center justify-end gap-1.5 pt-1 border-t border-slate-800/80 text-[10px] font-medium';
+    acoes.className = 'flex items-center justify-end gap-2 pt-1.5 border-t border-slate-800/80 text-xs font-semibold';
 
     if (bloco.status !== 'concluido') {
       var btnConcluir = document.createElement('button');
       btnConcluir.type = 'button';
-      btnConcluir.className = 'px-2 py-1 rounded bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition flex items-center gap-1';
-      btnConcluir.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Concluir';
+      btnConcluir.className = 'min-h-[34px] px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 transition active:scale-95 flex items-center gap-1.5 shadow-sm';
+      btnConcluir.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Concluir';
       btnConcluir.onclick = function() { RotinaTimeline.alterarStatus(bloco.id, 'concluido'); };
       acoes.append(btnConcluir);
     }
@@ -312,8 +324,8 @@
     if (bloco.status !== 'adiado' && bloco.status !== 'concluido') {
       var btnAdiar = document.createElement('button');
       btnAdiar.type = 'button';
-      btnAdiar.className = 'px-2 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition flex items-center gap-1';
-      btnAdiar.innerHTML = '<i data-lucide="clock" class="w-3 h-3"></i> Adiar (+30m)';
+      btnAdiar.className = 'min-h-[34px] px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition active:scale-95 flex items-center gap-1.5 shadow-sm';
+      btnAdiar.innerHTML = '<i data-lucide="clock" class="w-3.5 h-3.5"></i> Adiar (+30m)';
       btnAdiar.onclick = function() { RotinaTimeline.adiarBloco(bloco.id, 30); };
       acoes.append(btnAdiar);
     }
@@ -321,8 +333,8 @@
     if (bloco.status !== 'pulado' && bloco.status !== 'concluido') {
       var btnPular = document.createElement('button');
       btnPular.type = 'button';
-      btnPular.className = 'px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 transition flex items-center gap-1';
-      btnPular.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i> Pular';
+      btnPular.className = 'min-h-[34px] px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 transition active:scale-95 flex items-center gap-1';
+      btnPular.innerHTML = '<i data-lucide="x" class="w-3.5 h-3.5"></i> Pular';
       btnPular.onclick = function() { RotinaTimeline.alterarStatus(bloco.id, 'pulado'); };
       acoes.append(btnPular);
     }
@@ -330,8 +342,8 @@
     if (bloco.status === 'concluido' || bloco.status === 'pulado') {
       var btnReabrir = document.createElement('button');
       btnReabrir.type = 'button';
-      btnReabrir.className = 'px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1';
-      btnReabrir.innerHTML = '<i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reabrir';
+      btnReabrir.className = 'min-h-[34px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition active:scale-95 flex items-center gap-1.5 shadow-sm';
+      btnReabrir.innerHTML = '<i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reabrir Bloco';
       btnReabrir.onclick = function() { RotinaTimeline.alterarStatus(bloco.id, 'pendente'); };
       acoes.append(btnReabrir);
     }
@@ -451,9 +463,9 @@
     botoes.forEach(function(btn) {
       var cat = btn.getAttribute('data-filtro') || 'todos';
       if (cat === estadoAtual.filtroAtivo) {
-        btn.className = 'btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition';
+        btn.className = 'btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition active:scale-95 shadow-sm';
       } else {
-        btn.className = 'btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition';
+        btn.className = 'btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95';
       }
     });
 
@@ -524,6 +536,75 @@
   }
 
   var QUEUE_KEY = 'rotina_fila_mutacoes_v1';
+  var filaProcessando = false;
+
+  function obterFilaOffline() {
+    try {
+      var raw = localStorage.getItem(QUEUE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  function obterStatusFilaOffline() {
+    var fila = obterFilaOffline();
+    return {
+      pendencias: fila.length,
+      processando: filaProcessando || false
+    };
+  }
+
+  function salvarBlocosOfflineAsync(blocos, dataISO) {
+    return new Promise(function(resolve) {
+      salvarBlocosLocais(blocos, dataISO);
+      var alvoData = dataISO || estadoAtual.dataISO || obterDataISO('hoje');
+      var chaveData = STORAGE_KEY + '_' + alvoData;
+
+      if (typeof window !== 'undefined' && window.localDb && typeof window.localDb.table === 'function') {
+        try {
+          window.localDb.table('snapshots').put({
+            chave: chaveData,
+            payload: JSON.stringify(blocos),
+            atualizadoEm: Date.now()
+          }).then(function() {
+            resolve(true);
+          }).catch(function() {
+            resolve(true);
+          });
+          return;
+        } catch (_) {}
+      }
+      resolve(true);
+    });
+  }
+
+  function carregarBlocosOfflineAsync(dataISO) {
+    return new Promise(function(resolve) {
+      var alvoData = dataISO || estadoAtual.dataISO || obterDataISO('hoje');
+      var chaveData = STORAGE_KEY + '_' + alvoData;
+
+      if (typeof window !== 'undefined' && window.localDb && typeof window.localDb.table === 'function') {
+        try {
+          window.localDb.table('snapshots').get(chaveData).then(function(item) {
+            if (item && item.payload) {
+              var parsed = JSON.parse(item.payload);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                return resolve(parsed.map(normalizarBloco));
+              }
+            }
+            resolve(carregarBlocosLocais(alvoData));
+          }).catch(function() {
+            resolve(carregarBlocosLocais(alvoData));
+          });
+          return;
+        } catch (_) {}
+      }
+      resolve(carregarBlocosLocais(alvoData));
+    });
+  }
 
   function enfileirarMutacaoOffline(blocoId, status, nota) {
     try {
@@ -536,17 +617,29 @@
       });
       localStorage.setItem(QUEUE_KEY, JSON.stringify(fila));
       atualizarBadgeSync('Salvo offline (' + fila.length + ' pendente' + (fila.length > 1 ? 's' : '') + ')', false);
+
+      if (typeof window !== 'undefined' && window.localDb && typeof window.localDb.table === 'function') {
+        try {
+          window.localDb.table('syncQueue').add({
+            acao: 'rotina_status',
+            payload: JSON.stringify({ blocoId: blocoId, status: status, nota: nota }),
+            status: 'pendente',
+            criadoEm: Date.now()
+          }).catch(function() {});
+        } catch (_) {}
+      }
     } catch (_) {}
   }
 
   function processarFilaOffline() {
-    if (!navigator.onLine) return;
+    if (!navigator.onLine || filaProcessando) return;
     try {
       var raw = localStorage.getItem(QUEUE_KEY);
       if (!raw) return;
       var fila = JSON.parse(raw);
       if (!Array.isArray(fila) || fila.length === 0) return;
 
+      filaProcessando = true;
       var endpoint = (window.BACKEND_URL || '') + '/api/rotina/status';
       var item = fila[0];
 
@@ -555,6 +648,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(item)
       }).then(function(res) {
+        filaProcessando = false;
         if (res.ok) {
           var filaAtual = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
           filaAtual.shift();
@@ -565,8 +659,12 @@
             atualizarBadgeSync('Sincronizado', true);
           }
         }
-      }).catch(function() {});
-    } catch (_) {}
+      }).catch(function() {
+        filaProcessando = false;
+      });
+    } catch (_) {
+      filaProcessando = false;
+    }
   }
 
   function adiarBloco(blocoId, minutos) {
@@ -804,13 +902,13 @@
 
       var btnCheck = document.createElement('button');
       btnCheck.type = 'button';
-      btnCheck.className = 'px-2 py-1 rounded-lg text-[10.5px] font-bold shrink-0 transition flex items-center gap-1 ' +
+      btnCheck.className = 'min-h-[30px] px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition active:scale-95 flex items-center gap-1.5 shadow-sm ' +
         (item.resolvida
-          ? 'bg-slate-800 text-slate-400 hover:text-slate-300'
-          : 'bg-purple-500/20 hover:bg-emerald-500/20 text-purple-300 hover:text-emerald-300 border border-purple-500/30 hover:border-emerald-500/40');
+          ? 'bg-slate-800 text-slate-400 hover:text-slate-300 border border-slate-700/60'
+          : 'bg-purple-500/20 hover:bg-emerald-500/20 text-purple-200 hover:text-emerald-300 border border-purple-500/35 hover:border-emerald-500/40');
       btnCheck.innerHTML = item.resolvida
-        ? '<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Revisada'
-        : '<i data-lucide="check" class="w-3 h-3"></i> Concluir';
+        ? '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Revisada'
+        : '<i data-lucide="check" class="w-3.5 h-3.5"></i> Concluir';
 
       btnCheck.onclick = function(e) {
         e.stopPropagation();
@@ -1021,6 +1119,11 @@
     resolverDuvidaCockpit: resolverDuvidaCockpit,
     alternarGavetaDuvidas: alternarGavetaDuvidas,
     iniciarPollingSuave: iniciarPollingSuave,
+    salvarBlocosOfflineAsync: salvarBlocosOfflineAsync,
+    carregarBlocosOfflineAsync: carregarBlocosOfflineAsync,
+    obterFilaOffline: obterFilaOffline,
+    obterStatusFilaOffline: obterStatusFilaOffline,
+    enfileirarMutacaoOffline: enfileirarMutacaoOffline,
     CATEGORIA_CONFIG: CATEGORIA_CONFIG,
     STATUS_CONFIG: STATUS_CONFIG
   };

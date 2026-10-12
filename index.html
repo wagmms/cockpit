@@ -1756,7 +1756,7 @@
             type="button"
             id="btn-rotina-data-hoje"
             onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData('hoje');"
-            class="py-1.5 px-3 rounded-lg font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition flex items-center justify-center gap-1.5 shadow-sm"
+            class="min-h-[38px] py-2 px-3 rounded-lg font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm"
           >
             <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-400"></i>
             Hoje
@@ -1765,7 +1765,7 @@
             type="button"
             id="btn-rotina-data-amanha"
             onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData('amanha');"
-            class="py-1.5 px-3 rounded-lg font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition flex items-center justify-center gap-1.5"
+            class="min-h-[38px] py-2 px-3 rounded-lg font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:text-white transition active:scale-95 flex items-center justify-center gap-1.5"
           >
             <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-400"></i>
             Amanhã
@@ -1780,7 +1780,7 @@
               <span id="rotina-contador-concluidos">0</span> / <span id="rotina-contador-total">0</span> concluídos
             </span>
           </div>
-          <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+          <div class="w-full h-2 bg-slate-800/80 rounded-full overflow-hidden">
             <div id="rotina-barra-progresso" class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
           </div>
         </div>
@@ -1790,7 +1790,7 @@
           <button
             type="button"
             onclick="if(window.RotinaTimeline) RotinaTimeline.ativarModoDescanso();"
-            class="flex-1 py-1.5 px-2.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+            class="flex-1 min-h-[38px] py-2 px-3 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm"
           >
             <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
             Modo Descanso
@@ -1798,7 +1798,7 @@
           <button
             type="button"
             onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();"
-            class="flex-1 py-1.5 px-2.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+            class="flex-1 min-h-[38px] py-2 px-3 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm"
           >
             <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
             Dúvidas MedQuest
@@ -1807,7 +1807,7 @@
             type="button"
             onclick="if(window.RotinaTimeline) (RotinaTimeline.carregarGradePadraoComConfirmacao ? RotinaTimeline.carregarGradePadraoComConfirmacao() : RotinaTimeline.carregarGradePadrao());"
             title="Carregar grade padrão fixa (com aviso de confirmação)"
-            class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 text-[11px] transition flex items-center justify-center"
+            class="min-h-[38px] min-w-[38px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs transition active:scale-95 flex items-center justify-center shadow-sm"
           >
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-400"></i>
           </button>
@@ -1861,7 +1861,7 @@
           type="button"
           data-filtro="todos"
           onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('todos');"
-          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition whitespace-nowrap"
+          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition active:scale-95 whitespace-nowrap shadow-sm"
         >
           Todos
         </button>
@@ -1869,7 +1869,7 @@
           type="button"
           data-filtro="plantao"
           onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('plantao');"
-          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
         >
           Plantão / Hospital
         </button>
@@ -1877,7 +1877,7 @@
           type="button"
           data-filtro="estudo"
           onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('estudo');"
-          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
         >
           MedQuest & Anki
         </button>
@@ -1885,7 +1885,7 @@
           type="button"
           data-filtro="treino"
           onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('treino');"
-          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
         >
           Treino & Bio
         </button>
@@ -1893,7 +1893,7 @@
           type="button"
           data-filtro="lifestyle"
           onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('lifestyle');"
-          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
         >
           🎸 Vida & Lifestyle
         </button>
