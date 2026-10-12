@@ -1750,10 +1750,32 @@
           </div>
         </div>
 
+        <!-- Seletor de Data: Hoje vs Amanhã -->
+        <div class="grid grid-cols-2 gap-2 p-1 bg-slate-950/70 rounded-xl border border-slate-800/80 text-xs">
+          <button
+            type="button"
+            id="btn-rotina-data-hoje"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData('hoje');"
+            class="py-1.5 px-3 rounded-lg font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-400"></i>
+            Hoje
+          </button>
+          <button
+            type="button"
+            id="btn-rotina-data-amanha"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData('amanha');"
+            class="py-1.5 px-3 rounded-lg font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition flex items-center justify-center gap-1.5"
+          >
+            <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-400"></i>
+            Amanhã
+          </button>
+        </div>
+
         <!-- Indicador de Metas & Conclusão de Blocos do Dia -->
         <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
           <div class="flex items-center justify-between text-[11px]">
-            <span class="text-slate-300 font-medium">Progresso dos Blocos de Hoje</span>
+            <span id="rotina-label-progresso" class="text-slate-300 font-medium">Progresso dos Blocos de Hoje</span>
             <span class="font-mono text-white font-bold">
               <span id="rotina-contador-concluidos">0</span> / <span id="rotina-contador-total">0</span> concluídos
             </span>
@@ -1775,12 +1797,61 @@
           </button>
           <button
             type="button"
-            onclick="if(window.RotinaTimeline) RotinaTimeline.carregarGradePadrao();"
-            class="py-1.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[11px] font-medium transition flex items-center gap-1.5"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();"
+            class="flex-1 py-1.5 px-2.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            Dúvidas MedQuest
+          </button>
+          <button
+            type="button"
+            onclick="if(window.RotinaTimeline) (RotinaTimeline.carregarGradePadraoComConfirmacao ? RotinaTimeline.carregarGradePadraoComConfirmacao() : RotinaTimeline.carregarGradePadrao());"
+            title="Carregar grade padrão fixa (com aviso de confirmação)"
+            class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 text-[11px] transition flex items-center justify-center"
           >
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-400"></i>
-            Grade Padrão
           </button>
+        </div>
+      </div>
+
+      <!-- Gaveta de Dúvidas MedQuest (Sincronizada com o Telegram) -->
+      <div id="rotina-duvidas-card" class="glass-card-accent rounded-2xl p-3 space-y-2 border border-purple-500/20 bg-gradient-to-br from-purple-950/20 via-slate-900 to-slate-950">
+        <div class="flex items-center justify-between cursor-pointer" onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center ring-1 ring-purple-500/30">
+              <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            </div>
+            <span class="text-xs font-bold text-white flex items-center gap-1.5">
+              Dúvidas MedQuest & Residência
+              <span id="duvidas-contador-badge" class="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">0</span>
+            </span>
+          </div>
+          <button type="button" id="btn-toggle-gaveta-duvidas" class="text-slate-400 hover:text-slate-200 text-xs">
+            <i data-lucide="chevron-down" id="icone-toggle-duvidas" class="w-4 h-4 transition duration-200"></i>
+          </button>
+        </div>
+
+        <!-- Conteúdo Expansível da Gaveta (inicia aberto) -->
+        <div id="rotina-duvidas-conteudo" class="space-y-2 pt-1 border-t border-purple-500/10">
+          <div class="flex items-center gap-1.5">
+            <input
+              type="text"
+              id="input-nova-duvida-cockpit"
+              placeholder="Anotar dúvida médica (ex: Critérios de Light...)"
+              class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"
+              onkeydown="if(event.key === 'Enter' && window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
+            />
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
+              class="px-2.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-xs font-bold transition flex items-center gap-1"
+            >
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Salvar
+            </button>
+          </div>
+          <div id="rotina-duvidas-lista" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar text-xs">
+            <div class="text-[11px] text-slate-400 text-center py-2">Carregando dúvidas salvas...</div>
+          </div>
         </div>
       </div>
 
@@ -1817,6 +1888,14 @@
           class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
         >
           Treino & Bio
+        </button>
+        <button
+          type="button"
+          data-filtro="lifestyle"
+          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('lifestyle');"
+          class="btn-filtro-rotina px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200 transition whitespace-nowrap"
+        >
+          🎸 Vida & Lifestyle
         </button>
       </div>
 
@@ -4401,6 +4480,14 @@
           if (tabId === 'tab-corpo') {
             inicializarPlanoNutricional();
             inicializarGraficoCorpo();
+          }
+          if (tabId === 'tab-rotina') {
+            if (window.RotinaTimeline && typeof window.RotinaTimeline.carregarBlocosDoServidor === 'function') {
+              window.RotinaTimeline.carregarBlocosDoServidor();
+            }
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+              setTimeout(function() { window.lucide.createIcons(); }, 50);
+            }
           }
         }
       }

@@ -10,6 +10,7 @@
 
   var STORAGE_KEY = 'rotina_blocos_v1';
   var SYNC_STATE_KEY = 'rotina_sync_status_v1';
+  var STORAGE_KEY_DUVIDAS = 'rotina_duvidas_v1';
 
   var CATEGORIA_CONFIG = {
     plantao: {
@@ -35,6 +36,12 @@
       badgeCor: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30',
       icone: 'moon',
       borda: 'border-l-4 border-l-indigo-500'
+    },
+    lifestyle: {
+      rotulo: 'Vida & Lifestyle',
+      badgeCor: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+      icone: 'heart',
+      borda: 'border-l-4 border-l-rose-500'
     },
     compromisso: {
       rotulo: 'Compromisso',
@@ -77,10 +84,23 @@
     }
   };
 
+  function obterDataISO(modo) {
+    var d = new Date();
+    if (modo === 'amanha') {
+      d.setDate(d.getDate() + 1);
+    }
+    var y = d.getFullYear();
+    var m = ('0' + (d.getMonth() + 1)).slice(-2);
+    var dia = ('0' + d.getDate()).slice(-2);
+    return y + '-' + m + '-' + dia;
+  }
+
   var estadoAtual = {
     blocos: [],
     filtroAtivo: 'todos',
-    ultimoSync: null
+    ultimoSync: null,
+    modoData: 'hoje',
+    dataISO: obterDataISO('hoje')
   };
 
   function normalizarBloco(raw, idx) {
@@ -95,6 +115,7 @@
       else if (/medquest|anki|estudo|quest[õo]es|aula/i.test(titulo)) categoria = 'estudo';
       else if (/treino|academia|cardio|muscula/i.test(titulo)) categoria = 'treino';
       else if (/sono|descanso|cochilo|recupera/i.test(titulo)) categoria = 'recuperacao';
+      else if (/viol[aã]o|m[uú]sica|guitarra|lazer|leitura|livro|pessoal|hobby|ingl[eê]s|fam[ií]lia|lifestyle|vida/i.test(titulo)) categoria = 'lifestyle';
       else categoria = 'compromisso';
     }
 
@@ -113,9 +134,14 @@
     };
   }
 
-  function carregarBlocosLocais() {
+  function carregarBlocosLocais(dataISO) {
+    var alvoData = dataISO || estadoAtual.dataISO || obterDataISO('hoje');
+    var chaveData = STORAGE_KEY + '_' + alvoData;
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
+      var raw = localStorage.getItem(chaveData);
+      if (!raw && alvoData === obterDataISO('hoje')) {
+        raw = localStorage.getItem(STORAGE_KEY);
+      }
       if (raw) {
         var parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -126,9 +152,14 @@
     return [];
   }
 
-  function salvarBlocosLocais(blocos) {
+  function salvarBlocosLocais(blocos, dataISO) {
+    var alvoData = dataISO || estadoAtual.dataISO || obterDataISO('hoje');
+    var chaveData = STORAGE_KEY + '_' + alvoData;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(blocos));
+      localStorage.setItem(chaveData, JSON.stringify(blocos));
+      if (alvoData === obterDataISO('hoje')) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(blocos));
+      }
       atualizarBadgeSync('Salvo offline');
     } catch (_) {}
   }
@@ -310,31 +341,32 @@
   }
 
   function renderizarEmptyState(container) {
+    var ehAmanha = estadoAtual.modoData === 'amanha';
     var box = document.createElement('div');
-    box.className = 'glass-card p-6 rounded-2xl text-center space-y-3 border border-slate-800';
+    box.className = 'glass-card p-6 rounded-2xl text-center space-y-3 border border-slate-800 bg-slate-900/40';
 
     var iconeWrap = document.createElement('div');
     iconeWrap.className = 'w-10 h-10 mx-auto rounded-full bg-brand-500/10 text-brand-400 flex items-center justify-center';
-    iconeWrap.innerHTML = '<i data-lucide="calendar-check" class="w-5 h-5"></i>';
+    iconeWrap.innerHTML = '<i data-lucide="calendar" class="w-5 h-5"></i>';
 
     var tit = document.createElement('h4');
     tit.className = 'text-xs sm:text-sm font-bold text-white';
-    tit.textContent = 'Nenhum bloco agendado para hoje';
+    tit.textContent = ehAmanha ? 'Nenhum compromisso agendado para amanhã' : 'Nenhum compromisso agendado para hoje';
 
     var desc = document.createElement('p');
     desc.className = 'text-[11px] text-slate-400 max-w-xs mx-auto leading-relaxed';
-    desc.textContent = 'Sua grade de plantão, rodízio e estudos MedQuest pode ser sincronizada via Agenda Google ou ajustada diretamente no bot Telegram.';
+    desc.textContent = 'Seus eventos e sessões de estudo da Agenda Google (moraes.wagg@gmail.com) são sincronizados em tempo real.';
 
     var acoes = document.createElement('div');
     acoes.className = 'flex items-center justify-center gap-2 pt-2';
 
-    var btnGrade = document.createElement('button');
-    btnGrade.type = 'button';
-    btnGrade.className = 'px-3 py-1.5 rounded-lg bg-brand-500/20 text-brand-300 border border-brand-500/40 text-xs font-bold hover:bg-brand-500/30 transition flex items-center gap-1.5';
-    btnGrade.innerHTML = '<i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Carregar Grade Padrão';
-    btnGrade.onclick = function() { RotinaTimeline.carregarGradePadrao(); };
+    var btnSync = document.createElement('button');
+    btnSync.type = 'button';
+    btnSync.className = 'px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold hover:bg-emerald-500/30 transition flex items-center gap-1.5';
+    btnSync.innerHTML = '<i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Sincronizar Google Calendar';
+    btnSync.onclick = function() { RotinaTimeline.sincronizarAgendaGoogle(); };
 
-    acoes.append(btnGrade);
+    acoes.append(btnSync);
     box.append(iconeWrap, tit, desc, acoes);
     container.append(box);
   }
@@ -344,9 +376,9 @@
     var container = document.getElementById(cId);
     if (!container) return;
 
-    var lista = Array.isArray(blocosEntrada) && blocosEntrada.length > 0
+    var lista = Array.isArray(blocosEntrada)
       ? blocosEntrada.map(normalizarBloco)
-      : carregarBlocosLocais();
+      : carregarBlocosLocais(estadoAtual.dataISO);
 
     estadoAtual.blocos = lista;
     renderizarHeaderContadores(lista);
@@ -479,6 +511,18 @@
     }
   }
 
+  function carregarGradePadraoComConfirmacao() {
+    var confirmou = false;
+    if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
+      confirmou = window.confirm('Deseja realmente carregar a grade diária padrão fixa?\n\nIsso irá substituir os blocos do dia atual no Cockpit.');
+    } else {
+      confirmou = true;
+    }
+    if (confirmou) {
+      carregarGradePadrao();
+    }
+  }
+
   var QUEUE_KEY = 'rotina_fila_mutacoes_v1';
 
   function enfileirarMutacaoOffline(blocoId, status, nota) {
@@ -581,19 +625,57 @@
     }
   }
 
-  function carregarBlocosDoServidor(callback) {
+  function alternarData(modo) {
+    var novoModo = (modo === 'amanha') ? 'amanha' : 'hoje';
+    estadoAtual.modoData = novoModo;
+    estadoAtual.dataISO = obterDataISO(novoModo);
+
+    var btnHoje = document.getElementById('btn-rotina-data-hoje');
+    var btnAmanha = document.getElementById('btn-rotina-data-amanha');
+    var labelProgresso = document.getElementById('rotina-label-progresso');
+
+    if (btnHoje && btnAmanha) {
+      if (novoModo === 'hoje') {
+        btnHoje.className = 'py-1.5 px-3 rounded-lg font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition flex items-center justify-center gap-1.5';
+        btnAmanha.className = 'py-1.5 px-3 rounded-lg font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition flex items-center justify-center gap-1.5';
+      } else {
+        btnAmanha.className = 'py-1.5 px-3 rounded-lg font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 transition flex items-center justify-center gap-1.5';
+        btnHoje.className = 'py-1.5 px-3 rounded-lg font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition flex items-center justify-center gap-1.5';
+      }
+    }
+
+    if (labelProgresso) {
+      labelProgresso.textContent = novoModo === 'hoje' ? 'Progresso dos Blocos de Hoje' : 'Compromissos e Estudos de Amanhã';
+    }
+
+    // Renderiza blocos locais salvos para feedback imediato (0ms)
+    var blocosLocais = carregarBlocosLocais(estadoAtual.dataISO);
+    renderizar(blocosLocais);
+
+    // Atualiza com dados frescos do Google Calendar
+    carregarBlocosDoServidor(estadoAtual.dataISO);
+  }
+
+  function carregarBlocosDoServidor(dataISO, callback) {
+    if (typeof dataISO === 'function') {
+      callback = dataISO;
+      dataISO = null;
+    }
+    var targetDateISO = dataISO || estadoAtual.dataISO || obterDataISO('hoje');
+    estadoAtual.dataISO = targetDateISO;
+
     if (!navigator.onLine) {
       if (typeof callback === 'function') callback(null);
       return;
     }
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/blocos';
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/blocos?data=' + encodeURIComponent(targetDateISO);
       fetch(endpoint).then(function(res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       }).then(function(data) {
-        if (data && data.sucesso && Array.isArray(data.blocos) && data.blocos.length > 0) {
-          salvarBlocosLocais(data.blocos);
+        if (data && data.sucesso && Array.isArray(data.blocos)) {
+          salvarBlocosLocais(data.blocos, targetDateISO);
           renderizar(data.blocos);
           atualizarBadgeSync('Google Calendar', true);
         }
@@ -609,6 +691,7 @@
   }
 
   function sincronizarAgendaGoogle(callback) {
+    var targetDateISO = estadoAtual.dataISO || obterDataISO('hoje');
     atualizarBadgeSync('Sincronizando...', false);
     if (!navigator.onLine) {
       atualizarBadgeSync('Offline', false);
@@ -624,13 +707,13 @@
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
+        body: JSON.stringify({ data: targetDateISO })
       }).then(function(res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       }).then(function(data) {
         if (data && data.sucesso && Array.isArray(data.blocos)) {
-          salvarBlocosLocais(data.blocos);
+          salvarBlocosLocais(data.blocos, targetDateISO);
           renderizar(data.blocos);
           atualizarBadgeSync('Google Calendar', true);
           if (typeof window.copiarToast === 'function') {
@@ -653,21 +736,274 @@
     }
   }
 
+  // ==========================================
+  // Gaveta de Dúvidas MedQuest & Residência
+  // ==========================================
+
+  function carregarDuvidasLocais() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY_DUVIDAS);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  function salvarDuvidasLocais(duvidas) {
+    try {
+      localStorage.setItem(STORAGE_KEY_DUVIDAS, JSON.stringify(duvidas || []));
+    } catch (_) {}
+  }
+
+  function renderizarDuvidas(duvidasEntrada) {
+    var container = document.getElementById('rotina-duvidas-lista');
+    var badgeContador = document.getElementById('duvidas-contador-badge');
+    var duvidas = Array.isArray(duvidasEntrada) ? duvidasEntrada : carregarDuvidasLocais();
+
+    var pendentes = duvidas.filter(function(d) { return !d.resolvida; });
+    if (badgeContador) {
+      badgeContador.textContent = String(pendentes.length);
+      if (pendentes.length > 0) {
+        badgeContador.className = 'text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-purple-500/30 text-purple-200 border border-purple-500/40';
+      } else {
+        badgeContador.className = 'text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-slate-800 text-slate-400 border border-slate-700';
+      }
+    }
+
+    if (!container) return;
+    container.replaceChildren();
+
+    if (duvidas.length === 0) {
+      var vazio = document.createElement('div');
+      vazio.className = 'text-[11px] text-slate-400 text-center py-2.5 italic';
+      vazio.textContent = 'Nenhuma dúvida anotada. Registre temas de questões ou plantão para revisar!';
+      container.append(vazio);
+      return;
+    }
+
+    duvidas.forEach(function(item) {
+      var row = document.createElement('div');
+      row.className = 'flex items-center justify-between gap-2 p-2 rounded-xl transition ' +
+        (item.resolvida
+          ? 'bg-slate-900/40 border border-slate-800 text-slate-500'
+          : 'bg-slate-900/80 border border-purple-500/20 text-slate-200 hover:border-purple-500/40');
+
+      var corpo = document.createElement('div');
+      corpo.className = 'flex-1 min-w-0 flex items-start gap-2';
+
+      var bullet = document.createElement('span');
+      bullet.className = 'mt-1 w-1.5 h-1.5 rounded-full shrink-0 ' + (item.resolvida ? 'bg-slate-600' : 'bg-purple-400');
+
+      var texto = document.createElement('p');
+      texto.className = 'text-[11.5px] leading-tight break-words ' + (item.resolvida ? 'line-through text-slate-500' : 'text-slate-100 font-medium');
+      texto.textContent = item.texto || item.duvida || 'Sem texto';
+
+      corpo.append(bullet, texto);
+
+      var btnCheck = document.createElement('button');
+      btnCheck.type = 'button';
+      btnCheck.className = 'px-2 py-1 rounded-lg text-[10.5px] font-bold shrink-0 transition flex items-center gap-1 ' +
+        (item.resolvida
+          ? 'bg-slate-800 text-slate-400 hover:text-slate-300'
+          : 'bg-purple-500/20 hover:bg-emerald-500/20 text-purple-300 hover:text-emerald-300 border border-purple-500/30 hover:border-emerald-500/40');
+      btnCheck.innerHTML = item.resolvida
+        ? '<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Revisada'
+        : '<i data-lucide="check" class="w-3 h-3"></i> Concluir';
+
+      btnCheck.onclick = function(e) {
+        e.stopPropagation();
+        resolverDuvidaCockpit(item.id);
+      };
+
+      row.append(corpo, btnCheck);
+      container.append(row);
+    });
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      try {
+        window.lucide.createIcons({ root: container });
+      } catch (_) {}
+    }
+  }
+
+  function carregarDuvidasDoServidor(callback) {
+    if (!navigator.onLine) {
+      var locais = carregarDuvidasLocais();
+      renderizarDuvidas(locais);
+      if (typeof callback === 'function') callback(locais);
+      return;
+    }
+    try {
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/duvidas';
+      fetch(endpoint).then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }).then(function(data) {
+        if (data && data.sucesso && Array.isArray(data.duvidas)) {
+          salvarDuvidasLocais(data.duvidas);
+          renderizarDuvidas(data.duvidas);
+        }
+        if (typeof callback === 'function') callback(data);
+      }).catch(function(err) {
+        console.warn('[RotinaTimeline] Erro ao buscar dúvidas do servidor:', err);
+        var locais = carregarDuvidasLocais();
+        renderizarDuvidas(locais);
+        if (typeof callback === 'function') callback(null);
+      });
+    } catch (_) {
+      if (typeof callback === 'function') callback(null);
+    }
+  }
+
+  function adicionarDuvidaCockpit() {
+    var input = document.getElementById('input-nova-duvida-cockpit');
+    if (!input) return;
+    var texto = (input.value || '').trim();
+    if (!texto) return;
+
+    input.value = '';
+
+    var tempId = 'duv_' + Date.now();
+    var novaDuvida = {
+      id: tempId,
+      texto: texto,
+      resolvida: false,
+      origem: 'cockpit',
+      dataCriacao: new Date().toISOString()
+    };
+
+    var lista = carregarDuvidasLocais();
+    lista.unshift(novaDuvida);
+    salvarDuvidasLocais(lista);
+    renderizarDuvidas(lista);
+
+    if (typeof window.copiarToast === 'function') {
+      window.copiarToast('💡 Dúvida anotada! Disponível no Cockpit e no Telegram.');
+    }
+
+    if (!navigator.onLine) return;
+
+    try {
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/duvidas';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texto: texto, origem: 'cockpit' })
+      }).then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }).then(function(data) {
+        if (data && data.sucesso && data.duvida) {
+          var atualizadas = carregarDuvidasLocais();
+          for (var i = 0; i < atualizadas.length; i++) {
+            if (atualizadas[i].id === tempId) {
+              atualizadas[i] = data.duvida;
+              break;
+            }
+          }
+          salvarDuvidasLocais(atualizadas);
+          renderizarDuvidas(atualizadas);
+        }
+      }).catch(function(err) {
+        console.warn('[RotinaTimeline] Erro ao sincronizar nova dúvida com servidor:', err);
+      });
+    } catch (_) {}
+  }
+
+  function resolverDuvidaCockpit(id) {
+    if (!id) return;
+    var lista = carregarDuvidasLocais();
+    var encontrada = null;
+    for (var i = 0; i < lista.length; i++) {
+      if (lista[i].id === id) {
+        lista[i].resolvida = !lista[i].resolvida;
+        encontrada = lista[i];
+        break;
+      }
+    }
+    salvarDuvidasLocais(lista);
+    renderizarDuvidas(lista);
+
+    if (encontrada && encontrada.resolvida && typeof window.copiarToast === 'function') {
+      window.copiarToast('✅ Dúvida marcada como revisada!');
+    }
+
+    if (!navigator.onLine) return;
+
+    try {
+      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/duvidas/resolver';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id })
+      }).catch(function(err) {
+        console.warn('[RotinaTimeline] Erro ao sincronizar resolução no servidor:', err);
+      });
+    } catch (_) {}
+  }
+
+  function alternarGavetaDuvidas() {
+    var conteudo = document.getElementById('rotina-duvidas-conteudo');
+    var icone = document.getElementById('icone-toggle-duvidas');
+    if (!conteudo) return;
+
+    var estaOculto = conteudo.classList.contains('hidden');
+    if (estaOculto) {
+      conteudo.classList.remove('hidden');
+      if (icone) icone.style.transform = 'rotate(0deg)';
+    } else {
+      conteudo.classList.add('hidden');
+      if (icone) icone.style.transform = 'rotate(-90deg)';
+    }
+  }
+
+  // ==========================================
+  // Auto-Sincronização em Tempo Real (Polling Suave)
+  // ==========================================
+
+  var POLLING_INTERVALO_MS = 30000;
+  var timerPolling = null;
+
+  function iniciarPollingSuave() {
+    if (typeof setInterval !== 'function') return;
+    if (timerPolling) return;
+
+    timerPolling = setInterval(function() {
+      try {
+        if (!navigator.onLine) return;
+        if (typeof document !== 'undefined') {
+          if (document.hidden) return;
+          var tabRotina = document.getElementById('tab-rotina');
+          if (tabRotina && tabRotina.classList.contains('hidden')) return;
+        }
+
+        carregarBlocosDoServidor(estadoAtual.dataISO);
+        carregarDuvidasDoServidor();
+      } catch (_) {}
+    }, POLLING_INTERVALO_MS);
+  }
+
   if (typeof window !== 'undefined' && window.addEventListener) {
     window.addEventListener('online', function() {
       processarFilaOffline();
       carregarBlocosDoServidor();
+      carregarDuvidasDoServidor();
     });
   }
 
   // Exportação Pública do Módulo
   window.RotinaTimeline = {
     renderizar: renderizar,
+    alternarData: alternarData,
+    obterDataISO: obterDataISO,
     alterarStatus: alterarStatus,
     adiarBloco: adiarBloco,
     ativarModoDescanso: ativarModoDescanso,
     aplicarFiltro: aplicarFiltro,
     carregarGradePadrao: carregarGradePadrao,
+    carregarGradePadraoComConfirmacao: carregarGradePadraoComConfirmacao,
     carregarBlocosLocais: carregarBlocosLocais,
     salvarBlocosLocais: salvarBlocosLocais,
     carregarBlocosDoServidor: carregarBlocosDoServidor,
@@ -677,8 +1013,33 @@
     formatarMinutosEmHora: formatarMinutosEmHora,
     calcularEstadoTempoBloco: calcularEstadoTempoBloco,
     normalizarBloco: normalizarBloco,
+    carregarDuvidasLocais: carregarDuvidasLocais,
+    salvarDuvidasLocais: salvarDuvidasLocais,
+    renderizarDuvidas: renderizarDuvidas,
+    carregarDuvidasDoServidor: carregarDuvidasDoServidor,
+    adicionarDuvidaCockpit: adicionarDuvidaCockpit,
+    resolverDuvidaCockpit: resolverDuvidaCockpit,
+    alternarGavetaDuvidas: alternarGavetaDuvidas,
+    iniciarPollingSuave: iniciarPollingSuave,
     CATEGORIA_CONFIG: CATEGORIA_CONFIG,
     STATUS_CONFIG: STATUS_CONFIG
   };
+
+  // Carrega automaticamente em segundo plano ao inicializar
+  if (typeof window !== 'undefined' && typeof setTimeout === 'function') {
+    setTimeout(function() {
+      try {
+        var blocosCache = carregarBlocosLocais();
+        if (blocosCache.length > 0) renderizar(blocosCache);
+        carregarBlocosDoServidor();
+
+        var duvidasCache = carregarDuvidasLocais();
+        if (duvidasCache.length > 0) renderizarDuvidas(duvidasCache);
+        carregarDuvidasDoServidor();
+
+        iniciarPollingSuave();
+      } catch (_) {}
+    }, 100);
+  }
 
 })(typeof window !== 'undefined' ? window : this);
