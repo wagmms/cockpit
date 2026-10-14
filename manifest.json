@@ -1,19 +1,34 @@
 {
-  "name": "Cockpit Móvel — Assistente Clínico & Pessoal",
+  "id": "/",
+  "name": "Ultra Rotina — Cockpit Móvel",
   "short_name": "Cockpit",
-  "description": "Assistente Clínico, Plantão Hospitalar e Rotina",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Assistente Clínico & Cockpit PWA para rotina médica, cálculos e protocolos de plantão",
+  "start_url": "/cockpit",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#020617",
   "theme_color": "#020617",
-  "orientation": "portrait",
+  "lang": "pt-BR",
+  "categories": ["medical", "health", "productivity"],
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063823.png",
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

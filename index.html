@@ -1720,6 +1720,92 @@
     <!-- ABA 5: ROTINA VIVA & TIME-BLOCKING CLÍNICO (MEDQUEST + PLANTÃO + BIO) -->
     <!-- =================================================================== -->
     <div id="tab-rotina" class="tab-pane hidden space-y-3.5">
+      <!-- PAINEL DE ESTATÍSTICAS E ADERÊNCIA SEMANAL (ÚLTIMOS 7 DIAS) -->
+      <div id="painel-aderencia-rotina" class="glass-card-accent rounded-2xl p-3.5 space-y-2.5 border border-purple-500/25 bg-gradient-to-br from-purple-950/20 via-slate-900/95 to-slate-950">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center ring-1 ring-purple-500/30">
+              <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                Aderência Semanal (7 Dias)
+              </h4>
+              <span class="text-[9.5px] text-slate-400">Desempenho & Horas Cumpridas</span>
+            </div>
+          </div>
+          <span id="aderencia-pct-badge" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40 font-mono">
+            <span id="aderencia-pct-semanal">0</span>% aderência
+          </span>
+        </div>
+
+        <!-- Métricas Rápidas: Aderência, Estudo e Plantão -->
+        <div class="grid grid-cols-3 gap-2 text-center pt-1">
+          <div class="p-2 rounded-xl bg-slate-950/70 border border-slate-800/80">
+            <span class="text-[9px] text-slate-400 block font-medium">Cumprimento</span>
+            <span id="aderencia-pct-valor" class="text-xs sm:text-sm font-bold text-emerald-400 font-mono">0%</span>
+            <span id="aderencia-blocos-detalhe" class="text-[8.5px] text-slate-500 block truncate">0 de 0 blocos</span>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950/70 border border-slate-800/80">
+            <span class="text-[9px] text-slate-400 block font-medium">MedQuest / Anki</span>
+            <span id="aderencia-horas-estudo" class="text-xs sm:text-sm font-bold text-purple-300 font-mono">0.0h</span>
+            <span class="text-[8.5px] text-slate-500 block">Estudo ativo</span>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950/70 border border-slate-800/80">
+            <span class="text-[9px] text-slate-400 block font-medium">Plantão</span>
+            <span id="aderencia-horas-plantao" class="text-xs sm:text-sm font-bold text-amber-300 font-mono">0.0h</span>
+            <span class="text-[8.5px] text-slate-500 block">Turnos hospital</span>
+          </div>
+        </div>
+
+        <!-- Barra de Progresso Semanal -->
+        <div class="space-y-1 pt-0.5">
+          <div class="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+            <div id="aderencia-barra-progresso" class="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Mini-barras compactas por eixo (Plantão, MedQuest, Treino, Hábitos) -->
+        <div id="aderencia-eixos-grid" class="grid grid-cols-2 gap-2 pt-1 text-[9.5px]">
+          <div class="p-1.5 rounded-lg bg-slate-950/60 border border-emerald-500/20 space-y-1">
+            <div class="flex items-center justify-between text-slate-300">
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Plantão</span>
+              <span id="aderencia-eixo-plantao-val" class="font-mono font-bold text-emerald-400">0%</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="aderencia-eixo-plantao-bar" class="h-full bg-emerald-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="p-1.5 rounded-lg bg-slate-950/60 border border-purple-500/20 space-y-1">
+            <div class="flex items-center justify-between text-slate-300">
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>MedQuest</span>
+              <span id="aderencia-eixo-estudo-val" class="font-mono font-bold text-purple-300">0%</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="aderencia-eixo-estudo-bar" class="h-full bg-purple-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="p-1.5 rounded-lg bg-slate-950/60 border border-amber-500/20 space-y-1">
+            <div class="flex items-center justify-between text-slate-300">
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Treino</span>
+              <span id="aderencia-eixo-treino-val" class="font-mono font-bold text-amber-300">0%</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="aderencia-eixo-treino-bar" class="h-full bg-amber-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="p-1.5 rounded-lg bg-slate-950/60 border border-sky-500/20 space-y-1">
+            <div class="flex items-center justify-between text-slate-300">
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>Hábitos</span>
+              <span id="aderencia-eixo-habitos-val" class="font-mono font-bold text-sky-300">0%</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="aderencia-eixo-habitos-bar" class="h-full bg-sky-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Card Hero de Resumo & Contadores do Dia -->
       <div class="glass-card-accent rounded-2xl p-4 space-y-3 border border-brand-500/20 bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950">
         <div class="flex items-center justify-between">
@@ -4310,7 +4396,16 @@
     try {
       sessionStored = localStorage.getItem('cockpit_session') || '';
       if (customBackendFromUrl) {
-        localStorage.setItem('cockpit_backend_url', customBackendFromUrl);
+        if (customBackendFromUrl.includes('ultra-rotina-backend.onrender.com')) {
+          localStorage.removeItem('cockpit_backend_url');
+        } else {
+          localStorage.setItem('cockpit_backend_url', customBackendFromUrl);
+        }
+      } else {
+        const stored = localStorage.getItem('cockpit_backend_url') || '';
+        if (stored.includes('ultra-rotina-backend.onrender.com')) {
+          localStorage.removeItem('cockpit_backend_url');
+        }
       }
     } catch (eStore) {}
 
@@ -4926,11 +5021,15 @@
 
       const RENDER_BACKEND = (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io'))
         ? window.location.origin
-        : "https://ultra-rotina-backend.onrender.com";
+        : "https://rotina-tt8n.onrender.com";
 
       let customBackend = '';
       try {
         customBackend = localStorage.getItem('cockpit_backend_url') || '';
+        if (customBackend && customBackend.includes('ultra-rotina-backend.onrender.com')) {
+          localStorage.removeItem('cockpit_backend_url');
+          customBackend = '';
+        }
       } catch (e) {}
 
       const pingUrl = (customBackend || RENDER_BACKEND).replace(/\/+$/, '') + '/ping';
@@ -5312,11 +5411,15 @@
 
       const RENDER_BACKEND = (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io'))
         ? window.location.origin
-        : "https://ultra-rotina-backend.onrender.com";
+        : "https://rotina-tt8n.onrender.com";
 
       let customBackend = '';
       try {
         customBackend = localStorage.getItem('cockpit_backend_url') || '';
+        if (customBackend && customBackend.includes('ultra-rotina-backend.onrender.com')) {
+          localStorage.removeItem('cockpit_backend_url');
+          customBackend = '';
+        }
       } catch (e) {}
 
       const activeUrl = String(customBackend || RENDER_BACKEND).toLowerCase();
@@ -5668,11 +5771,15 @@
       // Backend Oficial Fastify no Render com Retry Exponencial e Jitter
       const RENDER_BACKEND = (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.hostname.includes('github.io'))
         ? window.location.origin
-        : "https://ultra-rotina-backend.onrender.com";
+        : "https://rotina-tt8n.onrender.com";
 
       let customBackend = '';
       try {
         customBackend = localStorage.getItem('cockpit_backend_url') || '';
+        if (customBackend && customBackend.includes('ultra-rotina-backend.onrender.com')) {
+          localStorage.removeItem('cockpit_backend_url');
+          customBackend = '';
+        }
       } catch (e) {}
 
       const primaryUrl = (customBackend || RENDER_BACKEND).replace(/\/+$/, '') + '/api/cockpit';
@@ -13926,7 +14033,7 @@
           const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
           wsUrl = `${proto}//${window.location.host}/live`;
         } else {
-          wsUrl = 'wss://ultra-rotina-backend.onrender.com/live';
+          wsUrl = 'wss://rotina-tt8n.onrender.com/live';
         }
 
         liveWs = new WebSocket(wsUrl);

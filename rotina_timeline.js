@@ -189,6 +189,135 @@
     if (progressoBarra) progressoBarra.style.width = pct + '%';
   }
 
+  function classificarEixoBlocoLocal(bloco) {
+    var cat = (bloco && bloco.categoria ? String(bloco.categoria) : "").toLowerCase();
+    var tit = (bloco && bloco.titulo ? String(bloco.titulo) : "").toLowerCase();
+    if (cat === "estudo" || /medquest|anki|estudo|quest[õo]es|questoes|aula|revis[aã]o|revisao|teoria/i.test(tit)) {
+      return "estudo";
+    }
+    if (cat === "plantao" || cat === "clinico" || /plant[aã]o|plantao|internato|enfermaria|usf|upa|samu|\bue\b|uti|ambulatório|ambulatorio|leito/i.test(tit)) {
+      return "plantao";
+    }
+    if (cat === "treino" || /treino|academia|muscula|cardio|corrida/i.test(tit)) {
+      return "treino";
+    }
+    return "habitos";
+  }
+
+  function calcularDuracaoHorasLocal(inicio, fim) {
+    if (!inicio || !fim) return 1.0;
+    var pI = String(inicio).split(":");
+    var pF = String(fim).split(":");
+    var mI = parseInt(pI[0], 10) * 60 + parseInt(pI[1] || 0, 10);
+    var mF = parseInt(pF[0], 10) * 60 + parseInt(pF[1] || 0, 10);
+    var diff = mF - mI;
+    if (diff <= 0) diff += 1440;
+    return Math.round((diff / 60) * 10) / 10;
+  }
+
+  function calcularAderenciaSemanalLocal() {
+    var eixos = {
+      plantao: { rotulo: "Plantão", planejados: 0, concluidos: 0, horasPlanejadas: 0, horasConcluidas: 0, taxa: 0 },
+      estudo: { rotulo: "MedQuest", planejados: 0, concluidos: 0, horasPlanejadas: 0, horasConcluidas: 0, taxa: 0 },
+      treino: { rotulo: "Treino", planejados: 0, concluidos: 0, horasPlanejadas: 0, horasConcluidas: 0, taxa: 0 },
+      habitos: { rotulo: "Hábitos", planejados: 0, concluidos: 0, horasPlanejadas: 0, horasConcluidas: 0, taxa: 0 }
+    };
+
+    var hojeObj = new Date();
+    var hojeISO = obterDataISO('hoje');
+
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(hojeObj.getTime() - (i * 86400000));
+      var y = d.getFullYear();
+      var m = ('0' + (d.getMonth() + 1)).slice(-2);
+      var dia = ('0' + d.getDate()).slice(-2);
+      var dataISO = y + '-' + m + '-' + dia;
+
+      var blocosDoDia = [];
+      if (dataISO === hojeISO && estadoAtual.blocos && estadoAtual.blocos.length > 0) {
+        blocosDoDia = estadoAtual.blocos;
+      } else {
+        blocosDoDia = carregarBlocosLocais(dataISO) || [];
+      }
+
+      for (var b = 0; b < blocosDoDia.length; b++) {
+        var bloco = blocosDoDia[b];
+        var eixoKey = classificarEixoBlocoLocal(bloco);
+        var dur = calcularDuracaoHorasLocal(bloco.inicio, bloco.fim);
+
+        eixos[eixoKey].planejados++;
+        eixos[eixoKey].horasPlanejadas = Math.round((eixos[eixoKey].horasPlanejadas + dur) * 10) / 10;
+
+        if (bloco.status === 'concluido') {
+          eixos[eixoKey].concluidos++;
+          eixos[eixoKey].horasConcluidas = Math.round((eixos[eixoKey].horasConcluidas + dur) * 10) / 10;
+        }
+      }
+    }
+
+    var totalPlanejados = 0;
+    var totalConcluidos = 0;
+    var keys = ["plantao", "estudo", "treino", "habitos"];
+
+    for (var k = 0; k < keys.length; k++) {
+      var kName = keys[k];
+      var p = eixos[kName].planejados;
+      var c = eixos[kName].concluidos;
+      totalPlanejados += p;
+      totalConcluidos += c;
+      // Previne divisão por zero (0/0 -> 0%)
+      eixos[kName].taxa = p > 0 ? Math.round((c / p) * 100) : 0;
+    }
+
+    var taxaGlobal = totalPlanejados > 0 ? Math.round((totalConcluidos / totalPlanejados) * 100) : 0;
+
+    return {
+      taxaGlobal: taxaGlobal,
+      totalPlanejados: totalPlanejados,
+      totalConcluidos: totalConcluidos,
+      horasEstudoConcluidas: eixos.estudo.horasConcluidas,
+      horasPlantaoConcluidas: eixos.plantao.horasConcluidas,
+      eixos: eixos
+    };
+  }
+
+  function atualizarPainelAderencia(dados) {
+    var ad = dados || calcularAderenciaSemanalLocal();
+    if (!ad) return;
+
+    var pctSemanalEl = document.getElementById('aderencia-pct-semanal');
+    var pctValorEl = document.getElementById('aderencia-pct-valor');
+    var blocosDetalheEl = document.getElementById('aderencia-blocos-detalhe');
+    var horasEstudoEl = document.getElementById('aderencia-horas-estudo');
+    var horasPlantaoEl = document.getElementById('aderencia-horas-plantao');
+    var barraProgressoEl = document.getElementById('aderencia-barra-progresso');
+
+    if (pctSemanalEl) pctSemanalEl.textContent = String(ad.taxaGlobal);
+    if (pctValorEl) pctValorEl.textContent = String(ad.taxaGlobal) + '%';
+    if (blocosDetalheEl) blocosDetalheEl.textContent = ad.totalConcluidos + ' de ' + ad.totalPlanejados + ' blocos';
+    if (horasEstudoEl) horasEstudoEl.textContent = (ad.horasEstudoConcluidas || 0).toFixed(1) + 'h';
+    if (horasPlantaoEl) horasPlantaoEl.textContent = (ad.horasPlantaoConcluidas || 0).toFixed(1) + 'h';
+    if (barraProgressoEl) barraProgressoEl.style.width = ad.taxaGlobal + '%';
+
+    // Mini-barras por eixo
+    if (ad.eixos) {
+      var mapEixos = [
+        { id: 'plantao', val: 'aderencia-eixo-plantao-val', bar: 'aderencia-eixo-plantao-bar' },
+        { id: 'estudo', val: 'aderencia-eixo-estudo-val', bar: 'aderencia-eixo-estudo-bar' },
+        { id: 'treino', val: 'aderencia-eixo-treino-val', bar: 'aderencia-eixo-treino-bar' },
+        { id: 'habitos', val: 'aderencia-eixo-habitos-val', bar: 'aderencia-eixo-habitos-bar' }
+      ];
+      for (var i = 0; i < mapEixos.length; i++) {
+        var item = mapEixos[i];
+        var info = ad.eixos[item.id] || { taxa: 0 };
+        var valEl = document.getElementById(item.val);
+        var barEl = document.getElementById(item.bar);
+        if (valEl) valEl.textContent = info.taxa + '%';
+        if (barEl) barEl.style.width = info.taxa + '%';
+      }
+    }
+  }
+
   function converterHoraEmMinutos(horaStr) {
     if (!horaStr || typeof horaStr !== 'string') return -1;
     var partes = horaStr.split(':');
@@ -394,6 +523,7 @@
 
     estadoAtual.blocos = lista;
     renderizarHeaderContadores(lista);
+    atualizarPainelAderencia();
 
     var filtrados = lista.filter(function(b) {
       if (estadoAtual.filtroAtivo === 'todos') return true;
@@ -1124,6 +1254,8 @@
     obterFilaOffline: obterFilaOffline,
     obterStatusFilaOffline: obterStatusFilaOffline,
     enfileirarMutacaoOffline: enfileirarMutacaoOffline,
+    calcularAderenciaSemanalLocal: calcularAderenciaSemanalLocal,
+    atualizarPainelAderencia: atualizarPainelAderencia,
     CATEGORIA_CONFIG: CATEGORIA_CONFIG,
     STATUS_CONFIG: STATUS_CONFIG
   };
