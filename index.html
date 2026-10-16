@@ -1744,10 +1744,358 @@
 
     <!-- =================================================================== -->
     <!-- =================================================================== -->
+    <!-- =================================================================== -->
+    <!-- =================================================================== -->
     <!-- ABA 5: ROTINA VIVA & TIME-BLOCKING CLÍNICO (MEDQUEST + PLANTÃO + BIO) -->
     <!-- =================================================================== -->
-    <div id="tab-rotina" class="tab-pane hidden space-y-3.5">
-      <!-- PAINEL DE ESTATÍSTICAS E ADERÊNCIA SEMANAL (ÚLTIMOS 7 DIAS) -->
+    <div id="tab-rotina" class="tab-pane hidden space-y-3.5 pb-8">
+      <!-- 1. CABEÇALHO EXECUTIVO, RADAR "AGORA" & CONTROLES DE VISUALIZAÇÃO -->
+      <div class="glass-card-accent p-3.5 rounded-2xl border border-brand-500/25 bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-slate-950 space-y-3 shadow-lg">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-400">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-xs sm:text-sm font-extrabold text-white tracking-tight">Rotina Viva & Time-Blocking</h3>
+                <span id="rotina-sync-badge" class="text-[9.5px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Google Calendar
+                </span>
+              </div>
+              <p id="rotina-subtitulo-contexto" class="text-[10px] text-slate-400">
+                Agenda Médica Integrada · Plantão, MedQuest R1 & Bio-ritmo
+              </p>
+            </div>
+          </div>
+
+          <!-- Ações Globais Rápidas -->
+          <div class="flex items-center gap-1.5">
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.alternarModoPlantaoAltoContraste();"
+              id="btn-modo-plantao-ativo"
+              class="min-h-[34px] px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition active:scale-95 flex items-center gap-1 shadow-sm"
+              title="Ativar/Desativar Modo Plantão Beira-Leito"
+            >
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Plantão
+            </button>
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.abrirModalBloco();"
+              class="min-h-[34px] px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-brand-600 hover:bg-brand-500 text-white border border-brand-400/40 transition active:scale-95 flex items-center gap-1 shadow-sm"
+              title="Adicionar Bloco Personalizado"
+            >
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Bloco
+            </button>
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline && typeof window.RotinaTimeline.sincronizarAgendaGoogle === \x27function\x27) RotinaTimeline.sincronizarAgendaGoogle(); else if(window.RotinaTimeline) RotinaTimeline.renderizar(); else carregarPerfil();"
+              title="Sincronizar com Google Calendar (moraes.wagg@gmail.com)"
+              class="min-h-[34px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition active:scale-95"
+            >
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Seletor de Data (Hoje / Amanhã) + Seletor de Modo de Visualização -->
+        <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-800/80 flex-wrap">
+          <div class="flex items-center gap-1.5 text-xs">
+            <button
+              type="button"
+              id="btn-rotina-data-hoje"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData(\x27hoje\x27);"
+              class="py-1.5 px-3 rounded-lg font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
+            >
+              <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-400"></i> Hoje
+            </button>
+            <button
+              type="button"
+              id="btn-rotina-data-amanha"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData(\x27amanha\x27);"
+              class="py-1.5 px-3 rounded-lg font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition flex items-center justify-center gap-1.5 active:scale-95"
+            >
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-400"></i> Amanhã
+            </button>
+          </div>
+
+          <!-- Seletor de View: Timeline | Modo Foco | 7 Dias -->
+          <div class="flex items-center bg-slate-950/90 p-0.5 rounded-xl border border-slate-800 text-[11px]">
+            <button
+              type="button"
+              id="btn-view-timeline"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.alternarVisualizacao(\x27timeline\x27);"
+              class="px-2.5 py-1 rounded-lg font-bold bg-brand-500/30 text-brand-200 border border-brand-500/40 transition"
+            >
+              Timeline
+            </button>
+            <button
+              type="button"
+              id="btn-view-foco"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.alternarVisualizacao(\x27foco\x27);"
+              class="px-2.5 py-1 rounded-lg font-medium text-slate-400 hover:text-slate-200 transition"
+            >
+              Modo Foco
+            </button>
+            <button
+              type="button"
+              id="btn-view-semana"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.alternarVisualizacao(\x27semana\x27);"
+              class="px-2.5 py-1 rounded-lg font-medium text-slate-400 hover:text-slate-200 transition"
+            >
+              7 Dias
+            </button>
+          </div>
+        </div>
+
+        <!-- Radar "AGORA" em Tempo Real & Barra da Régua do Dia -->
+        <div id="rotina-radar-agora-box" class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
+              <span id="rotina-radar-agora-texto" class="text-xs font-bold text-slate-100 truncate">
+                Sincronizando blocos da rotina médica...
+              </span>
+            </div>
+            <span id="rotina-relogio-vivo" class="font-mono text-[11px] font-bold text-brand-300 bg-brand-500/10 px-2 py-0.5 rounded-md border border-brand-500/20 shrink-0">
+              --:--
+            </span>
+          </div>
+
+          <!-- Barra de Progresso dos Blocos do Dia -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <span id="rotina-label-progresso" class="text-slate-400 font-medium">Progresso dos Blocos de Hoje</span>
+              <span class="font-mono font-bold text-slate-200">
+                <span id="rotina-contador-concluidos">0</span> / <span id="rotina-contador-total">0</span> concluídos
+              </span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden p-0.5">
+              <div id="rotina-barra-progresso" class="h-full rounded-full bg-gradient-to-r from-brand-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. BANNER MODO PLANTÃO ATIVO (ALTO CONTRASTE & EMERGÊNCIA 1-TOQUE) -->
+      <div id="rotina-modo-plantao-banner" class="hidden glass-card p-3 rounded-2xl border-2 border-emerald-500/60 bg-slate-950 shadow-xl space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <h4 class="text-xs font-extrabold uppercase tracking-wider text-emerald-300">
+              Modo Plantão Beira-Leito Ativo
+            </h4>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400">Zero-Click Emergency HUD</span>
+        </div>
+        <div class="grid grid-cols-4 gap-1.5">
+          <button type="button" onclick="if(typeof switchTab===\x27function\x27) switchTab(\x27tab-plantao\x27); else if(typeof navegarAba===\x27function\x27) navegarAba(\x27tab-plantao\x27, \x27Plantão & Sala Vermelha\x27);" class="min-h-[42px] p-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
+            <i data-lucide="flame" class="w-4 h-4 text-rose-400"></i>
+            <span class="text-[10px] font-extrabold">SRI / IOT</span>
+          </button>
+          <button type="button" onclick="if(typeof switchTab===\x27function\x27) switchTab(\x27tab-plantao\x27); else if(typeof navegarAba===\x27function\x27) navegarAba(\x27tab-plantao\x27, \x27Plantão & Sala Vermelha\x27);" class="min-h-[42px] p-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
+            <i data-lucide="syringe" class="w-4 h-4 text-amber-400"></i>
+            <span class="text-[10px] font-extrabold">DVA / Bomba</span>
+          </button>
+          <button type="button" onclick="if(typeof abrirModalSbarPassagem===\x27function\x27) abrirModalSbarPassagem();" class="min-h-[42px] p-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-emerald-400"></i>
+            <span class="text-[10px] font-extrabold">Passar SBAR</span>
+          </button>
+          <button type="button" onclick="var inp = document.getElementById(\x27input-nova-duvida-cockpit\x27); if(inp) { inp.focus(); inp.scrollIntoView({ behavior: \x27smooth\x27 }); }" class="min-h-[42px] p-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
+            <i data-lucide="help-circle" class="w-4 h-4 text-purple-400"></i>
+            <span class="text-[10px] font-extrabold">+ Dúvida</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. GAMIFICAÇÃO & METAS DIÁRIAS R1 (QUESTÕES, ANKI, ÁGUA) -->
+      <div id="rotina-metas-dia-card" class="glass-card-accent p-3 rounded-2xl border border-slate-800/80 bg-slate-900/60 shadow-sm">
+        <div class="grid grid-cols-3 gap-2">
+          <!-- Meta Questões MedQuest -->
+          <div class="p-2 rounded-xl bg-slate-950/60 border border-purple-500/20 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-purple-300 font-semibold block">MedQuest Hoje</span>
+              <span id="meta-questoes-hoje-val" class="text-xs sm:text-sm font-extrabold font-mono text-white">0/50 q</span>
+            </div>
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.incrementarMetaDiaria(\x27questoes\x27, 10);"
+              class="min-w-[34px] min-h-[34px] px-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 text-[11px] font-extrabold transition active:scale-95"
+              title="Somar +10 questões resolvidas"
+            >
+              +10
+            </button>
+          </div>
+
+          <!-- Meta Flashcards Anki -->
+          <div class="p-2 rounded-xl bg-slate-950/60 border border-sky-500/20 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-sky-300 font-semibold block">Anki Cards</span>
+              <span id="meta-anki-hoje-val" class="text-xs sm:text-sm font-extrabold font-mono text-white">0/60</span>
+            </div>
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.incrementarMetaDiaria(\x27anki\x27, 15);"
+              class="min-w-[34px] min-h-[34px] px-2 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 border border-sky-500/40 text-[11px] font-extrabold transition active:scale-95"
+              title="Somar +15 flashcards revisados"
+            >
+              +15
+            </button>
+          </div>
+
+          <!-- Meta Hidratação / Bio -->
+          <div class="p-2 rounded-xl bg-slate-950/60 border border-teal-500/20 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-teal-300 font-semibold block">Hidratação</span>
+              <span id="meta-agua-hoje-val" class="text-xs sm:text-sm font-extrabold font-mono text-white">0.0/3.0L</span>
+            </div>
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.incrementarMetaDiaria(\x27agua\x27, 250);"
+              class="min-w-[34px] min-h-[34px] px-2 rounded-lg bg-teal-500/20 hover:bg-teal-500/30 text-teal-200 border border-teal-500/40 text-[11px] font-extrabold transition active:scale-95"
+              title="Somar +250ml de água"
+            >
+              +250
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. FILTROS POR EIXO & AÇÕES DE CONTINGÊNCIA (DESCANSO / GRADE PADRÃO) -->
+      <div class="space-y-2">
+        <div id="rotina-filtros-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+          <button
+            type="button"
+            data-filtro="todos"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro(\x27todos\x27);"
+            class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition active:scale-95 shadow-sm shrink-0"
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            data-filtro="plantao"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro(\x27plantao\x27);"
+            class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 shrink-0"
+          >
+            🩺 Plantão / Hospital
+          </button>
+          <button
+            type="button"
+            data-filtro="estudo"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro(\x27estudo\x27);"
+            class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 shrink-0"
+          >
+            📚 MedQuest & Anki
+          </button>
+          <button
+            type="button"
+            data-filtro="treino"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro(\x27treino\x27);"
+            class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 shrink-0"
+          >
+            🏋️ Treino & Bio
+          </button>
+          <button
+            type="button"
+            data-filtro="lifestyle"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro(\x27lifestyle\x27);"
+            class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 shrink-0"
+          >
+            🎸 Vida & Lifestyle
+          </button>
+          <button
+            type="button"
+            data-filtro="recuperacao"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro(\x27recuperacao\x27);"
+            class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 shrink-0"
+          >
+            🌙 Sono & Recuperação
+          </button>
+        </div>
+
+        <!-- Barra Rápida de Ajuste Biológico & Grade Padrão -->
+        <div class="flex items-center justify-between gap-2 text-[11px] flex-wrap">
+          <button
+            type="button"
+            onclick="if(window.RotinaTimeline) RotinaTimeline.ativarModoDescanso();"
+            class="px-2.5 py-1.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 font-semibold transition active:scale-95 flex items-center gap-1.5 shadow-sm"
+          >
+            <i data-lucide="coffee" class="w-3.5 h-3.5"></i> Pós-Plantão: Modo Descanso
+          </button>
+          <button
+            type="button"
+            onclick="if(window.RotinaTimeline) (RotinaTimeline.carregarGradePadraoComConfirmacao ? RotinaTimeline.carregarGradePadraoComConfirmacao() : RotinaTimeline.carregarGradePadrao());"
+            class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700 font-medium transition active:scale-95 flex items-center gap-1.5 shadow-sm"
+          >
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-400"></i> Restaurar Grade Padrão
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. CONTAINER PRINCIPAL DE BLOCOS DA TIMELINE VIVA -->
+      <div id="rotina-blocos-container" class="space-y-3">
+        <div class="glass-card p-4 rounded-xl text-center space-y-1.5">
+          <div class="text-xs text-slate-300 font-medium">Carregando rotina viva do dia...</div>
+          <div class="text-[10px] text-slate-500">Sincronizando blocos, plantões e metas MedQuest.</div>
+        </div>
+      </div>
+
+      <!-- 6. GAVETA INTELIGENTE DE DÚVIDAS MEDQUEST & PLANTÃO (COM 5 GRANDES ÁREAS R1) -->
+      <div id="rotina-duvidas-card" class="glass-card-accent p-3.5 rounded-2xl border border-purple-500/30 bg-slate-900/80 space-y-3">
+        <div class="flex items-center justify-between cursor-pointer" onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center ring-1 ring-purple-500/30">
+              <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+              Caderno de Erros & Dúvidas MedQuest
+            </h4>
+            <span id="duvidas-contador-badge" class="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-purple-500/30 text-purple-200 border border-purple-500/40">0</span>
+          </div>
+          <button type="button" id="btn-toggle-gaveta-duvidas" class="text-slate-400 hover:text-slate-200 text-xs">
+            <i id="icone-toggle-duvidas" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+          </button>
+        </div>
+
+        <div id="rotina-duvidas-conteudo" class="space-y-2.5 pt-1 border-t border-purple-500/10">
+          <!-- Seletor de Grande Área R1 para nova dúvida -->
+          <div class="flex items-center gap-1 overflow-x-auto pb-1 no-scrollbar" id="duvidas-areas-seletor">
+            <button type="button" data-area="Clínica" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Clínica\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-500/30 text-purple-200 border border-purple-500/50">Clínica</button>
+            <button type="button" data-area="Cirurgia" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Cirurgia\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">Cirurgia</button>
+            <button type="button" data-area="Pediatria" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Pediatria\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">Pediatria</button>
+            <button type="button" data-area="GO" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27GO\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">G.O.</button>
+            <button type="button" data-area="Preventiva" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Preventiva\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">Preventiva</button>
+          </div>
+
+          <!-- Input Rápido de Nova Dúvida -->
+          <div class="flex items-center gap-2">
+            <input
+              id="input-nova-duvida-cockpit"
+              type="text"
+              placeholder="Ex: Critérios de Light, Manejo de Cetoacidose, DHEG..."
+              onkeydown="if(event.key===\x27Enter\x27 && window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
+              class="flex-1 bg-slate-950/90 border border-slate-700/80 focus:border-purple-400 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none"
+            />
+            <button
+              type="button"
+              onclick="if(window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
+              class="min-h-[36px] px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition active:scale-95 flex items-center gap-1 shrink-0 shadow-sm"
+            >
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Anotar
+            </button>
+          </div>
+
+          <!-- Lista de Dúvidas -->
+          <div id="rotina-duvidas-lista" class="space-y-1.5 max-h-56 overflow-y-auto pr-1 no-scrollbar text-xs">
+            <div class="text-[11px] text-slate-400 text-center py-2">Carregando dúvidas salvas...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. PAINEL DE ADERÊNCIA SEMANAL MULTIEIXO (7 DIAS) -->
       <div id="painel-aderencia-rotina" class="glass-card-accent rounded-2xl p-3.5 space-y-2.5 border border-purple-500/25 bg-gradient-to-br from-purple-950/20 via-slate-900/95 to-slate-950">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -1766,7 +2114,6 @@
           </span>
         </div>
 
-        <!-- Métricas Rápidas: Aderência, Estudo e Plantão -->
         <div class="grid grid-cols-3 gap-2 text-center pt-1">
           <div class="p-2 rounded-xl bg-slate-950/70 border border-slate-800/80">
             <span class="text-[9px] text-slate-400 block font-medium">Cumprimento</span>
@@ -1785,7 +2132,6 @@
           </div>
         </div>
 
-        <!-- Barra de Progresso Semanal -->
         <div class="space-y-1 pt-0.5">
           <div class="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
             <div id="aderencia-barra-progresso" class="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
@@ -1830,193 +2176,6 @@
               <div id="aderencia-eixo-habitos-bar" class="h-full bg-sky-400 transition-all duration-300" style="width: 0%"></div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Card Hero de Resumo & Contadores do Dia -->
-      <div class="glass-card-accent rounded-2xl p-4 space-y-3 border border-brand-500/20 bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center ring-1 ring-brand-500/30">
-              <i data-lucide="calendar" class="w-4 h-4"></i>
-            </div>
-            <div>
-              <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
-                Rotina & Time-Blocking
-              </h3>
-              <span class="text-[10px] text-slate-400">Timeline adaptativa sincronizada</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span id="rotina-sync-badge" class="text-[9.5px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Google Calendar
-            </span>
-            <button
-              type="button"
-              onclick="if(window.RotinaTimeline && typeof window.RotinaTimeline.sincronizarAgendaGoogle === 'function') RotinaTimeline.sincronizarAgendaGoogle(); else if(window.RotinaTimeline) RotinaTimeline.renderizar(); else carregarPerfil();"
-              title="Sincronizar com Google Calendar (moraes.wagg@gmail.com)"
-              class="p-1 rounded-lg text-slate-400 hover:text-brand-300 hover:bg-brand-500/10 transition"
-            >
-              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Seletor de Data: Hoje vs Amanhã -->
-        <div class="grid grid-cols-2 gap-2 p-1 bg-slate-950/70 rounded-xl border border-slate-800/80 text-xs">
-          <button
-            type="button"
-            id="btn-rotina-data-hoje"
-            onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData('hoje');"
-            class="min-h-[38px] py-2 px-3 rounded-lg font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm"
-          >
-            <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-400"></i>
-            Hoje
-          </button>
-          <button
-            type="button"
-            id="btn-rotina-data-amanha"
-            onclick="if(window.RotinaTimeline) RotinaTimeline.alternarData('amanha');"
-            class="min-h-[38px] py-2 px-3 rounded-lg font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:text-white transition active:scale-95 flex items-center justify-center gap-1.5"
-          >
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-400"></i>
-            Amanhã
-          </button>
-        </div>
-
-        <!-- Indicador de Metas & Conclusão de Blocos do Dia -->
-        <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
-          <div class="flex items-center justify-between text-[11px]">
-            <span id="rotina-label-progresso" class="text-slate-300 font-medium">Progresso dos Blocos de Hoje</span>
-            <span class="font-mono text-white font-bold">
-              <span id="rotina-contador-concluidos">0</span> / <span id="rotina-contador-total">0</span> concluídos
-            </span>
-          </div>
-          <div class="w-full h-2 bg-slate-800/80 rounded-full overflow-hidden">
-            <div id="rotina-barra-progresso" class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <!-- Botões de Ação Rápida Superior -->
-        <div class="flex items-center gap-2 pt-1">
-          <button
-            type="button"
-            onclick="if(window.RotinaTimeline) RotinaTimeline.ativarModoDescanso();"
-            class="flex-1 min-h-[38px] py-2 px-3 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm"
-          >
-            <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
-            Modo Descanso
-          </button>
-          <button
-            type="button"
-            onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();"
-            class="flex-1 min-h-[38px] py-2 px-3 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 text-xs font-bold transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm"
-          >
-            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
-            Dúvidas MedQuest
-          </button>
-          <button
-            type="button"
-            onclick="if(window.RotinaTimeline) (RotinaTimeline.carregarGradePadraoComConfirmacao ? RotinaTimeline.carregarGradePadraoComConfirmacao() : RotinaTimeline.carregarGradePadrao());"
-            title="Carregar grade padrão fixa (com aviso de confirmação)"
-            class="min-h-[38px] min-w-[38px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs transition active:scale-95 flex items-center justify-center shadow-sm"
-          >
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-400"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Gaveta de Dúvidas MedQuest (Sincronizada com o Telegram) -->
-      <div id="rotina-duvidas-card" class="glass-card-accent rounded-2xl p-3 space-y-2 border border-purple-500/20 bg-gradient-to-br from-purple-950/20 via-slate-900 to-slate-950">
-        <div class="flex items-center justify-between cursor-pointer" onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();">
-          <div class="flex items-center gap-2">
-            <div class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center ring-1 ring-purple-500/30">
-              <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
-            </div>
-            <span class="text-xs font-bold text-white flex items-center gap-1.5">
-              Dúvidas MedQuest & Residência
-              <span id="duvidas-contador-badge" class="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">0</span>
-            </span>
-          </div>
-          <button type="button" id="btn-toggle-gaveta-duvidas" class="text-slate-400 hover:text-slate-200 text-xs">
-            <i data-lucide="chevron-down" id="icone-toggle-duvidas" class="w-4 h-4 transition duration-200"></i>
-          </button>
-        </div>
-
-        <!-- Conteúdo Expansível da Gaveta (inicia aberto) -->
-        <div id="rotina-duvidas-conteudo" class="space-y-2 pt-1 border-t border-purple-500/10">
-          <div class="flex items-center gap-1.5">
-            <input
-              type="text"
-              id="input-nova-duvida-cockpit"
-              placeholder="Anotar dúvida médica (ex: Critérios de Light...)"
-              class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"
-              onkeydown="if(event.key === 'Enter' && window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
-            />
-            <button
-              type="button"
-              onclick="if(window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
-              class="px-2.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-xs font-bold transition flex items-center gap-1"
-            >
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Salvar
-            </button>
-          </div>
-          <div id="rotina-duvidas-lista" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar text-xs">
-            <div class="text-[11px] text-slate-400 text-center py-2">Carregando dúvidas salvas...</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filtros Rápidos de Categoria -->
-      <div id="rotina-filtros-container" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-        <button
-          type="button"
-          data-filtro="todos"
-          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('todos');"
-          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/40 transition active:scale-95 whitespace-nowrap shadow-sm"
-        >
-          Todos
-        </button>
-        <button
-          type="button"
-          data-filtro="plantao"
-          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('plantao');"
-          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
-        >
-          Plantão / Hospital
-        </button>
-        <button
-          type="button"
-          data-filtro="estudo"
-          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('estudo');"
-          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
-        >
-          MedQuest & Anki
-        </button>
-        <button
-          type="button"
-          data-filtro="treino"
-          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('treino');"
-          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
-        >
-          Treino & Bio
-        </button>
-        <button
-          type="button"
-          data-filtro="lifestyle"
-          onclick="if(window.RotinaTimeline) RotinaTimeline.aplicarFiltro('lifestyle');"
-          class="btn-filtro-rotina min-h-[32px] px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:text-white transition active:scale-95 whitespace-nowrap"
-        >
-          🎸 Vida & Lifestyle
-        </button>
-      </div>
-
-      <!-- Timeline Dinâmica de Blocos do Dia -->
-      <div id="rotina-blocos-container" class="space-y-2 text-xs">
-        <div class="glass-card p-4 rounded-xl text-center space-y-1.5">
-          <div class="text-xs text-slate-300 font-medium">Carregando rotina viva do dia...</div>
-          <div class="text-[10px] text-slate-500">Sincronizando blocos, plantões e metas MedQuest.</div>
         </div>
       </div>
     </div>
@@ -2993,6 +3152,21 @@
             <option value="ortopedico">🦴 Coluna &amp; Osteomuscular (Lasègue Negativo, Força e Mobilidade)</option>
             <option value="saude_mental">🧠 Saúde Mental / Psíquico (Eutimia, Pensamento Lógico, Crítica)</option>
           </select>
+
+          <!-- Barra de Chips de Alternância Rápida (1 Toque) -->
+          <div id="ef-chips-moldes" class="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-emerald-500/50 bg-emerald-500/20 text-emerald-300 shadow-sm" data-ef-key="padrao_completo" onclick="selecionarChipModeloEf('padrao_completo')">🩺 Padrão</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="pediatrico" onclick="selecionarChipModeloEf('pediatrico')">👶 Pediátrico</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="geriatrico" onclick="selecionarChipModeloEf('geriatrico')">👵 Geriátrico</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="obstetrico" onclick="selecionarChipModeloEf('obstetrico')">🤰 Pré-Natal</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="cardiovascular" onclick="selecionarChipModeloEf('cardiovascular')">🫀 Cardio/HAS</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="respiratorio" onclick="selecionarChipModeloEf('respiratorio')">🫁 Respiratório</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="abdome" onclick="selecionarChipModeloEf('abdome')">🍎 Abdome</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="neurologico" onclick="selecionarChipModeloEf('neurologico')">🧠 Neuro</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="vascular" onclick="selecionarChipModeloEf('vascular')">🩸 Vascular</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="ortopedico" onclick="selecionarChipModeloEf('ortopedico')">🦴 Coluna</button>
+            <button type="button" class="ef-chip-btn whitespace-nowrap px-2.5 py-1 rounded-full text-[10.5px] font-semibold transition border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-ef-key="saude_mental" onclick="selecionarChipModeloEf('saude_mental')">🧠 Psíquico</button>
+          </div>
         </div>
 
         <!-- Editor / Visualizador do Exame Físico -->
@@ -3005,10 +3179,66 @@
               <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Restaurar Modelo
             </button>
           </div>
-          <textarea id="ef-normal-editor-texto" rows="12" class="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-100 text-[11px] font-mono leading-relaxed focus:border-emerald-500 focus:outline-none resize-none" placeholder="Carregando modelo de exame físico..."></textarea>
+          <textarea id="ef-normal-editor-texto" rows="11" class="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-slate-100 text-[11px] font-mono leading-relaxed focus:border-emerald-500 focus:outline-none resize-none" placeholder="Carregando modelo de exame físico..."></textarea>
           <div class="flex items-center justify-between text-[10px] text-slate-500">
             <span>Dica: você pode ajustar valores (ex: PA, FC, FR) diretamente aqui antes de inserir.</span>
             <span id="ef-editor-contador" class="font-mono">0 caracteres</span>
+          </div>
+        </div>
+
+        <!-- Grade de Cópia Rápida Direta de Outros Moldes (1 Toque sem perder o editor) -->
+        <div class="border-t border-slate-800/80 pt-3 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+              <i data-lucide="zap" class="w-3 h-3 text-amber-400"></i> Copiar Outros Moldes Direto (1 Toque)
+            </span>
+            <span class="text-[9.5px] text-slate-500 font-medium">Sem alterar o editor acima</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+            <button type="button" onclick="copiarOutroModeloEfDireto('padrao_completo', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🩺 Adulto Padrão</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('pediatrico', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">👶 Pediátrico</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('geriatrico', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">👵 Geriátrico (AGA)</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('obstetrico', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🤰 Pré-Natal</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('cardiovascular', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🫀 Cardio &amp; HAS</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('respiratorio', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🫁 Respiratório</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('abdome', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🍎 Abdome</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('neurologico', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🧠 Neurológico</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('vascular', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🩸 Vascular</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('ortopedico', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🦴 Coluna / Lombar</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
+            <button type="button" onclick="copiarOutroModeloEfDireto('saude_mental', this)" class="ef-copiar-direto-btn px-2.5 py-1.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-200 text-[11px] font-medium flex items-center justify-between transition text-left active:scale-[0.98]">
+              <span class="truncate">🧠 Saúde Mental</span>
+              <i data-lucide="copy" class="w-3 h-3 text-emerald-400 shrink-0 ml-1"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -4640,6 +4870,69 @@
         document.body.removeChild(ta);
         copiarToast(label);
       }
+    }
+
+    function enviarDadosAoTelegram(tipo, titulo, conteudo) {
+      hapticFeedback('medium');
+      const payload = {
+        tipo: tipo || 'registro',
+        titulo: titulo || 'Cockpit Clínico',
+        conteudo: conteudo || ''
+      };
+
+      // 1. Telegram Mini App oficial (quando aberto via Bot do Telegram)
+      if (window.Telegram?.WebApp && typeof window.Telegram.WebApp.sendData === 'function') {
+        try {
+          window.Telegram.WebApp.sendData(JSON.stringify(payload));
+          copiarToast('Enviado com sucesso para o chat do Telegram!');
+          return true;
+        } catch (eTg) {
+          console.warn('[Telegram sendData]:', eTg);
+        }
+      }
+
+      // 2. Fallback: Copia para área de transferência e notifica o médico
+      const textoCopia = typeof conteudo === 'string' ? conteudo : JSON.stringify(conteudo, null, 2);
+      copiarTextoClipboard(textoCopia, 'Copiado para o Telegram! Cole no chat do bot.');
+      return false;
+    }
+
+    function enviarPrescricaoAoTelegram() {
+      if (!prescricaoItens.length) {
+        copiarToast('Nenhum item na prescrição para enviar.');
+        return;
+      }
+      const dataHora = new Date().toLocaleString('pt-BR');
+      let cabecalho = `========================================\n` +
+                      `📋 PRESCRIÇÃO HOSPITALAR BEIRA-LEITO\n` +
+                      `Data: ${dataHora}\n` +
+                      `========================================\n\n`;
+      let corpo = prescricaoItens.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n');
+      let rodape = `\n\n----------------------------------------\n` +
+                   `• Cuidados: Sinais vitais 6/6h, glicemia se DM, cabeceira 30°.\n` +
+                   `• Comunicar: Sinais de alarme, hipotensão (PAS < 90), dor refratária.`;
+      enviarDadosAoTelegram('prescricao', 'Prescrição Hospitalar Beira-Leito', cabecalho + corpo + rodape);
+    }
+
+    function enviarSbarAoTelegram() {
+      const previewEl = document.getElementById('sbar-texto-preview');
+      const texto = previewEl ? previewEl.textContent : '';
+      if (!texto || texto.includes('Carregando')) {
+        copiarToast('Passagem SBAR não carregada.');
+        return;
+      }
+      enviarDadosAoTelegram('sbar', 'Passagem de Plantão SBAR', texto);
+    }
+
+    function enviarSoapAoTelegram() {
+      const soapTexto = (typeof cockpitDados !== 'undefined' && cockpitDados && cockpitDados.soap) ? cockpitDados.soap : '';
+      const inputTexto = document.getElementById('input-conversa-texto')?.value?.trim();
+      const conteudo = soapTexto || inputTexto;
+      if (!conteudo) {
+        copiarToast('Nenhum dado clínico SOAP para enviar.');
+        return;
+      }
+      enviarDadosAoTelegram('soap', 'Resumo Clínico SOAP & Copiloto', conteudo);
     }
 
     function escapeHtml(str) {
@@ -10766,6 +11059,46 @@
       if (modal) modal.classList.add('hidden');
     }
 
+    function atualizarChipsModeloEf_(chaveAtiva) {
+      const chips = document.querySelectorAll('#ef-chips-moldes .ef-chip-btn');
+      chips.forEach(btn => {
+        const k = btn.getAttribute('data-ef-key');
+        if (k === chaveAtiva) {
+          btn.classList.remove('border-slate-700', 'bg-slate-800/80', 'text-slate-300', 'hover:bg-slate-700');
+          btn.classList.add('border-emerald-500/50', 'bg-emerald-500/20', 'text-emerald-300', 'shadow-sm');
+        } else {
+          btn.classList.remove('border-emerald-500/50', 'bg-emerald-500/20', 'text-emerald-300', 'shadow-sm');
+          btn.classList.add('border-slate-700', 'bg-slate-800/80', 'text-slate-300', 'hover:bg-slate-700');
+        }
+      });
+    }
+
+    function selecionarChipModeloEf(chave) {
+      const sel = document.getElementById('ef-select-modelo');
+      if (sel) sel.value = chave;
+      selecionarModeloEfModal(chave);
+    }
+
+    function copiarOutroModeloEfDireto(chave, btnEl) {
+      hapticFeedback('medium');
+      const mod = MODELOS_EF_COMPLETOS[chave] || MODELOS_EF_COMPLETOS.padrao_completo;
+      if (!mod || !mod.texto) {
+        copiarToast('Modelo de exame físico não encontrado.');
+        return;
+      }
+      copiarTextoClipboard(mod.texto, 'Exame físico (' + mod.titulo.split('(')[0].trim() + ') copiado para PEP!');
+      if (btnEl) {
+        const span = btnEl.querySelector('span');
+        const originalHtml = span ? span.textContent : btnEl.innerHTML;
+        if (span) span.textContent = '✅ Copiado!';
+        btnEl.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-300');
+        setTimeout(() => {
+          if (span) span.textContent = originalHtml;
+          btnEl.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-300');
+        }, 1400);
+      }
+    }
+
     function selecionarModeloEfModal(chave) {
       hapticFeedback('light');
       modeloEfAtivoChave = chave;
@@ -10785,6 +11118,7 @@
       if (badge) {
         badge.textContent = mod.sistemaBadge || 'Segmentar';
       }
+      atualizarChipsModeloEf_(chave);
     }
 
     function restaurarModeloEfAtual() {
@@ -14151,26 +14485,34 @@
               hapticFeedback('success');
             } else if (msg.type === 'audio' && msg.audio) {
               audioTocadoNesteTurno = true;
+              // Garante que o fallback de voz sintética nunca fale junto com o áudio neural
+              if (window.speechSynthesis && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+              }
               setLiveStatus('🔊 Preceptor Falando (Voz Fenrir)...', 'speaking');
               tocarChunkAudioLive(msg.audio);
             } else if (msg.type === 'transcript') {
               if (msg.role === 'model') {
-                ultimoTextoModelo = msg.text;
-                audioTocadoNesteTurno = false;
+                ultimoTextoModelo = msg.streaming ? (ultimoTextoModelo + msg.text) : msg.text;
               }
-              adicionarItemTranscricaoLive(msg.role || 'model', msg.text);
+              adicionarItemTranscricaoLive(msg.role || 'model', msg.text, !!msg.streaming);
             } else if (msg.type === 'interrupted') {
               // Barge-in: médico interrompeu fala do preceptor
               pararReproducaoAudioLive();
-              if (window.speechSynthesis) window.speechSynthesis.cancel();
+              audioTocadoNesteTurno = false;
+              ultimoTextoModelo = '';
+              finalizarBolhasStreamingLive();
               setLiveStatus('🎙️ Ouvindo você...', 'listening');
             } else if (msg.type === 'turnComplete') {
-              if (!audioTocadoNesteTurno && ultimoTextoModelo) {
-                falarTextoPreceptorFallback(ultimoTextoModelo);
-                ultimoTextoModelo = '';
-              } else {
+              finalizarBolhasStreamingLive();
+              if (!audioTocadoNesteTurno && ultimoTextoModelo.trim()) {
+                falarTextoPreceptorFallback(ultimoTextoModelo.trim());
+              } else if (liveActiveSources.length === 0) {
                 setLiveStatus('🎙️ Ouvindo você...', 'listening');
               }
+              // Reseta marcadores APENAS no encerramento completo do turno
+              audioTocadoNesteTurno = false;
+              ultimoTextoModelo = '';
             } else if (msg.type === 'close') {
               copiarToast(msg.reason || 'Sessão do Preceptor Live finalizada.');
               desconectarLivePreceptor();
@@ -14201,6 +14543,11 @@
       }
     }
 
+    function isPreceptorSpeaking() {
+      const ttsSpeaking = typeof window !== 'undefined' && window.speechSynthesis && window.speechSynthesis.speaking;
+      return liveActiveSources.length > 0 || ttsSpeaking;
+    }
+
     function iniciarCapturaAudioLive() {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!liveInputAudioCtx || liveInputAudioCtx.state === 'closed') {
@@ -14227,6 +14574,16 @@
 
       liveMicProcessor.onaudioprocess = (e) => {
         if (!liveConectado || liveMudo || !liveWs || liveWs.readyState !== WebSocket.OPEN) return;
+
+        // BLOQUEIO DE ECO ACÚSTICO: Não envia o áudio da própria fala do Preceptor de volta ao servidor
+        if (isPreceptorSpeaking()) {
+          if (pulseRing) {
+            pulseRing.style.transform = 'scale(1)';
+            pulseRing.style.borderColor = '';
+          }
+          return;
+        }
+
         const float32 = e.inputBuffer.getChannelData(0);
 
         // Medição do nível RMS da voz
@@ -14236,7 +14593,7 @@
 
         // Feedback visual imediato: o anel do avatar reage em tempo real à voz do médico
         if (pulseRing) {
-          if (rms > 0.005) {
+          if (rms > 0.008) {
             const scale = Math.min(1.35, 1 + rms * 8);
             pulseRing.style.transform = `scale(${scale})`;
             pulseRing.style.borderColor = 'rgba(52, 211, 153, 0.85)';
@@ -14246,8 +14603,8 @@
           }
         }
 
-        // VAD: capta fala beira-leito sem cortar voz mansa ou com fone bluetooth
-        if (rms < 0.002) return;
+        // Limiar VAD ajustado para 0.006 para filtrar ruído ambiente e vazamento de fone
+        if (rms < 0.006) return;
 
         // Converte Float32 para Int16 Little-Endian
         const int16 = new Int16Array(float32.length);
@@ -14278,8 +14635,12 @@
         const ptVoice = voices.find(v => v.lang === 'pt-BR' || (v.lang && v.lang.startsWith('pt')));
         if (ptVoice) utter.voice = ptVoice;
         utter.onstart = () => setLiveStatus('🔊 Preceptor Falando (Voz Sintetizada)...', 'speaking');
-        utter.onend = () => setLiveStatus('🎙️ Ouvindo você...', 'listening');
-        utter.onerror = () => setLiveStatus('🎙️ Ouvindo você...', 'listening');
+        utter.onend = () => {
+          if (liveActiveSources.length === 0) setLiveStatus('🎙️ Ouvindo você...', 'listening');
+        };
+        utter.onerror = () => {
+          if (liveActiveSources.length === 0) setLiveStatus('🎙️ Ouvindo você...', 'listening');
+        };
         window.speechSynthesis.speak(utter);
       } catch (eSpeech) {
         console.warn('[SpeechSynthesis Fallback Warning]:', eSpeech);
@@ -14305,11 +14666,14 @@
         const isMp3 = bytes.length > 3 && ((bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33) || (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0));
 
         if (isWav || isOgg || isMp3) {
+          // IMPEDE DUAS VOZES SIMULTÂNEAS: Para qualquer áudio anterior antes de iniciar o novo turno
+          pararReproducaoAudioLive();
+
           liveOutputAudioCtx.decodeAudioData(bytes.buffer.slice(0), (audioBuffer) => {
             const source = liveOutputAudioCtx.createBufferSource();
             source.buffer = audioBuffer;
             source.connect(liveOutputAudioCtx.destination);
-            source.start();
+            source.start(0);
             liveActiveSources.push(source);
             source.onended = () => {
               liveActiveSources = liveActiveSources.filter(s => s !== source);
@@ -14325,7 +14689,7 @@
           return;
         }
 
-        // Caso padrão: PCM raw 16-bit 24kHz
+        // Caso padrão: PCM raw 16-bit 24kHz enfileirado no tempo sem sobreposição
         const int16 = new Int16Array(bytes.buffer);
         const float32 = new Float32Array(int16.length);
         for (let i = 0; i < int16.length; i++) {
@@ -14358,8 +14722,11 @@
     }
 
     function pararReproducaoAudioLive() {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        try { window.speechSynthesis.cancel(); } catch (_) {}
+      }
       liveActiveSources.forEach(s => {
-        try { s.stop(); } catch (_) {}
+        try { s.stop(); s.disconnect(); } catch (_) {}
       });
       liveActiveSources = [];
       liveScheduledTime = 0;
@@ -14368,6 +14735,7 @@
     function desconectarLivePreceptor() {
       liveConectado = false;
       pararReproducaoAudioLive();
+      finalizarBolhasStreamingLive();
 
       if (liveMicProcessor) {
         try { liveMicProcessor.disconnect(); } catch (_) {}
@@ -14416,9 +14784,30 @@
       copiarToast(liveMudo ? 'Microfone mutado no Preceptor' : 'Microfone ativo');
     }
 
-    function adicionarItemTranscricaoLive(papel, texto) {
+    let bolhaStreamingAtual = { user: null, model: null };
+
+    function finalizarBolhasStreamingLive() {
+      bolhaStreamingAtual.user = null;
+      bolhaStreamingAtual.model = null;
+    }
+
+    function adicionarItemTranscricaoLive(papel, texto, isStreaming = false) {
       const container = document.getElementById('live-transcricao-container');
       if (!container || !texto) return;
+
+      // Se for streaming do mesmo interlocutor, concatena na mesma bolha
+      if (isStreaming && bolhaStreamingAtual[papel]) {
+        const pEl = bolhaStreamingAtual[papel].querySelector('p');
+        if (pEl) {
+          pEl.textContent += texto;
+          const ultimoHist = historicoTranscricaoLive[historicoTranscricaoLive.length - 1];
+          if (ultimoHist && ultimoHist.papel === papel) {
+            ultimoHist.texto = pEl.textContent;
+          }
+          container.scrollTop = container.scrollHeight;
+          return;
+        }
+      }
 
       historicoTranscricaoLive.push({ papel, texto, hora: new Date() });
 
@@ -14431,10 +14820,17 @@
       itemEl.innerHTML = `<span class="font-bold text-[10px] block text-emerald-400">${tag}</span><p class="mt-0.5">${escapeHtml(texto)}</p>`;
       container.appendChild(itemEl);
       container.scrollTop = container.scrollHeight;
+
+      if (isStreaming) {
+        bolhaStreamingAtual[papel] = itemEl;
+      } else {
+        bolhaStreamingAtual[papel] = null;
+      }
     }
 
     function limparTranscricaoLive() {
       historicoTranscricaoLive = [];
+      finalizarBolhasStreamingLive();
       const container = document.getElementById('live-transcricao-container');
       if (container) {
         container.innerHTML = '<p class="text-slate-500 italic text-center py-4">Transcrição limpa. Fale no microfone para continuar a discussão socrática...</p>';
