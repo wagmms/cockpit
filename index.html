@@ -29,6 +29,33 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Dexie.js (IndexedDB moderno) para Modo Plantão sem Sinal -->
   <script defer src="https://cdn.jsdelivr.net/npm/dexie@4.0.11/dist/dexie.min.js"></script>
+  <!-- Configuração Global do Backend & WebSocket (Resiliente para GitHub Pages, Localhost e Render) -->
+  <script>
+    window.ULTRA_CONFIG = window.ULTRA_CONFIG || {
+      API_BASE: (function() {
+        if (typeof window !== 'undefined' && window.location) {
+          const isFile = window.location.protocol === 'file:';
+          const isGithub = window.location.hostname && window.location.hostname.includes('github.io');
+          const hasHost = !!window.location.host;
+          if (!isFile && !isGithub && hasHost) return '';
+        }
+        return 'https://rotina-tt8n.onrender.com';
+      })(),
+      WS_BASE: (function() {
+        if (typeof window !== 'undefined' && window.location) {
+          const isFile = window.location.protocol === 'file:';
+          const isGithub = window.location.hostname && window.location.hostname.includes('github.io');
+          const hasHost = !!window.location.host;
+          if (!isFile && !isGithub && hasHost) {
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            return `${proto}//${window.location.host}`;
+          }
+        }
+        return 'wss://rotina-tt8n.onrender.com';
+      })()
+    };
+    window.BACKEND_URL = window.BACKEND_URL || window.ULTRA_CONFIG.API_BASE;
+  </script>
   <!-- Módulo Desacoplado: Aba Rotina & Time-Blocking Visual -->
   <script src="./rotina_timeline.js"></script>
   <!-- Chart.js carregado sob demanda (lazy-loading) na aba Perfil para acelerar FCP em 0ms -->
@@ -6864,7 +6891,25 @@
       'dexclorfeniramina 2 mg': '1 comp VO de 8/8h se prurido ou reação alérgica aguda (causa sonolência).',
       'prometazina 25 mg': '1 comp VO de 8/8h a 12/12h (ou 25mg IM profundo se náusea/alergia aguda).',
       'biperideno 2 mg': '1 comp VO 1 a 2x/dia se sintomas extrapiramidais por neurolépticos.',
-      'biperideno 5 mg/ml ap 1 ml': '1 ampola (5mg) IM ou IV lento se distonia aguda por neuroléptico.'
+      'biperideno 5 mg/ml ap 1 ml': '1 ampola (5mg) IM ou IV lento se distonia aguda por neuroléptico.',
+      'adenosina 3 mg/ml ap. 2 ml': 'TSV regular estável: 1ª dose de 6 mg (1 ampola) em bolus IV ultrarrápido (1-2s) + flush de 20 mL SF 0,9% com membro elevado. Se não reverter em 1-2 min: 2ª dose de 12 mg (2 ampolas). Contraindicada em Asma/Broncoespasmo ativo e BAV 2º/3º grau.',
+      'adrenalina 1 mg/ml ap. 1 ml': 'PCR: 1 mg IV/IO a cada 3 a 5 min + flush de 20 mL SF. Anafilaxia: 0,3 a 0,5 mg (0,3 a 0,5 mL) IM no vasto lateral da coxa a cada 5-15 min. Broncoespasmo grave: 0,3 mg IM/SC.',
+      'amicacina 250 mg/ml ap. 2 ml': '15 mg/kg/dia IV/IM em dose única diária diluída em 100 mL de SF 0,9% infundida em 30 a 60 min. Monitorar função renal.',
+      'atropina 0,25 mg/ml ap. 1 ml': 'Bradicardia instável: 1 mg IV a cada 3-5 min (dose máx: 3 mg). Intoxicação por organofosforados: 2 a 4 mg IV a cada 5-10 min até atropinização.',
+      'deslanosideo 0,2 mg/ml ap.': '0,4 mg (2 ampolas) EV lento diluído em 100 mL de SG 5% ou SF 0,9% em 20 min. Controle agudo de FC em FA com IC.',
+      'dobutamina 12,5 mg/ml ap.': 'Choque cardiogênico: 2 ampolas (500 mg = 40 mL) + 210 mL SG 5% ou SF 0,9% (conc: 2.000 mcg/mL). Iniciar a 2,5 a 5 mcg/kg/min em BIC contínua.',
+      'dopamina 5 mg/ml ap. 10 ml': 'Choque / Bradicardia: 5 ampolas (250 mg = 50 mL) + 200 mL SG 5% (conc: 1.000 mcg/mL). Iniciar a 5 mcg/kg/min em BIC contínua.',
+      'etomidato 2 mg/ml ap.': 'Indução em SRI: 0,3 mg/kg (0,15 mL/kg) EV bolus rápido direto. Cardioprotetor e hemodinamicamente estável.',
+      'fenitoina 50 mg/ml ap. 5 ml': 'Estado de Mal Epiléptico: Ataque de 15 a 20 mg/kg EV diluído EXCLUSIVAMENTE em SF 0,9% (velocidade máx: 50 mg/min para evitar arritmias). Manutenção: 100 mg EV/VO 8/8h.',
+      'fentanila 50 mcg/ml ap.': 'Analgesia em SRI: 2 a 3 mcg/kg EV lento (1 a 2 min antes da indução). Sedação contínua em VM: 25 a 100 mcg/h em BIC.',
+      'flumazenil 0,1 mg/ml ap. 5 ml': 'Reversão de intoxicação por benzodiazepínicos: 0,2 mg (2 mL) EV em 30 segundos. Repetir 0,1 mg/min se necessário (máx 1 mg).',
+      'glicose 50% ap. 10 ml': 'Hipoglicemia severa sintomática (HGT < 50 mg/dL): 4 ampolas (40 mL = 20 g de glicose) EV em bolus rápido, reavaliar HGT em 15 min.',
+      'heparina sodica 5.000 ui ap.': 'Profilaxia de TEV: 5.000 UI SC de 8/8h. Anticoagulação plena em SCA/TEP: Ataque 60-80 UI/kg EV (máx 5.000 UI) + infusão contínua 18 UI/kg/h.',
+      'hidralazina cloridrato 20 mg ap.': 'Emergência hipertensiva na gestação / Pré-eclâmpsia grave: 5 mg EV em bolus lento (diluir 1 amp em 19 mL SF; 1 mL = 1 mg). Repetir 5-10 mg a cada 20 min se PAD >= 110 (máx 20 mg).',
+      'metoprolol 1 mg/ml ap. 5 ml': 'Taquiarritmias / SCA: 5 mg EV lento (1 a 2 min) a cada 5 min até resposta ou máx 15 mg. Monitorar FC e PA.',
+      'naloxona 0,4 mg/ml ap. 1 ml': 'Reversão de overdose por opioides: 0,04 a 0,4 mg (diluir 1 amp em 9 mL SF; titular 1 a 2 mL) EV a cada 2-3 min até FR adequada.',
+      'suxametonio cloreto 100 mg fr.': 'Bloqueio neuromuscular na SRI: 1 a 1,5 mg/kg EV em bolus rápido (máx 200 mg). Contraindicado em hipercalemia, queimaduras graves > 24h e história de hipertermia maligna.',
+      'vecuronio 10 mg fr.': 'Bloqueio neuromuscular em IOT / VM: Indução 0,1 mg/kg EV. Manutenção: 0,01 a 0,015 mg/kg a cada 25-40 min.'
     };
 
     function normalizarBuscaFarmaco(texto) {
@@ -6876,6 +6921,14 @@
         .replace(/\s+/g, ' ')
         .trim();
     }
+
+    // Indexação determinística O(1) de posologias normalizadas
+    const POSOLOGIAS_NORMALIZADAS_REMUME = {};
+    try {
+      Object.entries(POSOLOGIAS_REFERENCIA_REMUME).forEach(([k, v]) => {
+        POSOLOGIAS_NORMALIZADAS_REMUME[normalizarBuscaFarmaco(k)] = v;
+      });
+    } catch (_) {}
 
     function obterMarcasComerciais(linha) {
       if (!linha || typeof linha !== 'string') return [];
@@ -6892,23 +6945,45 @@
     function obterPosologiaReferencia(linha) {
       if (!linha || typeof linha !== 'string') return '';
       const norm = normalizarBuscaFarmaco(linha);
+      if (POSOLOGIAS_NORMALIZADAS_REMUME[norm]) {
+        return POSOLOGIAS_NORMALIZADAS_REMUME[norm];
+      }
       if (POSOLOGIAS_REFERENCIA_REMUME[norm]) {
         return POSOLOGIAS_REFERENCIA_REMUME[norm];
       }
-      for (const [chave, poso] of Object.entries(POSOLOGIAS_REFERENCIA_REMUME)) {
-        if (norm.includes(chave) || chave.includes(norm)) {
+
+      const ehInjetavel = /\b(ap|amp|ampola|ampolas|fr\s*ap|fa|injetavel|iv|ev|im|sc)\b/.test(norm);
+      const ehLiquidoOral = /\b(gotas|gts|xpe|xarope|susp|suspensao|frasco|sol\s*oral)\b/.test(norm);
+      const ehTopico = /\b(creme|pomada|gel|pt|tb|locao|unguento|pasta)\b/.test(norm);
+      const ehOftalmico = /\b(colirio|oftalmico|sol\s*oft)\b/.test(norm);
+      const ehInalatorio = /\b(aer|spray|inalatorio|inalacao|nebulizacao|flaconete)\b/.test(norm);
+
+      // Busca por compatibilidade estrita de forma farmacêutica
+      for (const [chaveNorm, poso] of Object.entries(POSOLOGIAS_NORMALIZADAS_REMUME)) {
+        const chaveInjetavel = /\b(ap|amp|ampola|fr\s*ap|fa|injetavel|iv|ev|im|sc)\b/.test(chaveNorm);
+        if (ehInjetavel && !chaveInjetavel) continue; // Injetável NUNCA pode casar com comprimido oral!
+        if (!ehInjetavel && chaveInjetavel) continue; // Comprimido NUNCA pode casar com ampola EV!
+
+        if (norm.includes(chaveNorm) || chaveNorm.includes(norm)) {
           return poso;
         }
       }
-      // Heurística clínica determinística beira-leito
-      if (norm.includes('gotas') || norm.includes('fr.')) {
-        return 'Posologia líquida: dosar em gotas ou mL conforme peso corporal e prescrição.';
+
+      // Fallbacks clínicos determinísticos estritos por via (Zero "via oral" para injetáveis)
+      if (ehInjetavel) {
+        return 'Uso parenteral hospitalar: administrar via IV/IM conforme diluição, velocidade de infusão e monitorização clínica beira-leito.';
       }
-      if (norm.includes('ap.') || norm.includes('fr.ap.') || norm.includes('ampola')) {
-        return 'Posologia injetável: uso hospitalar parenteral conforme protocolo de infusão.';
+      if (ehLiquidoOral) {
+        return 'Uso oral pediátrico/adulto: dosar em gotas ou mL conforme peso corporal, indicação clínica e prescrição.';
       }
-      if (norm.includes('tb.') || norm.includes('pt.') || norm.includes('pomada') || norm.includes('creme')) {
-        return 'Uso tópico: aplicar fina camada sobre a área afetada 2 a 3x/dia após higienização.';
+      if (ehTopico) {
+        return 'Uso dermatológico/tópico: aplicar fina camada sobre a área afetada 2 a 3x/dia após higienização local.';
+      }
+      if (ehOftalmico) {
+        return 'Uso oftalmológico: instilar 1 a 2 gotas no saco conjuntival do olho afetado conforme prescrição.';
+      }
+      if (ehInalatorio) {
+        return 'Via inalatória: administrar doses/jatos com espaçador conforme protocolo respiratório.';
       }
       return 'Posologia usual de adulto: 1 tomada via oral conforme indicação clínica e função renal.';
     }
@@ -14025,15 +14100,21 @@
 
         // Configurar URL do WebSocket resiliente
         let wsUrl;
-        const isFile = typeof window !== 'undefined' && window.location && window.location.protocol === 'file:';
-        const isGithub = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('github.io');
-        const hasHost = typeof window !== 'undefined' && window.location && window.location.host;
-
-        if (!isFile && !isGithub && hasHost) {
-          const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-          wsUrl = `${proto}//${window.location.host}/live`;
+        if (typeof window !== 'undefined' && window.ULTRA_CONFIG && window.ULTRA_CONFIG.WS_BASE) {
+          wsUrl = `${window.ULTRA_CONFIG.WS_BASE}/live`;
+        } else if (typeof window !== 'undefined' && window.BACKEND_URL) {
+          const bUrl = window.BACKEND_URL.replace(/^http/, 'ws');
+          wsUrl = `${bUrl}/live`;
         } else {
-          wsUrl = 'wss://rotina-tt8n.onrender.com/live';
+          const isFile = typeof window !== 'undefined' && window.location && window.location.protocol === 'file:';
+          const isGithub = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('github.io');
+          const hasHost = typeof window !== 'undefined' && window.location && window.location.host;
+          if (!isFile && !isGithub && hasHost) {
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsUrl = `${proto}//${window.location.host}/live`;
+          } else {
+            wsUrl = 'wss://rotina-tt8n.onrender.com/live';
+          }
         }
 
         liveWs = new WebSocket(wsUrl);

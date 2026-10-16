@@ -12,6 +12,27 @@
   var SYNC_STATE_KEY = 'rotina_sync_status_v1';
   var STORAGE_KEY_DUVIDAS = 'rotina_duvidas_v1';
 
+  function obterApiBaseUrl() {
+    if (typeof window !== 'undefined') {
+      if (window.BACKEND_URL && typeof window.BACKEND_URL === 'string' && window.BACKEND_URL.trim()) {
+        return window.BACKEND_URL.replace(/\/+$/, '');
+      }
+      if (window.ULTRA_CONFIG && window.ULTRA_CONFIG.HTTP_BASE) {
+        return window.ULTRA_CONFIG.HTTP_BASE.replace(/\/+$/, '');
+      }
+      try {
+        var saved = localStorage.getItem('cockpit_backend_url') || localStorage.getItem('ULTRA_BACKEND_URL');
+        if (saved && !saved.includes('ultra-rotina-backend.onrender.com')) {
+          return saved.replace(/\/+$/, '');
+        }
+      } catch (e) {}
+      if (window.location && window.location.origin && !window.location.hostname.includes('github.io')) {
+        return window.location.origin;
+      }
+    }
+    return 'https://rotina-tt8n.onrender.com';
+  }
+
   var CATEGORIA_CONFIG = {
     plantao: {
       rotulo: 'Plantão / Enfermaria',
@@ -770,7 +791,7 @@
       if (!Array.isArray(fila) || fila.length === 0) return;
 
       filaProcessando = true;
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/status';
+      var endpoint = obterApiBaseUrl() + '/api/rotina/status';
       var item = fila[0];
 
       fetch(endpoint, {
@@ -833,7 +854,7 @@
       return;
     }
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/status';
+      var endpoint = obterApiBaseUrl() + '/api/rotina/status';
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -897,7 +918,7 @@
       return;
     }
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/blocos?data=' + encodeURIComponent(targetDateISO);
+      var endpoint = obterApiBaseUrl() + '/api/rotina/blocos?data=' + encodeURIComponent(targetDateISO);
       fetch(endpoint).then(function(res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
@@ -931,7 +952,7 @@
     }
 
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/agenda/sync';
+      var endpoint = obterApiBaseUrl() + '/api/rotina/agenda/sync';
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1064,7 +1085,7 @@
       return;
     }
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/duvidas';
+      var endpoint = obterApiBaseUrl() + '/api/rotina/duvidas';
       fetch(endpoint).then(function(res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
@@ -1114,7 +1135,7 @@
     if (!navigator.onLine) return;
 
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/duvidas';
+      var endpoint = obterApiBaseUrl() + '/api/rotina/duvidas';
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1161,7 +1182,7 @@
     if (!navigator.onLine) return;
 
     try {
-      var endpoint = (window.BACKEND_URL || '') + '/api/rotina/duvidas/resolver';
+      var endpoint = obterApiBaseUrl() + '/api/rotina/duvidas/resolver';
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
