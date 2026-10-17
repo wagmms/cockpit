@@ -58,6 +58,8 @@
   </script>
   <!-- Módulo Desacoplado: Aba Rotina & Time-Blocking Visual -->
   <script src="./rotina_timeline.js"></script>
+  <!-- Módulo Desacoplado: Estação Clínica SOAP & Copiloto Médico (Gemini 4 Argon) -->
+  <script src="./estacao_soap.js"></script>
   <!-- Chart.js carregado sob demanda (lazy-loading) na aba Perfil para acelerar FCP em 0ms -->
 
   <script>
@@ -176,6 +178,10 @@
       </div>
 
       <div class="flex items-center gap-1.5">
+        <button onclick="abrirModalPerfilLocal()" id="btn-contexto-clinico" class="px-2 py-1 rounded-lg bg-brand-500/15 border border-brand-500/40 text-brand-300 text-[10px] font-bold flex items-center gap-1 transition active:scale-95" title="Configurar Nome, Cidade (REMUME), Papel (Médico/Interno) e Cenário">
+          <i data-lucide="map-pin" class="w-3 h-3 text-brand-400"></i>
+          <span id="badge-contexto-clinico-label" class="truncate max-w-[130px] sm:max-w-[220px]">📍 RENAME SUS · 👨‍⚕️ Perfil</span>
+        </button>
         <button onclick="abrirPainelOffline()" id="btn-status-rede" class="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold flex items-center gap-1.5 transition active:scale-95" title="Telemetria & Modo de Conexão">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" id="dot-status-rede"></span>
           <i data-lucide="cloud" class="w-3.5 h-3.5" id="icon-status-rede"></i>
@@ -754,7 +760,7 @@
       <div class="glass-card rounded-xl p-3 sm:p-3.5 space-y-2.5">
         <div class="flex items-center justify-between">
           <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-            <i data-lucide="pill" class="w-3.5 h-3.5 text-rose-400"></i> Guia Rápido REMUME Ribeirão Preto
+            <i data-lucide="pill" class="w-3.5 h-3.5 text-rose-400"></i> Guia Rápido REMUME Municipal / SUS
           </h3>
           <button onclick="carregarRemume(true)" class="text-[10px] text-brand-400 hover:text-brand-300 flex items-center gap-1">
             <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i> Atualizar
@@ -792,14 +798,14 @@
     </div>
 
     <!-- =================================================================== -->
-    <!-- ABA 4: EMERGÊNCIA & CALCULADORAS RÁPIDAS (USP-RP) -->
+    <!-- ABA 4: EMERGÊNCIA & CALCULADORAS RÁPIDAS (SALA VERMELHA) -->
     <!-- =================================================================== -->
     <div id="tab-calculadoras" class="tab-pane hidden space-y-3.5">
       <!-- Seletor de Calculadora & Emergência -->
       <div class="space-y-1.5">
         <button onclick="abrirSubCalc('calc-usprp', this)" data-btn-type="usprp" class="subcalc-btn w-full py-2.5 px-3 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 text-rose-100 border-2 border-rose-400/70 text-xs font-black flex items-center justify-between shadow-md shadow-rose-950/40 transition active:scale-[0.99]">
           <span class="flex items-center gap-1.5">
-            <i data-lucide="shield-alert" class="w-4 h-4 text-rose-300"></i> 🚨 Checklists de Sala Vermelha (USP-RP)
+            <i data-lucide="shield-alert" class="w-4 h-4 text-rose-300"></i> 🚨 Checklists de Sala Vermelha (SALA VERMELHA)
           </span>
           <span class="text-[10px] bg-rose-500/40 text-white px-2 py-0.5 rounded-md font-mono font-black tracking-wider border border-rose-400/60">HC-UE</span>
         </button>
@@ -871,15 +877,15 @@
         </div>
       </div>
 
-      <!-- Subcalc 0: Checklists Sala Vermelha USP-RP (MedQuest OSCE Live) -->
+      <!-- Subcalc 0: Checklists Sala Vermelha SALA VERMELHA (MedQuest OSCE Live) -->
       <div id="calc-usprp" class="subcalc-pane glass-card rounded-xl p-3.5 space-y-3">
         <!-- Cabeçalho do Protocolo -->
         <div class="flex items-center justify-between">
           <div>
             <h4 class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
-              <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i> Sala Vermelha · Protocolos HC-UE
+              <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i> Sala Vermelha · Protocolos EMERGÊNCIA
             </h4>
-            <p class="text-[10px] text-slate-400">Conduta de choque e baremas oficiais FMRP-USP</p>
+            <p class="text-[10px] text-slate-400">Conduta de choque e baremas oficiais Diretrizes Clínicas</p>
           </div>
           <span class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full font-bold">MedQuest Live</span>
         </div>
@@ -926,7 +932,7 @@
           <!-- Preenchido dinamicamente via JS -->
         </div>
 
-        <!-- Card de Erros Críticos & Contraindicações da USP-RP -->
+        <!-- Card de Erros Críticos & Contraindicações da SALA VERMELHA -->
         <div class="p-3.5 rounded-xl bg-rose-950/70 border-2 border-rose-500/70 space-y-2 text-xs text-rose-100 shadow-md shadow-rose-950/40">
           <div class="font-extrabold flex items-center gap-1.5 text-rose-200 text-xs tracking-tight">
             <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-300"></i> Armadilhas &amp; Erros Críticos (HC-UE FMRP-USP)
@@ -2184,6 +2190,32 @@
     <!-- ABA 6: SOAP + PRECEPTOR IA -->
     <!-- =================================================================== -->
     <div id="tab-soap" class="tab-pane space-y-3.5">
+      <!-- BOTÃO DESTAQUE: ESTAÇÃO CLÍNICA SOAP (GEMINI 4 ARGON / VERTEX AI) -->
+      <div class="mb-3">
+        <button 
+          type="button"
+          onclick="abrirModalEstacaoSoap()"
+          class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-extrabold text-xs sm:text-sm shadow-xl shadow-purple-950/40 flex items-center justify-between transition active:scale-[0.98] border border-white/20 group"
+        >
+          <div class="flex items-center gap-2.5">
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 text-white group-hover:scale-110 transition shadow-inner">
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+            </span>
+            <div class="text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-white text-xs sm:text-sm">⚡ Estação Clínica SOAP &amp; Decisão Médica</span>
+                <span class="text-[9px] bg-amber-400 text-slate-950 font-black px-1.5 py-0.2 rounded-full uppercase tracking-wider">Novo</span>
+              </div>
+              <p class="text-[10px] text-purple-200 font-medium">Ditado por Voz, Cálculos Reativos e Conduta Médica Oficial</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 text-[11px] font-bold text-white/90 bg-white/10 px-2.5 py-1 rounded-xl">
+            <span>Abrir</span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </button>
+      </div>
+
       <!-- ================================================================= -->
       <!-- CARD DINÂMICO: PRECEPTOR IA · REVISÃO DE 30s DO PLANTÃO           -->
       <!-- ================================================================= -->
@@ -2707,7 +2739,184 @@
   </div>
 
   <!-- ================================================================= -->
+  <!-- MODAL: ESTAÇÃO CLÍNICA SOAP & COPILOTO MÉDICO (GEMINI 4 ARGON)     -->
+  <!-- ================================================================= -->
+  <div id="modal-estacao-soap" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md hidden animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="titulo-estacao-soap">
+    <div class="relative w-full max-w-5xl h-[94vh] flex flex-col rounded-2xl border border-purple-500/40 bg-slate-900 shadow-2xl overflow-hidden">
+      <!-- Header do Modal -->
+      <div class="flex items-center justify-between border-b border-slate-800 px-4 py-3 bg-slate-950/70 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/40">
+            <i data-lucide="sparkles" class="w-5 h-5 text-amber-300"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-400">Inteligência Clínica Oficial</span>
+              <span class="text-[9.5px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full font-bold">Gemini IA + Protocolos SUS</span>
+            </div>
+            <h3 id="titulo-estacao-soap" class="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
+              ⚡ Estação Clínica SOAP &amp; Suporte à Decisão
+            </h3>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span id="soap-autosave-status" class="text-[10.5px] text-slate-400 font-mono hidden sm:inline"></span>
+          <button type="button" onclick="limparFormularioSoap()" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-rose-300 text-xs font-semibold transition" title="Limpar todos os campos">
+            Limpar
+          </button>
+          <button type="button" onclick="fecharModalEstacaoSoap()" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition" title="Fechar (Esc)">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Local de Trabalho Ativo (CNES) & Cabeçalho -->
+      <div id="rotina-cnes-workplace-bar"></div>
+
+      <!-- Corpo Split-Screen (Scrollable) -->
+      <div class="flex-1 overflow-y-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <!-- Coluna Esquerda: Captura S + O (5 Colunas no Desktop) -->
+        <div class="lg:col-span-5 flex flex-col gap-3">
+          <!-- Contexto Demográfico -->
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2.5">
+            <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="user" class="w-3 h-3 text-purple-400"></i> Contexto do Paciente
+            </span>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">Idade</label>
+                <input type="number" id="soap-idade" min="0" max="130" placeholder="Anos" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">Sexo</label>
+                <select id="soap-sexo" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                  <option value="">Não informado</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Feminino</option>
+                  <option value="I">Outro / ND</option>
+                </select>
+              </div>
+              <div class="flex flex-col justify-end">
+                <label class="flex items-center gap-1.5 text-[11px] text-slate-300 cursor-pointer py-1.5">
+                  <input type="checkbox" id="soap-gestante" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-0">
+                  <span>Gestante</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">Alergias Conhecidas (separar por vírgula)</label>
+              <input type="text" id="soap-alergias" placeholder="Ex: Dipirona, Penicilina, Sulfa, AINEs..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500">
+            </div>
+          </div>
+
+          <!-- Sinais Vitais & Antropometria -->
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="activity" class="w-3 h-3 text-cyan-400"></i> Sinais Vitais &amp; Antropometria
+              </span>
+              <div class="flex items-center gap-1">
+                <span id="badge-pam-live" class="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 hidden">PAM: --</span>
+                <span id="badge-imc-live" class="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 hidden">IMC: --</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-1.5">
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">PAS</label>
+                <input type="number" id="soap-pas" placeholder="120" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">PAD</label>
+                <input type="number" id="soap-pad" placeholder="80" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">FC (bpm)</label>
+                <input type="number" id="soap-fc" placeholder="78" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">FR (irpm)</label>
+                <input type="number" id="soap-fr" placeholder="16" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">SpO2 (%)</label>
+                <input type="number" id="soap-spo2" placeholder="98" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">Tax (°C)</label>
+                <input type="number" step="0.1" id="soap-tax" placeholder="36.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">Peso (kg)</label>
+                <input type="number" step="0.1" id="soap-peso" placeholder="70" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="text-[9.5px] text-slate-400 block">Alt (cm)</label>
+                <input type="number" id="soap-altura" placeholder="175" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Relato Livre / Brain Dump & Ditado por Voz -->
+          <div class="flex-1 flex flex-col p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="mic" class="w-3 h-3 text-purple-400"></i> Relato Clínico Livre (Brain Dump)
+              </span>
+              <button
+                type="button"
+                id="btn-soap-mic"
+                onclick="toggleDitadoVozSoap()"
+                class="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 text-xs font-bold flex items-center gap-1.5 transition active:scale-95"
+                title="Ativar/Desativar ditado de voz pelo microfone"
+              >
+                <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+                <span id="btn-soap-mic-label">Ditar Voz</span>
+              </button>
+            </div>
+
+            <textarea
+              id="soap-brain-dump"
+              rows="6"
+              placeholder="Dite ou digite livremente o caso: queixa principal, tempo de evolução, histórico, exame físico e achados relevantes... Ex: 'Masc 58a, tabagista, dor no peito há 1h em aperto, PA 150x95, sudoreico, MV presente sem ruídos adventícios'..."
+              class="w-full flex-1 bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 resize-none font-sans leading-relaxed"
+            ></textarea>
+
+            <button
+              type="button"
+              id="btn-soap-submit"
+              onclick="enviarParaEstacaoSoap()"
+              class="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition active:scale-[0.98]"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>⚡ Estruturar SOAP &amp; Gerar Conduta (Ctrl + Enter)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Saída A + P & Conduta (7 Colunas no Desktop) -->
+        <div class="lg:col-span-7 flex flex-col gap-3">
+          <!-- Alertas Críticos e Red Flags -->
+          <div id="soap-alertas-container" class="space-y-2"></div>
+
+          <!-- Container Dinâmico de Resultados SOAP -->
+          <div id="soap-resultado-container" class="flex-1 flex flex-col justify-center items-center p-6 rounded-2xl bg-slate-950/40 border border-dashed border-slate-800 text-center text-slate-500 min-h-[350px]">
+            <div class="max-w-xs space-y-2">
+              <i data-lucide="stethoscope" class="w-10 h-10 mx-auto text-slate-600 opacity-60"></i>
+              <p class="text-xs font-medium text-slate-400">Preencha o caso clínico à esquerda ou dite por voz e clique em <strong>Estruturar SOAP</strong>.</p>
+              <p class="text-[11px] text-slate-500">A IA estruturará o S+O com terminologia técnica, calculará CIDs precisos no A e montará a prescrição com diretrizes brasileiras no P.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
   <!-- MODAL / GAVETA DE AUDITORIA BEIRA-LEITO (PRECEPTOR IA)            -->
+  <!-- ================================================================= -->
   <!-- ================================================================= -->
   <div id="modal-raiox-preceptor" class="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-in fade-in duration-200">
     <div class="relative w-full max-w-lg max-h-[88vh] flex flex-col rounded-2xl border border-purple-500/40 bg-slate-900 shadow-2xl overflow-hidden">
@@ -2745,7 +2954,7 @@
 
       <!-- Rodapé do Modal -->
       <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
-        <span class="text-[10px] text-slate-400">Protocolos clínicos HC-UE FMRP-USP & Beira-Leito.</span>
+        <span class="text-[10px] text-slate-400">Protocolos clínicos Protocolo de Emergência & Beira-Leito.</span>
         <div class="flex items-center gap-2">
           <button onclick="fecharModalRaioXPreceptor()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
             Fechar
@@ -2804,7 +3013,7 @@
               <span id="live-status-text">Pronto para conectar ao vivo</span>
             </div>
             <p class="text-[10px] text-slate-400 mt-1.5 max-w-xs mx-auto">
-              Fale pelo microfone como se estivesse com o Preceptor FMRP-USP no fone. Latência &lt; 500ms com interrupção natural (barge-in).
+              Fale pelo microfone como se estivesse com o Preceptor Diretrizes Clínicas no fone. Latência &lt; 500ms com interrupção natural (barge-in).
             </p>
           </div>
 
@@ -2906,7 +3115,7 @@
 
       <!-- Rodapé do Modal com Ações Rápidas -->
       <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
-        <span class="text-[10px] text-slate-400">Padronização HC-UE FMRP-USP · Pronto para PEP.</span>
+        <span class="text-[10px] text-slate-400">Padronização Protocolo de Emergência · Pronto para PEP.</span>
         <div class="flex items-center gap-2">
           <button onclick="fecharModalSinteseDiaSOAP()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
             Fechar
@@ -2975,7 +3184,7 @@
 
       <!-- Rodapé do Modal com Ações Rápidas -->
       <div class="border-t border-slate-800 p-3 bg-slate-950/70 flex items-center justify-between gap-2">
-        <span class="text-[10px] text-slate-400">Modelo SBAR FMRP-USP / IHI · Situação, Contexto, Avaliação, Recs.</span>
+        <span class="text-[10px] text-slate-400">Modelo SBAR Diretrizes Clínicas / IHI · Situação, Contexto, Avaliação, Recs.</span>
         <div class="flex items-center gap-2">
           <button onclick="fecharModalSbarPassagem()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-[11px] font-semibold text-slate-300 transition">
             Fechar
@@ -6717,7 +6926,7 @@
       });
 
       linhas.push(`======================================================================`);
-      linhas.push(`Padronização HC-UE FMRP-USP · Pronto para Round e PEP.`);
+      linhas.push(`Padronização Protocolo de Emergência · Padronização de Segurança do Paciente · Pronto para Round e PEP.`);
       return linhas.join('\n');
     }
 
@@ -10065,16 +10274,16 @@
     }
 
     // =========================================================================
-    // 5.1 CHECKLISTS DE SALA VERMELHA (HC-UE FMRP-USP & MEDQUEST OSCE LIVE)
+    // 5.1 CHECKLISTS DE SALA VERMELHA (Protocolo de Emergência & MEDQUEST OSCE LIVE)
     // =========================================================================
     const PROTOCOLOS_USP_SALA_VERMELHA = {
       cad: {
         id: 'cad',
         grandeArea: 'Clínica Médica',
         titulo: 'Cetoacidose Diabética (CAD)',
-        subtitulo: 'Protocolo HC-UE FMRP-USP · Emergências Endócrinas',
+        subtitulo: 'Protocolo Protocolo de Emergência · Emergências Endócrinas',
         icone: 'droplet',
-        badge: 'USP-RP 2024 CM',
+        badge: 'SALA VERMELHA 2024 CM',
         cenario: 'Paciente DM1 descompensado (glicemia > 250, acidose metabólica pH < 7.30, HCO3 < 15, cetonúria 4+, Kussmaul, desidratação grave).',
         metas: [
           'Meta glicêmica: Redução progressiva de 50 a 70 mg/dL por hora (evitar edema cerebral).',
@@ -10083,7 +10292,7 @@
         ],
         errosCriticos: [
           'NUNCA iniciar insulina venosa se Potássio Sérico < 3.3 mEq/L ou desconhecido (risco de arritmia ventricular fatal por hipocalemia aguda).',
-          'NUNCA prescrever Bicarbonato de Sódio de rotina para pH > 6.9 (contraindicação formal pela ADA e HC-UE; piora hipocalemia e induz acidose liquórica paradoxal).',
+          'NUNCA prescrever Bicarbonato de Sódio de rotina para pH > 6.9 (contraindicação formal pela ADA e EMERGÊNCIA; piora hipocalemia e induz acidose liquórica paradoxal).',
           'NUNCA suspender a insulina venosa assim que a glicemia atingir 200-250 mg/dL sem fechar o ânion gap. A regra de ouro é associar SG 5% e manter a insulina.'
         ],
         itens: [
@@ -10152,9 +10361,9 @@
         id: 'sca',
         grandeArea: 'Clínica Médica',
         titulo: 'SCA sem Supra / Angina Instável de Alto Risco',
-        subtitulo: 'Protocolo HC-UE FMRP-USP · Síndromes Coronarianas',
+        subtitulo: 'Protocolo Protocolo de Emergência · Síndromes Coronarianas',
         icone: 'heart-pulse',
-        badge: 'USP-RP 2024 CM',
+        badge: 'SALA VERMELHA 2024 CM',
         cenario: 'Dor torácica isquêmica em repouso/crescendo (> 20 min), alteração dinâmica de ST/T e/ou troponina ultrassensível positiva, GRACE > 140.',
         metas: [
           'Tempo porta-ECG: Eletrocardiograma de 12 derivações realizado e laudado em até 10 minutos.',
@@ -10227,7 +10436,7 @@
         id: 'sepse',
         grandeArea: 'Clínica Médica',
         titulo: 'Choque Séptico & Bundle de 1 Hora',
-        subtitulo: 'Protocolo HC-UE FMRP-USP / Surviving Sepsis',
+        subtitulo: 'Protocolo Protocolo de Emergência / Surviving Sepsis',
         icone: 'shield-alert',
         badge: 'USP/Einstein 2024',
         cenario: 'Infecção suspeita ou confirmada associada a disfunção orgânica aguda (PAM < 65 mmHg, Lactato arterial > 2 mmol/L ou refratariedade a volume).',
@@ -10377,9 +10586,9 @@
         id: 'trauma',
         grandeArea: 'Cirurgia Geral',
         titulo: 'Politrauma & Choque Hemorrágico (E-FAST)',
-        subtitulo: 'Protocolo Sala Vermelha de Trauma HC-UE FMRP-USP',
+        subtitulo: 'Protocolo Sala Vermelha de Trauma Protocolo de Emergência',
         icone: 'crosshair',
-        badge: 'USP-RP 2023 CG',
+        badge: 'SALA VERMELHA 2023 CG',
         cenario: 'Vítima de trauma fechado grave/colisão, hipotenso (PA < 90), taquicárdico (FC > 120), sinais de choque hemorrágico classe III/IV e FAST positivo.',
         metas: [
           'Avaliação primária rigorosa na sequência xABCDE do ATLS.',
@@ -10459,7 +10668,7 @@
         id: 'anaf',
         grandeArea: 'Pediatria',
         titulo: 'Anafilaxia Grave & Choque Anafilático',
-        subtitulo: 'Protocolo Sala Vermelha HC-Criança / FMRP-USP',
+        subtitulo: 'Protocolo Sala Vermelha HC-Criança / Diretrizes Clínicas',
         icone: 'syringe',
         badge: 'UNICAMP/USP 2024 PED',
         cenario: 'Início agudo (minutos a poucas horas) com acometimento mucocutâneo (urticária, angioedema) + comprometimento respiratório (estridor, broncoespasmo) e/ou choque circulatório.',
@@ -10656,7 +10865,7 @@
 
           const racionalEl = document.createElement('p');
           racionalEl.className = 'text-[10.5px] text-slate-300 font-medium leading-snug';
-          racionalEl.textContent = 'Racional FMRP: ' + item.racional;
+          racionalEl.textContent = 'Racional Clínico: ' + item.racional;
 
           contentDiv.append(badgeRow, prescricaoBox, racionalEl);
           topRow.append(chk, contentDiv);
@@ -10747,7 +10956,7 @@
       const dataHoraStr = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       const pesoVal = parseFloat(document.getElementById('usprp-peso')?.value) || null;
 
-      let texto = `=== SALA VERMELHA · HC-UE FMRP-USP ===\n`;
+      let texto = `=== SALA VERMELHA · Protocolo de Emergência ===\n`;
       texto += `PROTOCOLO: ${proto.titulo.toUpperCase()}\n`;
       texto += `DATA/HORA: ${dataHoraStr}\n`;
       if (pesoVal) texto += `PESO ESTIMADO DO PACIENTE: ${pesoVal} kg\n`;
@@ -10770,13 +10979,13 @@
         }
       });
 
-      texto += `\n--- METAS & VIGILÂNCIA HC-UE ---\n`;
+      texto += `\n--- METAS & VIGILÂNCIA EMERGÊNCIA ---\n`;
       proto.metas.forEach(m => {
         texto += `• ${m}\n`;
       });
 
       texto += `\nStatus: ${executados} realizadas, ${pendentes} pendentes.\n`;
-      texto += `Protocolo de Referência: MedQuest / HC-UE FMRP-USP Sala Vermelha.`;
+      texto += `Protocolo de Referência: MedQuest / Protocolo de Emergência Sala Vermelha.`;
 
       copiarTextoClipboard(texto, 'Conduta de Sala Vermelha copiada para o prontuário!');
     }
@@ -11393,8 +11602,8 @@
       const dias = parseInt(dados.dias || 1, 10);
       const diasExtenso = converterNumeroPorExtensoOffline(dias);
       const dataStr = dados.data || new Date().toLocaleDateString('pt-BR');
-      const cidade = dados.cidade || 'Ribeirão Preto - SP';
-      const medico = dados.medicoNome || 'Dr. Wagner Moraes';
+      const cidade = dados.cidade || 'Município / UF';
+      const medico = dados.medicoNome || 'Médico(a) Assistente';
       const crm = dados.medicoCrm || 'CRM/SP';
 
       const linhas = [
@@ -12064,7 +12273,7 @@
           '4. OBJETIVO DO PARECER ESPECIALIZADO:',
           'Avaliação especializada conjunta para seguimento e conduta complementar.',
           '----------------------------------------------------------------------',
-          'Médico Solicitante: Dr. Wagner Moraes · CRM/SP',
+          'Médico Solicitante: Médico(a) Assistente · CRM/SP',
           '======================================================================'
         ];
         textoSisreg = linhas.join('\n');
@@ -13743,7 +13952,7 @@
         copiarToast('Nenhum caso sintetizado no momento.');
         return;
       }
-      const cabecalho = `🏥 SÍNTESE DO PLANTÃO · TODOS OS CASOS DO DIA (SOAP)\nData: ${new Date().toLocaleDateString('pt-BR')} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\nResponsável: Dr. Wagner Moraes · FMRP-USP\n\n`;
+      const cabecalho = `🏥 SÍNTESE DO PLANTÃO · TODOS OS CASOS DO DIA (SOAP)\nData: ${new Date().toLocaleDateString('pt-BR')} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\nResponsável: Médico(a) Assistente · Diretrizes Clínicas\n\n`;
       copiarTextoClipboard(cabecalho + cacheSinteseDiaSOAP, 'Síntese de todos os casos copiada para o PEP!');
     }
 
@@ -13857,7 +14066,7 @@
         regex: /(?:iam|infarto|coronari|dor\s+tor[aá]cica|supra|vd|trombol[ií]tico|cate|angioplastia)/i,
         pontoAtencao: 'critérios de contraindicação do Nitrato no IAM de VD e PAS < 90 mmHg.',
         perolaClinica: 'No IAM de parede inferior com extensão para ventrículo direito (V3R/V4R supra), o miocárdio ventricular direito dilatado depende criticamente de pré-carga. O uso inadvertido de nitratos causa venodilatação aguda súbita, colapsa o débito cardíaco e precipita choque cardiogênico refratário e PCR.',
-        diretriz: 'Regra de Ouro HC-UE: Solicitar V3R, V4R e V7/V8 em todo IAM de parede inferior (DII, DIII, aVF). Se PAS < 90 mmHg, FC < 50 ou > 100 bpm com acometimento de VD: ZERO nitrato, ZERO betabloqueador, ZERO morfina. Expansão volêmica cautelosa com SF 0,9% e reperfusão imediata.',
+        diretriz: 'Regra de Ouro EMERGÊNCIA: Solicitar V3R, V4R e V7/V8 em todo IAM de parede inferior (DII, DIII, aVF). Se PAS < 90 mmHg, FC < 50 ou > 100 bpm com acometimento de VD: ZERO nitrato, ZERO betabloqueador, ZERO morfina. Expansão volêmica cautelosa com SF 0,9% e reperfusão imediata.',
         perguntaSocratica: 'Se o paciente com IAM de parede inferior apresentar PAS de 80 mmHg e turgência jugular patológica após uso de nitrato, qual é a medida imediata de ressuscitação hemodinâmica?'
       },
       {
@@ -13868,7 +14077,7 @@
         regex: /(?:ic\s+descompensada|insufici[eê]ncia\s+card[ií]aca|eap|edema\s+agudo|congest[aã]o|furosemida|perfil\s+b|perfil\s+c)/i,
         pontoAtencao: 'risco de introduzir ou titular betabloqueador na fase de congestão aguda ou instabilidade.',
         perolaClinica: 'Em vigência de descompensação aguda (perfil B ou C), o miocárdio depende do tônus adrenérgico compensatório. Introduzir ou aumentar betabloqueador antes de compensar a volemia causa descompensação fulminante e choque cardiogênico. O foco prioritário imediato é vasodilatação venosa/arterial e diurese de alça.',
-        diretriz: 'HC-UE Emergência: Se perfil B (quente e úmido): Furosemida IV em bolus + Nitroglicerina/Nitroprussiato se PAS > 110. Betabloqueador: manter a dose prévia se euvolêmico/estável, mas NUNCA introduzir ou titular durante congestão aguda descompensada.',
+        diretriz: 'EMERGÊNCIA Emergência: Se perfil B (quente e úmido): Furosemida IV em bolus + Nitroglicerina/Nitroprussiato se PAS > 110. Betabloqueador: manter a dose prévia se euvolêmico/estável, mas NUNCA introduzir ou titular durante congestão aguda descompensada.',
         perguntaSocratica: 'Em um paciente em edema agudo de pulmão hipertensivo com PAS de 200 mmHg, por que a prioridade é o vasodilatador venoso e arterial contínuo antes mesmo de doses cavalares de diuréticos?'
       },
       {
@@ -13879,7 +14088,7 @@
         regex: /(?:sepse|choque\s+s[eé]ptico|lactato|hemocultura|ceftriaxona|meropenem|qsofa|sofa)/i,
         pontoAtencao: 'atraso no antimicrobiano de amplo espectro além de 1 hora e atraso na noradrenalina precoce.',
         perolaClinica: 'Cada 60 minutos de atraso na primeira dose do antibiótico venoso adequado após identificação do choque séptico eleva a mortalidade em aproximadamente 8%. Não aguarde terminar 30 mL/kg de cristaloides se a PAM persistir < 65 mmHg: inicie noradrenalina em acesso periférico seguro de imediato.',
-        diretriz: 'Bundle de 1 Hora HC-UE: Dosar lactato sérico + coletar 2 pares de hemoculturas + infundir ATB de amplo espectro em < 60 min + cristaloides balanceados 30 mL/kg + noradrenalina precoce para alvo de PAM ≥ 65 mmHg.',
+        diretriz: 'Bundle de 1 Hora EMERGÊNCIA: Dosar lactato sérico + coletar 2 pares de hemoculturas + infundir ATB de amplo espectro em < 60 min + cristaloides balanceados 30 mL/kg + noradrenalina precoce para alvo de PAM ≥ 65 mmHg.',
         perguntaSocratica: 'Qual é o critério microcirculatório e tecidual que valida o início de vasopressor antes do término da reposição volêmica estrita de 30 mL/kg?'
       },
       {
@@ -13890,7 +14099,7 @@
         regex: /(?:cad|cetoacidose|glicemia|ceton[uú]ria|gasometria.*acidose|hgt)/i,
         pontoAtencao: 'iniciar infusão de insulina venosa antes de checar Potássio Sérico (< 3,3 mEq/L).',
         perolaClinica: 'A insulina e a correção volêmica promovem influxo maciço de potássio extracelular para o interior das células. Se o potássio sérico inicial for < 3,3 mEq/L, a insulina precipita hipocalemia severa súbita e parada cardíaca por fibrilação ventricular em poucos minutos.',
-        diretriz: 'Regra de Ouro HC-UE: K < 3,3 mEq/L: postergue a insulina, infunda KCl 20 a 40 mEq/h até K ≥ 3,3. K 3,3 a 5,2: inicie insulina regular 0,1 U/kg/h e adicione 20-30 mEq KCl/litro. Associar SG 5% quando glicemia atingir 250 mg/dL.',
+        diretriz: 'Regra de Ouro EMERGÊNCIA: K < 3,3 mEq/L: postergue a insulina, infunda KCl 20 a 40 mEq/h até K ≥ 3,3. K 3,3 a 5,2: inicie insulina regular 0,1 U/kg/h e adicione 20-30 mEq KCl/litro. Associar SG 5% quando glicemia atingir 250 mg/dL.',
         perguntaSocratica: 'Se a glicemia capilar cair abaixo de 250 mg/dL mas o anion gap ainda estiver elevado (> 12), por que a insulina regular NUNCA deve ser desligada?'
       },
       {
@@ -13901,7 +14110,7 @@
         regex: /(?:avc|avci|isqu[eê]mico|d[eé]ficit|hemiparesia|afasia|trombol[ií]se|nihss)/i,
         pontoAtencao: 'redução intempestiva e agressiva da pressão arterial em janela aguda ou sem indicação formal.',
         perolaClinica: 'A hipertensão arterial reativa na fase aguda do AVCi é um mecanismo protetor vital para manter o fluxo sanguíneo colateral na área de penumbra isquêmica. Baixar a PA precipitadamente colapsa a perfusão da penumbra e transforma tecido viável em infarto cerebral permanente.',
-        diretriz: 'Protocolo AVC HC-UE: Candidato a trombólise venosa: controle rigoroso se PA > 185x110 mmHg. Não candidato a trombólise: NÃO intervir na PA a menos que ultrapasse 220x120 mmHg ou haja lesão aguda de órgão-alvo (EAP, dissecção aórtica).',
+        diretriz: 'Protocolo AVC EMERGÊNCIA: Candidato a trombólise venosa: controle rigoroso se PA > 185x110 mmHg. Não candidato a trombólise: NÃO intervir na PA a menos que ultrapasse 220x120 mmHg ou haja lesão aguda de órgão-alvo (EAP, dissecção aórtica).',
         perguntaSocratica: 'Qual é o limiar pressórico de segurança que autoriza a infusão de alteplase (rtPA) venoso na sala de emergência?'
       },
       {
@@ -13923,7 +14132,7 @@
         regex: /(?:crise\s+convulsiva|convuls[aã]o|epilep|status|diazepam|midazolam|fenito[ií]na)/i,
         pontoAtencao: 'repetir doses de benzodiazepínicos indefinidamente sem escalonar para droga de 2ª linha após 5-10 min.',
         perolaClinica: 'Com a persistência da crise convulsiva (> 5 minutos), ocorre internalização e perda de receptores GABAérgicos na membrana sináptica. Insistir em doses repetidas de benzodiazepínico falha em parar a crise e induz depressão respiratória grave com PCR sem escalonar para bloqueadores de canais de sódio.',
-        diretriz: 'Protocolo Sala Vermelha HC-UE: Minuto 0 a 5: ABC + glicemia + oxigênio. Minuto 5 a 10: Diazepam 10 mg IV lento (ou Midazolam IM). Se persistir após 5 min, mais 1 dose de benzo E iniciar imediatamente droga de 2ª linha: Fenitoína 20 mg/kg IV (máx 50 mg/min). Minuto 20+: IOT e anestésico contínuo.',
+        diretriz: 'Protocolo Sala Vermelha EMERGÊNCIA: Minuto 0 a 5: ABC + glicemia + oxigênio. Minuto 5 a 10: Diazepam 10 mg IV lento (ou Midazolam IM). Se persistir após 5 min, mais 1 dose de benzo E iniciar imediatamente droga de 2ª linha: Fenitoína 20 mg/kg IV (máx 50 mg/min). Minuto 20+: IOT e anestésico contínuo.',
         perguntaSocratica: 'Por que a velocidade máxima de infusão da Fenitoína venosa não pode ultrapassar 50 mg/minuto no adulto?'
       },
       {
@@ -13934,7 +14143,7 @@
         regex: /(?:asma|broncoespasmo|sibilos|dpoc|salbutamol|ipratr[oó]pio|corticoide)/i,
         pontoAtencao: 'subestimar a crise asmática grave quando há desaparecimento dos sibilos ("tórax silencioso").',
         perolaClinica: 'O desaparecimento dos sibilos na crise asmática grave com taquipneia exaustiva não é sinal de melhora, mas sim de colapso ventilatório por obstrução extrema do fluxo aéreo (tórax silencioso). A gasometria mostrando PaCO2 "normal" ou elevado neste cenário indica falência respiratória iminente e fadiga diafragmática catastrófica.',
-        diretriz: 'Protocolo Sala Vermelha HC-UE: Inalação contínua de Beta-2 agonista (Salbutamol) + Brometo de Ipratrópio + Corticoide sistêmico venoso imediato (Hidrocortisona ou Metilprednisolona) + Sulfato de Magnésio 2g IV em 20 min nas crises graves.',
+        diretriz: 'Protocolo Sala Vermelha EMERGÊNCIA: Inalação contínua de Beta-2 agonista (Salbutamol) + Brometo de Ipratrópio + Corticoide sistêmico venoso imediato (Hidrocortisona ou Metilprednisolona) + Sulfato de Magnésio 2g IV em 20 min nas crises graves.',
         perguntaSocratica: 'Por que um valor de PaCO2 de 40 mmHg na gasometria arterial de um asmático em taquipneia intensa é um sinal de extrema gravidade?'
       },
       {
@@ -13945,7 +14154,7 @@
         regex: /(?:pr[eé]-ecl[aâ]mpsia|ecl[aâ]mpsia|gestante.*pa|protein[uú]ria|hellp|sulfato)/i,
         pontoAtencao: 'administrar diazepam em convulsão gravídica em vez de Sulfato de Magnésio imediato.',
         perolaClinica: 'Benzodiazepínicos não previnem a recorrência de crises eclâmpticas e provocam hipotonia e depressão respiratória fetal severa. O Sulfato de Magnésio é a única intervenção com evidência classe I que reduz a mortalidade materna em mais de 50% e estabiliza o endotélio microvascular cerebral.',
-        diretriz: 'Esquema Zuspan HC-UE: Ataque: Sulfato de Magnésio 4g IV em 20 min. Manutenção: 1 a 2 g/h em bomba de infusão contínua. Vigilância estrita de reflexo patelar, diurese (> 25 mL/h) e FR (> 16 irpm). Manter antídoto à beira do leito: Gluconato de Cálcio 10% 10 mL IV.',
+        diretriz: 'Esquema Zuspan EMERGÊNCIA: Ataque: Sulfato de Magnésio 4g IV em 20 min. Manutenção: 1 a 2 g/h em bomba de infusão contínua. Vigilância estrita de reflexo patelar, diurese (> 25 mL/h) e FR (> 16 irpm). Manter antídoto à beira do leito: Gluconato de Cálcio 10% 10 mL IV.',
         perguntaSocratica: 'Qual é o primeiro reflexo osteotendíneo abolido na intoxicação por magnésio que antecede o colapso respiratório materno?'
       },
       {
@@ -14202,7 +14411,7 @@
           <div>
             <h5 class="text-xs font-bold text-white">O Preceptor IA está auditando a conduta do plantão...</h5>
             <p class="text-[10.5px] text-slate-400 mt-1 max-w-xs mx-auto">
-              Cruzando os casos atendidos com os protocolos e armadilhas beira-leito do HC-UE FMRP-USP.
+              Cruzando os casos atendidos com os protocolos e armadilhas beira-leito do Protocolo de Emergência.
             </p>
           </div>
         </div>
@@ -14241,7 +14450,7 @@
 
             <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 space-y-1.5">
               <div class="flex items-center gap-1.5 text-emerald-300 font-bold text-[11px]">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Diretriz Salva-Vidas (Padrão-Ouro HC-UE)
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Diretriz Salva-Vidas (Padrão-Ouro EMERGÊNCIA)
               </div>
               <p class="text-[11px] text-emerald-200/90 leading-relaxed">${pc.diretriz}</p>
             </div>
@@ -14816,7 +15025,7 @@
         ? 'p-2 rounded-lg bg-purple-950/40 border border-purple-800/40 text-purple-200'
         : 'p-2 rounded-lg bg-slate-800/60 border border-slate-700/60 text-slate-200';
 
-      const tag = papel === 'model' ? '🎧 Preceptor FMRP-USP:' : '👨‍⚕️ Wagner:';
+      const tag = papel === 'model' ? '🎧 Preceptor Diretrizes Clínicas:' : '👨‍⚕️ Médico(a):';
       itemEl.innerHTML = `<span class="font-bold text-[10px] block text-emerald-400">${tag}</span><p class="mt-0.5">${escapeHtml(texto)}</p>`;
       container.appendChild(itemEl);
       container.scrollTop = container.scrollHeight;
@@ -14843,7 +15052,7 @@
         return;
       }
       const resumoDiscussao = historicoTranscricaoLive.map(t =>
-        (t.papel === 'model' ? '[Preceptor]: ' : '[Dr. Wagner]: ') + t.texto
+        (t.papel === 'model' ? '[Preceptor]: ' : '[Médico(a)]: ') + t.texto
       ).join('\n');
 
       const campoEntrada = document.getElementById('input-conversa-texto');
@@ -15394,7 +15603,7 @@
     function copiarListaComprasQuinzenal() {
       hapticFeedback('medium');
       const texto = `🛒 LISTA DE COMPRAS QUINZENAL (15 DIAS) — DIETA 150g PROTEÍNA
-🎯 Wagner Moraes (74 kg · 1,73 m · 1 Scoop Whey/dia · 4x Musculação)
+🎯 Perfil Ativo (74 kg · 1,73 m · 1 Scoop Whey/dia · 4x Musculação)
 -----------------------------------------------------------
 🥩 PROTEÍNAS & PESCADOS:
 • Peito de frango / Carnes magras (patinho/alcatra): 2,5 kg
@@ -19822,6 +20031,456 @@
         copiarToast('Esta é a primeira aula do curso.');
       }
     }
+
+    // =========================================================================
+    // MOTOR MULTI-LOCALIDADE, PERFIL DINÂMICO, CHECKBOXES DE MÓDULOS E RECEITA #000000
+    // =========================================================================
+    const COCKPIT_MODULOS_CATALOGO = [
+      { id: 'SALA_VERMELHA', nome: '🚨 Sala Vermelha & PCR', tabId: 'tab-emergencia' },
+      { id: 'ENFERMARIA_LEITOS', nome: '🛏️ Enfermaria & SBAR', tabId: 'tab-leitos' },
+      { id: 'SOAP_PEP', nome: '📝 Gerador SOAP & PEP', tabId: 'tab-soap' },
+      { id: 'RECEITUARIO_ATESTADOS', nome: '📄 Receituário PDF & Atestados', tabId: 'tab-soap' },
+      { id: 'FARMACIA_REMUME', nome: '💊 Bulário, Diluição & REMUME', tabId: 'tab-remume' },
+      { id: 'PEDIATRIA_DOSES', nome: '👶 Pediatria & Puericultura', tabId: 'tab-emergencia' },
+      { id: 'GO_OBSTETRICIA', nome: '🤰 Obstetrícia, Parto & Pré-Natal', tabId: 'tab-soap' },
+      { id: 'CALCULADORAS_ESCORES', nome: '🧮 Calculadoras & Gasometria', tabId: 'tab-emergencia' },
+      { id: 'INTOXICACOES', nome: '🐍 Toxicologia & Acidentes', tabId: 'tab-emergencia' },
+      { id: 'PRECEPTOR_EBM', nome: '🎧 Preceptor Socrático & Evidências', tabId: 'tab-soap' }
+    ];
+
+    const COCKPIT_MODULOS_POR_CENARIO = {
+      APS_UBS: ['SOAP_PEP', 'RECEITUARIO_ATESTADOS', 'FARMACIA_REMUME', 'PEDIATRIA_DOSES', 'GO_OBSTETRICIA', 'CALCULADORAS_ESCORES', 'PRECEPTOR_EBM'],
+      URGENCIA_UPA_24H: ['SALA_VERMELHA', 'SOAP_PEP', 'RECEITUARIO_ATESTADOS', 'FARMACIA_REMUME', 'PEDIATRIA_DOSES', 'CALCULADORAS_ESCORES', 'INTOXICACOES', 'PRECEPTOR_EBM'],
+      SALA_VERMELHA: ['SALA_VERMELHA', 'ENFERMARIA_LEITOS', 'FARMACIA_REMUME', 'CALCULADORAS_ESCORES', 'INTOXICACOES', 'PRECEPTOR_EBM'],
+      ENFERMARIA: ['ENFERMARIA_LEITOS', 'SOAP_PEP', 'RECEITUARIO_ATESTADOS', 'FARMACIA_REMUME', 'CALCULADORAS_ESCORES', 'SALA_VERMELHA', 'PRECEPTOR_EBM'],
+      MATERNIDADE_GO: ['GO_OBSTETRICIA', 'SALA_VERMELHA', 'ENFERMARIA_LEITOS', 'SOAP_PEP', 'RECEITUARIO_ATESTADOS', 'FARMACIA_REMUME', 'CALCULADORAS_ESCORES', 'PRECEPTOR_EBM'],
+      PEDIATRIA: ['PEDIATRIA_DOSES', 'SALA_VERMELHA', 'SOAP_PEP', 'RECEITUARIO_ATESTADOS', 'FARMACIA_REMUME', 'CALCULADORAS_ESCORES', 'INTOXICACOES', 'PRECEPTOR_EBM']
+    };
+
+    window.cockpitContextoClinico = (() => {
+      try {
+        const salvo = JSON.parse(localStorage.getItem('cockpit_contexto_clinico_v1') || 'null');
+        if (salvo && typeof salvo === 'object') return salvo;
+      } catch (_) {}
+      return {
+        prefixo_tratamento: 'Dr.',
+        nome_chamada: 'Médico(a)',
+        nome_chamada_configurado: false,
+        papel: 'MEDICO_CRM',
+        nome_completo_carimbo: 'Médico(a) Assistente',
+        crm: '',
+        municipio: '',
+        uf: 'BR',
+        unidade_saude: 'Unidade de Saúde',
+        cenario_assistencial: 'URGENCIA_UPA_24H',
+        remume_slug: 'rename_nacional',
+        modulos_ativos: COCKPIT_MODULOS_CATALOGO.map(m => m.id)
+      };
+    })();
+
+    function atualizarBadgeContextoClinicoUI() {
+      const ctx = window.cockpitContextoClinico || {};
+      const badge = document.getElementById('badge-contexto-clinico-label');
+      const sub = document.getElementById('header-subtitle');
+      const saudacao = ((ctx.prefixo_tratamento || 'Dr.') + ' ' + (ctx.nome_chamada || 'Médico(a)')).trim();
+      const loc = ctx.municipio ? `${ctx.municipio}/${ctx.uf || 'BR'}` : 'RENAME SUS';
+      if (badge) badge.textContent = `📍 ${loc} · ${saudacao}`;
+      if (sub) sub.textContent = `${saudacao} · ${ctx.unidade_saude || loc}`;
+    }
+
+    async function sincronizarPerfilComBackend() {
+      atualizarBadgeContextoClinicoUI();
+      try {
+        const resp = await fetch('/api/perfil?chatId=default');
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.perfil) {
+            window.cockpitContextoClinico = { ...window.cockpitContextoClinico, ...data.perfil };
+            localStorage.setItem('cockpit_contexto_clinico_v1', JSON.stringify(window.cockpitContextoClinico));
+            atualizarBadgeContextoClinicoUI();
+          }
+        }
+      } catch (_) {}
+    }
+
+    function garantirModalPerfilDOM() {
+      if (document.getElementById('modal-perfil-local')) return;
+      const modal = document.createElement('div');
+      modal.id = 'modal-perfil-local';
+      modal.className = 'fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 overflow-y-auto';
+      modal.innerHTML = `
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-4 space-y-3.5 text-xs text-slate-100 shadow-2xl max-h-[92vh] overflow-y-auto">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              ⚙️ Identidade, Cidade (REMUME) & Cenário
+            </h3>
+            <button onclick="fecharModalPerfilLocal()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">✕</button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Tratamento</label>
+              <select id="cfg-prefixo" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2 py-1.5 text-xs">
+                <option value="Dr.">👨‍⚕️ Dr.</option>
+                <option value="Dra.">👩‍⚕️ Dra.</option>
+              </select>
+            </div>
+            <div class="col-span-2">
+              <label class="block text-[10px] text-slate-400 mb-1">Como te chamar no Chat/Voz</label>
+              <input id="cfg-nome-chamada" type="text" placeholder="Ex: Matheus / Carolina" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Papel Profissional (Regra do PDF)</label>
+              <select id="cfg-papel" onchange="alternarCamposCarimboInterno()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2 py-1.5 text-xs">
+                <option value="MEDICO_CRM">👨‍⚕️ Médico(a) com CRM</option>
+                <option value="RESIDENTE">🏥 Médico(a) Residente</option>
+                <option value="INTERNO_ACADEMICO">🎓 Interno(a) (Receita sem CRM impresso)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Unidade / Hospital / UBS</label>
+              <input id="cfg-unidade" type="text" placeholder="Ex: UPA Central / UBS Centro" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs" />
+            </div>
+          </div>
+
+          <div id="cfg-bloco-carimbo" class="grid grid-cols-3 gap-2">
+            <div class="col-span-2">
+              <label class="block text-[10px] text-slate-400 mb-1">Nome Completo (Impressão Receita)</label>
+              <input id="cfg-nome-carimbo" type="text" placeholder="Nome completo para receita" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">CRM / UF</label>
+              <input id="cfg-crm" type="text" placeholder="CRM/SP 123456" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs" />
+            </div>
+          </div>
+
+          <div class="border-t border-slate-800 pt-2.5 space-y-2">
+            <label class="block text-[10px] font-bold uppercase text-brand-400">📍 Cidade & Catálogo REMUME (Presets + Busca Web)</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <select id="cfg-remume-preset" onchange="selecionarPresetCidadeCockpit(this.value)" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2 py-1.5 text-xs">
+                <option value="rename_nacional">🇧🇷 RENAME Nacional (Padrão SUS)</option>
+                <option value="sp_sao_paulo">📍 São Paulo (SP)</option>
+                <option value="mg_belo_horizonte">📍 Belo Horizonte (MG)</option>
+                <option value="rj_rio_de_janeiro">📍 Rio de Janeiro (RJ)</option>
+                <option value="pr_curitiba">📍 Curitiba (PR)</option>
+                <option value="rs_porto_alegre">📍 Porto Alegre (RS)</option>
+                <option value="df_brasilia">📍 Brasília (DF)</option>
+                <option value="mt_cuiaba">📍 Cuiabá (MT)</option>
+                <option value="sp_ribeirao_preto">📍 Ribeirão Preto (SP)</option>
+              </select>
+              <div class="flex gap-1">
+                <input id="cfg-busca-cidade" type="text" placeholder="Outra cidade (ex: Campinas - SP)" class="flex-1 rounded-lg bg-slate-950 border border-slate-700 px-2 py-1.5 text-xs" />
+                <button type="button" onclick="buscarRemumeCidadeWebCockpit()" class="px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[11px]">🔎 Buscar</button>
+              </div>
+            </div>
+            <div id="cfg-status-busca-remume" class="hidden rounded-lg p-2 bg-slate-950 border border-slate-800 text-[11px] space-y-1.5"></div>
+            <details class="bg-slate-950/70 border border-slate-800 rounded-lg p-2">
+              <summary class="cursor-pointer font-bold text-[11px] text-emerald-400">📥 Inserir REMUME da minha cidade (entra automaticamente no Preset!)</summary>
+              <div class="mt-2 space-y-1.5">
+                <input id="cfg-import-cidade" type="text" placeholder="Cidade - UF (ex: Bauru - SP)" class="w-full rounded bg-slate-900 border border-slate-700 px-2 py-1 text-xs" />
+                <textarea id="cfg-import-texto" rows="3" placeholder="Cole aqui a lista de medicamentos (1 por linha, ex: Amoxicilina 500mg cápsula)..." class="w-full rounded bg-slate-900 border border-slate-700 p-2 text-xs"></textarea>
+                <button type="button" onclick="importarEPromoverRemumeCockpit()" class="w-full py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px]">✅ Salvar & Promover Cidade para Preset Oficial</button>
+              </div>
+            </details>
+          </div>
+
+          <div class="border-t border-slate-800 pt-2.5 space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="text-[10px] font-bold uppercase text-brand-400">🏥 Cenário & Módulos Relevantes (Checkboxes)</label>
+              <select id="cfg-cenario" onchange="aplicarSugestaoCenarioCockpit(this.value)" class="rounded bg-slate-950 border border-slate-700 px-2 py-1 text-[11px]">
+                <option value="APS_UBS">🩺 UBS / Saúde da Família</option>
+                <option value="URGENCIA_UPA_24H">🚑 UPA 24h / Pronto Atendimento</option>
+                <option value="SALA_VERMELHA">🚨 Sala Vermelha / Emergência</option>
+                <option value="ENFERMARIA">🛏️ Enfermaria / Clínica Médica</option>
+                <option value="MATERNIDADE_GO">🤰 Maternidade / G&O</option>
+                <option value="PEDIATRIA">👶 Pronto-Socorro Pediátrico</option>
+              </select>
+            </div>
+            <p class="text-[10px] text-slate-400">Ao escolher o cenário, sugerimos marcados os módulos mais usados. Você pode aceitar ou marcar/desmarcar quantos quiser:</p>
+            <div id="cfg-lista-checkboxes-modulos" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"></div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+            <button type="button" onclick="imprimirReceituarioPadraoPreto(false)" class="px-2.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-[11px]">🖨️ Testar Receita 100% Preta</button>
+            <button type="button" onclick="salvarPerfilLocalCockpit()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">✔️ Salvar Preferências</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function renderizarCheckboxesModulosCockpit(selecionados) {
+      const container = document.getElementById('cfg-lista-checkboxes-modulos');
+      if (!container) return;
+      const ativos = new Set(Array.isArray(selecionados) ? selecionados : COCKPIT_MODULOS_CATALOGO.map(m => m.id));
+      container.innerHTML = COCKPIT_MODULOS_CATALOGO.map(m => {
+        const checked = ativos.has(m.id) ? 'checked' : '';
+        return `
+          <label class="flex items-center gap-2 p-1.5 rounded-lg bg-slate-950 border border-slate-800 cursor-pointer hover:border-slate-600">
+            <input type="checkbox" class="cfg-chk-modulo accent-emerald-500" value="${m.id}" ${checked} />
+            <span class="text-[11px] text-slate-200">${m.nome}</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function alternarCamposCarimboInterno() {
+      const papelEl = document.getElementById('cfg-papel');
+      const bloco = document.getElementById('cfg-bloco-carimbo');
+      if (!papelEl || !bloco) return;
+      if (papelEl.value === 'INTERNO_ACADEMICO') {
+        bloco.classList.add('opacity-40');
+      } else {
+        bloco.classList.remove('opacity-40');
+      }
+    }
+
+    function aplicarSugestaoCenarioCockpit(cenarioId) {
+      const sugeridos = COCKPIT_MODULOS_POR_CENARIO[cenarioId] || COCKPIT_MODULOS_CATALOGO.map(m => m.id);
+      renderizarCheckboxesModulosCockpit(sugeridos);
+    }
+
+    async function abrirModalPerfilLocal() {
+      garantirModalPerfilDOM();
+      const ctx = window.cockpitContextoClinico || {};
+      document.getElementById('cfg-prefixo').value = ctx.prefixo_tratamento || 'Dr.';
+      document.getElementById('cfg-nome-chamada').value = (ctx.nome_chamada && ctx.nome_chamada !== 'Médico(a)') ? ctx.nome_chamada : '';
+      document.getElementById('cfg-papel').value = ctx.papel || 'MEDICO_CRM';
+      document.getElementById('cfg-unidade').value = ctx.unidade_saude || '';
+      document.getElementById('cfg-nome-carimbo').value = (ctx.nome_completo_carimbo && ctx.nome_completo_carimbo !== 'Médico(a) Assistente') ? ctx.nome_completo_carimbo : '';
+      document.getElementById('cfg-crm').value = ctx.crm || '';
+      document.getElementById('cfg-cenario').value = ctx.cenario_assistencial || 'URGENCIA_UPA_24H';
+      renderizarCheckboxesModulosCockpit(ctx.modulos_ativos);
+      alternarCamposCarimboInterno();
+
+      // Atualiza lista de presets do servidor (inclui cidades auto-promovidas)
+      try {
+        const r = await fetch('/api/remume/presets');
+        if (r.ok) {
+          const d = await r.json();
+          if (d && Array.isArray(d.presets)) {
+            const sel = document.getElementById('cfg-remume-preset');
+            sel.innerHTML = `<option value="rename_nacional">🇧🇷 RENAME Nacional (Padrão SUS)</option>` +
+              d.presets.map(p => `<option value="${p.slug}">📍 ${p.municipio} (${p.uf})</option>`).join('');
+            sel.value = ctx.remume_slug || 'rename_nacional';
+          }
+        }
+      } catch (_) {}
+
+      document.getElementById('modal-perfil-local').classList.remove('hidden');
+    }
+
+    function fecharModalPerfilLocal() {
+      const m = document.getElementById('modal-perfil-local');
+      if (m) m.classList.add('hidden');
+    }
+
+    function selecionarPresetCidadeCockpit(slug) {
+      const sel = document.getElementById('cfg-remume-preset');
+      if (!sel) return;
+      const opt = sel.options[sel.selectedIndex];
+      if (slug === 'rename_nacional') {
+        window.cockpitContextoClinico.municipio = '';
+        window.cockpitContextoClinico.uf = 'BR';
+        window.cockpitContextoClinico.remume_slug = 'rename_nacional';
+      } else if (opt) {
+        const m = opt.textContent.replace(/^📍\s*/, '').match(/^(.+?)\s*\(([A-Z]{2})\)$/);
+        if (m) {
+          window.cockpitContextoClinico.municipio = m[1].trim();
+          window.cockpitContextoClinico.uf = m[2].trim();
+        }
+        window.cockpitContextoClinico.remume_slug = slug;
+      }
+    }
+
+    async function buscarRemumeCidadeWebCockpit() {
+      const inp = document.getElementById('cfg-busca-cidade');
+      const box = document.getElementById('cfg-status-busca-remume');
+      if (!inp || !box) return;
+      const raw = inp.value.trim();
+      if (!raw) return;
+      const partes = raw.split(/[-/,]/);
+      const municipio = (partes[0] || '').trim();
+      const uf = (partes[1] || 'BR').trim().toUpperCase();
+
+      box.classList.remove('hidden');
+      box.innerHTML = `<p class="text-sky-300">🔎 Pesquisando REMUME oficial verificável de <b>${municipio}</b>...</p>`;
+
+      try {
+        const r = await fetch('/api/remume/buscar-web', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ municipio, uf })
+        });
+        const d = await r.json();
+        if (d && d.encontrado && d.catalogo) {
+          window.cockpitContextoClinico.municipio = d.catalogo.municipio || municipio;
+          window.cockpitContextoClinico.uf = d.catalogo.uf || uf;
+          window.cockpitContextoClinico.remume_slug = d.slug;
+          box.innerHTML = `<p class="text-emerald-400 font-bold">✅ REMUME de ${municipio} localizada (${d.catalogo.medicamentos.length} itens) e promovida automaticamente aos Presets!</p>`;
+          atualizarBadgeContextoClinicoUI();
+          return;
+        }
+      } catch (_) {}
+
+      // Fallback honesto (Zero Invenção) + Botão de Solicitar REMUME ao Desenvolvedor
+      box.innerHTML = `
+        <p class="text-amber-300">⚠️ Não foi encontrado documento oficial atualizado e confiável para <b>${municipio}</b> na busca automática (nenhum dado foi inventado). Mantida a <b>RENAME Nacional (SUS)</b>.</p>
+        <button type="button" onclick="solicitarRemumeAoDesenvolvedorCockpit('${municipio.replace(/'/g, '')}', '${uf.replace(/'/g, '')}')" class="w-full py-1.5 rounded bg-amber-500/20 border border-amber-500/50 text-amber-200 font-bold">
+          📩 Solicitar REMUME de ${municipio} ao Desenvolvedor
+        </button>
+      `;
+    }
+
+    async function solicitarRemumeAoDesenvolvedorCockpit(municipio, uf) {
+      const box = document.getElementById('cfg-status-busca-remume');
+      try {
+        await fetch('/api/remume/solicitar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ municipio, uf })
+        });
+      } catch (_) {}
+      if (box) {
+        box.innerHTML = `<p class="text-emerald-400 font-bold">✅ Solicitação enviada ao desenvolvedor! Assim que a REMUME de <b>${municipio}</b> for inserida, ela entrará nos presets oficiais.</p>`;
+      }
+    }
+
+    async function importarEPromoverRemumeCockpit() {
+      const cidRaw = (document.getElementById('cfg-import-cidade')?.value || '').trim();
+      const texto = (document.getElementById('cfg-import-texto')?.value || '').trim();
+      if (!cidRaw || !texto) {
+        if (typeof copiarToast === 'function') copiarToast('Informe a Cidade - UF e a lista de medicamentos.');
+        return;
+      }
+      const partes = cidRaw.split(/[-/,]/);
+      const municipio = (partes[0] || '').trim();
+      const uf = (partes[1] || 'BR').trim().toUpperCase();
+      try {
+        const r = await fetch('/api/remume/importar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ municipio, uf, texto })
+        });
+        const d = await r.json();
+        if (d && d.sucesso) {
+          window.cockpitContextoClinico.municipio = municipio;
+          window.cockpitContextoClinico.uf = uf;
+          window.cockpitContextoClinico.remume_slug = d.slug;
+          if (typeof copiarToast === 'function') copiarToast(`REMUME de ${municipio} salva e adicionada aos Presets!`);
+          abrirModalPerfilLocal();
+        }
+      } catch (_) {}
+    }
+
+    async function salvarPerfilLocalCockpit() {
+      const checks = [...document.querySelectorAll('.cfg-chk-modulo:checked')].map(el => el.value);
+      const nomeChamada = (document.getElementById('cfg-nome-chamada')?.value || '').trim() || 'Médico(a)';
+      const novoPerfil = {
+        ...window.cockpitContextoClinico,
+        prefixo_tratamento: document.getElementById('cfg-prefixo')?.value || 'Dr.',
+        nome_chamada: nomeChamada,
+        nome_chamada_configurado: nomeChamada !== 'Médico(a)',
+        papel: document.getElementById('cfg-papel')?.value || 'MEDICO_CRM',
+        unidade_saude: (document.getElementById('cfg-unidade')?.value || '').trim() || 'Unidade de Saúde',
+        nome_completo_carimbo: (document.getElementById('cfg-nome-carimbo')?.value || '').trim() || `${document.getElementById('cfg-prefixo')?.value || 'Dr.'} ${nomeChamada}`,
+        crm: (document.getElementById('cfg-crm')?.value || '').trim(),
+        cenario_assistencial: document.getElementById('cfg-cenario')?.value || 'URGENCIA_UPA_24H',
+        modulos_ativos: checks.length > 0 ? checks : COCKPIT_MODULOS_CATALOGO.map(m => m.id)
+      };
+      window.cockpitContextoClinico = novoPerfil;
+      localStorage.setItem('cockpit_contexto_clinico_v1', JSON.stringify(novoPerfil));
+      atualizarBadgeContextoClinicoUI();
+      fecharModalPerfilLocal();
+      try {
+        await fetch('/api/perfil', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(novoPerfil)
+        });
+      } catch (_) {}
+      if (typeof copiarToast === 'function') {
+        copiarToast(`Perfil salvo! Olá, ${novoPerfil.prefixo_tratamento} ${novoPerfil.nome_chamada}.`);
+      }
+    }
+
+    /**
+     * Emite janela de impressão de Receituário Médico 100% Preto (#000000) padronizado.
+     * Quando papel === 'INTERNO_ACADEMICO', omite nome de médico e CRM para o preceptor carimbar.
+     */
+    function imprimirReceituarioPadraoPreto(controleEspecial = false, itensCustom = null, pacienteCustom = 'Ao Portador') {
+      const ctx = window.cockpitContextoClinico || {};
+      const ehInterno = ctx.papel === 'INTERNO_ACADEMICO';
+      const unidade = ctx.unidade_saude || 'UNIDADE DE SAÚDE / SERVIÇO MÉDICO';
+      const localData = `${ctx.municipio ? (ctx.municipio + (ctx.uf ? ' - ' + ctx.uf : '')) : 'Local'}, ${new Date().toLocaleDateString('pt-BR')}`;
+      const itens = Array.isArray(itensCustom) && itensCustom.length > 0 ? itensCustom : [
+        { nome: '1. Dipirona Sódica 500mg comprimido', qtd: '1 caixa', posologia: 'Tomar 1 comprimido via oral de 6 em 6 horas se dor ou febre.' }
+      ];
+      const assinaturaHtml = ehInterno
+        ? `<div class="assinatura"><div class="linha"></div><div>Assinatura e Carimbo do(a) Médico(a) Responsável (CRM)</div></div>`
+        : `<div class="assinatura"><div class="linha"></div><div class="bold">${ctx.nome_completo_carimbo || 'Médico(a) Assistente'}</div><div>${ctx.crm || 'CRM'}</div></div>`;
+
+      const quadrosControle = controleEspecial ? `
+        <div class="quadros">
+          <div class="quadro">
+            <div class="quadro-titulo">IDENTIFICAÇÃO DO COMPRADOR</div>
+            <div>Nome: ________________________________________</div>
+            <div>Ident.: ___________________ Órg. Emissor: ______</div>
+            <div>End.: ________________________________________</div>
+            <div>Cidade: ______________________ UF: ____</div>
+            <div>Telefone: (____) ______________________________</div>
+          </div>
+          <div class="quadro">
+            <div class="quadro-titulo">IDENTIFICAÇÃO DO FORNECEDOR</div>
+            <div style="height:46px;"></div>
+            <div style="text-align:center;border-top:1px solid #000000;padding-top:4px;">Assinatura do Farmacêutico · Data ___/___/___</div>
+          </div>
+        </div>
+      ` : '';
+
+      const htmlDoc = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Receituário Médico</title>
+        <style>
+          * { color: #000000 !important; background: #FFFFFF !important; border-color: #000000 !important; font-family: Arial, Helvetica, sans-serif; box-sizing: border-box; }
+          body { margin: 20mm; font-size: 11pt; line-height: 1.45; }
+          .cabecalho { text-align: center; border-bottom: 1.5px solid #000000; padding-bottom: 8px; margin-bottom: 14px; }
+          .titulo { font-size: 14pt; font-weight: bold; text-transform: uppercase; }
+          .sub { font-size: 10pt; margin-top: 2px; }
+          .paciente { border: 1px solid #000000; padding: 8px 10px; margin-bottom: 16px; }
+          .item { margin-bottom: 12px; }
+          .bold { font-weight: bold; }
+          .assinatura { margin-top: 42px; text-align: center; }
+          .linha { width: 280px; border-top: 1px solid #000000; margin: 0 auto 6px auto; }
+          .quadros { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; font-size: 8.5pt; }
+          .quadro { border: 1px solid #000000; padding: 6px; }
+          .quadro-titulo { font-weight: bold; text-align: center; border-bottom: 1px solid #000000; margin-bottom: 6px; padding-bottom: 2px; }
+        </style></head><body>
+        <div class="cabecalho">
+          <div class="titulo">${controleEspecial ? 'RECEITUÁRIO DE CONTROLE ESPECIAL' : 'RECEITUÁRIO MÉDICO'}</div>
+          <div class="sub">${unidade}</div>
+        </div>
+        <div class="paciente"><span class="bold">PACIENTE:</span> ${pacienteCustom}</div>
+        <div>${itens.map(it => `<div class="item"><div class="bold">${it.nome} — ${it.qtd || 'uso contínuo'}</div><div>${it.posologia}</div></div>`).join('')}</div>
+        <div style="margin-top:20px;">Local e Data: ${localData}.</div>
+        ${assinaturaHtml}
+        ${quadrosControle}
+      </body></html>`;
+
+      const w = window.open('', '_blank');
+      if (w) {
+        w.document.open();
+        w.document.write(htmlDoc);
+        w.document.close();
+        setTimeout(() => { try { w.print(); } catch (_) {} }, 250);
+      }
+      return htmlDoc;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      sincronizarPerfilComBackend();
+    });
 
     // Registro do PWA Service Worker (Cache-First 0ms Offline para plantão)
     if ('serviceWorker' in navigator && (window.location.protocol.startsWith('http') || window.location.protocol.startsWith('https'))) {

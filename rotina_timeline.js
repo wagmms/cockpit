@@ -1543,6 +1543,7 @@
     var blocosLocais = carregarBlocosLocais(estadoAtual.dataISO);
     renderizar(blocosLocais);
     carregarBlocosDoServidor(estadoAtual.dataISO);
+    conectarSSE();
   }
 
   function mesclarComFilaOffline(blocosServidor) {
@@ -1931,7 +1932,101 @@
   }
 
   // ==========================================
-  // Auto-Sincronização em Tempo Real (Polling Suave)
+  // Sincronização em Tempo Real (SSE + Revalidação ETag em Foco)
+  // ==========================================
+
+  var sseSource = null;
+  var timerReconexaoSSE = null;
+  var ultimaETagRotina = null;
+
+  function conectarSSE() {
+    if (typeof window === "undefined" || typeof window.EventSource === "undefined") {
+      iniciarPollingSuave();
+      return;
+    }
+    if (sseSource) {
+      try { sseSource.close(); } catch (_) {}
+      sseSource = null;
+    }
+
+    var targetDateISO = estadoAtual.dataISO || obterDataISO("hoje");
+    var urlSSE = obterApiBaseUrl() + "/api/rotina/events?data=" + encodeURIComponent(targetDateISO);
+
+    try {
+      sseSource = new EventSource(urlSSE);
+
+      sseSource.addEventListener("connected", function(e) {
+        try {
+          var data = JSON.parse(e.data);
+          atualizarBadgeSync("Tempo Real (Telegram ↔ Cockpit)", true);
+          if (data && data.blocos && Array.isArray(data.blocos) && data.blocos.length > 0) {
+            var blocosConciliados = mesclarComFilaOffline(data.blocos);
+            salvarBlocosLocais(blocosConciliados, targetDateISO);
+            renderizar(blocosConciliados);
+          }
+        } catch (_) {}
+      });
+
+      sseSource.addEventListener("rotina_update", function(e) {
+        try {
+          var data = JSON.parse(e.data);
+          var dateRecebida = data.dateKey || data.data;
+          if (dateRecebida === (estadoAtual.dataISO || obterDataISO("hoje"))) {
+            if (data.blocos && Array.isArray(data.blocos)) {
+              var blocosConciliados = mesclarComFilaOffline(data.blocos);
+              salvarBlocosLocais(blocosConciliados, dateRecebida);
+              renderizar(blocosConciliados);
+              atualizarBadgeSync("Tempo Real (" + (data.origin === "telegram" ? "via Telegram" : "Sincronizado") + ")", true);
+              dispararHaptic("sucesso");
+            }
+          }
+        } catch (err) {
+          console.warn("[Rotina SSE] Erro ao processar rotina_update:", err);
+        }
+      });
+
+      sseSource.onerror = function() {
+        atualizarBadgeSync("Modo Resiliente", false);
+        try { sseSource.close(); } catch (_) {}
+        sseSource = null;
+        clearTimeout(timerReconexaoSSE);
+        timerReconexaoSSE = setTimeout(function() {
+          conectarSSE();
+        }, 5000);
+      };
+    } catch (_) {
+      iniciarPollingSuave();
+    }
+  }
+
+  function checarVersaoERevalidar() {
+    if (typeof fetch !== "function") return;
+    if (typeof navigator !== "undefined" && !navigator.onLine) return;
+    var targetDateISO = estadoAtual.dataISO || obterDataISO("hoje");
+    var endpoint = obterApiBaseUrl() + "/api/rotina/version?data=" + encodeURIComponent(targetDateISO);
+
+    var headers = {};
+    if (ultimaETagRotina) headers["If-None-Match"] = ultimaETagRotina;
+
+    fetch(endpoint, { headers: headers, cache: "no-store" })
+      .then(function(res) {
+        if (res.status === 304) {
+          return null;
+        }
+        var etag = res.headers.get("ETag");
+        if (etag) ultimaETagRotina = etag;
+        return res.json();
+      })
+      .then(function(data) {
+        if (data && data.ok) {
+          carregarBlocosDoServidor(targetDateISO);
+        }
+      })
+      .catch(function() {});
+  }
+
+  // ==========================================
+  // Auto-Sincronização em Tempo Real (Polling Suave de Fallback)
   // ==========================================
 
   var POLLING_INTERVALO_MS = 30000;
@@ -1962,6 +2057,22 @@
       processarFilaOffline();
       carregarBlocosDoServidor();
       carregarDuvidasDoServidor();
+      conectarSSE();
+    });
+
+    if (typeof document !== "undefined" && document.addEventListener) {
+      document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "visible") {
+          checarVersaoERevalidar();
+          if (!sseSource || sseSource.readyState === 2) {
+            conectarSSE();
+          }
+        }
+      });
+    }
+
+    window.addEventListener("focus", function() {
+      checarVersaoERevalidar();
     });
   }
 
@@ -1993,6 +2104,8 @@
     resolverDuvidaCockpit: resolverDuvidaCockpit,
     alternarGavetaDuvidas: alternarGavetaDuvidas,
     selecionarAreaDuvida: selecionarAreaDuvida,
+    conectarSSE: conectarSSE,
+    checarVersaoERevalidar: checarVersaoERevalidar,
     iniciarPollingSuave: iniciarPollingSuave,
     salvarBlocosOfflineAsync: salvarBlocosOfflineAsync,
     carregarBlocosOfflineAsync: carregarBlocosOfflineAsync,
@@ -2029,6 +2142,7 @@
         if (duvidasCache.length > 0) renderizarDuvidas(duvidasCache);
         carregarDuvidasDoServidor();
 
+        conectarSSE();
         iniciarPollingSuave();
       } catch (_) {}
     }, 100);
