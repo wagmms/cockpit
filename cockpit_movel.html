@@ -1795,14 +1795,13 @@
             >
               <i data-lucide="plus" class="w-3.5 h-3.5"></i> Bloco
             </button>
-            <button
-              type="button"
-              onclick="if(window.RotinaTimeline && typeof window.RotinaTimeline.sincronizarAgendaGoogle === \x27function\x27) RotinaTimeline.sincronizarAgendaGoogle(); else if(window.RotinaTimeline) RotinaTimeline.renderizar(); else carregarPerfil();"
-              title="Sincronizar com Google Calendar (moraes.wagg@gmail.com)"
-              class="min-h-[34px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition active:scale-95"
+            <div
+              id="rotina-gcal-badge-status"
+              class="min-h-[34px] px-2.5 py-1.5 rounded-xl bg-slate-800/80 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold flex items-center gap-1.5 shadow-sm"
+              title="Sincronização contínua e automática com seu Google Calendar (moraes.wagg@gmail.com)"
             >
-              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-            </button>
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Google Calendar
+            </div>
           </div>
         </div>
 
@@ -1896,7 +1895,7 @@
           </div>
           <span class="text-[10px] font-mono text-slate-400">Zero-Click Emergency HUD</span>
         </div>
-        <div class="grid grid-cols-4 gap-1.5">
+        <div class="grid grid-cols-3 gap-1.5">
           <button type="button" onclick="if(typeof switchTab===\x27function\x27) switchTab(\x27tab-plantao\x27); else if(typeof navegarAba===\x27function\x27) navegarAba(\x27tab-plantao\x27, \x27Plantão & Sala Vermelha\x27);" class="min-h-[42px] p-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
             <i data-lucide="flame" class="w-4 h-4 text-rose-400"></i>
             <span class="text-[10px] font-extrabold">SRI / IOT</span>
@@ -1908,10 +1907,6 @@
           <button type="button" onclick="if(typeof abrirModalSbarPassagem===\x27function\x27) abrirModalSbarPassagem();" class="min-h-[42px] p-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
             <i data-lucide="clipboard-list" class="w-4 h-4 text-emerald-400"></i>
             <span class="text-[10px] font-extrabold">Passar SBAR</span>
-          </button>
-          <button type="button" onclick="var inp = document.getElementById(\x27input-nova-duvida-cockpit\x27); if(inp) { inp.focus(); inp.scrollIntoView({ behavior: \x27smooth\x27 }); }" class="min-h-[42px] p-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 flex flex-col items-center justify-center gap-0.5 transition active:scale-95 shadow-sm">
-            <i data-lucide="help-circle" class="w-4 h-4 text-purple-400"></i>
-            <span class="text-[10px] font-extrabold">+ Dúvida</span>
           </button>
         </div>
       </div>
@@ -2023,14 +2018,7 @@
         </div>
 
         <!-- Barra Rápida de Ajuste Biológico & Grade Padrão -->
-        <div class="flex items-center justify-between gap-2 text-[11px] flex-wrap">
-          <button
-            type="button"
-            onclick="if(window.RotinaTimeline) RotinaTimeline.ativarModoDescanso();"
-            class="px-2.5 py-1.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 font-semibold transition active:scale-95 flex items-center gap-1.5 shadow-sm"
-          >
-            <i data-lucide="coffee" class="w-3.5 h-3.5"></i> Pós-Plantão: Modo Descanso
-          </button>
+        <div class="flex items-center justify-end gap-2 text-[11px] flex-wrap">
           <button
             type="button"
             onclick="if(window.RotinaTimeline) (RotinaTimeline.carregarGradePadraoComConfirmacao ? RotinaTimeline.carregarGradePadraoComConfirmacao() : RotinaTimeline.carregarGradePadrao());"
@@ -2048,56 +2036,6 @@
           <div class="text-[10px] text-slate-500">Sincronizando blocos, plantões e metas MedQuest.</div>
         </div>
       </div>
-
-      <!-- 6. GAVETA INTELIGENTE DE DÚVIDAS MEDQUEST & PLANTÃO (COM 5 GRANDES ÁREAS R1) -->
-      <div id="rotina-duvidas-card" class="glass-card-accent p-3.5 rounded-2xl border border-purple-500/30 bg-slate-900/80 space-y-3">
-        <div class="flex items-center justify-between cursor-pointer" onclick="if(window.RotinaTimeline) RotinaTimeline.alternarGavetaDuvidas();">
-          <div class="flex items-center gap-2">
-            <div class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center ring-1 ring-purple-500/30">
-              <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
-            </div>
-            <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
-              Caderno de Erros & Dúvidas MedQuest
-            </h4>
-            <span id="duvidas-contador-badge" class="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-purple-500/30 text-purple-200 border border-purple-500/40">0</span>
-          </div>
-          <button type="button" id="btn-toggle-gaveta-duvidas" class="text-slate-400 hover:text-slate-200 text-xs">
-            <i id="icone-toggle-duvidas" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
-          </button>
-        </div>
-
-        <div id="rotina-duvidas-conteudo" class="space-y-2.5 pt-1 border-t border-purple-500/10">
-          <!-- Seletor de Grande Área R1 para nova dúvida -->
-          <div class="flex items-center gap-1 overflow-x-auto pb-1 no-scrollbar" id="duvidas-areas-seletor">
-            <button type="button" data-area="Clínica" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Clínica\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-500/30 text-purple-200 border border-purple-500/50">Clínica</button>
-            <button type="button" data-area="Cirurgia" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Cirurgia\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">Cirurgia</button>
-            <button type="button" data-area="Pediatria" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Pediatria\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">Pediatria</button>
-            <button type="button" data-area="GO" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27GO\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">G.O.</button>
-            <button type="button" data-area="Preventiva" onclick="if(window.RotinaTimeline) RotinaTimeline.selecionarAreaDuvida(\x27Preventiva\x27);" class="btn-area-duvida px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">Preventiva</button>
-          </div>
-
-          <!-- Input Rápido de Nova Dúvida -->
-          <div class="flex items-center gap-2">
-            <input
-              id="input-nova-duvida-cockpit"
-              type="text"
-              placeholder="Ex: Critérios de Light, Manejo de Cetoacidose, DHEG..."
-              onkeydown="if(event.key===\x27Enter\x27 && window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
-              class="flex-1 bg-slate-950/90 border border-slate-700/80 focus:border-purple-400 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none"
-            />
-            <button
-              type="button"
-              onclick="if(window.RotinaTimeline) RotinaTimeline.adicionarDuvidaCockpit();"
-              class="min-h-[36px] px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition active:scale-95 flex items-center gap-1 shrink-0 shadow-sm"
-            >
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Anotar
-            </button>
-          </div>
-
-          <!-- Lista de Dúvidas -->
-          <div id="rotina-duvidas-lista" class="space-y-1.5 max-h-56 overflow-y-auto pr-1 no-scrollbar text-xs">
-            <div class="text-[11px] text-slate-400 text-center py-2">Carregando dúvidas salvas...</div>
-          </div>
         </div>
       </div>
 
@@ -2826,35 +2764,35 @@
             <div class="grid grid-cols-4 gap-1.5">
               <div>
                 <label class="text-[9.5px] text-slate-400 block">PAS</label>
-                <input type="number" id="soap-pas" placeholder="120" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" id="soap-pas" min="0" max="350" inputmode="numeric" autocomplete="off" placeholder="120" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">PAD</label>
-                <input type="number" id="soap-pad" placeholder="80" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" id="soap-pad" min="0" max="250" inputmode="numeric" autocomplete="off" placeholder="80" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">FC (bpm)</label>
-                <input type="number" id="soap-fc" placeholder="78" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" id="soap-fc" min="0" max="350" inputmode="numeric" autocomplete="off" placeholder="78" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">FR (irpm)</label>
-                <input type="number" id="soap-fr" placeholder="16" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" id="soap-fr" min="0" max="120" inputmode="numeric" autocomplete="off" placeholder="16" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">SpO2 (%)</label>
-                <input type="number" id="soap-spo2" placeholder="98" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" id="soap-spo2" min="0" max="100" inputmode="numeric" autocomplete="off" placeholder="98" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">Tax (°C)</label>
-                <input type="number" step="0.1" id="soap-tax" placeholder="36.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" step="0.1" id="soap-tax" min="0" max="45" inputmode="decimal" autocomplete="off" placeholder="36.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">Peso (kg)</label>
-                <input type="number" step="0.1" id="soap-peso" placeholder="70" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" step="0.1" id="soap-peso" min="0" max="500" inputmode="decimal" autocomplete="off" placeholder="70" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
               <div>
                 <label class="text-[9.5px] text-slate-400 block">Alt (cm)</label>
-                <input type="number" id="soap-altura" placeholder="175" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
+                <input type="number" id="soap-altura" min="0" max="300" inputmode="numeric" autocomplete="off" placeholder="175" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1 text-xs text-center text-white focus:outline-none focus:border-cyan-500">
               </div>
             </div>
           </div>
@@ -11824,68 +11762,310 @@
     }
 
     const CATALOGO_CID_AMBULATORIAL_RAPIDO = [
-      { cid: 'I10', ciap: 'K86', diag: 'Hipertensão Arterial Sistêmica Primária', modelo: 'has_rotina' },
-      { cid: 'E11.9', ciap: 'T90', diag: 'Diabetes Mellitus Tipo 2 sem complicações agudas', modelo: 'dm_rotina' },
-      { cid: 'J06.9', ciap: 'R74', diag: 'Infecção Aguda das Vias Aéreas Superiores (IVAS)', modelo: 'respiratorio_ivas' },
-      { cid: 'M54.5', ciap: 'L03', diag: 'Dor Lombar Baixa / Lombalgia Aguda Mecânica', modelo: 'lombalgia_postural' },
-      { cid: 'K21.9', ciap: 'D84', diag: 'Doença do Refluxo Gastroesofágico (DRGE)', modelo: 'dispepsia_gastro' },
-      { cid: 'K30', ciap: 'D87', diag: 'Dispepsia Funcional / Epigastralgia', modelo: 'dispepsia_gastro' },
-      { cid: 'G44.2', ciap: 'N95', diag: 'Cefaleia Tensional Primária', modelo: 'cefaleia_neuro' },
-      { cid: 'F41.1', ciap: 'P74', diag: 'Transtorno de Ansiedade Generalizada (TAG)', modelo: 'saude_mental' },
-      { cid: 'F32.0', ciap: 'P76', diag: 'Episódio Depressivo Leve a Moderado', modelo: 'saude_mental' },
-      { cid: 'N30.0', ciap: 'U71', diag: 'Cistite Aguda Não Complicada (ITU baixa)', modelo: 'checkup_geral' },
-      { cid: 'J30.4', ciap: 'R97', diag: 'Rinite Alérgica Não Especificada', modelo: 'respiratorio_ivas' },
-      { cid: 'J45.9', ciap: 'R96', diag: 'Asma Brônquica em Acompanhamento', modelo: 'respiratorio_ivas' },
-      { cid: 'Z00.0', ciap: 'A98', diag: 'Exame Médico Geral / Consulta de Rotina', modelo: 'checkup_geral' }
+      // CARDIOVASCULAR
+      { cid: 'I10', ciap: 'K86', diag: 'Hipertensão Arterial Sistêmica Primária', modelo: 'has_rotina', cat: 'Cardiovascular', sin: ['has', 'pressao alta', 'hipertensao arterial', 'hipertensao essencial', 'pa elevada'] },
+      { cid: 'I15.9', ciap: 'K87', diag: 'Hipertensão Arterial Resistente / Secundária', modelo: 'has_rotina', cat: 'Cardiovascular', sin: ['har', 'hipertensao secundaria', 'pressao resistente'] },
+      { cid: 'I50.9', ciap: 'K77', diag: 'Insuficiência Cardíaca Congestiva Não Especificada', modelo: 'has_rotina', cat: 'Cardiovascular', sin: ['ic', 'icc', 'insuficiencia cardiaca', 'coracao fraco', 'dispneia paroxistica'] },
+      { cid: 'I20.9', ciap: 'K74', diag: 'Doença Arterial Coronariana / Angina Estável', modelo: 'has_rotina', cat: 'Cardiovascular', sin: ['dac', 'angina', 'angina estavel', 'dor no peito', 'isquemia miocardica'] },
+      { cid: 'I48.9', ciap: 'K78', diag: 'Fibrilação Atrial e Flutter Não Especificados', modelo: 'has_rotina', cat: 'Cardiovascular', sin: ['fa', 'fibrilacao atrial', 'flutter', 'arritmia', 'palpitacoes', 'coracao acelerado'] },
+      { cid: 'I83.9', ciap: 'K95', diag: 'Varizes dos Membros Inferiores sem Úlcera', modelo: 'checkup_geral', cat: 'Cardiovascular', sin: ['varizes', 'insuficiencia venosa', 'peso nas pernas', 'edema de mmii'] },
+      { cid: 'I95.1', ciap: 'K88', diag: 'Hipotensão Ortostática / Postural', modelo: 'checkup_geral', cat: 'Cardiovascular', sin: ['pressao baixa', 'tontura ao levantar', 'hipotensao postural', 'lipotimia'] },
+      { cid: 'I73.9', ciap: 'K92', diag: 'Doença Vascular Periférica (DAOP)', modelo: 'checkup_geral', cat: 'Cardiovascular', sin: ['daop', 'claudicacao intermitente', 'dor na panturrilha ao caminhar'] },
+
+      // METABÓLICO & ENDÓCRINO
+      { cid: 'E11.9', ciap: 'T90', diag: 'Diabetes Mellitus Tipo 2 sem complicações agudas', modelo: 'dm_rotina', cat: 'Metabólico', sin: ['dm2', 'dm 2', 'diabetes', 'diabetes tipo 2', 'glicemia alta', 'acucar no sangue'] },
+      { cid: 'E10.9', ciap: 'T89', diag: 'Diabetes Mellitus Tipo 1', modelo: 'dm_rotina', cat: 'Metabólico', sin: ['dm1', 'dm 1', 'diabetes tipo 1', 'insulino dependente', 'diabetes juvenil'] },
+      { cid: 'O24.4', ciap: 'W85', diag: 'Diabetes Mellitus Gestacional (DMG)', modelo: 'dm_rotina', cat: 'Metabólico', sin: ['dmg', 'diabetes gestacional', 'diabetes na gestacao'] },
+      { cid: 'R73.0', ciap: 'T90', diag: 'Glicemia de Jejum Alterada / Pré-Diabetes', modelo: 'dm_rotina', cat: 'Metabólico', sin: ['prediabetes', 'glicemia de jejum alterada', 'resistencia a insulina'] },
+      { cid: 'E78.0', ciap: 'T93', diag: 'Hipercolesterolemia Pura / Dislipidemia', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['colesterol alto', 'colesterol', 'dislipidemia', 'ldl alto'] },
+      { cid: 'E78.2', ciap: 'T93', diag: 'Hipertrigliceridemia Pura / Mista', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['triglicerideos altos', 'triglicerides', 'dislipidemia mista'] },
+      { cid: 'E66.9', ciap: 'T82', diag: 'Obesidade Não Especificada', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['obesidade', 'sobrepeso', 'excesso de peso', 'imc alto'] },
+      { cid: 'E03.9', ciap: 'T86', diag: 'Hipotireoidismo Primário Não Especificado', modelo: 'checkup_geral', cat: 'Endócrino', sin: ['tireoide', 'tsh alto', 't4 livre baixo', 'hipo tireoidismo', 'hashimoto'] },
+      { cid: 'E05.9', ciap: 'T85', diag: 'Tireotoxicose / Hipertireoidismo', modelo: 'checkup_geral', cat: 'Endócrino', sin: ['hipertireoidismo', 'doenca de graves', 'tireotoxicose', 'tsh baixo', 'bocio'] },
+      { cid: 'M10.9', ciap: 'T92', diag: 'Gota Úrica Idiopática / Podagra', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['gota', 'acido urico alto', 'crise de gota', 'podagra', 'artrite gotosa'] },
+      { cid: 'M81.0', ciap: 'L95', diag: 'Osteoporose Não Especificada', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['osteoporose', 'densitometria alterada', 'desmineralizacao ossea', 'osteopenia'] },
+      { cid: 'E55.9', ciap: 'T91', diag: 'Deficiência de Vitamina D Não Especificada', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['vitamina d baixa', 'hipovitaminose d', 'falta de vitamina d'] },
+      { cid: 'E53.8', ciap: 'B81', diag: 'Deficiência de Vitamina B12 Não Especificada', modelo: 'checkup_geral', cat: 'Metabólico', sin: ['b12 baixa', 'falta de vitamina b12', 'cobalamina baixa'] },
+
+      // RESPIRATÓRIO
+      { cid: 'J00', ciap: 'R74', diag: 'Rinofaringite Aguda (Resfriado Comum)', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['resfriado', 'gripe', 'ivas', 'coriza', 'nariz escorrendo', 'congestao nasal'] },
+      { cid: 'J06.9', ciap: 'R74', diag: 'Infecção Aguda das Vias Aéreas Superiores (IVAS)', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['infeccao respiratoria', 'virose respiratoria', 'catarro', 'obstrucao nasal'] },
+      { cid: 'J02.9', ciap: 'R74', diag: 'Faringoamigdalite Aguda Não Especificada', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['dor de garganta', 'garganta inflamada', 'amigdalite', 'faringite', 'odinofagia'] },
+      { cid: 'J02.0', ciap: 'R72', diag: 'Faringite Estreptocócica Bacteriana', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['amigdalite bacteriana', 'placas na garganta', 'pus na garganta'] },
+      { cid: 'J01.9', ciap: 'R75', diag: 'Sinusite Aguda / Rinossinusite', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['sinusite', 'rinossinusite', 'dor na face', 'pressao facial', 'secrecao purulenta'] },
+      { cid: 'J32.9', ciap: 'R75', diag: 'Sinusite Crônica Não Especificada', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['sinusite cronica', 'gotejamento pos nasal'] },
+      { cid: 'J30.4', ciap: 'R97', diag: 'Rinite Alérgica Não Especificada', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['rinite', 'espirros', 'prurido nasal', 'coriza alergica', 'coceira no nariz'] },
+      { cid: 'J45.9', ciap: 'R96', diag: 'Asma Brônquica Não Especificada', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['asma', 'bronquite alergica', 'chiado no peito', 'sibilancia', 'falta de ar asmatica'] },
+      { cid: 'J44.9', ciap: 'R95', diag: 'Doença Pulmonar Obstrutiva Crônica (DPOC)', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['dpoc', 'enfisema pulmonar', 'bronquite cronica', 'pulmao de fumante'] },
+      { cid: 'J20.9', ciap: 'R78', diag: 'Bronquite Aguda Não Especificada', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['bronquite', 'tosse com catarro', 'infeccao bronquica'] },
+      { cid: 'J18.9', ciap: 'R81', diag: 'Pneumonia Adquirida na Comunidade (PAC)', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['pneumonia', 'pac', 'infeccao pulmonar', 'febre e tosse com catarro'] },
+      { cid: 'R05', ciap: 'R05', diag: 'Tosse Não Especificada', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['tosse', 'tosse seca', 'pigarro', 'tosse cronica'] },
+      { cid: 'J11.1', ciap: 'R80', diag: 'Influenza (Gripe) com Manifestações Respiratórias', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['gripe', 'influenza', 'sindrome gripal', 'dor no corpo e febre'] },
+      { cid: 'U07.1', ciap: 'R83', diag: 'COVID-19 / Infecção por Coronavírus SARS-CoV-2', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['covid', 'covid 19', 'coronavirus', 'sars cov 2', 'perda de olfato'] },
+
+      // GASTROINTESTINAL
+      { cid: 'K21.9', ciap: 'D84', diag: 'Doença do Refluxo Gastroesofágico (DRGE)', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['refluxo', 'drge', 'azia', 'pirose', 'queimacao no peito', 'regurgitacao'] },
+      { cid: 'K30', ciap: 'D87', diag: 'Dispepsia Funcional / Epigastralgia', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['dispepsia', 'dor de estomago', 'estomago pesado', 'empachamento', 'ma digestao'] },
+      { cid: 'K29.7', ciap: 'D87', diag: 'Gastrite Não Especificada', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['gastrite', 'queimacao no estomago', 'dor no estomago'] },
+      { cid: 'K27.9', ciap: 'D86', diag: 'Úlcera Péptica Não Especificada', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['ulcera', 'ulcera gastrica', 'ulcera peptica'] },
+      { cid: 'A09', ciap: 'D70', diag: 'Diarreia e Gastroenterite Infecciosa (GECA)', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['geca', 'diarreia', 'dor de barriga', 'vomito', 'desinteria', 'intoxicacao alimentar'] },
+      { cid: 'K58.9', ciap: 'D93', diag: 'Síndrome do Intestino Irritável (SII)', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['sii', 'intestino irritavel', 'distensao abdominal cronica'] },
+      { cid: 'K59.0', ciap: 'D12', diag: 'Constipação Intestinal Crônica / Obstipação', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['constipacao', 'prisao de ventre', 'intestino preso', 'fezes ressecadas'] },
+      { cid: 'I84.9', ciap: 'D95', diag: 'Hemorroidas Sem Complicação', modelo: 'checkup_geral', cat: 'Gastrointestinal', sin: ['hemorroida', 'sangramento ao evacuar', 'nodulo anal', 'dor anal'] },
+      { cid: 'K60.2', ciap: 'D95', diag: 'Fissura Anal Aguda ou Crônica', modelo: 'checkup_geral', cat: 'Gastrointestinal', sin: ['fissura anal', 'dor cortante ao evacuar', 'sangue no papel'] },
+      { cid: 'K80.2', ciap: 'D98', diag: 'Colelitíase sem Colecistite / Pedra na Vesícula', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['pedra na vesicula', 'calculo biliar', 'colica biliar', 'dor no hipocondrio direito'] },
+      { cid: 'K76.0', ciap: 'D97', diag: 'Esteatose Hepática (Gordura no Fígado)', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['gordura no figado', 'esteatose', 'figado gorduroso'] },
+      { cid: 'R11', ciap: 'D09', diag: 'Náuseas e Vômitos Inespecíficos', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['nausea', 'vomito', 'enjoo', 'ansia de vomito'] },
+      { cid: 'R10.4', ciap: 'D01', diag: 'Dor Abdominal e Pélvica Não Especificada', modelo: 'dispepsia_gastro', cat: 'Gastrointestinal', sin: ['dor abdominal', 'dor na barriga', 'colica abdominal'] },
+
+      // MUSCULOESQUELÉTICO
+      { cid: 'M54.5', ciap: 'L03', diag: 'Dor Lombar Baixa / Lombalgia Aguda Mecânica', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['lombalgia', 'dor nas costas', 'dor lombar', 'lumbago', 'coluna travada', 'mau jeito nas costas'] },
+      { cid: 'M54.4', ciap: 'L86', diag: 'Lumbago com Ciática / Lombociatalgia Radicular', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['dor ciatica', 'ciatico', 'hernia de disco', 'lombociatalgia', 'dor que desce para perna'] },
+      { cid: 'M54.2', ciap: 'L01', diag: 'Cervicalgia / Torcicolo', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['cervicalgia', 'dor no pescoco', 'torcicolo', 'dor na coluna cervical'] },
+      { cid: 'M17.9', ciap: 'L90', diag: 'Gonartrose (Osteoartrite de Joelho)', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['artrose joelho', 'gonartrose', 'desgaste no joelho', 'dor no joelho ao andar', 'dor joelho'] },
+      { cid: 'M16.9', ciap: 'L89', diag: 'Coxartrose (Osteoartrite de Quadril)', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['artrose quadril', 'coxartrose', 'desgaste no quadril', 'dor na virilha'] },
+      { cid: 'M75.1', ciap: 'L92', diag: 'Síndrome do Manguito Rotador / Ombro Doloroso', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['dor no ombro', 'tendinite ombro', 'manguito rotador', 'bursite ombro'] },
+      { cid: 'M77.1', ciap: 'L93', diag: 'Epicondilite Lateral / Cotovelo de Tenista', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['epicondilite', 'cotovelo de tenista', 'dor no cotovelo'] },
+      { cid: 'M72.2', ciap: 'L99', diag: 'Fascite Plantar / Esporão de Calcâneo', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['fascite plantar', 'esporao', 'dor no calcanhar', 'dor ao pisar pela manha'] },
+      { cid: 'G56.0', ciap: 'N93', diag: 'Síndrome do Túnel do Carpo', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['tunel do carpo', 'dormencia nos dedos', 'formigamento na mao'] },
+      { cid: 'M79.7', ciap: 'L18', diag: 'Fibromialgia / Síndrome de Amplificação Dolorosa', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['fibromialgia', 'dor no corpo todo', 'pontos dolorosos', 'tender points'] },
+      { cid: 'M70.6', ciap: 'L99', diag: 'Bursite Trocantérica / Bursite do Quadril', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['bursite quadril', 'bursite trocanterica', 'dor na lateral da coxa'] },
+      { cid: 'S93.4', ciap: 'L77', diag: 'Entorse e Distensão do Tornozelo', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['entorse tornozelo', 'torcao no pe', 'pisou em falso'] },
+      { cid: 'M79.1', ciap: 'L18', diag: 'Mialgia / Contratura Muscular', modelo: 'lombalgia_postural', cat: 'Musculoesquelético', sin: ['mialgia', 'dor muscular', 'contratura muscular'] },
+
+      // NEFROLOGIA & UROLOGIA
+      { cid: 'N30.0', ciap: 'U71', diag: 'Cistite Aguda Não Complicada (ITU Baixa)', modelo: 'checkup_geral', cat: 'Urológico', sin: ['itu', 'cistite', 'infeccao urinaria', 'disuria', 'ardor para urinar', 'xixi ardendo', 'polaciuria'] },
+      { cid: 'N10', ciap: 'U70', diag: 'Pielonefrite Aguda Não Complicada', modelo: 'checkup_geral', cat: 'Urológico', sin: ['pielonefrite', 'infeccao no rim', 'itu alta', 'dor no flanco com febre', 'giordano positivo'] },
+      { cid: 'N20.0', ciap: 'U95', diag: 'Cálculo do Rim e do Ureter / Cólica Nefrética', modelo: 'checkup_geral', cat: 'Urológico', sin: ['calculo renal', 'pedra no rim', 'colica renal', 'colica nefretica', 'nefrolitiase'] },
+      { cid: 'N40', ciap: 'Y73', diag: 'Hiperplasia Prostática Benigna (HPB)', modelo: 'checkup_geral', cat: 'Urológico', sin: ['hpb', 'prostata aumentada', 'jato urinario fraco', 'nocturia'] },
+      { cid: 'N41.9', ciap: 'Y73', diag: 'Prostatite Aguda Não Especificada', modelo: 'checkup_geral', cat: 'Urológico', sin: ['prostatite', 'infeccao na prostata', 'dor no perineo'] },
+      { cid: 'R32', ciap: 'U04', diag: 'Incontinência Urinária Não Especificada', modelo: 'checkup_geral', cat: 'Urológico', sin: ['incontinencia urinaria', 'perda de urina', 'escape de xixi'] },
+      { cid: 'R31', ciap: 'U06', diag: 'Hematúria Não Especificada', modelo: 'checkup_geral', cat: 'Urológico', sin: ['sangue na urina', 'urina vermelha', 'hematuria'] },
+      { cid: 'N18.9', ciap: 'U99', diag: 'Doença Renal Crônica Não Especificada', modelo: 'checkup_geral', cat: 'Urológico', sin: ['drc', 'insuficiencia renal cronica', 'creatinina alta', 'tfg baixa'] },
+
+      // DERMATOLOGIA
+      { cid: 'L23.9', ciap: 'S88', diag: 'Dermatite de Contato Não Especificada', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['dermatite de contato', 'alergia na pele', 'eczema', 'coceira e vermelhidao'] },
+      { cid: 'L20.9', ciap: 'S87', diag: 'Dermatite Atópica Não Especificada', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['dermatite atopica', 'eczema atopico', 'pele ressecada com prurido'] },
+      { cid: 'L21.9', ciap: 'S86', diag: 'Dermatite Seborreica Não Especificada', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['dermatite seborreica', 'caspa', 'descamacao no couro cabeludo'] },
+      { cid: 'L50.9', ciap: 'S98', diag: 'Urticária Alérgica / Não Especificada', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['urticaria', 'placas vermelhas que cocam', 'empolacao', 'alergia na pele'] },
+      { cid: 'B86', ciap: 'S72', diag: 'Escabiose (Sarna Humana)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['escabiose', 'sarna', 'coceira noturna', 'pereba', 'lesoes interdigitais'] },
+      { cid: 'B85.0', ciap: 'S73', diag: 'Pediculose (Piolho)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['piolho', 'pediculose', 'lendea', 'coceira na cabeca'] },
+      { cid: 'A46', ciap: 'S76', diag: 'Erisipela / Celulite Infecciosa de Membro', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['erisipela', 'celulite infecciosa', 'perna vermelha e quente', 'infeccao de pele'] },
+      { cid: 'B02.9', ciap: 'S70', diag: 'Herpes Zoster sem Complicações', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['herpes zoster', 'cobreiro', 'vesiculas em dermatomo', 'queimacao na pele em faixa'] },
+      { cid: 'B00.9', ciap: 'S71', diag: 'Herpes Simples Labial ou Genital', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['herpes labial', 'herpes simples', 'vesicula no labio', 'feridinha no labio'] },
+      { cid: 'B35.9', ciap: 'S74', diag: 'Dermatofitose / Tinea Não Especificada (Micose)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['tinea', 'micose', 'frieira', 'pe de atleta', 'impigem'] },
+      { cid: 'B36.0', ciap: 'S74', diag: 'Pitiríase Versicolor (Pano Branco)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['pano branco', 'micose de praia', 'pitiriase versicolor', 'manchas claras'] },
+      { cid: 'B35.1', ciap: 'S74', diag: 'Onicomicose (Micose de Unha)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['micose de unha', 'onicomicose', 'unha amarelada e grossa'] },
+      { cid: 'L70.0', ciap: 'S96', diag: 'Acne Vulgar', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['acne', 'espinhas', 'cravos', 'comedoes'] },
+      { cid: 'L40.0', ciap: 'S91', diag: 'Psoríase Vulgar', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['psoriase', 'placas descamativas', 'lesoes em cotovelo'] },
+      { cid: 'L02.9', ciap: 'S10', diag: 'Abscesso Cutâneo / Furúnculo', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['furunculo', 'abscesso', 'nodulo com pus'] },
+      { cid: 'B07', ciap: 'S03', diag: 'Verrugas de Origem Viral (HPV Cutâneo)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['verruga', 'olho de peixe', 'verruga plantar'] },
+      { cid: 'L60.0', ciap: 'S99', diag: 'Unha Encravada (Onicocriptose)', modelo: 'checkup_geral', cat: 'Dermatologia', sin: ['unha encravada', 'onicocriptose', 'canto da unha inflamado'] },
+
+      // NEUROLOGIA
+      { cid: 'G44.2', ciap: 'N95', diag: 'Cefaleia Tensional Primária', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['cefaleia', 'dor de cabeca', 'cefaleia tipo tensao', 'pressao na cabeca', 'cefaleia tensional'] },
+      { cid: 'G43.0', ciap: 'N89', diag: 'Enxaqueca (Migrânea) sem Aura', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['migranea', 'enxaqueca', 'dor pulsatil na cabeca', 'fotofobia'] },
+      { cid: 'H81.1', ciap: 'N17', diag: 'Vertigem Posicional Paroxística Benigna (VPPB)', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['vppb', 'vertigem posicional', 'labirintite', 'tontura rotatoria ao virar'] },
+      { cid: 'H81.0', ciap: 'H82', diag: 'Transtorno da Função Vestibular / Labirintite', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['labirintite', 'neuronite vestibular', 'tontura com nausea'] },
+      { cid: 'R42', ciap: 'N17', diag: 'Tontura e Instabilidade Não Especificadas', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['tontura', 'sensacao de desmaio', 'instabilidade ao caminhar'] },
+      { cid: 'G51.0', ciap: 'N91', diag: 'Paralisia Facial Periférica (Paralisia de Bell)', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['paralisia de bell', 'boca torta', 'paralisia facial'] },
+      { cid: 'G25.0', ciap: 'N08', diag: 'Tremor Essencial / Postural', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['tremor', 'tremor nas maos', 'tremedeira'] },
+      { cid: 'G40.9', ciap: 'N88', diag: 'Epilepsia Não Especificada', modelo: 'cefaleia_neuro', cat: 'Neurológico', sin: ['epilepsia', 'convulsao', 'crise convulsiva'] },
+
+      // SAÚDE MENTAL
+      { cid: 'F41.1', ciap: 'P74', diag: 'Transtorno de Ansiedade Generalizada (TAG)', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['tag', 'ansiedade', 'nervosismo', 'preocupacao excessiva', 'crise de ansiedade'] },
+      { cid: 'F41.0', ciap: 'P74', diag: 'Transtorno de Pânico / Ataque de Pânico', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['panico', 'ataque de panico', 'crise de panico', 'sensacao de morte iminente'] },
+      { cid: 'F32.0', ciap: 'P76', diag: 'Episódio Depressivo Leve a Moderado', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['depressao', 'tristeza', 'transtorno depressivo', 'depressao leve', 'desanimo'] },
+      { cid: 'F32.2', ciap: 'P76', diag: 'Episódio Depressivo Grave sem Sintomas Psicóticos', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['depressao grave', 'melancolia severa'] },
+      { cid: 'F51.0', ciap: 'P06', diag: 'Insônia Não Orgânica Crônica', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['insonia', 'dificuldade para dormir', 'sono ruim', 'acordar a noite'] },
+      { cid: 'Z73.0', ciap: 'Z05', diag: 'Síndrome de Burnout (Esgotamento Profissional)', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['burnout', 'esgotamento profissional', 'estresse no trabalho'] },
+      { cid: 'F31.9', ciap: 'P73', diag: 'Transtorno Afetivo Bipolar Não Especificado', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['bipolaridade', 'transtorno bipolar', 'tab'] },
+      { cid: 'F90.0', ciap: 'P22', diag: 'Transtorno do Déficit de Atenção (TDAH)', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['tdah', 'deficit de atencao', 'hiperatividade', 'desatencao'] },
+      { cid: 'F17.2', ciap: 'P17', diag: 'Dependência de Nicotina / Tabagismo', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['tabagismo', 'cigarro', 'fumo', 'cessacao do tabagismo'] },
+      { cid: 'F10.2', ciap: 'P15', diag: 'Uso Nocivo / Dependência de Álcool', modelo: 'saude_mental', cat: 'Saúde Mental', sin: ['alcoolismo', 'dependencia de alcool', 'etilismo'] },
+
+      // DOENÇAS INFECCIOSAS
+      { cid: 'A90', ciap: 'A77', diag: 'Dengue Clássica sem Sinais de Alarme', modelo: 'checkup_geral', cat: 'Infeccioso', sin: ['dengue', 'dor atras dos olhos', 'febre alta e dor muscular', 'mialgia intensa'] },
+      { cid: 'A92.0', ciap: 'A77', diag: 'Febre de Chikungunya Aguda', modelo: 'checkup_geral', cat: 'Infeccioso', sin: ['chikungunya', 'dor nas articulacoes com febre', 'poliartrite febril'] },
+      { cid: 'B01.9', ciap: 'A72', diag: 'Varicela (Catapora) sem Complicação', modelo: 'checkup_geral', cat: 'Infeccioso', sin: ['catapora', 'varicela', 'vesiculas na pele com febre'] },
+      { cid: 'H10.9', ciap: 'F70', diag: 'Conjuntivite Aguda Não Especificada', modelo: 'checkup_geral', cat: 'Infeccioso', sin: ['conjuntivite', 'olho vermelho', 'secrecao ocular', 'olho colado pela manha'] },
+      { cid: 'B82.9', ciap: 'D96', diag: 'Parasitose Intestinal Não Especificada', modelo: 'dispepsia_gastro', cat: 'Infeccioso', sin: ['vermes', 'verminose', 'parasitose', 'giardiase', 'lombriga'] },
+      { cid: 'A53.9', ciap: 'Y70', diag: 'Sífilis Adquirida / Precoce Não Especificada', modelo: 'checkup_geral', cat: 'Infeccioso', sin: ['sifilis', 'cancro duro', 'vdrl positivo', 'treponema'] },
+      { cid: 'B37.3', ciap: 'X72', diag: 'Candidíase Vulvovaginal', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['candidiase', 'corrimento branco', 'coceira vaginal', 'leite coalhado'] },
+      { cid: 'N76.0', ciap: 'X74', diag: 'Vaginose Bacteriana / Vaginite Aguda', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['vaginose', 'corrimento com cheiro de peixe', 'odor vaginal', 'gardnerella'] },
+      { cid: 'A15.0', ciap: 'R91', diag: 'Tuberculose Pulmonar', modelo: 'respiratorio_ivas', cat: 'Infeccioso', sin: ['tuberculose', 'tb', 'tosse cronica com escarro', 'sudorese noturna'] },
+      { cid: 'A30.9', ciap: 'S78', diag: 'Hanseníase Não Especificada', modelo: 'checkup_geral', cat: 'Infeccioso', sin: ['hanseniase', 'mancha dormente', 'perda de sensibilidade'] },
+
+      // HEMATOLOGIA
+      { cid: 'D50.9', ciap: 'B80', diag: 'Anemia por Deficiência de Ferro (Ferropriva)', modelo: 'checkup_geral', cat: 'Hematológico', sin: ['anemia', 'falta de ferro', 'ferritina baixa', 'palidez', 'anemia ferropriva'] },
+      { cid: 'D51.9', ciap: 'B81', diag: 'Anemia Megaloblástica por Deficiência de B12/Folato', modelo: 'checkup_geral', cat: 'Hematológico', sin: ['anemia megaloblastica', 'vcm alto', 'macrocitose'] },
+
+      // GINECOLOGIA & SAÚDE DA MULHER
+      { cid: 'Z32.1', ciap: 'W78', diag: 'Gravidez Confirmada / Pré-Natal', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['gravidez', 'gestacao', 'prenatal', 'pre natal', 'gestante', 'atraso menstrual'] },
+      { cid: 'N94.6', ciap: 'X02', diag: 'Dismenorreia Primária Não Especificada', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['colica menstrual', 'dismenorreia', 'dor na menstruacao'] },
+      { cid: 'N95.1', ciap: 'X11', diag: 'Sintomas da Menopausa / Climatério', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['menopausa', 'climaterio', 'fogachos', 'calores', 'ondas de calor'] },
+      { cid: 'N93.9', ciap: 'X06', diag: 'Sangramento Uterino Anormal (SUA)', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['sua', 'sangramento uterino', 'menstruacao excessiva'] },
+      { cid: 'E28.2', ciap: 'T99', diag: 'Síndrome dos Ovários Policísticos (SOP)', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['sop', 'ovarios policisticos', 'hirsutismo'] },
+      { cid: 'Z30.0', ciap: 'W11', diag: 'Aconselhamento e Prescrição de Anticoncepcionais', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['anticoncepcional', 'pilula', 'diu', 'planejamento familiar'] },
+      { cid: 'Z01.4', ciap: 'X37', diag: 'Exame Ginecológico / Preventivo Citopatológico', modelo: 'checkup_geral', cat: 'Ginecológico', sin: ['papanicolau', 'preventivo', 'colpocitologia', 'rastreio colo'] },
+
+      // GERAL & CHECK-UP
+      { cid: 'Z00.0', ciap: 'A98', diag: 'Exame Médico Geral / Consulta de Rotina', modelo: 'checkup_geral', cat: 'Geral', sin: ['checkup', 'consulta de rotina', 'exame de rotina', 'avaliacao geral'] },
+      { cid: 'Z02.5', ciap: 'A98', diag: 'Exame de Saúde para Admissão ao Esporte / Academia', modelo: 'checkup_geral', cat: 'Geral', sin: ['atestado', 'aptidao fisica', 'academia', 'atestado de saude'] },
+      { cid: 'Z00.1', ciap: 'A98', diag: 'Exame de Rotina de Saúde da Criança / Puericultura', modelo: 'checkup_geral', cat: 'Pediatria', sin: ['puericultura', 'consulta do bebe', 'crescimento e desenvolvimento'] },
+      { cid: 'H61.2', ciap: 'H81', diag: 'Rolha de Cerúmen Oclusiva', modelo: 'respiratorio_ivas', cat: 'Respiratório', sin: ['cerume', 'rolha de cera', 'ouvido entupido', 'lavagem de ouvido'] },
+      { cid: 'Z48.0', ciap: 'A98', diag: 'Cuidados com Suturas / Retirada de Pontos', modelo: 'checkup_geral', cat: 'Procedimento', sin: ['retirar pontos', 'retirada de pontos', 'pontos cirurgicos'] },
+      { cid: 'T14.0', ciap: 'A80', diag: 'Traumatismo Superficial / Escoriação', modelo: 'checkup_geral', cat: 'Procedimento', sin: ['machucado', 'escoriacao', 'ralado', 'corte superficial'] }
     ];
 
     async function buscarDiagnosticosAmbulatorial(termo) {
       const container = document.getElementById('amb-lista-sugestoes-cid');
       if (!container) return;
-      termo = (termo || '').trim().toLowerCase();
-      if (termo.length < 2) {
+      const termoBruto = (termo || '').trim();
+      const limpo = termoBruto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (limpo.length < 2) {
         container.classList.add('hidden');
         container.innerHTML = '';
         return;
       }
 
-      let resultados = CATALOGO_CID_AMBULATORIAL_RAPIDO.filter(item => {
-        return item.cid.toLowerCase().includes(termo) ||
-               item.ciap.toLowerCase().includes(termo) ||
-               item.diag.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(termo);
-      });
+      const limpoSemPonto = limpo.replace(/[^a-z0-9]/g, '');
+      const tokens = limpo.split(/\s+/).filter(t => t.length > 1);
+      const avaliados = [];
 
+      for (let i = 0; i < CATALOGO_CID_AMBULATORIAL_RAPIDO.length; i++) {
+        const item = CATALOGO_CID_AMBULATORIAL_RAPIDO[i];
+        let score = 0;
+
+        const cidLimpo = (item.cid || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        const cidSemPonto = cidLimpo.replace(/[^a-z0-9]/g, '');
+        const ciapLimpo = (item.ciap || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        const diagLimpo = (item.diag || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        const catLimpa = (item.cat || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+
+        // 1. Match exato ou início de código CID-10
+        if (cidLimpo === limpo || (cidSemPonto && cidSemPonto === limpoSemPonto)) {
+          score = Math.max(score, 100);
+        } else if (cidLimpo.indexOf(limpo) === 0 || (cidSemPonto && cidSemPonto.indexOf(limpoSemPonto) === 0)) {
+          score = Math.max(score, 90);
+        } else if (cidLimpo.indexOf(limpo) !== -1 || (cidSemPonto && cidSemPonto.indexOf(limpoSemPonto) !== -1)) {
+          score = Math.max(score, 80);
+        }
+
+        // 2. Match com CIAP-2
+        if (ciapLimpo && ciapLimpo === limpo) {
+          score = Math.max(score, 95);
+        } else if (ciapLimpo && ciapLimpo.indexOf(limpo) === 0) {
+          score = Math.max(score, 85);
+        }
+
+        // 3. Match em sinônimos / siglas / sintomas
+        if (Array.isArray(item.sin)) {
+          for (let s = 0; s < item.sin.length; s++) {
+            const sin = item.sin[s].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+            if (sin === limpo) {
+              score = Math.max(score, 95);
+              break;
+            } else if (sin.indexOf(limpo) === 0) {
+              score = Math.max(score, 80);
+            } else if (sin.indexOf(limpo) !== -1) {
+              score = Math.max(score, 65);
+            }
+          }
+        }
+
+        // 4. Match no diagnóstico
+        if (diagLimpo === limpo) {
+          score = Math.max(score, 95);
+        } else if (diagLimpo.indexOf(limpo) === 0) {
+          score = Math.max(score, 85);
+        } else if (diagLimpo.indexOf(limpo) !== -1) {
+          score = Math.max(score, 70);
+        }
+
+        // 5. Match em categoria
+        if (catLimpa.indexOf(limpo) !== -1) {
+          score = Math.max(score, 45);
+        }
+
+        // 6. Multi-token
+        if (score === 0 && tokens.length > 1) {
+          const textoGlobal = (item.diag + ' ' + (item.sin || []).join(' ') + ' ' + item.cat).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          if (tokens.every(tk => textoGlobal.indexOf(tk) !== -1)) {
+            score = 55;
+          }
+        }
+
+        if (score > 0) {
+          avaliados.push({ item: item, score: score });
+        }
+      }
+
+      avaliados.sort((a, b) => b.score - a.score);
+      let resultados = avaliados.map(a => a.item);
+
+      // Consulta ao backend via RPC para enriquecimento em tempo real
       try {
-        const respRpc = await cockpitRpc('cockpitBuscarCid', [termo]);
+        const respRpc = await cockpitRpc('cockpitBuscarCid', [termoBruto]);
         if (respRpc && respRpc.sucesso && Array.isArray(respRpc.resultados) && respRpc.resultados.length > 0) {
-          respRpc.resultados.slice(0, 6).forEach(r => {
+          respRpc.resultados.slice(0, 8).forEach(r => {
             if (!resultados.some(item => item.cid === r.cid10)) {
               resultados.push({
                 cid: r.cid10,
-                ciap: r.ciap2 || '',
+                ciap: r.ciap2 || '—',
                 diag: r.diagnostico,
-                modelo: r.modeloEf || 'checkup_geral'
+                modelo: r.modeloEf || 'checkup_geral',
+                cat: r.categoria || 'Clínica Geral',
+                sin: r.sinonimos || []
               });
             }
           });
         }
       } catch (e) {}
 
-      if (!resultados.length) {
-        container.innerHTML = '<div class="p-2 text-slate-400 text-center text-[10.5px]">Nenhum diagnóstico encontrado</div>';
+      // Se o médico digitou um padrão de código CID (ex: J18.9, M54.2, A09, Z76)
+      const ehPadraoCid = /^[A-Z][0-9]{2}(\.[0-9]{1,2})?$/i.test(termoBruto);
+      let htmlCidDireto = '';
+      if (ehPadraoCid) {
+        const codUpper = termoBruto.toUpperCase();
+        htmlCidDireto = `
+          <button type="button" onclick="selecionarDiagnosticoAmbulatorial('${codUpper}', '—', 'Diagnóstico Clínico (${codUpper})', 'checkup_geral')" class="w-full text-left p-1.5 rounded-lg bg-teal-950/40 border border-teal-500/40 hover:bg-teal-900/50 flex items-center justify-between gap-1.5 transition">
+            <div class="min-w-0">
+              <span class="text-[11px] font-bold text-teal-300 block truncate">🏷️ Inserir código digitado: ${codUpper}</span>
+              <span class="text-[9.5px] text-slate-400">Código CID-10 manual rápido</span>
+            </div>
+            <span class="text-[9px] bg-teal-500 text-slate-950 font-mono font-black px-1.5 py-0.5 rounded shrink-0">${codUpper}</span>
+          </button>
+        `;
+      }
+
+      if (!resultados.length && !ehPadraoCid) {
+        container.innerHTML = `
+          <div class="p-2.5 text-center space-y-1.5">
+            <div class="text-slate-400 text-[11px]">Nenhum código direto para "<strong>${termoBruto}</strong>"</div>
+            <button type="button" onclick="selecionarDiagnosticoAmbulatorial('Z00.0', 'A98', '${termoBruto.replace(/'/g, "\\'")}', 'checkup_geral')" class="text-[10px] text-teal-400 hover:text-teal-300 underline font-semibold block mx-auto">
+              ➕ Usar "${termoBruto}" como hipótese diagnóstica livre
+            </button>
+          </div>
+        `;
         container.classList.remove('hidden');
         return;
       }
 
-      container.innerHTML = resultados.slice(0, 7).map(item => `
-        <button type="button" onclick="selecionarDiagnosticoAmbulatorial('${item.cid}', '${item.ciap}', '${item.diag.replace(/'/g, "\\'")}', '${item.modelo}')" class="w-full text-left p-1.5 rounded-lg hover:bg-slate-800 flex items-center justify-between gap-1.5 transition">
-          <div class="min-w-0">
-            <span class="text-[11px] font-semibold text-slate-100 block truncate">${item.diag}</span>
+      const listaCards = resultados.slice(0, 8).map(item => `
+        <button type="button" onclick="selecionarDiagnosticoAmbulatorial('${item.cid}', '${item.ciap || '—'}', '${item.diag.replace(/'/g, "\\'")}', '${item.modelo || 'checkup_geral'}')" class="w-full text-left p-1.5 rounded-lg hover:bg-slate-800 flex items-center justify-between gap-1.5 transition">
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px] font-semibold text-slate-100 block truncate">${item.diag}</span>
+              ${item.cat ? `<span class="text-[8.5px] px-1 py-0.2 rounded bg-slate-800 text-slate-400 shrink-0 font-medium">${item.cat}</span>` : ''}
+            </div>
             <span class="text-[9.5px] text-slate-400">CIAP-2: ${item.ciap || '—'}</span>
           </div>
-          <span class="text-[9px] bg-teal-500/20 text-teal-300 font-mono font-bold px-1.5 py-0.5 rounded shrink-0">${item.cid}</span>
+          <span class="text-[9.5px] bg-teal-500/20 text-teal-300 font-mono font-bold px-1.5 py-0.5 rounded shrink-0">${item.cid}</span>
         </button>
       `).join('');
+
+      container.innerHTML = htmlCidDireto + listaCards;
       container.classList.remove('hidden');
     }
 
@@ -14351,29 +14531,158 @@
       copiarToast(`Revisão: ${pc.termo} (${pc.area})`);
     }
 
-    async function solicitarSabatinaPreceptorPlantao() {
+    let ultimaProvocacaoPreceptor = '';
+
+    function ouvirProvocacaoPreceptor() {
+      hapticFeedback('light');
+      if (!ultimaProvocacaoPreceptor) {
+        copiarToast('Nenhuma provocação do preceptor disponível para ouvir.');
+        return;
+      }
+      falarTextoPreceptorFallback(ultimaProvocacaoPreceptor);
+      copiarToast('Ouvindo provocação do Preceptor IA no fone...');
+    }
+
+    function prepararRespostaPreceptor() {
+      hapticFeedback('medium');
+      const inputEl = document.getElementById('input-conversa-texto') || document.getElementById('conversa-input');
+      if (inputEl) {
+        if (!inputEl.value.trim()) {
+          inputEl.value = 'Minha conduta imediata: ';
+        }
+        inputEl.focus();
+        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+        inputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        copiarToast('Digite sua resposta ou use o microfone para responder à sabatina.');
+      }
+    }
+
+    async function solicitarSabatinaPreceptorPlantao(forcarNovo = false) {
+      if (preceptorPendente) return;
       hapticFeedback('medium');
       const pc = pontosCegosFiltradosHoje[indicePontoCegoPlantao] || CATALOGO_PONTOS_CEGOS_PLANTAO[0];
       const box = document.getElementById('resposta-preceptor-box');
       const txt = document.getElementById('resposta-preceptor-texto');
+      const inputEl = document.getElementById('input-conversa-texto') || document.getElementById('conversa-input');
+      const inputTxt = inputEl?.value?.trim() || '';
+      const revision = cockpitDados?.revision;
+      const temCasoAtivo = !!(cockpitDados && cockpitDados.casoAtivo && cockpitDados.soap);
+
       if (box && txt) {
         box.classList.remove('hidden');
         txt.innerHTML = `
-          <div class="space-y-1.5">
-            <div class="text-[10px] font-extrabold uppercase text-purple-400 flex items-center gap-1">
-              <i data-lucide="brain" class="w-3.5 h-3.5"></i> Provocação Socrática do Preceptor (${pc.termo}):
+          <div class="space-y-2 py-1.5 animate-pulse">
+            <div class="flex items-center gap-2 text-purple-300 font-bold text-xs">
+              <div class="w-3.5 h-3.5 rounded-full border-2 border-purple-400 border-t-transparent animate-spin"></div>
+              <span>Preceptor IA formulando provocação socrática (${escapeHtml(pc.termo)})...</span>
             </div>
-            <p class="text-xs text-purple-100 font-medium italic">
-              "${pc.perguntaSocratica}"
-            </p>
-            <div class="text-[9.5px] text-slate-400 pt-1 border-t border-purple-500/20 flex items-center justify-between">
-              <span>Foco: ${pc.area} · Conduta Crítica</span>
-              <button onclick="copiarToast('Responda mentalmente ou dite no chat do plantão.')" class="text-purple-300 hover:text-white font-bold">Como responder?</button>
-            </div>
+            <p class="text-[10.5px] text-purple-200/70 italic">Consultando diretrizes e cruzando achados críticos em tempo real com IA...</p>
           </div>
         `;
         if (window.lucide) lucide.createIcons();
         box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      preceptorPendente = true;
+      try {
+        let perguntaIa = '';
+        let contextoTema = inputTxt;
+        if (!contextoTema && !temCasoAtivo) {
+          contextoTema = `Tema do Plantão: ${pc.nomeCompleto || pc.termo} (${pc.area}). Ponto de Atenção Crítico: ${pc.pontoAtencao}. Pérola Fisiopatológica: ${pc.perolaClinica}. Diretriz de Emergência: ${pc.diretriz}`;
+        }
+
+        const res = await cockpitRpc('cockpitConversar', {
+          acao: 'preceptor',
+          texto: contextoTema,
+          tema: pc.termo,
+          area: pc.area,
+          pontoAtencao: pc.pontoAtencao,
+          perolaClinica: pc.perolaClinica,
+          diretriz: pc.diretriz,
+          forcarNovo: !!forcarNovo
+        });
+
+        perguntaIa = res?.resposta || '';
+        if (!perguntaIa || perguntaIa.trim().length < 10) {
+          perguntaIa = pc.perguntaSocratica;
+        }
+
+        ultimaProvocacaoPreceptor = perguntaIa;
+
+        if (box && txt) {
+          txt.innerHTML = `
+            <div class="space-y-2 animate-in fade-in duration-200">
+              <div class="flex items-center justify-between">
+                <div class="text-[10px] font-extrabold uppercase text-purple-300 flex items-center gap-1.5">
+                  <i data-lucide="brain" class="w-3.5 h-3.5 text-purple-400"></i>
+                  <span>Provocação Socrática do Preceptor (${escapeHtml(pc.termo)}):</span>
+                </div>
+                <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-purple-500/20 text-purple-200 border border-purple-500/40 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Conectado à IA
+                </span>
+              </div>
+              <p class="text-xs text-purple-100 font-medium italic leading-relaxed bg-purple-950/40 p-2.5 rounded-lg border border-purple-800/40 shadow-inner">
+                "${escapeHtml(perguntaIa)}"
+              </p>
+              <div class="text-[9.5px] text-slate-400 pt-1.5 border-t border-purple-500/20 flex flex-wrap items-center justify-between gap-1.5">
+                <span>Foco: ${escapeHtml(pc.area)} · Conduta Crítica</span>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="ouvirProvocacaoPreceptor()" class="px-2 py-0.5 rounded bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-700/60 font-bold text-[10px] flex items-center gap-1 transition active:scale-95">
+                    <i data-lucide="volume-2" class="w-3 h-3 text-purple-300"></i> Ouvir
+                  </button>
+                  <button type="button" onclick="prepararRespostaPreceptor()" class="px-2 py-0.5 rounded bg-purple-600 hover:bg-purple-500 text-white font-bold text-[10px] flex items-center gap-1 transition shadow-sm active:scale-95">
+                    <i data-lucide="message-square" class="w-3 h-3"></i> Responder
+                  </button>
+                  <button type="button" onclick="solicitarSabatinaPreceptorPlantao(true)" title="Gerar nova provocação inédita com IA" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition active:scale-95">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+          box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      } catch (err) {
+        console.warn('[Preceptor IA Fallback]:', err);
+        const perguntaFallback = pc.perguntaSocratica || 'Qual conduta imediata você preconiza?';
+        ultimaProvocacaoPreceptor = perguntaFallback;
+        if (box && txt) {
+          txt.innerHTML = `
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="text-[10px] font-extrabold uppercase text-purple-300 flex items-center gap-1.5">
+                  <i data-lucide="brain" class="w-3.5 h-3.5 text-purple-400"></i>
+                  <span>Provocação Socrática (${escapeHtml(pc.termo)}):</span>
+                </div>
+                <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-200 border border-amber-500/40">
+                  Modo Offline
+                </span>
+              </div>
+              <p class="text-xs text-purple-100 font-medium italic leading-relaxed bg-purple-950/40 p-2.5 rounded-lg border border-purple-800/40">
+                "${escapeHtml(perguntaFallback)}"
+              </p>
+              <div class="text-[9.5px] text-slate-400 pt-1.5 border-t border-purple-500/20 flex flex-wrap items-center justify-between gap-1.5">
+                <span>Foco: ${escapeHtml(pc.area)} · Conduta Crítica</span>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="ouvirProvocacaoPreceptor()" class="px-2 py-0.5 rounded bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-700/60 font-bold text-[10px] flex items-center gap-1 transition">
+                    <i data-lucide="volume-2" class="w-3 h-3 text-purple-300"></i> Ouvir
+                  </button>
+                  <button type="button" onclick="prepararRespostaPreceptor()" class="px-2 py-0.5 rounded bg-purple-600 hover:bg-purple-500 text-white font-bold text-[10px] flex items-center gap-1 transition shadow-sm">
+                    <i data-lucide="message-square" class="w-3 h-3"></i> Responder
+                  </button>
+                  <button type="button" onclick="solicitarSabatinaPreceptorPlantao(true)" title="Tentar novamente conectar à IA" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+        }
+      } finally {
+        preceptorPendente = false;
       }
     }
 
@@ -14426,6 +14735,21 @@
           } catch (eRpc) {
             parecerTexto = '';
           }
+        }
+        if (!parecerTexto) {
+          try {
+            const contextoCaso = `Tema do Plantão: ${pc.nomeCompleto || pc.termo} (${pc.area}). Ponto de Atenção: ${pc.pontoAtencao}. Pérola Fisiopatológica: ${pc.perolaClinica}. Diretriz de Emergência: ${pc.diretriz}`;
+            const resIa = await cockpitRpc('cockpitConversar', {
+              acao: 'preceptor',
+              texto: contextoCaso,
+              tema: pc.termo,
+              area: pc.area,
+              pontoAtencao: pc.pontoAtencao,
+              perolaClinica: pc.perolaClinica,
+              diretriz: pc.diretriz
+            });
+            parecerTexto = resIa?.resposta || '';
+          } catch (_) {}
         }
 
         let htmlParecer = `
@@ -14489,29 +14813,67 @@
     let preceptorPendente = false;
     async function provocarPreceptorSocratico() {
       if (preceptorPendente) return;
-      const inputEl = document.getElementById('conversa-input');
+      const inputEl = document.getElementById('input-conversa-texto') || document.getElementById('conversa-input');
       const inputTxt = inputEl?.value?.trim();
 
       if (!cockpitDados?.revision && !inputTxt) {
-        copiarToast('Digite um caso clínico ou selecione um atendimento.');
-        return;
+        // Quando não há atendimento nem texto, aciona a sabatina IA do ponto cego selecionado
+        return solicitarSabatinaPreceptorPlantao(true);
       }
       preceptorPendente = true;
       const revision = cockpitDados?.revision;
       const box = document.getElementById('resposta-preceptor-box');
       const txt = document.getElementById('resposta-preceptor-texto');
       box.classList.remove('hidden');
-      txt.textContent = 'Preparando provocação socrática do preceptor…';
+      txt.innerHTML = `
+        <div class="space-y-1.5 py-1">
+          <div class="flex items-center gap-2 text-purple-300 font-bold text-xs">
+            <div class="w-3.5 h-3.5 rounded-full border-2 border-purple-400 border-t-transparent animate-spin"></div>
+            <span>Preparando provocação socrática do preceptor com IA…</span>
+          </div>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
       try {
         let resposta = '';
         if (revision) {
           resposta = await cockpitRpc('cockpitPreceptor', revision);
-          txt.textContent = cockpitDados?.revision === revision ? resposta : 'O atendimento mudou. Atualize o painel.';
+          resposta = cockpitDados?.revision === revision ? resposta : 'O atendimento mudou. Atualize o painel.';
         } else {
           const res = await cockpitRpc('cockpitConversar', { acao: 'preceptor', texto: inputTxt });
           resposta = res?.resposta || 'Qual conduta imediata você preconiza?';
-          txt.textContent = resposta;
         }
+        ultimaProvocacaoPreceptor = resposta;
+        txt.innerHTML = `
+          <div class="space-y-2 animate-in fade-in duration-200">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase text-purple-300 flex items-center gap-1">
+                <i data-lucide="brain" class="w-3.5 h-3.5 text-purple-400"></i> Provocação do Preceptor IA:
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-purple-500/20 text-purple-200 border border-purple-500/40 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Conectado à IA
+              </span>
+            </div>
+            <p class="text-xs text-purple-100 font-medium italic leading-relaxed bg-purple-950/40 p-2.5 rounded-lg border border-purple-800/40">
+              "${escapeHtml(resposta)}"
+            </p>
+            <div class="text-[9.5px] text-slate-400 pt-1.5 border-t border-purple-500/20 flex items-center justify-between">
+              <span>Sabatina Clínica Beira-Leito</span>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="ouvirProvocacaoPreceptor()" class="px-2 py-0.5 rounded bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-700/60 font-bold text-[10px] flex items-center gap-1 transition">
+                  <i data-lucide="volume-2" class="w-3 h-3 text-purple-300"></i> Ouvir
+                </button>
+                <button type="button" onclick="prepararRespostaPreceptor()" class="px-2 py-0.5 rounded bg-purple-600 hover:bg-purple-500 text-white font-bold text-[10px] flex items-center gap-1 transition shadow-sm">
+                  <i data-lucide="message-square" class="w-3 h-3"></i> Responder
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
       } catch (e) {
         txt.textContent = e.message;
       } finally {

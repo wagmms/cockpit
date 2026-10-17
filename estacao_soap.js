@@ -74,6 +74,11 @@ function configurarListenersEstacaoSoap() {
     'soap-brain-dump': 'brain_dump'
   };
 
+  const camposNumericosPositivos = [
+    'soap-idade', 'soap-pas', 'soap-pad', 'soap-fc',
+    'soap-fr', 'soap-spo2', 'soap-tax', 'soap-peso', 'soap-altura'
+  ];
+
   Object.keys(fieldMap).forEach((domId) => {
     const el = document.getElementById(domId);
     if (!el) return;
@@ -81,8 +86,25 @@ function configurarListenersEstacaoSoap() {
     const stateKey = fieldMap[domId];
     const eventType = el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input';
 
+    // Bloqueia teclas inválidas em sinais vitais e antropometria (sinais negativos e notação científica)
+    if (camposNumericosPositivos.includes(domId)) {
+      el.addEventListener('keydown', (e) => {
+        if (['-', '+', 'e', 'E'].includes(e.key)) {
+          e.preventDefault();
+        }
+      });
+    }
+
     el.addEventListener(eventType, (e) => {
-      soapDraft[stateKey] = el.type === 'checkbox' ? el.checked : e.target.value;
+      if (camposNumericosPositivos.includes(domId) && typeof el.value === 'string') {
+        // Remove qualquer caractere negativo ou inválido colado ou inserido
+        if (el.value.includes('-') || parseFloat(el.value) < 0) {
+          el.value = el.value.replace(/-/g, '');
+          if (parseFloat(el.value) < 0) el.value = '';
+        }
+      }
+
+      soapDraft[stateKey] = el.type === 'checkbox' ? el.checked : el.value;
       
       if (['pas', 'pad', 'peso', 'altura'].includes(stateKey)) {
         calcularMetricasReativas();
@@ -138,6 +160,16 @@ function restaurarRascunhoSoap() {
 
     const parsed = JSON.parse(saved);
     soapDraft = { ...soapDraft, ...parsed };
+
+    // Higienização estrita de dados persistidos: sinais vitais e antropometria nunca aceitam valores negativos
+    const camposNumericos = ['idade', 'pas', 'pad', 'fc', 'fr', 'spo2', 'tax', 'peso', 'altura'];
+    camposNumericos.forEach((k) => {
+      if (soapDraft[k] !== undefined && soapDraft[k] !== null && soapDraft[k] !== '') {
+        const str = String(soapDraft[k]).replace(/-/g, '').trim();
+        const num = parseFloat(str);
+        soapDraft[k] = (!isNaN(num) && num >= 0) ? str : '';
+      }
+    });
 
     const setVal = (id, val, isCheck = false) => {
       const el = document.getElementById(id);
@@ -251,7 +283,7 @@ function calcularMetricasReativas() {
   const badgePam = document.getElementById('badge-pam-live');
 
   if (badgePam) {
-    if (!isNaN(pas) && !isNaN(pad) && pas > 0 && pad > 0) {
+    if (!isNaN(pas) && !isNaN(pad) && pas > 0 && pad > 0 && pas > pad) {
       const pam = Math.round((pas + 2 * pad) / 3);
       let statusClass = 'badge-normal';
       if (pam < 65) statusClass = 'badge-critico';
@@ -439,6 +471,41 @@ async function enviarParaEstacaoSoap(modelOverride = null) {
     return;
   }
 
+  // Validação estrita de salvaguarda clínica: sinais vitais e antropometria nunca são negativos
+  const camposSinaisVitais = [
+    { label: 'Idade', val: dados.idade, id: 'soap-idade' },
+    { label: 'PAS', val: dados.pas, id: 'soap-pas' },
+    { label: 'PAD', val: dados.pad, id: 'soap-pad' },
+    { label: 'FC (Frequência Cardíaca)', val: dados.fc, id: 'soap-fc' },
+    { label: 'FR (Frequência Respiratória)', val: dados.fr, id: 'soap-fr' },
+    { label: 'SpO2', val: dados.spo2, id: 'soap-spo2' },
+    { label: 'Tax (Temperatura)', val: dados.tax, id: 'soap-tax' },
+    { label: 'Peso', val: dados.peso, id: 'soap-peso' },
+    { label: 'Altura', val: dados.altura, id: 'soap-altura' }
+  ];
+
+  const invalidos = camposSinaisVitais.filter(c => {
+    if (c.val === '' || c.val === undefined || c.val === null) return false;
+    const n = Number(c.val);
+    return Number.isNaN(n) || n < 0;
+  });
+
+  if (invalidos.length > 0) {
+    const nomes = invalidos.map(c => c.label).join(', ');
+    const msg = `Sinais vitais e antropometria não permitem valores negativos (${nomes}). Corrija os valores antes de continuar.`;
+    if (alertContainer) {
+      alertContainer.innerHTML = `
+        <div class="soap-alert soap-alert-danger" style="padding:12px; border-left:4px solid #ef4444; background:#fef2f2; color:#991b1b; border-radius:6px; margin-bottom:12px;">
+          🚨 <strong>Valores Fisiológicos Inválidos:</strong> ${escapeHtmlSoap(msg)}
+        </div>`;
+    } else {
+      alert(msg);
+    }
+    const primeiroInvalido = document.getElementById(invalidos[0].id);
+    if (primeiroInvalido) primeiroInvalido.focus();
+    return;
+  }
+
   if (alertContainer) alertContainer.innerHTML = '';
   if (resContainer) {
     resContainer.innerHTML = `
@@ -451,21 +518,21 @@ async function enviarParaEstacaoSoap(modelOverride = null) {
   }
 
   const patientContext = {
-    idade: dados.idade !== undefined && dados.idade !== '' ? Number(dados.idade) : undefined,
+    idade: dados.idade !== undefined && dados.idade !== '' && Number(dados.idade) >= 0 ? Number(dados.idade) : undefined,
     sexo: dados.sexo ? String(dados.sexo).trim().toUpperCase() : undefined,
     gestante: Boolean(dados.gestante === true || dados.gestante === 'true' || dados.gestante === '1'),
     alergias: dados.alergias ? (Array.isArray(dados.alergias) ? dados.alergias : [String(dados.alergias).trim()]) : []
   };
 
   const vitals = {};
-  if (dados.pas) vitals.pas = Number(dados.pas);
-  if (dados.pad) vitals.pad = Number(dados.pad);
-  if (dados.fc) vitals.fc = Number(dados.fc);
-  if (dados.fr) vitals.fr = Number(dados.fr);
-  if (dados.spo2) vitals.spo2 = Number(dados.spo2);
-  if (dados.tax) vitals.tax = Number(dados.tax);
-  if (dados.peso) vitals.peso = Number(dados.peso);
-  if (dados.altura) vitals.altura = Number(dados.altura);
+  if (dados.pas && Number(dados.pas) >= 0) vitals.pas = Number(dados.pas);
+  if (dados.pad && Number(dados.pad) >= 0) vitals.pad = Number(dados.pad);
+  if (dados.fc && Number(dados.fc) >= 0) vitals.fc = Number(dados.fc);
+  if (dados.fr && Number(dados.fr) >= 0) vitals.fr = Number(dados.fr);
+  if (dados.spo2 && Number(dados.spo2) >= 0) vitals.spo2 = Number(dados.spo2);
+  if (dados.tax && Number(dados.tax) >= 0) vitals.tax = Number(dados.tax);
+  if (dados.peso && Number(dados.peso) >= 0) vitals.peso = Number(dados.peso);
+  if (dados.altura && Number(dados.altura) >= 0) vitals.altura = Number(dados.altura);
 
   const payload = {
     ...dados,
